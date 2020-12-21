@@ -4,8 +4,8 @@
         {% load static cache %}{% get_static_prefix as STATIC_PREFIX %}
         {% cache 120 meta_and_css_file %}
             {% include "includes/meta.html" %}
-            {% include "includes/css.html" %}
         {% endcache %}
+        {% include "includes/css.html" %}
 
         <title>Document</title>
 
@@ -13,6 +13,11 @@
 
     <body>
         {% include "includes/header.html" %}
-        
+
+        <main class="homepage-1">
+            {% include "includes/banner.html" %}
+        </main>
+
+        {% include "includes/javascript.html" %}
     </body>
 </html>
