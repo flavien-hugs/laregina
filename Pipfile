@@ -7,6 +7,14 @@ verify_ssl = true
 
 [packages]
 django = "*"
+gunicorn = "*"
+django-filter = "*"
+django-mptt = "*"
+django-countries = "*"
+whitenoise = "*"
+argon2-cffi = "*"
+cloudinary = "*"
+python-decouple = "*"
 
 [requires]
 python_version = "3.8"

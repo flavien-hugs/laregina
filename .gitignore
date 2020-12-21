@@ -1,0 +1,7 @@
+*.pyc
+*.sqlite3
+.git
+.env
+staticfiles
+Pipfile.lock
+logs/*
