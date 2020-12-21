@@ -24,7 +24,6 @@ INSTALLED_APPS += ['whitenoise.runserver_nostatic']
 MIDDLEWARE += [
     'django.middleware.security.SecurityMiddleware',
     'whitenoise.middleware.WhiteNoiseMiddleware',
-    # 'csp.middleware.CSPMiddleware',
 ]
 
 # https://docs.djangoproject.com/fr/3.0/ref/settings/
@@ -51,4 +50,4 @@ SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 # EMAIL SENDER
-EMAIL_SUBJECT_PREFIX = '[kareeba]'
+EMAIL_SUBJECT_PREFIX = '[vendito]'
