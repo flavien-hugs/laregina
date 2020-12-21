@@ -1,6 +1,5 @@
 # kareeba/production.py
 
-import django_heroku
 import dj_database_url
 from core.settings import *
 
