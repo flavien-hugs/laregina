@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="fr">
+    <head>
+        {% load static cache %}{% get_static_prefix as STATIC_PREFIX %}
+        {% cache 120 meta_and_css_file %}
+            {% include "includes/meta.html" %}
+            {% include "includes/css.html" %}
+        {% endcache %}
+
+        <title>Document</title>
+
+    </head>
+
+    <body>
+        {% include "includes/header.html" %}
+        
+    </body>
+</html>
