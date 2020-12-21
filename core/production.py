@@ -5,7 +5,7 @@ from core.settings import *
 
 DEBUG = TEMPLATE_DEBUG = False
 BASE_URL = 'https://vendito.onrender.com'
-ALLOWED_HOSTS = ['vendito.onrender.com']
+ALLOWED_HOSTS = ['*.onrender.com']
 
 # Parse database configuration from $DATABASE_URL
 # Change 'default' database configuration with
@@ -40,7 +40,7 @@ SECURE_BROWSER_XSS_FILTER = True
 CORS_REPLACE_HTTPS_REFERER = True
 SECURE_CONTENT_TYPE_NOSNIFF = True
 SECURE_HSTS_INCLUDE_SUBDOMAINS = True
-SECURE_SSL_HOST = ''
+SECURE_SSL_HOST = BASE_URL
 SECURE_REFERRER_POLICY = 'origin-when-cross-origin'
 SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 

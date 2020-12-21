@@ -30,13 +30,12 @@ DEBUG = TEMPLATE_DEBUG = config('DEBUG', default=True, cast=bool)
 DEFAULT_CHARSET = 'UTF-8'
 SITE_DESCRIPTION = ""
 META_KEYWORDS = ''
-ALLOWED_HOSTS = []
 SITE_NAME = 'Vendez sur LaRegina'
 LOCATION_SESSION_ID = 'vkbr'
 USE_THOUSAND_SEPARATOR = True
 THOUSAND_SEPARATOR = ' '
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
