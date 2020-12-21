@@ -1,4 +1,4 @@
-# config/settings.py
+# core/settings.py
 
 """
 For more information on this file, see
@@ -35,7 +35,7 @@ LOCATION_SESSION_ID = 'vkbr'
 USE_THOUSAND_SEPARATOR = True
 THOUSAND_SEPARATOR = ' '
 
-ALLOWED_HOSTS = ['*']
+ALLOWED_HOSTS = []
 
 
 # Application definition

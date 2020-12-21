@@ -1,11 +1,11 @@
-# kareeba/production.py
+# core/production.py
 
 import dj_database_url
 from core.settings import *
 
 DEBUG = TEMPLATE_DEBUG = False
 BASE_URL = 'https://vendito.onrender.com'
-ALLOWED_HOSTS = ['*.onrender.com']
+ALLOWED_HOSTS = ['vendito.onrender.com', '.onrender.com']
 
 # Parse database configuration from $DATABASE_URL
 # Change 'default' database configuration with
