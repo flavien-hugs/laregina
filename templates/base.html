@@ -5,19 +5,23 @@
         {% cache 120 meta_and_css_file %}
             {% include "includes/meta.html" %}
         {% endcache %}
-        {% include "includes/css.html" %}
+        {% include "includes/assets/css.html" %}
 
-        <title>Document</title>
+        <title>Vendito</title>
 
     </head>
 
-    <body>
-        {% include "includes/header.html" %}
+    <body class="d-flex flex-column">
+        <div class="flex-grow-1 flex-shrink-0">
+            {% include "includes/header.html" %}
 
-        <main class="homepage-1">
-            {% include "includes/banner.html" %}
-        </main>
+            <main class="homepage-1">
+                {% block content %}
+                {% endblock content %}
+            </main>
+            {% include "includes/footer.html" %}
+        </div>
 
-        {% include "includes/javascript.html" %}
+        {% include "includes/assets/javascript.html" %}
     </body>
 </html>

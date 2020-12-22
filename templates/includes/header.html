@@ -1,6 +1,5 @@
     <header class="header header--1" data-sticky="true">
         <div class="header__top">
-
             <div class="ps-container">
                 <div class="header__left">
                     <div class="menu--product-categories">
@@ -187,62 +186,6 @@
 
                         <input class="form-control" type="text" placeholder="I'm shopping for..." id="input-search">
                         <button>Rechercher</button>
-                        
-                        <div class="ps-panel--search-result">
-                            <div class="ps-panel__content">
-                                <div class="ps-product ps-product--wide ps-product--search-result">
-                                    <div class="ps-product__thumbnail">
-                                        <a href="#"><img src="img/products/arrivals/1.jpg" alt=""></a>
-                                    </div>
-
-                                    <div class="ps-product__content"><a class="ps-product__title" href="#">Apple iPhone Retina 6s Plus 32GB</a>
-                                        <div class="ps-product__rating">
-                                            <select class="ps-rating" data-read-only="true">
-                                                <option value="1">1</option>
-                                                <option value="1">2</option>
-                                                <option value="1">3</option>
-                                                <option value="1">4</option>
-                                                <option value="2">5</option>
-                                            </select><span></span>
-                                        </div>
-                                        <p class="ps-product__price">$990.50</p>
-                                    </div>
-                                </div>
-
-                                <div class="ps-product ps-product--wide ps-product--search-result">
-                                    <div class="ps-product__thumbnail"><a href="product-default.html"><img src="img/products/arrivals/1.jpg" alt=""></a></div>
-                                    <div class="ps-product__content"><a class="ps-product__title" href="product-default.html">Apple iPhone Retina 6s Plus 64GB</a>
-                                        <div class="ps-product__rating">
-                                            <select class="ps-rating" data-read-only="true">
-                                                <option value="1">1</option>
-                                                <option value="1">2</option>
-                                                <option value="1">3</option>
-                                                <option value="1">4</option>
-                                                <option value="2">5</option>
-                                            </select><span></span>
-                                        </div>
-                                        <p class="ps-product__price">$1120.50</p>
-                                    </div>
-                                </div>
-
-                                <div class="ps-product ps-product--wide ps-product--search-result">
-                                    <div class="ps-product__thumbnail"><a href="product-default.html"><img src="img/products/arrivals/1.jpg" alt=""></a></div>
-                                    <div class="ps-product__content"><a class="ps-product__title" href="product-default.html">Apple iPhone Retina 6s Plus 128GB</a>
-                                        <div class="ps-product__rating">
-                                            <select class="ps-rating" data-read-only="true">
-                                                <option value="1">1</option>
-                                                <option value="1">2</option>
-                                                <option value="1">3</option>
-                                                <option value="1">4</option>
-                                                <option value="2">5</option>
-                                            </select><span></span>
-                                        </div>
-                                        <p class="ps-product__price">$1220.50</p>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="ps-panel__footer text-center"><a href="#">See all results</a></div>
-                        </div>
                     </form>
                 </div>
 
@@ -258,7 +201,7 @@
                                 <div class="ps-cart__items">
                                     <div class="ps-product--cart-mobile">
                                         <div class="ps-product__thumbnail">
-                                            <a href="#"><img src="img/products/clothing/7.jpg" alt=""></a>
+                                            <a href="#"><img src="{{ STATIC_PREFIX }}img/products/clothing/7.jpg" alt=""></a>
                                         </div>
                                         
                                         <div class="ps-product__content">
@@ -698,7 +641,7 @@
                             <div class="ps-cart__items">
                                 <div class="ps-product--cart-mobile">
                                     <div class="ps-product__thumbnail">
-                                        <a href="#"><img src="img/products/clothing/7.jpg" alt=""></a>
+                                        <a href="#"><img src="{{ STATIC_PREFIX }}img/products/clothing/7.jpg" alt=""></a>
                                     </div>
 
                                     <div class="ps-product__content">
@@ -748,7 +691,7 @@
                 <div class="ps-cart__content">
                     <div class="ps-product--cart-mobile">
                         <div class="ps-product__thumbnail">
-                            <a href="#"><img src="img/products/clothing/7.jpg" alt=""></a>
+                            <a href="#"><img src="{{ STATIC_PREFIX }}img/products/clothing/7.jpg" alt=""></a>
                         </div>
                         <div class="ps-product__content">
                             <a class="ps-product__remove" href="#"><i class="icon-cross"></i></a>

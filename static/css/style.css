@@ -1921,6 +1921,7 @@ button {
   border-radius: 4px;
   visibility: hidden;
   opacity: 0;
+  background-color: #fcb800;
 }
 
 #back2top i {
@@ -1932,8 +1933,8 @@ button {
 
 #back2top:hover {
   cursor: pointer;
-  background-color: #fcb800;
-  border-color: #fcb800;
+  background-color: #eee;
+  border-color: #eee;
 }
 
 #back2top.active {
