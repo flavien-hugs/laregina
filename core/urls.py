@@ -30,6 +30,7 @@ def handler500(request, template_name='500.html'):
 
 urlpatterns = [
     path('', TemplateView.as_view(template_name='index.html'), name='home'),
+    path('sp-', include("core.pages.urls")),
     path('admin/', admin.site.urls),
 ]
 

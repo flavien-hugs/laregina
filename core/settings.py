@@ -29,8 +29,9 @@ SECRET_KEY = config('SECRET_KEY', default='_q@t!jz_mb@j_l64kk%_7!(+d3o4fa)qpc!fm
 DEBUG = TEMPLATE_DEBUG = config('DEBUG', default=True, cast=bool)
 DEFAULT_CHARSET = 'UTF-8'
 SITE_DESCRIPTION = ""
+INDEX_DESCRIPTION = "Vender sur LaRegina"
 META_KEYWORDS = ''
-SITE_NAME = 'Vendez sur LaRegina'
+SITE_NAME = 'Overstock'
 LOCATION_SESSION_ID = 'vkbr'
 USE_THOUSAND_SEPARATOR = True
 THOUSAND_SEPARATOR = ' '
@@ -74,7 +75,11 @@ TEMPLATES = [
                 'django.template.context_processors.static',
                 'django.template.context_processors.csrf',
                 'django.contrib.messages.context_processors.messages',
+
+                # ajout de context_pocessors personnalise
+                'core.context.context',
             ],
+
             'debug': DEBUG,
         },
     },
@@ -90,6 +95,7 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
         'NAME': BASE_DIR / 'db.sqlite3',
+        'ATOMIC_REQUESTS': True
     }
 }
 

@@ -1,0 +1,123 @@
+{% extends "base.html" %}
+
+{% block content %}
+    {% include "partials/breadcrumb.html" %}
+
+    <img src="{{ STATIC_PREFIX }}img/bg/about-us.jpg" alt="">
+
+    <div class="ps-about-intro py-5">
+        <div class="container">
+            <div class="ps-section__header">
+                <h4 class="mb-5">Bienvenue chez {{ title }}</h4>
+
+                <h3>Nous connectons des millions d'acheteurs et de vendeurs à travers le monde, responsabilisons les gens et créons des opportunités économiques pour tous.</h3>
+
+                <p>Sur nos marchés, des millions de personnes dans le monde se connectent, en ligne et hors ligne, pour fabriquer, vendre et acheter des produits uniques. Nous proposons également une large gamme de services et d'outils pour les vendeurs qui aident les entrepreneurs créatifs à démarrer, gérer et développer leur entreprise. Notre mission est de réinventer le commerce de manière à créer un monde plus épanouissant et durable, et nous nous engageons à utiliser le pouvoir des entreprises pour renforcer les communautés et autonomiser les gens.</p>
+            </div>
+            <div class="ps-section__content">
+                <div class="row">
+                    <div class="col-xl-3 col-lg-3 col-md-3 col-sm-4 col-6 ">
+                        <div class="ps-block--icon-box"><i class="icon-cube"></i>
+                            <h4>45M</h4>
+                            <p>Produit à vendre</p>
+                        </div>
+                    </div>
+                    <div class="col-xl-3 col-lg-3 col-md-3 col-sm-4 col-6 ">
+                        <div class="ps-block--icon-box"><i class="icon-store"></i>
+                            <h4>1.8M</h4>
+                            <p>Vendeurs actifs sur {{ title }}</p>
+                        </div>
+                    </div>
+                    <div class="col-xl-3 col-lg-3 col-md-3 col-sm-4 col-6 ">
+                        <div class="ps-block--icon-box"><i class="icon-bag2"></i>
+                            <h4>30.6M</h4>
+                            <p>Acheteur actif sur {{ title }}</p>
+                        </div>
+                    </div>
+                    <div class="col-xl-3 col-lg-3 col-md-3 col-sm-4 col-6 ">
+                        <div class="ps-block--icon-box"><i class="icon-cash-dollar"></i>
+                            <h4>2.46M Fr</h4>
+                            <p>Ventes annuelles brutes de marchandises</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="ps-our-team py-5">
+        <div class="container">
+            <div class="ps-section__header pl-0 pb-4">
+                <h3>Rencontrez nos dirigeants</h3>
+            </div>
+            <div class="ps-section__content">
+                <figure>
+                    <div class="ps-block--ourteam"><img src="{{ STATIC_PREFIX }}img/users/our-team/1.jpg" alt="">
+                        <div class="ps-block__content">
+                            <h4>Robert Downey Jr</h4>
+                            <p>CEO Fouder</p>
+                            <ul>
+                                <li><a href="#"><i class="fa fa-twitter"></i></a></li>
+                                <li><a href="#"><i class="fa fa-facebook"></i></a></li>
+                                <li><a href="#"><i class="fa fa-linkedin"></i></a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </figure>
+
+                <figure>
+                    <div class="ps-block--ourteam"><img src="{{ STATIC_PREFIX }}img/users/our-team/2.jpg" alt="">
+                        <div class="ps-block__content">
+                            <h4>Robert Downey Jr</h4>
+                            <p>CEO Fouder</p>
+                            <ul>
+                                <li><a href="#"><i class="fa fa-twitter"></i></a></li>
+                                <li><a href="#"><i class="fa fa-facebook"></i></a></li>
+                                <li><a href="#"><i class="fa fa-linkedin"></i></a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </figure>
+
+                <figure>
+                    <div class="ps-block--ourteam"><img src="{{ STATIC_PREFIX }}img/users/our-team/3.jpg" alt="">
+                        <div class="ps-block__content">
+                            <h4>Robert Downey Jr</h4>
+                            <p>CEO Fouder</p>
+                            <ul>
+                                <li><a href="#"><i class="fa fa-twitter"></i></a></li>
+                                <li><a href="#"><i class="fa fa-facebook"></i></a></li>
+                                <li><a href="#"><i class="fa fa-linkedin"></i></a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </figure>
+
+                <figure data-mh="our-team">
+                    <div class="ps-block--ourteam blank">
+                        <a href="#" class="uppercase">
+                        devenez <br> membre d'une <br> équipe</a>
+                    </div>
+                </figure>
+            </div>
+        </div>
+    </div>
+
+    <div class="ps-about-awards">
+        <div class="container">
+            <div class="ps-section__header">
+                <h4>Prix ​​&amp; reconnaissance</h4>
+                <p>Les leaders du secteur et les influenceurs reconnaissent Overstock comme l'une des entreprises de vente au détail les plus dignes de confiance aux États-Unis, se classant en bonne place pour la satisfaction des clients et des employés.</p>
+            </div>
+            <div class="ps-section__content">
+                <div class="owl-slider" data-owl-auto="true" data-owl-loop="true" data-owl-speed="15000" data-owl-gap="0" data-owl-nav="false" data-owl-dots="false" data-owl-item="5" data-owl-item-xs="3" data-owl-item-sm="3" data-owl-item-md="3" data-owl-item-lg="4" data-owl-duration="1500" data-owl-mousedrag="off">
+                    <a href="#"><img src="{{ STATIC_PREFIX }}img/awards/1.png" alt=""></a>
+                    <a href="#"><img src="{{ STATIC_PREFIX }}img/awards/2.png" alt=""></a>
+                    <a href="#"><img src="{{ STATIC_PREFIX }}img/awards/3.png" alt=""></a>
+                    <a href="#"><img src="{{ STATIC_PREFIX }}img/awards/4.png" alt=""></a>
+                    <a href="#"><img src="{{ STATIC_PREFIX }}img/awards/5.png" alt=""></a>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock content %}

@@ -2,12 +2,20 @@
 <html lang="fr">
     <head>
         {% load static cache %}{% get_static_prefix as STATIC_PREFIX %}
-        {% cache 120 meta_and_css_file %}
+        {% cache 360 meta_and_css_file %}
             {% include "includes/meta.html" %}
         {% endcache %}
         {% include "includes/assets/css.html" %}
 
-        <title>Vendito</title>
+        <title>
+            {% block title %}
+                {% if page_title %}
+                    {{ page_title|title }}
+                {% else %}
+                    {{ desc }}
+                {% endif %} &smid; {{ title }}
+            {% endblock title %}
+        </title>
 
     </head>
 
@@ -15,7 +23,7 @@
         <div class="flex-grow-1 flex-shrink-0">
             {% include "includes/header.html" %}
 
-            <main class="homepage-1">
+            <main class="ps-page--single">
                 {% block content %}
                 {% endblock content %}
             </main>
