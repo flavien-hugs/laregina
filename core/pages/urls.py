@@ -6,7 +6,10 @@ from django.views.decorators.cache import cache_page
 
 
 urlpatterns  = [
-path('about-us/', cache_page(60 * 2)(TemplateView.as_view(
+path('account/seller/register/', TemplateView.as_view(
+        extra_context={'page_title': 'Créer un compte', 'page_description': "Ouvrir ma boutique"
+        }, template_name='accounts/register.html'), name='register'),
+    path('about-us/', cache_page(60 * 2)(TemplateView.as_view(
         extra_context={'page_title': 'À propos de nous', 'page_description': "Qui sommes-nous ?"
         }, template_name='pages/about-us.html')), name='about-us'),
     path('faqs/', cache_page(60 * 2)(TemplateView.as_view(
