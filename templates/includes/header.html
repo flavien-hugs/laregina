@@ -1,4 +1,31 @@
-    <header class="header header--1" data-sticky="true">
+    {% if request.resolver_match.url_name == 'detail' %}
+        <header class="header header--product" data-sticky="true">
+            <nav class="navigation">
+                <div class="container">
+                    <article class="ps-product--header-sticky">
+                        <div class="ps-product__thumbnail">
+                            <img src="{{ STATIC_PREFIX }}img/products/detail/fullwidth/1.jpg" alt="" />
+                        </div>
+                        <div class="ps-product__wrapper">
+                            <div class="ps-product__content"><a class="ps-product__title" href="#">Marshall Kilburn Portable Wireless Speaker</a>
+                                <ul class="ps-tab-list">
+                                    <li class="active"><a href="#tab-1">Description</a></li>
+                                    <li><a href="#tab-2">Spécification</a></li>
+                                    <li><a href="#tab-3">Vendeur</a></li>
+                                    <li><a href="#tab-4">Avis client (1)</a></li>
+                                </ul>
+                            </div>
+                            <div class="ps-product__shopping"><span class="ps-product__price"><span>$100.56</span>
+                                <del>$106.22</del></span><a class="ps-btn" href="#"> Ajout au panier</a>
+                            </div>
+                        </div>
+                    </article>
+                </div>
+            </nav>
+        </header>
+    {% endif %}
+
+    <header class="header header--1" data-sticky="{% if request.resolver_match.url_name == 'detail' %} false {% else %} true {% endif %}">
         <div class="header__top">
             <div class="ps-container">
                 <div class="header__left">
@@ -91,40 +118,17 @@
 
                 <div class="header__right">
                     <div class="header__actions">
-
                         <a class="header__extra" href="#">
                             <i class="icon-heart"></i><span><i>0</i></span>
                         </a>
                         <div class="ps-cart--mini">
                             <a class="header__extra" href="#"><i class="icon-bag2"></i><span><i>0</i></span></a>
-                            <div class="ps-cart__content">
-                                <div class="ps-cart__items">
-                                    <div class="ps-product--cart-mobile">
-                                        <div class="ps-product__thumbnail">
-                                            <a href="#"><img src="{{ STATIC_PREFIX }}img/products/clothing/7.jpg" alt=""></a>
-                                        </div>
-                                        
-                                        <div class="ps-product__content">
-                                            <a class="ps-product__remove" href="#"><i class="icon-cross"></i></a>
-                                            <a href="#">MVMTH Classical Leather Watch In Black</a>
-                                            <p><strong>Sold by:</strong> YOUNG SHOP</p>
-                                            <small>1 x $59.99</small>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div class="ps-cart__footer">
-                                    <h3>Sub Total:<strong>$59.99</strong></h3>
-                                    <figure>
-                                        <a class="ps-btn" href="#">Voir le panier</a>
-                                        <a class="ps-btn" href="#">Checkout</a>
-                                    </figure>
-                                </div>
-                            </div>
                         </div>
 
                         <div class="ps-cart--mini">
-                            <div class="header__extra"><i class="icon-user"></i></div>
+                            <div class="header__extra">
+                                <a class="header__extra" href="#"><i class="icon-user"></i></a>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -140,82 +144,92 @@
                 <div class="navigation__right">
                     <ul class="menu">
                         <li>
-                            <a href="#">Mode</a>
+                            <a href="{% url "list" %}">Mode</a>
                         </li>
 
                         <li>
-                            <a href="#">Bien être</a>
+                            <a href="{% url "list" %}">Bien être</a>
                         </li>
 
                         <li>
-                            <a href="#">Maison</a>
+                            <a href="{% url "list" %}">Maison</a>
                         </li>
 
                         <li>
-                            <a href="#">Téléphones</a>
+                            <a href="{% url "list" %}">Téléphones</a>
                         </li>
 
                         <li>
-                            <a href="#">Informatique</a>
+                            <a href="{% url "list" %}">Informatique</a>
                         </li>
                     </ul>
 
                     <ul class="navigation__extra">
                         <li><a href="{% url "register" %}">Ouvrir ma boutique</a></li>
-                        <li><a href="#">Se connecter</a></li>
+                        <li><a href="{% url "login" %}">Se connecter</a></li>
                     </ul>
                 </div>
             </div>
         </nav>
     </header>
 
-    <header class="header header--mobile" data-sticky="true">
-        <div class="navigation--mobile">
-            <div class="navigation__left">
-                <a class="ps-logo" href="#">
-                    <img src="{{ STATIC_PREFIX }}img/logo_light.png" alt="">
-                </a>
-            </div>
+    <header class="header header--mobile {% if request.resolver_match.url_name == 'list' %} header--mobile-categories {% elif request.resolver_match.url_name == 'detail' %} header--mobile-product {% endif %}" data-sticky="true">
+        <nav class="navigation--mobile">
+
+            {% if request.resolver_match.url_name == 'list' %}
+                <div class="navigation__left">
+                    <a class="header__back" href="#">
+                        <i class="icon-chevron-left"></i><strong>Shop</strong>
+                    </a>
+                </div>
+            {% elif request.resolver_match.url_name == 'detail' %}
+                <div class="navigation__left">
+                    <a class="header__back" href="{% url "list" %}">
+                        <i class="icon-chevron-left"></i><strong>Retour</strong>
+                    </a>
+                </div>
+            {% else %}
+                <div class="navigation__left">
+                    <a class="ps-logo" href="/">
+                        <img src="{{ STATIC_PREFIX }}img/logo_light.png" alt="">
+                    </a>
+                </div>
+            {% endif %}
 
             <div class="navigation__right">
                 <div class="header__actions">
                     <div class="ps-cart--mini">
                         <a class="header__extra" href="#"><i class="icon-bag2"></i><span><i>0</i></span></a>
-                        <div class="ps-cart__content">
-                            <div class="ps-cart__items">
-                                <div class="ps-product--cart-mobile">
-                                    <div class="ps-product__thumbnail">
-                                        <a href="#"><img src="{{ STATIC_PREFIX }}img/products/clothing/7.jpg" alt=""></a>
-                                    </div>
-
-                                    <div class="ps-product__content">
-                                        <a class="ps-product__remove" href="#">
-                                            <i class="icon-cross"></i></a>
-                                            <a href="#">MVMTH Classical Leather Watch In Black</a>
-                                        <p><strong>Sold by:</strong> YOUNG SHOP</p><small>1 x $59.99</small>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="ps-cart__footer">
-                                <h3>Sub Total:<strong>$59.99</strong></h3>
-                                <figure><a class="ps-btn" href="">View Cart</a>
-                                    <a class="ps-btn" href="#">Checkout</a>
-                                </figure>
-                            </div>
-                        </div>
                     </div>
 
                     <div class="ps-block--user-header">
                         <div class="ps-block__left"><i class="icon-user"></i></div>
                         <div class="ps-block__right">
-                            <a href="#">Connexion</a>
+                            <a href="{% url "login" %}">Connexion</a>
                             <a href="{% url "register" %}">S'inscrire</a>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
+        </nav>
+
+        {% if request.resolver_match.url_name == 'list' %}
+            <div class="header__filter">
+                <button class="ps-shop__filter-mb" id="filter-sidebar">
+                    <i class="icon-equalizer"></i><span>Filter</span>
+                </button>
+                <div class="header__sort">
+                    <i class="icon-sort-amount-desc"></i>
+                    <select class="ps-select">
+                        <option value="3">Nouveauté</option>
+                        <option value="4">Trier par prix : prix bas</option>
+                        <option value="5">Trier par prix : prix haut</option>
+                    </select>
+                </div>
+            </div>
+        
+        {% endif %}
+
         <div class="ps-search--mobile">
             <form class="ps-form--search-mobile" action="" method="get">
                 <div class="form-group--nest">
@@ -225,6 +239,13 @@
             </form>
         </div>
     </header>
+
+    {% if request.resolver_match.url_name == 'detail' %}
+        <nav class="navigation--mobile-product">
+            <a class="ps-btn ps-btn--black" href="#">Ajouter au panier</a>
+            <a class="ps-btn" href="#">Acheter maintenant</a>
+        </nav>
+    {% endif %}
 
     <div class="ps-panel--sidebar" id="cart-mobile">
         <div class="ps-panel__header">

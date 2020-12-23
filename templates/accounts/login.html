@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <div class="ps-page--my-account">
+        {% include "partials/breadcrumb.html" %}
+
+        <div class="ps-my-account">
+            <div class="container">
+                <div class="row justify-content-center">
+                    <div class="col-md-9 col-sm-10">
+                        <div class="pb-5">
+                            <div class="col bg-white p-5">
+                                <h3 class="font-weight-bold pb-5">Connexion</h3>
+                                <form action="#" method="get">
+                                    <div class="form-group">
+                                        <label for="">Adresse Email *</label>
+                                        <input class="form-control" type="text" placeholder="Entrer votre adresse email *">
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label for="">Mot de passe *</label>
+                                        <input class="form-control" type="email" placeholder="Entrez votre mot de passe *">
+                                    </div>
+
+                                    <div class="d-flex justify-content-end mb-1">
+                                      <a class="font-weight-bold" href="#">
+                                        <span>Mot de passe oublié ?</span></a>
+                                    </div><!-- reset password link -->
+
+                                    <div class="form-group submit">
+                                        <button class="ps-btn btn-block text-uppercase border-0">
+                                        se connecter</button>
+                                    </div>
+                                </form>
+
+
+                                <!-- connexion url -->
+                                <div class="text-center w-100 pt-2 pb-3">
+                                    Vous êtes un nouvel utilisateur ?
+                                    <span class="font-weight-bold">
+                                      <a href="{% url 'register' %}"><span><u>Créer votre compte</u></span></a>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock content %}

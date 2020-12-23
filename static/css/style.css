@@ -663,6 +663,10 @@ body {
   margin: 0;
 }
 
+html, body {
+    height: 100vh;
+}
+
 article,
 aside,
 details,
@@ -1736,14 +1740,14 @@ button {
 
 .ps-btn, button.ps-btn {
   display: inline-block;
-  padding: 15px 45px;
-  font-size: 16px;
+  padding: 10px 0;
+  font-size: 14px;
   font-weight: 600;
   line-height: 20px;
   color: #000;
   border: none;
   font-weight: 600;
-  border-radius: 4px;
+  border-radius: 0px;
   background-color: #fcb800;
   transition: all .4s ease;
   cursor: pointer;
@@ -8992,7 +8996,7 @@ html:not([dir="rtl"]) .noUi-horizontal .noUi-handle {
   font-weight: 600;
   padding-left: 30px;
   padding-right: 30px;
-  vertical-align: top;
+  display: inline;
   max-height: 50px;
   font-size: 18px;
 }
@@ -13795,7 +13799,6 @@ html:not([dir="rtl"]) .noUi-horizontal .noUi-handle {
 }
 
 .ps-my-account {
-  min-height: 80vh;
   background-color: #f1f1f1;
 }
 
