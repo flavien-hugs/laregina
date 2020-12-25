@@ -242,8 +242,8 @@
 
     {% if request.resolver_match.url_name == 'detail' %}
         <nav class="navigation--mobile-product">
-            <a class="ps-btn ps-btn--black" href="#">Ajouter au panier</a>
-            <a class="ps-btn" href="#">Acheter maintenant</a>
+            <a class="ps-btn ps-btn--black" href="{% url "cart" %}">Ajouter au panier</a>
+            <a class="ps-btn" href="{% url "payment" %}">Acheter maintenant</a>
         </nav>
     {% endif %}
 
@@ -261,7 +261,7 @@
                         <div class="ps-product__content">
                             <a class="ps-product__remove" href="#"><i class="icon-cross"></i></a>
                             <a href="#">MVMTH Classical Leather Watch In Black</a>
-                            <p><strong>Sold by:</strong> YOUNG SHOP</p><small>1 x $59.99</small>
+                            <p><strong>Vendu par:</strong> YOUNG SHOP</p><small>1 x $59.99</small>
                         </div>
                     </div>
                 </div>
@@ -277,36 +277,38 @@
 
     {% include "includes/partials/menu_category_mobile.html" %}
 
-    <div class="navigation--list">
-        <div class="navigation__content">
-            <a class="navigation__item ps-toggle--sidebar" href="#menu-mobile">
-                <i class="icon-menu"></i><span> Menu</span>
-            </a>
-            
-            <a class="navigation__item ps-toggle--sidebar" href="#navigation-mobile">
-                <i class="icon-list4"></i><span> Catégories</span>
-            </a>
+    {% if not request.resolver_match.url_name == 'detail' %}
+        <div class="navigation--list">
+            <div class="navigation__content">
+                <a class="navigation__item ps-toggle--sidebar" href="#menu-mobile">
+                    <i class="icon-menu"></i><span> Menu</span>
+                </a>
+                
+                <a class="navigation__item ps-toggle--sidebar" href="#navigation-mobile">
+                    <i class="icon-list4"></i><span> Catégories</span>
+                </a>
 
-            <a class="navigation__item ps-toggle--sidebar" href="#search-sidebar">
-                <i class="icon-magnifier"></i><span> Rechercher</span>
-            </a>
+                <a class="navigation__item ps-toggle--sidebar" href="#search-sidebar">
+                    <i class="icon-magnifier"></i><span> Rechercher</span>
+                </a>
 
-            <a class="navigation__item ps-toggle--sidebar" href="#cart-mobile">
-                <i class="icon-bag2"></i><span> Panier</span>
-            </a>
+                <a class="navigation__item ps-toggle--sidebar" href="#cart-mobile">
+                    <i class="icon-bag2"></i><span> Panier</span>
+                </a>
+            </div>
         </div>
-    </div>
 
-    <div class="ps-panel--sidebar" id="search-sidebar">
-        <div class="ps-panel__header">
-            <form class="ps-form--search-mobile" action="" method="get">
-                <div class="form-group--nest">
-                    <input class="form-control" type="text" placeholder="Rechercher un produit, une catégorie...">
-                    <button><i class="icon-magnifier"></i></button>
-                </div>
-            </form>
+        <div class="ps-panel--sidebar" id="search-sidebar">
+            <div class="ps-panel__header">
+                <form class="ps-form--search-mobile" action="" method="get">
+                    <div class="form-group--nest">
+                        <input class="form-control" type="text" placeholder="Rechercher un produit, une catégorie...">
+                        <button><i class="icon-magnifier"></i></button>
+                    </div>
+                </form>
+            </div>
+            <div class="navigation__content"></div>
         </div>
-        <div class="navigation__content"></div>
-    </div>
+    {% endif %}
 
     {% include "includes/partials/menu_mobile.html" %}

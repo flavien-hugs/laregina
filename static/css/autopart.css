@@ -1,5 +1,4 @@
 .ps-btn, button.ps-btn {
-  background-color: #dd2400;
   color: #ffffff;
 }
 
@@ -239,90 +238,5 @@
   }
   .ps-banner--autopart p {
     font-size: 12px;
-  }
-}
-
-#homepage-2 a:hover {
-  color: #dd2400;
-}
-
-#homepage-2 .ps-block--category-auto-part:hover {
-  border-color: #dd2400;
-}
-
-#homepage-2 .ps-block--deal-hot {
-  border-color: #dd2400;
-}
-
-#homepage-2 .ps-deal-hot {
-  padding: 50px 0;
-}
-
-#homepage-2 .ps-product .ps-product__actions li a:hover {
-  background-color: #dd2400;
-}
-
-#homepage-2 .ps-product .ps-product__actions li a:hover i {
-  color: #ffffff;
-}
-
-#homepage-2 .ps-home-promotions {
-  padding-bottom: 50px;
-}
-
-@media (max-width: 767px) {
-  #homepage-2 .ps-home-promotions {
-    padding-bottom: 30px;
-  }
-}
-
-@media (max-width: 479px) {
-  #homepage-2 .ps-home-promotions {
-    padding-bottom: 20px;
-  }
-}
-
-#homepage-2 .ps-block--testimonial .ps-block__content i {
-  color: #dd2400;
-}
-
-#homepage-2 .ps-block--site-features i {
-  color: #dd2400;
-}
-
-#homepage-2 .ps-home-banner .owl-slider .owl-nav {
-  left: 50%;
-  max-width: 1200px;
-  margin: 0 auto;
-  transform: translate(-50%, -50%);
-}
-
-#homepage-2 .ps-home-banner .owl-slider .owl-nav > * {
-  width: 48px;
-  height: 48px;
-}
-
-#homepage-2 .ps-site-features {
-  border-top: 1px solid #e1e1e1;
-}
-
-#homepage-2 .ps-site-features .ps-block--site-features {
-  padding: 50px 0;
-  border-bottom: 1px solid #e1e1e1;
-}
-
-#homepage-2 .ps-top-categories {
-  padding: 70px 0 50px;
-}
-
-@media (max-width: 767px) {
-  #homepage-2 .ps-top-categories {
-    padding: 50px 0 30px;
-  }
-}
-
-@media (max-width: 479px) {
-  #homepage-2 .ps-top-categories {
-    padding: 50px 0 30px;
   }
 }

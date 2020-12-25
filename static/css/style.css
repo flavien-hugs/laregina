@@ -1740,7 +1740,7 @@ button {
 
 .ps-btn, button.ps-btn {
   display: inline-block;
-  padding: 10px 0;
+  padding: 10px 15px;
   font-size: 14px;
   font-weight: 600;
   line-height: 20px;

@@ -1,10 +1,10 @@
 {% extends "base.html" %}
-{% load static %}{% get_static_prefix as STATIC_PREFIX %}
 
 {% block content %}
     <div class="ps-vendor-banner bg--cover" data-background="{{ STATIC_PREFIX }}img/bg/vendor.jpg">
         <div class="container">
-            <h2>Des millions d'acheteurs ont hâte de voir ce que vous avez en magasin</h2><a class="ps-btn ps-btn--lg" href="#">Commencer à vendre</a>
+            <h2>Des millions d'acheteurs ont hâte de voir ce que vous avez en magasin</h2>
+            <a class="ps-btn ps-btn--lg" href="{% url "register" %}">Commencer à vendre</a>
         </div>
     </div>
     <div class="ps-section--vendor ps-vendor-about">

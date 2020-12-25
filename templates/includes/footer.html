@@ -1,5 +1,6 @@
+    {% include "partials/newsletter.html" %}
 
-    <footer class="ps-footer pt-5 footer flex-shrink-0">
+    <footer class="ps-footer pt-5 flex-shrink-0">
         <div class="ps-container">
             <div class="ps-footer__widgets pb-0">
                 <aside class="widget widget_footer widget_contact-us">
@@ -26,19 +27,18 @@
                     <h4 class="widget-title">Entreprise</h4>
                     <ul class="ps-list--link">
                         <li><a href="{% url "about-us" %}">À propos de nous</a></li>
-                        <li><a href="#">Affilié</a></li>
-                        <li><a href="#">Carrière</a></li>
-                        <li><a href="{% url "contact" %}">Contact</a></li>
+                        <li><a href="#">Soumettre une annonce</a></li>
+                        <li><a href="#">Liste des magasins</a></li>
+                        <li><a href="#">Mode de livraison</a></li>
                     </ul>
                 </aside>
 
                 <aside class="widget widget_footer">
-                    <h4 class="widget-title">Boutique</h4>
+                    <h4 class="widget-title">Mon compte</h4>
                     <ul class="ps-list--link">
-                        <li><a href="#">Mon compte</a></li>
-                        <li><a href="#">Liste des magasins</a></li>
-                        <li><a href="#">Suivre ma commande</a></li>
-                        <li><a href="#">Blog</a></li>
+                        <li><a href="#">Mes commandes</a></li>
+                        <li><a href="{% url "tracking-order" %}">Suivre ma commande</a></li>
+                        <li><a href="#">Mode de paiement</a></li>
                     </ul>
                 </aside>
             </div>
