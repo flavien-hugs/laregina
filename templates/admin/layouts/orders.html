@@ -1,0 +1,61 @@
+{% extends "admin/base.html" %}
+
+{% block content %}
+    <div class="ps-main__wrapper">
+        <header class="header--dashboard">
+            <div class="header__left">
+                <h3>Commandes</h3>
+                <p>Liste de vos commandes</p>
+            </div>
+            {% include "admin/partials/header_top.html" %}
+        </header>
+
+        <section class="ps-items-listing">
+            <div class="ps-section__header simple">
+                <div class="ps-section__actions">
+                    <a class="ps-btn ps-btn--gray" href="#"><i class="icon icon-download2 mr-2"></i>Export</a>
+                </div>
+            </div>
+
+            <div class="ps-section__content">
+                <div class="table-responsive">
+                    <table class="table ps-table">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Date</th>
+                                <th>Produits</th>
+                                <th>Paiement</th>
+                                <th>Status</th>
+                                <th>Total</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>#A580</td>
+                                <td><strong> Aug, 15, 2020</strong></td>
+                                <td><a href="{% url "vendor-order-detail" %}"><strong>Unero Black Military</strong></a></td>
+                                <td><span class="ps-badge success">Payé</span></td>
+                                <td><span class="ps-fullfillment success">Livré</span></td>
+                                <td><strong>$56.00</strong></td>
+                                <td>
+                                    <div class="dropdown">
+                                        <a id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="icon-ellipsis"></i></a>
+
+                                        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                            <a class="dropdown-item" href="#">Modifier</a>
+                                            <a class="dropdown-item" href="#">Supprimer</a>
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            {% include "admin/partials/pagination.html" %}
+        </section>
+    </div>
+{% endblock content %}

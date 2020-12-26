@@ -36,7 +36,8 @@
                 <aside class="widget widget_footer">
                     <h4 class="widget-title">Mon compte</h4>
                     <ul class="ps-list--link">
-                        <li><a href="#">Mes commandes</a></li>
+                        <li><a href="{% url "vendor-admin" %}">Mes articles</a></li>
+                        <li><a href="{% url "vendor-admin" %}">Mes commandes</a></li>
                         <li><a href="{% url "tracking-order" %}">Suivre ma commande</a></li>
                         <li><a href="#">Mode de paiement</a></li>
                     </ul>

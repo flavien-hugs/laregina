@@ -1,0 +1,34 @@
+<div class="ps-main__sidebar">
+    <div class="ps-sidebar">
+        <div class="ps-sidebar__top">
+            <div class="ps-block--user-wellcome">
+                <div class="ps-block__left"><img src="{{ STATIC_PREFIX }}img/users/admin.jpg" alt=""></div>
+                <div class="ps-block__right">
+                    <p>Bonjour,<a href="#">Boutique Unsta</a></p>
+                </div>
+                <div class="ps-block__action"><a href="#"><i class="icon-exit"></i></a></div>
+            </div>
+            <div class="ps-block--earning-count"><small>Revenus</small>
+                <h3>$12,560.55</h3>
+            </div>
+        </div>
+        <div class="ps-sidebar__content">
+            <div class="ps-sidebar__center">
+                <ul class="menu">
+                    <li>
+                        <a class="active" href="{% url "vendor-admin" %}">
+                        <i class="icon-home"></i>Tableau de Bord</a>
+                    </li>
+                    <li><a href="{% url "vendor-product" %}"><i class="icon-database"></i>Mes produits</a></li>
+                    <li><a href="{% url "vendor-orders" %}"><i class="icon-bag2"></i>Mes commandes</a></li>
+                    <li><a href="{% url "vendor-settings" %}"><i class="icon-cog"></i>Réglages</a></li>
+                </ul>
+            </div>
+            <div class="ps-sidebar__footer">
+                <div class="ps-copyright"><img src="{{ STATIC_PREFIX }}img/logo_light.png" alt="">
+                    <p>&copy;2020 {{ title }} marketplace. <br/> All rights reversed.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

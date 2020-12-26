@@ -1,0 +1,76 @@
+{% extends "admin/base.html" %}
+
+{% block content %}
+    <div class="ps-main__wrapper">
+        <header class="header--dashboard">
+            <div class="header__left">
+                <h3>Produits</h3>
+                <p>Listes de produits</p>
+            </div>
+
+            {% include "admin/partials/header_top.html" %}
+        </header>
+
+        <section class="ps-items-listing">
+            <div class="ps-section__actions">
+                <a class="ps-btn success" href="{% url "vendor-product-add" %}">
+                    <i class="icon icon-plus mr-2"></i>
+                    Ajouter un nouveau produit
+                </a>
+            </div>
+
+            <div class="ps-section__header">
+                <div class="ps-section__search">
+                    <form class="ps-form--search-simple" action="#" method="get">
+                        <input class="form-control" type="text" placeholder="Chercher un produit...">
+                        <button><i class="icon icon-magnifier"></i></button>
+                    </form>
+                </div>
+            </div>
+
+            <div class="ps-section__content">
+                <div class="table-responsive">
+                    <table class="table ps-table">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Nom</th>
+                                <th>Prix</th>
+                                <th>Catégories</th>
+                                <th>Date</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>ABH-0</td>
+                                <td><a href="#"><strong>Herschel Leather Duffle Bag In Brown Color</strong></a></td>
+                                <td><strong>£125.30</strong></td>
+                                <td>
+                                    <p class="ps-item-categories">
+                                        <a href="#">Clothing &amp; Apparel</a>
+                                    </p>
+                                </td>
+                                <td>2019/11/06</td>
+                                <td>
+                                    <div class="dropdown">
+                                        <a id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                            <i class="icon-ellipsis"></i>
+                                        </a>
+                                        
+                                        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                            <a class="dropdown-item" href="#">Modifier</a>
+                                            <a class="dropdown-item" href="#">Supprimer</a>
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            
+            {% include "admin/partials/pagination.html" %}
+        </section>
+    </div>
+{% endblock content %}

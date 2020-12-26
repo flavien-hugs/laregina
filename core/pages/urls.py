@@ -45,4 +45,23 @@ urlpatterns  = [
     path('contact/', cache_page(60 * 2)(TemplateView.as_view(
         extra_context={'page_title': 'Nous contacter', 'page_description': "Contactez-nous pour toute question"
         }, template_name='pages/contact.html')), name='contact'),
+    
+    path('vendor-admin/', TemplateView.as_view(
+        extra_context={'page_title': 'Tableau de bord', 'page_description': "Tableau de bord"
+        }, template_name='admin/index.html'), name='vendor-admin'),
+    path('vendor-admin/product/', TemplateView.as_view(
+        extra_context={'page_title': 'Liste des produits', 'page_description': "Liste des produits"
+        }, template_name='admin/layouts/product.html'), name='vendor-product'),
+    path('vendor-admin/product/add/', TemplateView.as_view(
+        extra_context={'page_title': 'Ajouter un produit', 'page_description': "Ajouter un produit"
+        }, template_name='admin/layouts/add_product.html'), name='vendor-product-add'),
+    path('vendor-admin/orders/', TemplateView.as_view(
+        extra_context={'page_title': 'Liste des commandes', 'page_description': "Liste des commandes"
+        }, template_name='admin/layouts/orders.html'), name='vendor-orders'),
+    path('vendor-admin/orders/detail/', TemplateView.as_view(
+        extra_context={'page_title': 'Detail de la commande', 'page_description': "Detail de la commande"
+        }, template_name='admin/layouts/orders_detail.html'), name='vendor-order-detail'),
+    path('vendor-admin/orders/settings/', TemplateView.as_view(
+        extra_context={'page_title': 'Configuration', 'page_description': "Configuration"
+        }, template_name='admin/layouts/settings.html'), name='vendor-settings'),
 ]
