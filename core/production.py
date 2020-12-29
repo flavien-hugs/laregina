@@ -21,8 +21,9 @@ INSTALLED_APPS += ['whitenoise.runserver_nostatic']
 
 # 'django.middleware.security.SecurityMiddleware',
 MIDDLEWARE += [
-    'django.middleware.security.SecurityMiddleware',
+    'django.middleware.cache.UpdateCacheMiddleware',
     'whitenoise.middleware.WhiteNoiseMiddleware',
+    'django.middleware.cache.FetchFromCacheMiddleware',
 ]
 
 # https://docs.djangoproject.com/fr/3.0/ref/settings/
@@ -31,6 +32,8 @@ MIDDLEWARE += [
 HOST_SCHEME = "https://"
 X_FRAME_OPTIONS = 'DENY'
 SECURE_FRAME_DENY = True
+CSRF_USE_SESSIONS = True
+CSRF_COOKIE_NAME = 'tokenize'
 CSRF_COOKIE_SECURE = True
 SECURE_SSL_REDIRECT = True
 SECURE_HSTS_PRELOAD = True
@@ -43,6 +46,14 @@ SECURE_HSTS_INCLUDE_SUBDOMAINS = True
 SECURE_SSL_HOST = BASE_URL
 SECURE_REFERRER_POLICY = 'origin-when-cross-origin'
 SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+
+# Gestion de cache
+CACHE_MIDDLEWARE_ALIAS = 'cgic'
+CACHE_MIDDLEWARE_KEY_PREFIX = 'c'
+CACHE_MIDDLEWARE_SECONDS = 300
+
+# gestion interdomaine
+CSRF_COOKIE_DOMAIN = ".onrender.com"
 
 # Simplified static file serving.
 # https://warehouse.python.org/project/whitenoise/
