@@ -1,20 +1,22 @@
 {% extends "base.html" %}
 
 {% block content %}
-    <div class="ps-page--404">
-        <div class="container">
-            <div class="ps-section__content">
-                <img src="{{ STATIC_PREFIX }}img/404.jpg" alt="">
-                <h3>ohh! Page non trouvée</h3>
-                <p>Il semble que nous ne trouvons pas ce que vous cherchez.
-                    Peut-être que la recherche peut vous aider ou revenir à la page d'
-                    <a href="/"> accueil</a>
-                </p>
-                <form class="ps-form--widget-search" action="#" method="get">
-                    <input class="form-control" type="text" placeholder="Chercher...">
-                    <button><i class="icon-magnifier"></i></button>
-                </form>
+    {% cache 120 error404 request.user.pk|default_if_none:"0" %}
+        <div class="ps-page--404">
+            <div class="container">
+                <div class="ps-section__content">
+                    <img src="{{ STATIC_PREFIX }}img/404.jpg" alt="">
+                    <h3>ohh! Page non trouvée</h3>
+                    <p>Il semble que nous ne trouvons pas ce que vous cherchez.
+                        Peut-être que la recherche peut vous aider ou revenir à la page d'
+                        <a href="/"> accueil</a>
+                    </p>
+                    <form class="ps-form--widget-search" action="#" method="get">
+                        <input class="form-control" type="text" placeholder="Chercher...">
+                        <button><i class="icon-magnifier"></i></button>
+                    </form>
+                </div>
             </div>
         </div>
-    </div>
+    {% endcache %}
 {% endblock content %}

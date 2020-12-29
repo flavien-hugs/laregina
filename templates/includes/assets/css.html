@@ -1,16 +1,17 @@
 {% load cache %}
 
-{% cache 360 style_file %}
-<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.8.1/slick.min.css" integrity="sha512-yHknP1/AwR+yx26cB1y0cjvQUMvEa2PFzt1c9LlS4pRQ5NOTZFWbhBig+X9G9eYW/8m0/4OXNx8pxJ6z57x0dw==" crossorigin="anonymous">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/noUiSlider/14.6.2/nouislider.min.css" integrity="sha512-O3hRQ2OLCWeTZjAqJzcWMwFGDuv/hzjfwgrKm1Q5+RhyM0Y0rhPF7epp5cdQN39zYNwGeNuixF3fE5AhHOiSzA==" crossorigin="anonymous">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/css/select2.min.css" integrity="sha512-nMNlpuaDPrqlEls3IX/Q56H36qvBASwb3ipuo3MxeWbsQB1881ox0cRv7UPTgBlriqoynt35KjEwgGUeUXIPnw==" crossorigin="anonymous">
+{% cache 120 css_file request.user.pk|default_if_none:"0" %}
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.8.1/slick.min.css" integrity="sha512-yHknP1/AwR+yx26cB1y0cjvQUMvEa2PFzt1c9LlS4pRQ5NOTZFWbhBig+X9G9eYW/8m0/4OXNx8pxJ6z57x0dw==" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/noUiSlider/14.6.2/nouislider.min.css" integrity="sha512-O3hRQ2OLCWeTZjAqJzcWMwFGDuv/hzjfwgrKm1Q5+RhyM0Y0rhPF7epp5cdQN39zYNwGeNuixF3fE5AhHOiSzA==" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/css/select2.min.css" integrity="sha512-nMNlpuaDPrqlEls3IX/Q56H36qvBASwb3ipuo3MxeWbsQB1881ox0cRv7UPTgBlriqoynt35KjEwgGUeUXIPnw==" crossorigin="anonymous">
+
+    <link rel="stylesheet" href="{{ STATIC_PREFIX }}css/plugins/fontawesome.min.css">
+    <link rel="stylesheet" href="{{ STATIC_PREFIX }}fonts/linearicons/demo.css">
+    <link rel="stylesheet" href="{{ STATIC_PREFIX }}css/plugins/owl.carousel.min.css">
+    <link rel="stylesheet" href="{{ STATIC_PREFIX }}css/plugins/owl.theme.default.min.css">
+    <link rel="stylesheet" href="{{ STATIC_PREFIX }}css/plugins/fontawesomestars.css">
 {% endcache %}
 
-<link rel="stylesheet" href="{{ STATIC_PREFIX }}css/plugins/fontawesome.min.css">
-<link rel="stylesheet" href="{{ STATIC_PREFIX }}fonts/linearicons/demo.css">
-<link rel="stylesheet" href="{{ STATIC_PREFIX }}css/plugins/owl.carousel.min.css">
-<link rel="stylesheet" href="{{ STATIC_PREFIX }}css/plugins/owl.theme.default.min.css">
-<link rel="stylesheet" href="{{ STATIC_PREFIX }}css/plugins/fontawesomestars.css">
 <link rel="stylesheet" href="{{ STATIC_PREFIX }}css/style.css">
 <link rel="stylesheet" href="{{ STATIC_PREFIX }}css/autopart.css">

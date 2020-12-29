@@ -3,9 +3,11 @@
     <html lang="fr">
         <head>
             {% load static cache %}{% get_static_prefix as STATIC_PREFIX %}
-            {% cache 360 meta_and_css_file %}
+
+            {% cache 120 meta request.user.pk|default_if_none:"0" %}
                 {% include "includes/meta.html" %}
             {% endcache %}
+
             {% include "includes/assets/css.html" %}
 
             <title>
@@ -23,12 +25,19 @@
         <body class="d-flex flex-column">
             <div class="flex-grow-1 flex-shrink-0">
                 <main class="ps-page--single">
-                    {% include "includes/header.html" %}
-                    
+                    <!-- mise en cache du header pendant 120ms -->
+                    {% cache 120 header request.user.pk|default_if_none:"0" %}
+                        {% include "includes/header.html" %}
+                    {% endcache %}
+
                     {% block content %}
                     {% endblock content %}
                 </main>
-                {% include "includes/footer.html" %}
+
+                <!-- mise en cache du header pendant 120ms -->
+                {% cache 120 footer request.user.pk|default_if_none:"0" %}
+                    {% include "includes/footer.html" %}
+                {% endcache %}
             </div>
 
             {% include "includes/assets/javascript.html" %}

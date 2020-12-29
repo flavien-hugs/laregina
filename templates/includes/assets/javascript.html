@@ -1,16 +1,17 @@
 {% load cache %}
 
-{% cache 360 js_file %}
+{% cache 360 javascript request.user.pk|default_if_none:"0" %}
 
-{% include "includes/assets/javascript_file.html" %}
+    {% include "includes/assets/javascript_file.html" %}
 
-<script defer src="https://cdnjs.cloudflare.com/ajax/libs/noUiSlider/14.6.2/nouislider.min.js" integrity="sha512-hwgsSKm7cPjNHLACxyMGVRrd7cH+wveyYM1ZxWxxbCZd/pXdMukyuIrrCjt2I7iLsmYDk02B1ZUcarEv1A3RVQ==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.imagesloaded/4.1.4/imagesloaded.pkgd.min.js" integrity="sha512-S5PZ9GxJZO16tT9r3WJp/Safn31eu8uWrzglMahDT4dsmgqWonRY9grk3j+3tfuPr9WJNsfooOR7Gi7HL5W2jw==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.8.1/slick.min.js" integrity="sha512-XtmMtDEcNz2j7ekrtHvOVR4iwwaD6o/FUJe6+Zq+HgcCsk3kj4uSQQR8weQ2QVj1o0Pk6PwYLohm206ZzNfubg==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/masonry/4.2.2/masonry.pkgd.min.js" integrity="sha512-JRlcvSZAXT8+5SQQAvklXGJuxXTouyq8oIMaYERZQasB8SBDHZaUbeASsJWpk0UUrf89DP3/aefPPrlMR1h1yQ==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.isotope/3.0.6/isotope.pkgd.min.js" integrity="sha512-Zq2BOxyhvnRFXu0+WE6ojpZLOU2jdnqbrM1hmVdGzyeCa1DgM3X5Q4A/Is9xA1IkbUeDd7755dNNI/PzSf2Pew==" crossorigin="anonymous"></script>
+    <script defer src="https://cdnjs.cloudflare.com/ajax/libs/noUiSlider/14.6.2/nouislider.min.js" integrity="sha512-hwgsSKm7cPjNHLACxyMGVRrd7cH+wveyYM1ZxWxxbCZd/pXdMukyuIrrCjt2I7iLsmYDk02B1ZUcarEv1A3RVQ==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.imagesloaded/4.1.4/imagesloaded.pkgd.min.js" integrity="sha512-S5PZ9GxJZO16tT9r3WJp/Safn31eu8uWrzglMahDT4dsmgqWonRY9grk3j+3tfuPr9WJNsfooOR7Gi7HL5W2jw==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.8.1/slick.min.js" integrity="sha512-XtmMtDEcNz2j7ekrtHvOVR4iwwaD6o/FUJe6+Zq+HgcCsk3kj4uSQQR8weQ2QVj1o0Pk6PwYLohm206ZzNfubg==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/masonry/4.2.2/masonry.pkgd.min.js" integrity="sha512-JRlcvSZAXT8+5SQQAvklXGJuxXTouyq8oIMaYERZQasB8SBDHZaUbeASsJWpk0UUrf89DP3/aefPPrlMR1h1yQ==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.isotope/3.0.6/isotope.pkgd.min.js" integrity="sha512-Zq2BOxyhvnRFXu0+WE6ojpZLOU2jdnqbrM1hmVdGzyeCa1DgM3X5Q4A/Is9xA1IkbUeDd7755dNNI/PzSf2Pew==" crossorigin="anonymous"></script>
+
+    <script src="{{ STATIC_PREFIX }}js/plugins/owl.carousel.min.js" type="text/javascript"></script>
+    <script src="{{ STATIC_PREFIX }}js/plugins/slick-animation.min.js" type="text/javascript"></script>
+    <script src="{{ STATIC_PREFIX }}js/plugins/lightgallery-all.min.js" type="text/javascript"></script>
+    <script src="{{ STATIC_PREFIX }}js/plugins/sticky-sidebar.min.js" type="text/javascript"></script>
+    <script src="{{ STATIC_PREFIX }}js/plugins/jquery.barrating.min.js" type="text/javascript"></script>
 {% endcache %}
 
-<script src="{{ STATIC_PREFIX }}js/plugins/owl.carousel.min.js" type="text/javascript"></script>
-<script src="{{ STATIC_PREFIX }}js/plugins/slick-animation.min.js" type="text/javascript"></script>
-<script src="{{ STATIC_PREFIX }}js/plugins/lightgallery-all.min.js" type="text/javascript"></script>
-<script src="{{ STATIC_PREFIX }}js/plugins/sticky-sidebar.min.js" type="text/javascript"></script>
-<script src="{{ STATIC_PREFIX }}js/plugins/jquery.barrating.min.js" type="text/javascript"></script>
 <!-- custom scripts-->
 <script src="{{ STATIC_PREFIX }}js/main.js" type="text/javascript"></script>
