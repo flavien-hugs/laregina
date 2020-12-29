@@ -7,6 +7,12 @@ DEBUG = TEMPLATE_DEBUG = False
 BASE_URL = 'https://vendito.onrender.com'
 ALLOWED_HOSTS = ['vendito.onrender.com', '.onrender.com']
 
+{
+    'default': {
+        'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
+    }
+}
+
 # Parse database configuration from $DATABASE_URL
 # Change 'default' database configuration with
 # $DATABASE_URL.
@@ -49,8 +55,9 @@ SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 
 # Gestion de cache
 CACHE_MIDDLEWARE_ALIAS = 'cgic'
-CACHE_MIDDLEWARE_KEY_PREFIX = 'c'
-CACHE_MIDDLEWARE_SECONDS = 300
+CACHE_MIDDLEWARE_KEY_PREFIX = 'txt'
+CACHE_MIDDLEWARE_SECONDS = 800
+SESSION_COOKIE_SECURE = True
 
 # gestion interdomaine
 CSRF_COOKIE_DOMAIN = ".onrender.com"
