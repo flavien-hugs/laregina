@@ -63,5 +63,8 @@ urlpatterns  = [
         }, template_name='admin/layouts/orders_detail.html'), name='vendor-order-detail'),
     path('vendor-admin/orders/settings/', TemplateView.as_view(
         extra_context={'page_title': 'Configuration', 'page_description': "Configuration"
-        }, template_name='admin/layouts/settings.html'), name='vendor-settings'),
+        }, template_name='admin/layouts/settings-store.html'), name='vendor-settings'),
+    path('vendor-admin/vendor-store/', TemplateView.as_view(
+        extra_context={'page_title': 'Vendor store', 'page_description': "Vendor store"
+        }, template_name='admin/layouts/vendor-store.html'), name='vendor-store'),
 ]

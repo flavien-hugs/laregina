@@ -22,40 +22,40 @@
                                     <div class="form-group">
                                         <label>Nom du produit<sup>*</sup>
                                         </label>
-                                        <input class="form-control" type="text" placeholder="Enter product name..." />
+                                        <input class="form-control" type="text" placeholder="Entre le nom du produit..." />
                                     </div>
                                     <div class="form-group">
                                         <label>Référence<sup>*</sup>
                                         </label>
-                                        <input class="form-control" type="text" placeholder="Enter product Reference..." />
+                                        <input class="form-control" type="text" placeholder="Entrez la référence du produit..." />
                                     </div>
                                     <div class="form-group">
-                                        <label>Product Summary<sup>*</sup>
+                                        <label>Description du produit<sup>*</sup>
                                         </label>
-                                        <textarea class="form-control" rows="6" placeholder="Enter product description..."></textarea>
+                                        <textarea class="form-control" rows="6" placeholder="Entrez la description du produit..."></textarea>
                                     </div>
                                     <div class="form-group">
-                                        <label>Regular Price<sup>*</sup>
-                                        </label>
-                                        <input class="form-control" type="text" placeholder="" />
-                                    </div>
-                                    <div class="form-group">
-                                        <label>Sale Price<sup>*</sup>
+                                        <label>Prix normal<sup>*</sup>
                                         </label>
                                         <input class="form-control" type="text" placeholder="" />
                                     </div>
                                     <div class="form-group">
-                                        <label>Sale Quantity<sup>*</sup>
+                                        <label>Prix de vente<sup>*</sup>
                                         </label>
                                         <input class="form-control" type="text" placeholder="" />
                                     </div>
                                     <div class="form-group">
-                                        <label>Sold Items<sup>*</sup>
+                                        <label>Quantité de vente<sup>*</sup>
                                         </label>
                                         <input class="form-control" type="text" placeholder="" />
                                     </div>
                                     <div class="form-group">
-                                        <label>Product Description<sup>*</sup></label>
+                                        <label>Articles vendus<sup>*</sup>
+                                        </label>
+                                        <input class="form-control" type="text" placeholder="" />
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Description du produit<sup>*</sup></label>
                                         <textarea id="summernote" rows="6" name="editordata"></textarea>
                                     </div>
                                 </div>
@@ -64,47 +64,46 @@
 
                         <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 col-12">
                             <figure class="ps-block--form-box">
-                                <figcaption>Product Images</figcaption>
+                                <figcaption>Images du produit</figcaption>
                                 <div class="ps-block__content">
                                     <div class="form-group">
-                                        <label>Product Thumbnail</label>
+                                        <label>Vignette du produit</label>
                                         <div class="form-group--nest">
                                             <input class="form-control mb-1" type="text" placeholder="">
-                                            <button class="ps-btn ps-btn--sm">Choose</button>
+                                            <button class="ps-btn ps-btn--sm">Choisir</button>
                                         </div>
                                     </div>
                                     <div class="form-group">
-                                        <label>Product Gallery</label>
+                                        <label>Gallerie de produits</label>
                                         <div class="form-group--nest">
                                             <input class="form-control mb-1" type="text" placeholder="">
-                                            <button class="ps-btn ps-btn--sm">Choose</button>
+                                            <button class="ps-btn ps-btn--sm">Choisir</button>
                                         </div>
                                     </div>
                                     <div class="form-group form-group--nest">
                                         <input class="form-control mb-1" type="text" placeholder="">
-                                        <button class="ps-btn ps-btn--sm">Choose</button>
+                                        <button class="ps-btn ps-btn--sm">Choisir</button>
                                     </div>
                                     <div class="form-group">
-                                        <label>Video (optional)
+                                        <label>Video (facultatif)
                                         </label>
-                                        <input class="form-control" type="text" placeholder="Enter video URL" />
+                                        <input class="form-control" type="text" placeholder="Saisissez l'URL de la vidéo">
                                     </div>
                                 </div>
                             </figure>
 
                             <figure class="ps-block--form-box">
-                                <figcaption>Inventory</figcaption>
+                                <figcaption>Inventaire</figcaption>
                                 <div class="ps-block__content">
                                     <div class="form-group">
                                     <div class="form-group form-group--select">
-                                        <label>Status
-                                        </label>
+                                        <label>Status</label>
                                         <div class="form-group__content">
                                             <select class="ps-select" title="Status">
-                                                <option value="1">Status 1</option>
-                                                <option value="2">Status 2</option>
-                                                <option value="3">Status 3</option>
-                                                <option value="4">Status 4</option>
+                                                <option value="1">Vendu</option>
+                                                <option value="2">En cours de livraison</option>
+                                                <option value="3">Annuler</option>
+                                                <option value="4">En vente</option>
                                             </select>
                                         </div>
                                     </div>
@@ -115,14 +114,13 @@
                                 <figcaption>Meta</figcaption>
                                 <div class="ps-block__content">
                                     <div class="form-group form-group--select">
-                                        <label>Marque
-                                        </label>
+                                        <label>Marque</label>
                                         <div class="form-group__content">
                                             <select class="ps-select" title="Brand">
-                                                <option value="1">Brand 1</option>
-                                                <option value="2">Brand 2</option>
-                                                <option value="3">Brand 3</option>
-                                                <option value="4">Brand 4</option>
+                                                <option value="1">Marque 1</option>
+                                                <option value="2">Marque 2</option>
+                                                <option value="3">Marque 3</option>
+                                                <option value="4">Marque 4</option>
                                             </select>
                                         </div>
                                     </div>

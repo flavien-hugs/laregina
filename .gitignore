@@ -4,4 +4,4 @@
 .env
 staticfiles
 Pipfile.lock
-logs/*
+logs
