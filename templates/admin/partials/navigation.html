@@ -1,3 +1,4 @@
+
 <div class="ps-main__sidebar">
     <div class="ps-sidebar">
         <div class="ps-sidebar__top">
@@ -16,12 +17,15 @@
             <div class="ps-sidebar__center">
                 <ul class="menu">
                     <li>
-                        <a class="active" href="{% url "vendor-admin" %}">
+                        <a class="{% if request.resolver_match.url_name == 'vendor-admin' %}active{% endif %}" href="{% url "vendor-admin" %}">
                         <i class="icon-home"></i>Tableau de Bord</a>
                     </li>
-                    <li><a href="{% url "vendor-product" %}"><i class="icon-database"></i>Mes produits</a></li>
-                    <li><a href="{% url "vendor-orders" %}"><i class="icon-bag2"></i>Mes commandes</a></li>
-                    <li><a href="{% url "vendor-settings" %}"><i class="icon-cog"></i>Réglages</a></li>
+
+                    <li><a class="{% if request.resolver_match.url_name == 'vendor-product' %}active {% elif request.resolver_match.url_name == 'vendor-product-add' %} active {% endif %}" href="{% url "vendor-product" %}"><i class="icon-database"></i>Mes produits</a></li>
+
+                    <li><a class="{% if request.resolver_match.url_name == 'vendor-orders' %}active{% endif %}" href="{% url "vendor-orders" %}"><i class="icon-bag2"></i>Mes commandes</a></li>
+
+                    <li><a class="{% if request.resolver_match.url_name == 'vendor-settings' %}active{% endif %}" href="{% url "vendor-settings" %}"><i class="icon-cog"></i>Réglages</a></li>
                 </ul>
             </div>
             <div class="ps-sidebar__footer">
