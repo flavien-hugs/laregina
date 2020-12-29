@@ -38,7 +38,7 @@
                             <div class="ps-product__info">
                                 <h1>Marshall Kilburn Portable Wireless Speaker</h1>
                                 <div class="ps-product__meta">
-                                    <p>Brand:<a href="shop-default.html">Sony</a></p>
+                                    <p>Marque: <a href="#">Sony</a></p>
                                     <div class="ps-product__rating">
                                         <select class="ps-rating" data-read-only="true">
                                             <option value="1">1</option>
@@ -51,7 +51,7 @@
                                 </div>
                                 <h4 class="ps-product__price">$36.78 – $56.99</h4>
                                 <div class="ps-product__desc">
-                                    <p>Sold By:<a href="shop-default.html"><strong> Go Pro</strong></a></p>
+                                    <p>Vendu par: <a href="{% url "vendor-store" %}" target="_blank"><strong> Go Pro</strong></a></p>
                                     <ul class="ps-list--dot">
                                         <li> Unrestrained and portable active stereo speaker</li>
                                         <li> Free from the confines of wires and chords</li>
@@ -255,7 +255,7 @@
                         <p><i class="icon-credit-card"></i> Payer en ligne ou lors de la réception de marchandises</p>
                     </aside>
                     <aside class="widget widget_sell-on-site">
-                        <p><i class="icon-store"></i> Vendre sur {{ title }} ?<a href="#"> Inscrivez-vous maintenant</a></p>
+                        <p><i class="icon-store"></i> Vendre sur {{ title }} ?<a href="{% url "register" %}" target="_blank"> Inscrivez-vous maintenant</a></p>
                     </aside>
                     <aside class="widget widget_ads"><a href="#"><img src="{{ STATIC_PREFIX }}img/ads/product-ads.png" alt=""></a></aside>
                     <aside class="widget widget_same-brand">
