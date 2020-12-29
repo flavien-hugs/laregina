@@ -185,6 +185,34 @@ cloudinary.config(
 
 MPTT_ADMIN_LEVEL_INDENT = 20
 
+# https://django-redis-cache.readthedocs.io/en/latest/intro_quick_start.html
+# https://pypi.org/project/django-redis/
+
+import lzma
+
+CACHES = {
+    "default": {
+        "BACKEND": "django_redis.cache.RedisCache",
+        "LOCATION": "redis://127.0.0.1:6379/1",
+        "OPTIONS": {
+            'PICKLE_VERSION': -1,
+            'PASSWORD': config('REDIS_PASSWORD'),
+            "COMPRESSOR": "django_redis.compressors.lzma.LzmaCompressor",
+            "CLIENT_CLASS": "django_redis.client.DefaultClient",
+            'COMPRESSOR_CLASS_KWARGS': {'level': 5,},
+            "SOCKET_CONNECT_TIMEOUT" : 5 ,
+            "SOCKET_TIMEOUT" : 5 ,
+        },
+
+        "KEY_PREFIX": "caching"
+    }
+}
+
+# Cache time to live is 15 minutes.
+CACHE_TTL = 60 * 15
+DJANGO_REDIS_IGNORE_EXCEPTIONS = True
+SESSION_ENGINE = "django.contrib.sessions.backends.cache"
+
 # LOGGING = {
 #     'version': 1,
 #     'disable_existing_loggers': False,

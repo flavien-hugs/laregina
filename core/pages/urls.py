@@ -1,8 +1,13 @@
 # static pages url
 
+
 from django.urls import path
+from django.conf import settings
 from django.views.generic import TemplateView
 from django.views.decorators.cache import cache_page
+
+from django.core.cache.backends.base import DEFAULT_TIMEOUT
+CACHE_TTL = getattr(settings, 'CACHE_TTL', DEFAULT_TIMEOUT)
 
 
 urlpatterns  = [
@@ -36,22 +41,22 @@ urlpatterns  = [
         extra_context={'page_title': 'Suivi de commande', 'page_description': "Suivi de commande"
         }, template_name='pages/tracking-order.html'), name='tracking-order'),
 
-    path('about-us/', cache_page(60 * 2)(TemplateView.as_view(
+    path('about-us/', cache_page(CACHE_TTL)(TemplateView.as_view(
         extra_context={'page_title': 'À propos de nous', 'page_description': "Qui sommes-nous ?"
         }, template_name='pages/about-us.html')), name='about-us'),
-    path('faqs/', cache_page(60 * 2)(TemplateView.as_view(
+    path('faqs/', cache_page(CACHE_TTL)(TemplateView.as_view(
         extra_context={'page_title': 'Faqs : Questions fréquemment posées', 'page_description': "Questions fréquemment posées"
         }, template_name='pages/faqs.html')), name='faqs'),
-    path('contact/', cache_page(60 * 2)(TemplateView.as_view(
+    path('contact/', cache_page(CACHE_TTL)(TemplateView.as_view(
         extra_context={'page_title': 'Nous contacter', 'page_description': "Contactez-nous pour toute question"
         }, template_name='pages/contact.html')), name='contact'),
     
-    path('vendor-admin/', TemplateView.as_view(
+    path('vendor-admin/', cache_page(CACHE_TTL)(TemplateView.as_view(
         extra_context={'page_title': 'Tableau de bord', 'page_description': "Tableau de bord"
-        }, template_name='admin/index.html'), name='vendor-admin'),
-    path('vendor-admin/product/', TemplateView.as_view(
+        }, template_name='admin/index.html')), name='vendor-admin'),
+    path('vendor-admin/product/', cache_page(CACHE_TTL)(TemplateView.as_view(
         extra_context={'page_title': 'Liste des produits', 'page_description': "Liste des produits"
-        }, template_name='admin/layouts/product.html'), name='vendor-product'),
+        }, template_name='admin/layouts/product.html')), name='vendor-product'),
     path('vendor-admin/product/add/', TemplateView.as_view(
         extra_context={'page_title': 'Ajouter un produit', 'page_description': "Ajouter un produit"
         }, template_name='admin/layouts/add_product.html'), name='vendor-product-add'),

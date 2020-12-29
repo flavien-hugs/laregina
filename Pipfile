@@ -17,6 +17,7 @@ cloudinary = "*"
 python-decouple = "*"
 dj-database-url = "*"
 psycopg2 = "*"
+django-redis = "*"
 
 [requires]
 python_version = "3.8"
