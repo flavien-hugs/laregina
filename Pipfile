@@ -18,6 +18,12 @@ python-decouple = "*"
 dj-database-url = "*"
 psycopg2 = "*"
 django-redis = "*"
+django-extensions = "*"
+django-crispy-forms = "*"
+django-allauth = "*"
+django-tagulous = "*"
+django-phonenumber-field = "*"
+phonenumbers = "*"
 
 [requires]
 python_version = "3.8"

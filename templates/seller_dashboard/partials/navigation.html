@@ -5,9 +5,9 @@
             <div class="ps-block--user-wellcome">
                 <div class="ps-block__left"><img src="{{ STATIC_PREFIX }}img/users/admin.jpg" alt=""></div>
                 <div class="ps-block__right">
-                    <p>Bonjour,<a href="{% url "vendor-store" %}" target="_blank">Boutique Unsta</a></p>
+                    <p>Bonjour,<a href="{% url "vendor-store" %}" target="_blank">{{ request.user.username }}</a></p>
                 </div>
-                <div class="ps-block__action"><a href="#"><i class="icon-exit"></i></a></div>
+                <div class="ps-block__action"><a href="{% url "account_logout" %}"><i class="icon-exit"></i></a></div>
             </div>
             <div class="ps-block--earning-count"><small>Revenus</small>
                 <h3>$12,560.55</h3>

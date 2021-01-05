@@ -2,7 +2,6 @@
 {% load cache %}
 
 
-
 {% block content %}
 
     {% cache 120 home request.user.pk|default_if_none:"0" %}
@@ -10,7 +9,7 @@
         <div class="ps-vendor-banner bg--cover" data-background="{{ STATIC_PREFIX }}img/bg/vendor.jpg">
             <div class="container">
                 <h2>Des millions d'acheteurs ont hâte de voir ce que vous avez en magasin</h2>
-                <a class="ps-btn ps-btn--lg" href="{% url "register" %}">Commencer à vendre</a>
+                <a class="ps-btn ps-btn--lg" href="{% url "account_signup" %}">Commencer à vendre</a>
             </div>
         </div>
         <div class="ps-section--vendor ps-vendor-about">

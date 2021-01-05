@@ -1,5 +1,7 @@
 {% extends "base.html" %}
 
+{% load cache %}
+
 {% block content %}
     {% cache 120 error404 request.user.pk|default_if_none:"0" %}
         <div class="ps-page--404">

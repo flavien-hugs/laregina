@@ -3,8 +3,8 @@
     <html lang="fr">
         <head>
             {% load static cache %}{% get_static_prefix as STATIC_PREFIX %}
-            {% include "admin/includes/meta.html" %}
-            {% include "admin/includes/css.html" %}
+            {% include "seller_dashboard/includes/meta.html" %}
+            {% include "seller_dashboard/includes/css.html" %}
 
             <title>
                 {% block title %}
@@ -19,13 +19,13 @@
         <body class="d-flex flex-column">
             <div class="flex-grow-1 flex-shrink-0">
                 <main class="ps-main">
-                    {% include "admin/partials/navigation.html" %}
+                    {% include "seller_dashboard/partials/navigation.html" %}
 
                     {% block content %}
                     {% endblock content %}
                 </main>
             </div>
-            {% include "admin/includes/javascript.html" %}
+            {% include "seller_dashboard/includes/javascript.html" %}
         </body>
     </html>
 {% endspaceless %}

@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+{% load crispy_forms_tags %}
+{% block title %}Créer un compte{% endblock title %}
+
+{% block content %}
+    <div class="ps-page--my-account">
+        <div class="ps-breadcrumb">
+            <div class="container">
+                <ul class="breadcrumb">
+                    <li><a href="/">Accueil</a></li>
+                    <li>Créer un compte</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="ps-my-account">
+            <div class="container">
+                <div class="row justify-content-center">
+                    <div class="col-md-9 col-sm-10">
+                        <div class="pb-5">
+                            <div class="col bg-white p-5">
+                                <h3 class="font-weight-bold pb-5">Créer un compte</h3>
+
+                                {% crispy form %}
+
+                                <!-- connexion url -->
+                                <div class="text-center w-100 pt-2 pb-3">
+                                    Vous avez déjà un compte ?
+                                    <a href="{% url "account_login" %}">
+                                        <span class="font-weight-bold"><u>Connectez-vous</u>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock content %}

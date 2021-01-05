@@ -1,0 +1,17 @@
+
+{% extends "account/email/base_message.txt" %}
+{% load account %}
+
+{% block content %}
+    {% autoescape off %}
+    {% user_display user as user_display %}
+
+        {% with site_name=current_site.name site_domain=current_site.domain %}
+            Vous recevez cet e-mail car l'utilisateur {{ user_display }} a donné votre adresse e-mail pour créer un compte sur
+            <a href="{{ site_domain }}">{{ site_name }}</a>.
+
+            Pour confirmer que c'est correct, veuillez <a class="btn btn-block btn-shadow" href="{{ activate_url }}" target="_blank"><span class="text-uppercase font-weight-bold">confirmer votre adresse électronique</span>
+            </a>
+        {% endwith %}
+    {% endautoescape %}
+{% endblock content %}

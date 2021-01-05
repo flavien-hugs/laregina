@@ -4,7 +4,7 @@
                 <div class="container">
                     <article class="ps-product--header-sticky">
                         <div class="ps-product__thumbnail">
-                            <img src="{{ STATIC_PREFIX }}img/products/detail/fullwidth/1.jpg" alt="" />
+                            <img src="{{ STATIC_PREFIX }}img/products/detail/fullwidth/1.jpg" alt="">
                         </div>
                         <div class="ps-product__wrapper">
                             <div class="ps-product__content"><a class="ps-product__title" href="#">Marshall Kilburn Portable Wireless Speaker</a>
@@ -127,7 +127,7 @@
 
                         <div class="ps-cart--mini">
                             <div class="header__extra">
-                                <a class="header__extra" href="#"><i class="icon-user"></i></a>
+                                <a class="header__extra" href="{% url 'account_login' %}"><i class="icon-user"></i></a>
                             </div>
                         </div>
                     </div>
@@ -165,8 +165,8 @@
                     </ul>
 
                     <ul class="navigation__extra">
-                        <li><a href="{% url "register" %}">Ouvrir ma boutique</a></li>
-                        <li><a href="{% url "login" %}">Se connecter</a></li>
+                        <li><a href="{% url "account_signup" %}">Ouvrir ma boutique</a></li>
+                        <li><a href="{% url "account_login" %}">Se connecter</a></li>
                     </ul>
                 </div>
             </div>
@@ -205,8 +205,8 @@
                     <div class="ps-block--user-header">
                         <div class="ps-block__left"><i class="icon-user"></i></div>
                         <div class="ps-block__right">
-                            <a href="{% url "login" %}">Connexion</a>
-                            <a href="{% url "register" %}">S'inscrire</a>
+                            <a href="{% url "account_login" %}">Connexion</a>
+                            <a href="{% url "account_signup" %}">S'inscrire</a>
                         </div>
                     </div>
                 </div>

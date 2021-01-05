@@ -29,9 +29,16 @@ def handler500(request, template_name='500.html'):
         status=500, context={'page_title': 'Erreur interne'})
 
 urlpatterns = [
-    path('', TemplateView.as_view(template_name='index.html'), name='home'),
-    path('sp-', include("core.pages.urls")),
     path('admin/', admin.site.urls),
+
+    path('', TemplateView.as_view(template_name='index.html'), name='home'),
+    path('dashboard/', include("core.pages.urls")),
+
+    # Remove logout confirmation
+    # Note: Needs to be changed to redirect to ACCOUNT_LOGOUT_REDIRECT_URL
+    # url(r'^accounts/logout/$', 'django.contrib.auth.views.logout', {'next_page': '/'}),
+    path('accounts/', include('allauth.urls')),
+    path('vendor/', include('accounts.urls', namespace='accounts')),
 ]
 
 handler404 = handler404

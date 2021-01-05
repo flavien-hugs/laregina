@@ -1,0 +1,11 @@
+<!-- accounts/snippets/already_logged_in.html templates -->
+
+{% extends "base.html" %}
+
+{% load account %}
+
+{% block content %}
+    {% user_display user as user_display %}
+
+    Note : <strong>Vous êtes déjà connecté en tant que {{ user_display }}.</strong>
+{% endblock content %}

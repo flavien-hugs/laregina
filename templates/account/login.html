@@ -1,0 +1,47 @@
+<!-- accounts/login.html templates -->
+
+{% extends "base.html" %}
+{% load crispy_forms_tags %}
+{% block title %}Connexion{% endblock title %}
+
+{% block content %}
+    <div class="ps-page--my-account">
+        <div class="ps-breadcrumb">
+            <div class="container">
+                <ul class="breadcrumb">
+                    <li><a href="/">Accueil</a></li>
+                    <li>Connexion</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="ps-my-account">
+            <div class="container">
+                <div class="row justify-content-center">
+                    <div class="col-md-8 col-sm-10">
+                        <div class="pb-5">
+                            <div class="col bg-white p-5">
+                                <h3 class="font-weight-bold pb-4">Connexion</h3>
+
+                                {% crispy form %}
+
+                                <!-- connexion url -->
+                                <div class="text-center w-100 pt-5 pb-3">
+                                    Vous êtes un nouvel utilisateur ?
+                                    <span class="font-weight-bold">
+                                      <a href="{% url 'account_signup' %}">
+                                        <span><u>Créer votre compte</u></span>
+                                    </a> &smid;
+
+                                    <a href="{% url 'account_reset_password' %}">
+                                        <span><u>Mot de passe oublié ?</u></span></a>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock content %}

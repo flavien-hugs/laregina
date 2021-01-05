@@ -11,12 +11,6 @@ CACHE_TTL = getattr(settings, 'CACHE_TTL', DEFAULT_TIMEOUT)
 
 
 urlpatterns  = [
-    path('account/seller/register/', TemplateView.as_view(
-        extra_context={'page_title': 'Créer un compte', 'page_description': "Ouvrir ma boutique"
-        }, template_name='accounts/register.html'), name='register'),
-    path('account/seller/connexion/', TemplateView.as_view(
-        extra_context={'page_title': 'Se connecter', 'page_description': "Connectez-vous à votre compte"
-        }, template_name='accounts/login.html'), name='login'),
 
     path('list/', TemplateView.as_view(
         extra_context={'page_title': 'Liste des produits', 'page_description': "Tous les produits des magasins"
@@ -51,25 +45,25 @@ urlpatterns  = [
         extra_context={'page_title': 'Nous contacter', 'page_description': "Contactez-nous pour toute question"
         }, template_name='pages/contact.html')), name='contact'),
     
-    path('vendor-admin/', cache_page(CACHE_TTL)(TemplateView.as_view(
+    path('vendor/', cache_page(CACHE_TTL)(TemplateView.as_view(
         extra_context={'page_title': 'Tableau de bord', 'page_description': "Tableau de bord"
-        }, template_name='admin/index.html')), name='vendor-admin'),
-    path('vendor-admin/product/', cache_page(CACHE_TTL)(TemplateView.as_view(
+        }, template_name='seller_dashboard/index.html')), name='vendor-admin'),
+    path('product/', cache_page(CACHE_TTL)(TemplateView.as_view(
         extra_context={'page_title': 'Liste des produits', 'page_description': "Liste des produits"
-        }, template_name='admin/layouts/product.html')), name='vendor-product'),
-    path('vendor-admin/product/add/', TemplateView.as_view(
+        }, template_name='seller_dashboard/layouts/product.html')), name='vendor-product'),
+    path('product/add/', TemplateView.as_view(
         extra_context={'page_title': 'Ajouter un produit', 'page_description': "Ajouter un produit"
-        }, template_name='admin/layouts/add_product.html'), name='vendor-product-add'),
-    path('vendor-admin/orders/', TemplateView.as_view(
+        }, template_name='seller_dashboard/layouts/add_product.html'), name='vendor-product-add'),
+    path('orders/', TemplateView.as_view(
         extra_context={'page_title': 'Liste des commandes', 'page_description': "Liste des commandes"
-        }, template_name='admin/layouts/orders.html'), name='vendor-orders'),
-    path('vendor-admin/orders/detail/', TemplateView.as_view(
+        }, template_name='seller_dashboard/layouts/orders.html'), name='vendor-orders'),
+    path('orders/detail/', TemplateView.as_view(
         extra_context={'page_title': 'Detail de la commande', 'page_description': "Detail de la commande"
-        }, template_name='admin/layouts/orders_detail.html'), name='vendor-order-detail'),
-    path('vendor-admin/orders/settings/', TemplateView.as_view(
+        }, template_name='seller_dashboard/layouts/orders_detail.html'), name='vendor-order-detail'),
+    path('orders/settings/', TemplateView.as_view(
         extra_context={'page_title': 'Configuration', 'page_description': "Configuration"
-        }, template_name='admin/layouts/settings-store.html'), name='vendor-settings'),
-    path('vendor-admin/vendor-store/', TemplateView.as_view(
+        }, template_name='seller_dashboard/layouts/settings-store.html'), name='vendor-settings'),
+    path('store/', TemplateView.as_view(
         extra_context={'page_title': 'Vendor store', 'page_description': "Vendor store"
-        }, template_name='admin/layouts/vendor-store.html'), name='vendor-store'),
+        }, template_name='seller_dashboard/layouts/vendor-store.html'), name='vendor-store'),
 ]

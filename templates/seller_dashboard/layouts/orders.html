@@ -1,4 +1,4 @@
-{% extends "admin/base.html" %}
+{% extends "seller_dashboard/base.html" %}
 
 {% block content %}
     <div class="ps-main__wrapper">
@@ -7,7 +7,7 @@
                 <h3>Commandes</h3>
                 <p>Liste de vos commandes</p>
             </div>
-            {% include "admin/partials/header_top.html" %}
+            {% include "seller_dashboard/partials/header_top.html" %}
         </header>
 
         <section class="ps-items-listing">
@@ -74,7 +74,7 @@
                 </div>
             </div>
 
-            {% include "admin/partials/pagination.html" %}
+            {% include "seller_dashboard/partials/pagination.html" %}
         </section>
     </div>
 {% endblock content %}
