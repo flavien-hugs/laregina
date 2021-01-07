@@ -34,9 +34,13 @@ META_KEYWORDS = ''
 SITE_NAME = 'Overstock'
 USE_THOUSAND_SEPARATOR = True
 THOUSAND_SEPARATOR = ' '
+APPEND_SLASH = True
 
 MANAGERS = (('admin', "flavienhgs@gmail.com"),)
 ADMINS = MANAGERS
+
+# Custom Django auth settings
+# AUTH_USER_MODEL = 'accounts.User'
 
 # DJANGO-ADMIN CONFIGURATION
 # Location of root django.contrib.admin URL
@@ -92,7 +96,7 @@ AUTHENTICATION_BACKENDS = [
 
 # Logged in users redirected here if they view login/signup pages
 LOGIN_URL = 'account_login'
-LOGIN_REDIRECT_URL = 'vendor-admin'
+LOGIN_REDIRECT_URL = 'accounts:profile'
 
 # Configuration django-allauth
 # https://django-allauth.readthedocs.io/en/latest/configuration.html
@@ -350,6 +354,10 @@ DJANGO_REDIS_IGNORE_EXCEPTIONS = True
 #         },
 #     },
 # }
+
+# phonenumber config
+PHONENUMBER_DEFAULT_REGION = "CI"
+PHONENUMBER_DB_FORMAT = "NATIONAL"
 
 # Django has switched to JSON serializing for security reasons, but it does not
 # serialize Models. We should resolve this by extending the

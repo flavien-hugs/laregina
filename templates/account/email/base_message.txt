@@ -1,6 +1,8 @@
+{% load account %}
 
 {% autoescape off %}
-    {% with site_name=current_site.name %} Hello !{% endwith %}
+    {% user_display user as user_display %}
+    {% with site_name=current_site.name %} Bonjour {{ user_display }}{% endwith %}
 
     {% block content %}{% endblock content%}
 

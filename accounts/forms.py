@@ -8,9 +8,9 @@ from crispy_forms.helper import FormHelper
 from accounts.models import UserProfile, StoreProfile
 from allauth.account.forms import SignupForm, LoginForm
 
-
 from django_countries.fields import CountryField
 from phonenumber_field.formfields import PhoneNumberField
+from phonenumber_field.widgets import PhoneNumberPrefixWidget
 
 
 class MarketLoginForm(LoginForm):
@@ -31,8 +31,10 @@ class MarketLoginForm(LoginForm):
 
 
 class MarketSignupForm(SignupForm):
-    type = forms.ChoiceField(label='Type d\'utilisateur', choices=UserProfile.ACCOUNT_TYPE_CHOICES)
     name = forms.CharField(label='Nom de la boutique', max_length=200)
+    type = forms.ChoiceField(label="Type d'utilisateur", choices=UserProfile.ACCOUNT_TYPE_CHOICES)
+    phone_number = PhoneNumberField(label='Numéro de téléphone', initial='+225', widget=PhoneNumberPrefixWidget(
+        attrs={'placeholder': '00 00 00 00', 'class': "form-control"}))
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -40,10 +42,11 @@ class MarketSignupForm(SignupForm):
 
         self.helper.layout = layout.Layout(
             layout.Fieldset(
-                'Créer votre compte en quelques secondes.',
+                'Inscrivez-vous et commencez à vendre dès aujourd\'hui - créez votre propre compte vendeur.',
                 bootstrap.PrependedText('email', '', placeholder="Entrez votre adresse email"),
-                bootstrap.PrependedText('name', '', placeholder="Entrez le nom de votre boutique"),
-                'type',
+                bootstrap.PrependedText('name', '', placeholder="Entrez le nom de votre magasin"),
+                bootstrap.PrependedText('phone_number', '', placeholder="Numéro de téléphone", css_class='form-control'),
+                bootstrap.PrependedText('type', '', placeholder="Type d'utilisateur", css_class='form-control'),
                 bootstrap.PrependedText('password1', '', placeholder="Entrez votre mot de passe"),
                 bootstrap.PrependedText('password2', '', placeholder="Confirmez le mot de passe"),
             ),
@@ -72,18 +75,17 @@ class StoreProfileUpdateForm(forms.ModelForm):
             layout.Fieldset(
                 '',
                 'avatar',
-                'phone_number',
                 'country',
                 'tagline',
                 'store_description',
             ),
             bootstrap.FormActions(
-                layout.Submit('submit', 'Update profile', css_class='btn btn-success'),
+                layout.Submit('submit', 'Update profile', css_class='mt-4 ps-btn btn-block text-uppercase border-0'),
             )
         )
 
 
-class UserProfileForm(forms.Form):
+class UserProfileForm(forms.ModelForm):
     # Ce formulaire est utilisé lors de l'inscription pour créer automatiquement les objets UserProfile et StoreProfile
     # Notez que ce n'est PAS le formulaire effectivement vu par l'utilisateur
 

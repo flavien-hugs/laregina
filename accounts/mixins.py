@@ -67,12 +67,12 @@ class OwnerRequiredMixin(LoginRequiredMixin, UserPassesTestMixin):
 
 class SellerRequiredMixin(LoginRequiredMixin, UserPassesTestMixin):
     """
-    Limite l'accès à cette vue aux utilisateurs du groupe Vendeur.
+    Limite l'accès de cette vue aux utilisateurs du groupe Vendeur.
     """
     # TODO:Augmenter de 404 au lieu de 503
     raise_exception = True
 
     def test_func(self):
         # TODO: Utilisez plutôt des groupes d'utilisateurs
-        # return self.request.user.groups.filter(name='Seller').exists()
-        return self.request.profile.is_seller
+        # return self.request.user.groups.filter(name='Vendeur').exists()
+        return self.request.user == self.get_object()

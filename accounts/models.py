@@ -2,6 +2,7 @@
 
 from django.db import models
 from django.conf import settings
+from django.contrib.auth.models import AbstractUser
 
 import cloudinary
 from cloudinary.models import CloudinaryField
@@ -30,13 +31,15 @@ class UserProfile(RandomSlugModel):
     """
 
     ACCOUNT_TYPE_CHOICES = (
-        ('0', "Je suis un acheteur"),
-        ('1', "Je suis un vendeur"),
+        ('0', "Acheteur"),
+        ('1', "Vendeur"),
     )
 
     user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='profile', **UNIQUE_AND_DB_INDEX)
+    phone_number = PhoneNumberField('numéro de téléphone')
     type = models.CharField(max_length=1, choices=ACCOUNT_TYPE_CHOICES, default='0')
     name = models.CharField('boutique', max_length=200, **UNIQUE_AND_DB_INDEX)
+
 
     @property
     def is_seller(self):
@@ -52,7 +55,6 @@ class StoreProfile(RandomSlugModel):
     owner = models.OneToOneField(UserProfile, on_delete=models.CASCADE, related_name='social')
     avatar = CloudinaryField('avatar', resource_type="avatar", transformation={"quality": "auto:eco"}, blank=True)
     tagline = models.CharField(max_length=150, **NULL_AND_BLANK)
-    phone_number = PhoneNumberField('numéro de téléphone', **NULL_AND_BLANK)
     country = CountryField(blank_label='choisir le pays', **NULL_AND_BLANK)
     store_description = models.TextField('description de la boutique', max_length=2000, **NULL_AND_BLANK)
 

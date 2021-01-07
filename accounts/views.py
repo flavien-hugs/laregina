@@ -16,11 +16,11 @@ from accounts.mixins import OwnerRequiredMixin, SellerRequiredMixin
 
 # Viewing a seller's own profile
 class StoreProfileSelfDetailView(SellerRequiredMixin, DetailView):
-    model = StoreProfile
-    template_name = 'account/snippets/profile_detail.html'
+    model = UserProfile
+    template_name = 'seller_dashboard/index.html'
 
     def get_object(self, *args, **kwargs):
-        return StoreProfile.objects.get(owner=self.request.user)
+        return self.request.user
 
     # def get_context_data(self, **kwargs):
     #     context = super().get_context_data(**kwargs)
@@ -52,7 +52,7 @@ class StoreProfileSelfDetailView(SellerRequiredMixin, DetailView):
 # Même chose que ci-dessus, mais pour voir un autre vendeur.
 class StoreProfileDetailView(DetailView):
     model = StoreProfile
-    template_name = 'account/snippets/profile_detail.html'
+    template_name = 'seller_dashboard/index.html'
 
     # def get_context_data(self, **kwargs):
     #     context = super().get_context_data(**kwargs)
@@ -79,13 +79,13 @@ class StoreProfileDetailView(DetailView):
 
 
 # Update a profile.
-class StoreProfileUpdateView(SellerRequiredMixin, OwnerRequiredMixin, UpdateView):
+class StoreProfileUpdateView(SellerRequiredMixin, UpdateView):
     model = StoreProfile
     form_class = StoreProfileUpdateForm
-    template_name = 'account/snippets/profile_update_form.html'
+    template_name = 'seller_dashboard/layouts/settings-store.html'
 
     def get_object(self, *args, **kwargs):
-        return StoreProfile.objects.get(owner=self.request.profile)
+        return self.request.user
 
     def get_success_url(self):
         messages.success(self.request, 'Seller profile updated!', extra_tags='fa fa-check')
