@@ -24,6 +24,7 @@ django-allauth = "*"
 django-tagulous = "*"
 django-phonenumber-field = "*"
 phonenumbers = "*"
+babel = "*"
 
 [requires]
 python_version = "3.8"
