@@ -278,15 +278,6 @@ MESSAGE_TAGS = {
     messages.ERROR: 'alert-danger',
 }
 
-# Cloudinary settings for Django.
-
-cloudinary.config(
-    cloud_name=config('CLOUD_NAME'),
-    api_key=config('API_KEY'),
-    api_secret=config('API_SECRET'),
-    secure=True
-)
-
 MPTT_ADMIN_LEVEL_INDENT = 20
 
 # https://django-redis-cache.readthedocs.io/en/latest/intro_quick_start.html
