@@ -1,7 +1,8 @@
-*.pyc
 *.sqlite3
+*.pyc
 .git
 .env
 staticfiles
 Pipfile.lock
 logs
+media

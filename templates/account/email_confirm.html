@@ -28,7 +28,7 @@
                                     <p class="h2 pb-4">
                                         {% with confirmation.email_address.email as email %}
                                             S'il vous plaît confirmer que <a href="mailto:{{ email }}" class="font-weight-bold text-primary">{{ email }}</a>
-                                            est une adresse email pour l' utilisateur {{ user_display }}.
+                                            est une adresse email pour l'activation du compte du Magasin <b>{{ user_display }}</b>.
                                         {% endwith %}
                                     </p>
 
@@ -36,7 +36,6 @@
                                         {% csrf_token %}
                                         <button class="ps-btn btn-block text-uppercase border-0" type="submit">confirmer</button>
                                     </form>
-
                                 {% else %}
                                     {% url 'account_email' as email_url %}
                                     <p>

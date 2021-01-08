@@ -4,9 +4,7 @@
         <head>
             {% load static cache %}{% get_static_prefix as STATIC_PREFIX %}
 
-            {% cache 120 meta request.user.pk|default_if_none:"0" %}
-                {% include "includes/meta.html" %}
-            {% endcache %}
+            {% include "includes/meta.html" %}
 
             {% include "includes/assets/css.html" %}
 
@@ -26,7 +24,7 @@
             <div class="flex-grow-1 flex-shrink-0">
                 <main class="ps-page--single">
                     <!-- mise en cache du header pendant 120ms -->
-                    {% cache 120 header request.user.pk|default_if_none:"0" %}
+                    {% cache 60 header %}
                         {% include "includes/header.html" %}
                     {% endcache %}
 
@@ -35,7 +33,7 @@
                 </main>
 
                 <!-- mise en cache du header pendant 120ms -->
-                {% cache 120 footer request.user.pk|default_if_none:"0" %}
+                {% cache 60 footer %}
                     {% include "includes/footer.html" %}
                 {% endcache %}
             </div>

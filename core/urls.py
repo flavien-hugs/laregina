@@ -8,10 +8,12 @@ The `urlpatterns` list routes URLs to views. For more information
 
 from django.contrib import admin
 from django.conf import settings
-from django.shortcuts import render
 from django.urls import path, include
 from django.conf.urls.static import static
+from django.shortcuts import redirect, render
 from django.views.generic import TemplateView
+
+from accounts.views import customer, seller
 
 admin.autodiscover()
 
@@ -23,22 +25,31 @@ def handler403(request, exception, template_name='403.html'):
     return render(request, template_name=template_name, status=403,
         context={'page_title': 'Page non trouvée - Erreur 404'})
 
-
 def handler500(request, template_name='500.html'):
     return render(request, template_name=template_name,
         status=500, context={'page_title': 'Erreur interne'})
 
+def home(request, template='index.html'):
+    if request.user.is_authenticated:
+
+        if request.user.is_seller:
+            return redirect('accounts:profile')
+        else:
+            return redirect('home')
+
+    return render(request, template)
+
+
 urlpatterns = [
     path('admin/', admin.site.urls),
 
-    path('', TemplateView.as_view(template_name='index.html'), name='home'),
-    path('dashboard/', include("core.pages.urls")),
+    path('', home, name='home'),
 
-    # Remove logout confirmation
-    # Note: Needs to be changed to redirect to ACCOUNT_LOGOUT_REDIRECT_URL
-    # url(r'^accounts/logout/$', 'django.contrib.auth.views.logout', {'next_page': '/'}),
+    path('dashboard/', include("core.pages.urls")),
+    path('accounts/signup/customer/', customer.CustomerSignUpView.as_view(), name='customer_signup'),
+    
     path('accounts/', include('allauth.urls')),
-    path('vendor/', include('accounts.urls', namespace='accounts')),
+    path('vendor/', include('accounts.urls')),
 ]
 
 handler404 = handler404

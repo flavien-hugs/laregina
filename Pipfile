@@ -25,6 +25,9 @@ django-tagulous = "*"
 django-phonenumber-field = "*"
 phonenumbers = "*"
 babel = "*"
+celery = "*"
+flower = "*"
+pillow = "*"
 
 [requires]
 python_version = "3.8"

@@ -4,7 +4,7 @@
 
 {% block content %}
 
-    {% cache 120 home request.user.pk|default_if_none:"0" %}
+    {% cache 120 home %}
 
         <div class="ps-vendor-banner bg--cover" data-background="{{ STATIC_PREFIX }}img/bg/vendor.jpg">
             <div class="container">

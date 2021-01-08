@@ -1,3 +1,4 @@
+{% load humanize %}
 
 <div class="ps-main__sidebar">
     <div class="ps-sidebar">
@@ -5,7 +6,7 @@
             <div class="ps-block--user-wellcome">
                 <div class="ps-block__left"><img src="{{ STATIC_PREFIX }}img/users/admin.jpg" alt=""></div>
                 <div class="ps-block__right">
-                    <p>Bonjour,<a href="{% url "vendor-store" %}" target="_blank">{{ request.user.username }}</a></p>
+                    <p>Bonjour,<a href="{% url "vendor-store" %}" target="_blank">{{ request.user.get_fullname|truncatewords:"10" }}</a></p>
                 </div>
                 <div class="ps-block__action"><a href="{% url "account_logout" %}"><i class="icon-exit"></i></a></div>
             </div>

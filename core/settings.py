@@ -36,12 +36,6 @@ USE_THOUSAND_SEPARATOR = True
 THOUSAND_SEPARATOR = ' '
 APPEND_SLASH = True
 
-MANAGERS = (('admin', "flavienhgs@gmail.com"),)
-ADMINS = MANAGERS
-
-# Custom Django auth settings
-# AUTH_USER_MODEL = 'accounts.User'
-
 # DJANGO-ADMIN CONFIGURATION
 # Location of root django.contrib.admin URL
 ADMIN_URL = 'admin/'
@@ -75,7 +69,7 @@ OTHERS_APPS = [
     'django_countries',
     'phonenumber_field',
     'phonenumbers',
-    
+    "celery",
     'tagulous',
 ]
 
@@ -85,18 +79,21 @@ LOCAL_APPS = [
 
 INSTALLED_APPS += OTHERS_APPS + LOCAL_APPS
 
+# Custom Django auth settings
+AUTH_USER_MODEL = 'accounts.User'
+
 # Site ID for allauth
 SITE_ID = 1
 
 # AUTHENTICATION CONFIGURATION
 AUTHENTICATION_BACKENDS = [
-    'django.contrib.auth.backends.ModelBackend',
+    # 'django.contrib.auth.backends.ModelBackend',
     'allauth.account.auth_backends.AuthenticationBackend',
 ]
 
 # Logged in users redirected here if they view login/signup pages
 LOGIN_URL = 'account_login'
-LOGIN_REDIRECT_URL = 'accounts:profile'
+LOGIN_REDIRECT_URL = 'seller:profile'
 
 # Configuration django-allauth
 # https://django-allauth.readthedocs.io/en/latest/configuration.html
@@ -123,7 +120,7 @@ ACCOUNT_FORMS = {
 ACCOUNT_LOGOUT_ON_GET = True
 
 # La valeur d'affichage de l'utilisateur est le nom du profil associé
-ACCOUNT_USER_DISPLAY = lambda user: user.username
+ACCOUNT_USER_DISPLAY = lambda user: user.store
 
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
@@ -162,7 +159,7 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 
     # Custom middleware
-    'accounts.middleware.UserProfileMiddleware',
+    # 'accounts.middleware.UserProfileMiddleware',
 ]
 
 ROOT_URLCONF = 'core.urls'
@@ -180,13 +177,13 @@ TEMPLATES = [
                 'django.contrib.auth.context_processors.auth',
                 'django.template.context_processors.media',
                 'django.template.context_processors.static',
-                'django.template.context_processors.csrf',
+                # 'django.template.context_processors.csrf',
                 'django.contrib.messages.context_processors.messages',
 
                 # Custom context processors
                 'core.context_processors.context',
-                'core.context_processors.customization',
-                'core.context_processors.user_profile',
+                'accounts.context_processors.customization',
+                'accounts.context_processors.profile',
             ],
 
             'debug': DEBUG,

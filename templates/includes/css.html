@@ -1,12 +1,16 @@
+{% load cache %}
 
-<link rel="stylesheet" href="{{ STATIC_PREFIX }}css/plugins/fontawesome.min.css">
-<link rel="stylesheet" href="{{ STATIC_PREFIX }}fonts/linearicons/demo.css">
-<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
-<link rel="stylesheet" href="{{ STATIC_PREFIX }}css/plugins/owl.carousel.min.css">
-<link rel="stylesheet" href="{{ STATIC_PREFIX }}css/plugins/owl.theme.default.min.css">
-<link rel="stylesheet" href="{{ STATIC_PREFIX }}css∕plugins/slick.css">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/noUiSlider/14.6.2/nouislider.min.css" integrity="sha512-O3hRQ2OLCWeTZjAqJzcWMwFGDuv/hzjfwgrKm1Q5+RhyM0Y0rhPF7epp5cdQN39zYNwGeNuixF3fE5AhHOiSzA==" crossorigin="anonymous">
-<link rel="stylesheet" href="{{ STATIC_PREFIX }}css/plugins/fontawesomestars.css">
-<link rel="stylesheet" href="{{ STATIC_PREFIX }}css/plugins/select2.min.css">
+{% cache 60 css_file %}
+    <link rel="stylesheet" href="{{ STATIC_PREFIX }}css/plugins/fontawesome.min.css">
+    <link rel="stylesheet" href="{{ STATIC_PREFIX }}fonts/linearicons/demo.css">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
+    <link rel="stylesheet" href="{{ STATIC_PREFIX }}css/plugins/owl.carousel.min.css">
+    <link rel="stylesheet" href="{{ STATIC_PREFIX }}css/plugins/owl.theme.default.min.css">
+    <link rel="stylesheet" href="{{ STATIC_PREFIX }}css∕plugins/slick.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/noUiSlider/14.6.2/nouislider.min.css" integrity="sha512-O3hRQ2OLCWeTZjAqJzcWMwFGDuv/hzjfwgrKm1Q5+RhyM0Y0rhPF7epp5cdQN39zYNwGeNuixF3fE5AhHOiSzA==" crossorigin="anonymous">
+    <link rel="stylesheet" href="{{ STATIC_PREFIX }}css/plugins/fontawesomestars.css">
+    <link rel="stylesheet" href="{{ STATIC_PREFIX }}css/plugins/select2.min.css">
+{% endcache %}
+
 <link rel="stylesheet" href="{{ STATIC_PREFIX }}css/style.css">
 <link rel="stylesheet" href="{{ STATIC_PREFIX }}css/autopart.css">
