@@ -69,7 +69,6 @@ OTHERS_APPS = [
     'django_countries',
     'phonenumber_field',
     'phonenumbers',
-    "celery",
     'tagulous',
 ]
 
