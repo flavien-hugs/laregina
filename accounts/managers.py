@@ -8,8 +8,6 @@ from django.contrib.auth.models import BaseUserManager
 class UserManager(BaseUserManager):
     """Définir un gestionnaire de modèle pour Modèle d'utilisateur sans champ de nom d'utilisateur."""
 
-    use_in_migrations = True
-
     def _create_user(self, email, password, is_buyer, is_seller, **extra_fields):
         
         """Créer et enregistrer un utilisateur avec l'adresse électronique et le mot de passe donnés"""
