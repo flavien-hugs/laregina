@@ -22,7 +22,6 @@ local-migrate:
 dumpdata:
 	$(MANAGE) dumpdata --indent=4 accounts.user > backups/accounts_user.json
 
-
 loaddata:
 	$(MANAGE) loaddata backups/accounts_user.json
 

@@ -5,4 +5,3 @@ staticfiles
 Pipfile.lock
 logs
 media
-backups

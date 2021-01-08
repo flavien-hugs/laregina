@@ -3,6 +3,6 @@
 set -o errexit
 
 pipenv install
-python manage.py collectstatic --no-input
-python manage.py makemigrations
-python manage.py migrate
+./manage.py collectstatic --no-input
+./manage.py makemigrations
+./manage.py migrate

@@ -61,7 +61,6 @@ INSTALLED_APPS = [
 
 OTHERS_APPS = [
     'crispy_forms',
-    'django_extensions',
 
     'allauth',
     'allauth.account',
