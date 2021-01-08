@@ -8,16 +8,10 @@
             <div class="container">
                 <div class="ps-section__content">
                     <img src="{{ STATIC_PREFIX }}img/404.jpg" alt="{{ page_title }}">
-                    <h3>ohh! Page non trouvée</h3>
+                    <h3>ohh! Page non trouvée - {{ page_title  }}</h3>
                     <p>Il semble que nous ne trouvons pas ce que vous cherchez.
-                        Peut-être que la recherche peut vous aider ou revenir à la page d'
-                        <a href="/"> accueil</a>
+                        Retounez à <a href="{{ request.META.HTTP_REFERER }}"> la page précédente.</a>
                     </p>
-                    
-                    <form class="ps-form--widget-search" action="#" method="get">
-                        <input class="form-control" type="text" placeholder="Chercher...">
-                        <button><i class="icon-magnifier"></i></button>
-                    </form>
                 </div>
             </div>
         </div>

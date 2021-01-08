@@ -7,11 +7,9 @@
             <div class="container">
                 <div class="ps-section__content">
                     <img src="{{ STATIC_PREFIX }}img/404.jpg" alt="{{ page_title }}">
-                    <h3>Ooops ! Quelques choses c'est mal passé !</h3>
+                    <h3>Ooops ! Quelques choses c'est mal passé - {{ page_title }}.</h3>
                     <p>
-                        Erreur interne.
-                        Peut-être que la recherche peut vous aider ou revenir à la page d'
-                        <a href="/"> accueil</a>
+                        Revenir à la <a href="{{ request.META.HTTP_REFERER  }}"> page précédente.</a>
                     </p>
                 </div>
             </div>
