@@ -1,0 +1,34 @@
+[
+{
+    "model": "accounts.user",
+    "pk": 1,
+    "fields": {
+        "password": "argon2$argon2i$v=19$m=512,t=2,p=2$VDdraG9UOEZ6Ynl1$NCOdqIfDI0Ck47xXkjH+LQ",
+        "email": "flavienhugs@pm.me",
+        "gender": "Mr",
+        "name": "flavien-hugs",
+        "store": "Unsta Store",
+        "phone_number": "+22551571396",
+        "whatsapp_number": null,
+        "country": null,
+        "city": null,
+        "address": null,
+        "store_description": null,
+        "logo": "",
+        "facebook": null,
+        "twitter": null,
+        "linkedin": null,
+        "instagramm": null,
+        "is_staff": false,
+        "is_superuser": false,
+        "is_active": true,
+        "is_buyer": false,
+        "is_seller": true,
+        "last_login": null,
+        "date_joined": "2021-01-08T15:12:09.773Z",
+        "groups": [],
+        "user_permissions": [],
+        "interests": []
+    }
+}
+]
