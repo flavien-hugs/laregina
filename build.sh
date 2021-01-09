@@ -6,5 +6,3 @@ pipenv install
 ./manage.py collectstatic --no-input
 ./manage.py makemigrations
 ./manage.py migrate
-
-make loaddata
