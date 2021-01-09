@@ -117,7 +117,7 @@ ACCOUNT_FORMS = {
 ACCOUNT_LOGOUT_ON_GET = True
 
 # La valeur d'affichage de l'utilisateur est le nom du profil associé
-ACCOUNT_USER_DISPLAY = lambda user: user.username
+ACCOUNT_USER_DISPLAY = lambda user: user.name
 
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
