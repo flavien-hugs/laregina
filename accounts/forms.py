@@ -57,9 +57,9 @@ class MarketSignupForm(UserCreationForm):
         self.helper.layout = layout.Layout(
             layout.Fieldset(
                 'Inscrivez-vous et commencez à vendre dès aujourd\'hui - créez votre propre compte vendeur.',
+                bootstrap.PrependedText('email', '', placeholder="Entrez le nom de votre Adresse e-mail"),
                 bootstrap.PrependedText('gender', '', placeholder="choisir", css_class='custom-control'),
                 bootstrap.PrependedText('name', '', placeholder="Entrez votre nom et prénoms"),
-                bootstrap.PrependedText('email', '', placeholder="Entrez le nom de votre Adresse e-mail"),
                 bootstrap.PrependedText('store', '', placeholder="Entrez le nom de votre Magasin"),
                 bootstrap.PrependedText('phone_number', '', placeholder=''),
                 bootstrap.PrependedText('whatsapp_number', '', placeholder=''),
@@ -74,7 +74,7 @@ class MarketSignupForm(UserCreationForm):
 
     class Meta:
         model = User
-        fields = ('gender', 'name', 'store', 'email', 'phone_number')
+        fields = ('email', 'gender', 'name', 'store', 'phone_number', 'whatsapp_number')
 
     def save(self, commit=True):
         user = super().save(commit=False)

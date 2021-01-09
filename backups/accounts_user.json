@@ -1,7 +1,7 @@
 [
 {
     "model": "accounts.user",
-    "pk": 1,
+    "pk": 2,
     "fields": {
         "password": "argon2$argon2i$v=19$m=512,t=2,p=2$VlhOdnpJUnk0NlpV$8fumzGP6f9KVmDCoBQkxfQ",
         "email": "flavienhgs@gmail.com",
@@ -30,4 +30,5 @@
         "user_permissions": [],
         "interests": []
     }
-},
+}
+]
