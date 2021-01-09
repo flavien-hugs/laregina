@@ -3,7 +3,7 @@
 import dj_database_url
 from core.settings import *
 
-DEBUG = TEMPLATE_DEBUG = False
+DEBUG = TEMPLATE_DEBUG = True
 BASE_URL = 'https://vendito.onrender.com'
 ALLOWED_HOSTS = ['vendito.onrender.com', '.onrender.com']
 
