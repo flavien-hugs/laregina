@@ -174,7 +174,7 @@ TEMPLATES = [
                 'django.contrib.auth.context_processors.auth',
                 'django.template.context_processors.media',
                 'django.template.context_processors.static',
-                # 'django.template.context_processors.csrf',
+                'django.template.context_processors.csrf',
                 'django.contrib.messages.context_processors.messages',
 
                 # Custom context processors
