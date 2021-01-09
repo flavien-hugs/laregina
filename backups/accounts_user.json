@@ -1,11 +1,11 @@
 [
 {
     "model": "accounts.user",
-    "pk": 2,
+    "pk": 1,
     "fields": {
-        "password": "argon2$argon2i$v=19$m=512,t=2,p=2$VlhOdnpJUnk0NlpV$8fumzGP6f9KVmDCoBQkxfQ",
+        "password": "argon2$argon2i$v=19$m=512,t=2,p=2$TzdnNEYyU3ZWaUdp$8aiUc4+R/Oi3iZSzJvI+Eg",
         "email": "flavienhgs@gmail.com",
-        "gender": "Mr",
+        "civility": "Mr",
         "name": "",
         "store": null,
         "phone_number": "",
@@ -24,8 +24,8 @@
         "is_active": true,
         "is_buyer": false,
         "is_seller": false,
-        "last_login": "2021-01-09T15:21:09.211Z",
-        "date_joined": "2021-01-08T17:32:14.796Z",
+        "last_login": "2021-01-09T21:49:19.358Z",
+        "date_joined": "2021-01-09T21:09:53.357Z",
         "groups": [],
         "user_permissions": [],
         "interests": []

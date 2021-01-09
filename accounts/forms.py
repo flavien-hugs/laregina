@@ -13,7 +13,8 @@ from django_countries.fields import CountryField
 from phonenumber_field.formfields import PhoneNumberField
 from phonenumber_field.widgets import PhoneNumberPrefixWidget
 
-from accounts.models import Subject, User
+from accounts.models import User
+from category.models import Category
 
 
 class MarketLoginForm(LoginForm):
@@ -42,7 +43,7 @@ class MarketLoginForm(LoginForm):
 
 
 class MarketSignupForm(UserCreationForm):
-    gender = forms.ChoiceField(label="Sexe", choices=User.GENDER_CHOICES)
+    civility = forms.ChoiceField(label="Civilité", choices=User.CIVILITY_CHOICES)
     name = forms.CharField(label='Nom & Prénoms', max_length=120)
     phone_number = PhoneNumberField(label='Numéro de téléphone', initial='+225',
         widget=PhoneNumberPrefixWidget(attrs={'placeholder': '00 00 00 00', 'class': "form-control"}))
@@ -58,7 +59,7 @@ class MarketSignupForm(UserCreationForm):
             layout.Fieldset(
                 'Inscrivez-vous et commencez à vendre dès aujourd\'hui - créez votre propre compte vendeur.',
                 bootstrap.PrependedText('email', '', placeholder="Entrez le nom de votre Adresse e-mail"),
-                bootstrap.PrependedText('gender', '', placeholder="choisir", css_class='custom-control'),
+                bootstrap.PrependedText('civility', '', placeholder="choisir", css_class='custom-control'),
                 bootstrap.PrependedText('name', '', placeholder="Entrez votre nom et prénoms"),
                 bootstrap.PrependedText('store', '', placeholder="Entrez le nom de votre Magasin"),
                 bootstrap.PrependedText('phone_number', '', placeholder=''),
@@ -74,7 +75,7 @@ class MarketSignupForm(UserCreationForm):
 
     class Meta:
         model = User
-        fields = ('email', 'gender', 'name', 'store', 'phone_number', 'whatsapp_number')
+        fields = ('email', 'civility', 'name', 'store', 'phone_number', 'whatsapp_number')
 
     def save(self, commit=True):
         user = super().save(commit=False)
@@ -91,8 +92,9 @@ class MarketChangeForm(UserChangeForm):
 
 
 class CustomerSignUpForm(UserCreationForm):
+    civility = forms.ChoiceField(label="Civilité", choices=User.CIVILITY_CHOICES)
     interests = forms.ModelMultipleChoiceField(
-        queryset=Subject.objects.all(),
+        queryset=Category.objects.all(),
         widget=forms.CheckboxSelectMultiple,
         required=True
     )
@@ -105,6 +107,7 @@ class CustomerSignUpForm(UserCreationForm):
             layout.Fieldset(
                 'Inscrivez-vous et commencez à acheter dès aujourd\'hui - créez votre propre compte acheteur.',
                 bootstrap.PrependedText('email', '', placeholder="Entrez votre adresse email"),
+                bootstrap.PrependedText('civility', '', placeholder="Votre civilité"),
                 bootstrap.PrependedText('name', '', placeholder="Entrez votre nom complet"),
                 bootstrap.PrependedText('password1', '', placeholder="Entrez votre mot de passe"),
                 bootstrap.PrependedText('password2', '', placeholder="Confirmez le mot de passe"),
@@ -122,7 +125,7 @@ class CustomerSignUpForm(UserCreationForm):
 
     class Meta:
         model = User
-        fields = ('email', 'name', 'interests')
+        fields = ('email', 'civility', 'name', 'interests')
 
     @transaction.atomic
     def save(self):
@@ -157,6 +160,7 @@ class StoreProfileUpdateForm(forms.ModelForm):
     class Meta:
         model = User
         fields = [
+            "civility",
             "name",
             "store",
             "logo",
@@ -173,10 +177,10 @@ class StoreProfileUpdateForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.helper = FormHelper(self)
-        
         self.helper.layout = layout.Layout(
             layout.Fieldset(
                 '',
+                "civility",
                 "name",
                 "store",
                 "logo",

@@ -46,6 +46,7 @@ ALLOWED_HOSTS = []
 # See: https://docs.djangoproject.com/en/1.11/ref/settings/#installed-apps
 INSTALLED_APPS = [
     # for authorization and registration
+    
     'django.contrib.auth',
     'django.contrib.sites',
 
@@ -68,10 +69,13 @@ OTHERS_APPS = [
     'phonenumber_field',
     'phonenumbers',
     'tagulous',
+    'mptt',
 ]
 
 LOCAL_APPS = [
     'accounts.apps.AccountsConfig',
+    'category.apps.CategoryConfig',
+    'catalogue.apps.CatalogueConfig'
 ]
 
 INSTALLED_APPS += OTHERS_APPS + LOCAL_APPS

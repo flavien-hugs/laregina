@@ -5,6 +5,7 @@ import random
 import string
 import threading
 from django.conf import settings
+from django.utils.text import slugify
 from django.core.validators import EmailValidator
 
 

@@ -6,22 +6,14 @@ from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin
 from django_countries.fields import CountryField
 from phonenumber_field.modelfields import PhoneNumberField
 
+from category.models import Category
 from accounts.managers import UserManager
+from tagulous.models import SingleTagField
 from core.utils import generate_key, upload_image_path
 
 
 NULL_AND_BLANK = {'null': True, 'blank': True}
 UNIQUE_AND_DB_INDEX = {'null': False, 'unique': True, 'db_index': True}
-
-class Subject(models.Model):
-    name = models.CharField(max_length=30)
-
-    class Meta:
-        verbose_name = 'sujet'
-        verbose_name_plural = 'sujets'
-
-    def __str__(self):
-        return self.name
 
 
 class User(AbstractBaseUser, PermissionsMixin):
@@ -32,19 +24,19 @@ class User(AbstractBaseUser, PermissionsMixin):
         Les autres champs sont facultatifs. 
     """
 
-    GENDER_CHOICES = (('Mr', 'Mr'), ('Mme', 'Mme'), ('Mlle', 'Mlle'),)
+    CIVILITY_CHOICES = (('Mr', 'Monsieur'), ('Mme', 'Madame'), ('Mlle', 'Mademoiselle'),)
 
     email = models.EmailField(verbose_name='email', max_length=254, unique=True,
         error_messages={'unique': "Un utilisateur disposant de ce courriel existe déjà.",})
-    gender = models.CharField(max_length=4, choices=GENDER_CHOICES, default="Mr")
-    name = models.CharField(verbose_name="nom", max_length=120)
+    civility = models.CharField(verbose_name='civilité', max_length=4, choices=CIVILITY_CHOICES, default="Mr")
+    name = models.CharField(verbose_name="nom & prénoms", max_length=120)
     store = models.CharField(verbose_name='boutique', max_length=254, **NULL_AND_BLANK)
     phone_number = PhoneNumberField('numéro de téléphone')
     whatsapp_number = PhoneNumberField('numéro de téléphone WhatsApp', null=True)
     country = CountryField(blank_label='choisir le pays', **NULL_AND_BLANK)
     city = models.CharField(verbose_name='ville', max_length=250, **NULL_AND_BLANK)
     address = models.CharField(verbose_name='adresse', max_length=250, **NULL_AND_BLANK)
-    interests = models.ManyToManyField(Subject, related_name='interested_customers')
+    interests = models.ManyToManyField(Category, related_name='interested_customers')
     store_description = models.TextField('description de la boutique', max_length=2000, **NULL_AND_BLANK)
     logo = models.ImageField(verbose_name='logo', upload_to=upload_image_path, **NULL_AND_BLANK)
     facebook = models.URLField(verbose_name='lien facebook', max_length=250, **NULL_AND_BLANK)
@@ -52,12 +44,12 @@ class User(AbstractBaseUser, PermissionsMixin):
     linkedin = models.URLField(verbose_name='lien linkedin', max_length=250, **NULL_AND_BLANK)
     instagramm = models.URLField(verbose_name='lien instagramm', max_length=250, **NULL_AND_BLANK)
     is_staff = models.BooleanField(verbose_name='statut équipe', default=False)
-    is_superuser = models.BooleanField(verbose_name='administrateur', default=False)
+    is_superuser = models.BooleanField(verbose_name='statut administrateur', default=False)
     is_active = models.BooleanField(verbose_name='active', default=True)
-    is_buyer = models.BooleanField(verbose_name='Acheteur', default=False)
-    is_seller = models.BooleanField(verbose_name='Vendeur', default=False)
-    last_login = models.DateTimeField(**NULL_AND_BLANK)
-    date_joined = models.DateTimeField(auto_now_add=True)
+    is_buyer = models.BooleanField(verbose_name='statut acheteur', default=False)
+    is_seller = models.BooleanField(verbose_name='statut vendeur', default=False)
+    last_login = models.DateTimeField(verbose_name='date de derniere connexion', auto_now_add=True)
+    date_joined = models.DateTimeField(verbose_name="date d'inscription", auto_now_add=True)
 
     USERNAME_FIELD = 'email'
     EMAIL_FIELD = 'email'
@@ -75,8 +67,8 @@ class User(AbstractBaseUser, PermissionsMixin):
         return self.email
 
     def get_fullname(self):
-        if self.gender and self.name:
-            fullname = '{gender} {name}'.format(gender=self.gender, name=self.name)
+        if self.civility and self.name:
+            fullname = '{civility} {name}'.format(civility=self.civility, name=self.name)
             return fullname.strip()
         return self.email
 

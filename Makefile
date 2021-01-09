@@ -20,12 +20,12 @@ local-migrate:
 	$(MANAGE) migrate
 
 dumpdata:
-	$(MANAGE) dumpdata --indent=4 accounts.subject > backups/subject.json
 	$(MANAGE) dumpdata --indent=4 accounts.user > backups/accounts_user.json
+	$(MANAGE) dumpdata --indent=4 category.category > backups/category.json
 
 loaddata:
-	$(MANAGE) loaddata backups/subject.json
 	$(MANAGE) loaddata backups/accounts_user.json
+	$(MANAGE) loaddata backups/category.json
 
 test:
 	$(MANAGE) test $(TEST_SETTINGS)

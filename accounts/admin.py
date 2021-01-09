@@ -3,7 +3,7 @@
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
 
-from accounts.models import User, Subject
+from accounts.models import User
 from accounts.forms import MarketSignupForm, MarketChangeForm
 
 
@@ -85,6 +85,3 @@ class UserAdmin(BaseUserAdmin):
     search_fields = ('email', 'user', 'store',)
     ordering = ('email',)
     filter_horizontal = ('groups', 'user_permissions',)
-
-
-admin.site.register(Subject)
