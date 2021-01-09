@@ -61,8 +61,8 @@ class MarketSignupForm(UserCreationForm):
                 bootstrap.PrependedText('name', '', placeholder="Entrez votre nom et prénoms"),
                 bootstrap.PrependedText('email', '', placeholder="Entrez le nom de votre Adresse e-mail"),
                 bootstrap.PrependedText('store', '', placeholder="Entrez le nom de votre Magasin"),
-                bootstrap.PrependedText('phone_number', ''),
-                bootstrap.PrependedText('whatsapp_number', ''),
+                bootstrap.PrependedText('phone_number', '', placeholder=''),
+                bootstrap.PrependedText('whatsapp_number', '', placeholder=''),
                 bootstrap.PrependedText('password1', '', placeholder="Entrez votre mot de passe"),
                 bootstrap.PrependedText('password2', '', placeholder="Confirmez le mot de passe"),
             ),
@@ -104,7 +104,8 @@ class CustomerSignUpForm(UserCreationForm):
         self.helper.layout = layout.Layout(
             layout.Fieldset(
                 'Inscrivez-vous et commencez à acheter dès aujourd\'hui - créez votre propre compte acheteur.',
-                bootstrap.PrependedText('email', '', placeholder="Entrez votre nom complet"),
+                bootstrap.PrependedText('email', '', placeholder="Entrez votre adresse email"),
+                bootstrap.PrependedText('name', '', placeholder="Entrez votre nom complet"),
                 bootstrap.PrependedText('password1', '', placeholder="Entrez votre mot de passe"),
                 bootstrap.PrependedText('password2', '', placeholder="Confirmez le mot de passe"),
             ),
@@ -121,7 +122,7 @@ class CustomerSignUpForm(UserCreationForm):
 
     class Meta:
         model = User
-        fields = ('email', 'email', 'interests')
+        fields = ('email', 'name', 'interests')
 
     @transaction.atomic
     def save(self):

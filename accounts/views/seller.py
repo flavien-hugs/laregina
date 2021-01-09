@@ -15,19 +15,19 @@ from ..forms import MarketSignupForm, StoreProfileUpdateForm
 from ..mixins import OwnerRequiredMixin, SellerRequiredMixin
 
 
-class SellerSignUpView(CreateView):
-    model = User
-    form_class = MarketSignupForm
-    template_name = 'account/signup.html'
+# class SellerSignUpView(CreateView):
+#     model = User
+#     form_class = MarketSignupForm
+#     template_name = 'account/signup.html'
 
-    def get_context_data(self, **kwargs):
-        kwargs['user_type'] = 'seller'
-        return super().get_context_data(**kwargs)
+#     def get_context_data(self, **kwargs):
+#         kwargs['user_type'] = 'seller'
+#         return super().get_context_data(**kwargs)
 
-    def form_valid(self, form):
-        user = form.save()
-        login(self.request, user)
-        return redirect('accounts:profile')
+#     def form_valid(self, form):
+#         user = form.save()
+#         login(self.request, user)
+#         return redirect('accounts:profile')
 
 
 class StoreProfileSelfDetailView(SellerRequiredMixin, DetailView):

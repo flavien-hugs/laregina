@@ -1,0 +1,9 @@
+[
+{
+    "model": "accounts.subject",
+    "pk": 1,
+    "fields": {
+        "name": "Vêtement de sport"
+    }
+}
+]

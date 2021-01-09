@@ -1,7 +1,7 @@
 SHELL := /bin/bash
 MANAGE := ./manage.py
 
-TEST_SETTINGS := core.settings.test
+TEST_SETTINGS := test
 
 .PHONY: all help deps static migrate restart update deploy
 
@@ -20,9 +20,11 @@ local-migrate:
 	$(MANAGE) migrate
 
 dumpdata:
+	$(MANAGE) dumpdata --indent=4 accounts.subject > backups/subject.json
 	$(MANAGE) dumpdata --indent=4 accounts.user > backups/accounts_user.json
 
 loaddata:
+	$(MANAGE) loaddata backups/subject.json
 	$(MANAGE) loaddata backups/accounts_user.json
 
 test:

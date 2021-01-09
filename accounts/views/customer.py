@@ -1,6 +1,5 @@
 # accounts.views.customer.py
 
-
 from django.db import transaction
 from django.db.models import Count
 from django.contrib import messages

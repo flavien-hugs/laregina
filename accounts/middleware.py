@@ -14,8 +14,8 @@ class UserProfileMiddleware(object):
 
         # Ajouter le UserProfile actuel à la demande
         if request.user.is_anonymous or request.user.is_superuser:
-            request.profile = None
+            request.user = None
         else:
-            request.profile = request.user.profile
+            request.user = request.user.is_buyer
 
         return self.get_response(request)

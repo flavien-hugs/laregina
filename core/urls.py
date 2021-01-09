@@ -41,8 +41,6 @@ def home(request, template='index.html'):
 
 
 urlpatterns = [
-    path('admin/', admin.site.urls),
-
     path('', home, name='home'),
 
     path('dashboard/', include("core.pages.urls")),
@@ -50,6 +48,7 @@ urlpatterns = [
     
     path('accounts/', include('allauth.urls')),
     path('vendor/', include('accounts.urls')),
+    path('admin/', admin.site.urls),
 ]
 
 handler404 = handler404
