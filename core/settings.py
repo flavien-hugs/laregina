@@ -9,7 +9,6 @@ https://docs.djangoproject.com/en/3.1/ref/settings/
 """
 
 import os
-import cloudinary
 from pathlib import Path
 from decouple import config
 from django.core.exceptions import ImproperlyConfigured
