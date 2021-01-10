@@ -1,7 +1,6 @@
 # category.models.py
 
 from django.db import models
-from django.db.models import Q
 
 from tagulous.models import TagField
 from mptt.models import MPTTModel, TreeForeignKey
@@ -9,14 +8,6 @@ from mptt.models import MPTTModel, TreeForeignKey
 
 NULL_AND_BLANK = {'null': True, 'blank': True}
 UNIQUE_AND_DB_INDEX = {'unique': True, 'db_index': True}
-
-
-# class CategoryManager(models.Manager):
-
-#     def get_related_category(self, instance):
-#         category = self.get_queryset().filter(categories=instance.categories)
-#         qs = (category).exclude(id=instance.id).distinct()
-#         return qs
 
 
 class Category(MPTTModel):
