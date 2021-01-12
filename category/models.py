@@ -1,6 +1,8 @@
 # category.models.py
 
+
 from django.db import models
+from django.urls import reverse
 
 from tagulous.models import TagField
 from core.utils import unique_slug_generator
@@ -47,5 +49,5 @@ class Category(MPTTModel):
     def __repr__(self):
        return self.__str__()
 
-    # def get_category_url(self):
-    #     return reverse('category_detail', kwargs={'slug': str(self.slug)})
+    def get_absolute_url(self):
+        return reverse('category:category_detail', kwargs={'slug': str(self.slug)})
