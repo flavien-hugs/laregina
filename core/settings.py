@@ -190,6 +190,7 @@ TEMPLATES = [
 
                 # Custom context processors
                 'core.context_processors.context',
+                'core.context_processors.category',
                 'accounts.context_processors.customization',
                 'accounts.context_processors.profile',
             ],

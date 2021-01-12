@@ -1,3 +1,6 @@
+<!-- includes/footer.html -->
+{% load mptt_tags %}
+
     {% include "partials/newsletter.html" %}
 
     <footer class="ps-footer pt-5 flex-shrink-0">
@@ -44,24 +47,20 @@
                 </aside>
             </div>
 
-            <div class="ps-footer__links py-5">
-                <p><strong>Consommateur électrique:</strong><a href="#">Air Conditioners</a><a href="#">Audios &amp; Theaters</a><a href="#">Car Electronics</a><a href="#">Office Electronics</a><a href="#">TV Televisions</a><a href="#">Washing Machines</a>
-                </p>
-
-                <p><strong>Vêtements &amp; accessoires:</strong><a href="#">Printers</a><a href="#">Projectors</a><a href="#">Scanners</a><a href="#">Store &amp; Business</a><a href="#">4K Ultra HD TVs</a><a href="#">LED TVs</a><a href="#">OLED TVs</a>
-                </p>
-
-                <p><strong>Maison, jardin &amp; cuisine:</strong><a href="#">Cookware</a><a href="#">Decoration</a><a href="#">Furniture</a><a href="#">Garden Tools</a><a href="#">Garden Equipments</a><a href="#">Powers And Hand Tools</a><a href="#">Utensil &amp; Gadget</a>
-                </p>
-
-                <p><strong>Santé &amp; Beauté:</strong><a href="#">Hair Care</a><a href="#">Decoration</a><a href="#">Hair Care</a><a href="#">Makeup</a><a href="#">Body Shower</a><a href="#">Skin Care</a><a href="#">Cologine</a><a href="#">Perfume</a>
-                </p>
-
-                <p><strong>Bijoux &amp; Montres:</strong><a href="#">Necklace</a><a href="#">Pendant</a><a href="#">Diamond Ring</a><a href="#">Sliver Earing</a><a href="#">Leather Watcher</a><a href="#">Gucci</a>
-                </p>
-
-                <p><strong>Informatique &amp; Technologies:</strong><a href="#">Desktop PC</a><a href="#">Laptop</a><a href="#">Smartphones</a><a href="#">Tablet</a><a href="#">Game Controller</a><a href="#">Audio &amp; Video</a><a href="#">Wireless Speaker</a><a href="#">Done</a>
-                </p>
+            <div class="ps-footer__links py-3">
+                {% recursetree category %}
+                    <p>
+                        <strong>{{ node.name|safe }}:</strong>
+                        {% if not node.is_leaf_node and node.children.all %}
+                            {% for children in node.children.all %}
+                                <a href="{{ children.get_absolute_url }}">{{ children }}</a>
+                                {% for obj in children.children.all %}
+                                    <a href="{{ obj.get_absolute_url }}">{{ obj.name|safe }}</a>
+                                {% endfor %}
+                            {% endfor %}
+                        {% endif %}
+                    </p>
+                {% endrecursetree %}
             </div>
 
             <div class="ps-footer__copyright py-3">
@@ -75,293 +74,6 @@
             </div>
         </div>
     </footer>
-
-    {% if request.resolver_match.url_name == 'list' %}
-        <div class="ps-filter--sidebar">
-            <div class="ps-filter__header">
-                <h3>Filter Products</h3><a class="ps-btn--close ps-btn--no-boder" href="#"></a>
-            </div>
-            <div class="ps-filter__content">
-                <aside class="widget widget_shop">
-                    <h4 class="widget-title">Categories</h4>
-                    <ul class="ps-list--categories">
-                        <li class="menu-item-has-children"><a href="#">Clothing &amp; Apparel</a><span class="sub-toggle"><i class="fa fa-angle-down"></i></span>
-                            <ul class="sub-menu">
-                                <li><a href="#">Womens</a>
-                                </li>
-                                <li><a href="#">Mens</a>
-                                </li>
-                                <li><a href="#">Bags</a>
-                                </li>
-                                <li><a href="#">Sunglasses</a>
-                                </li>
-                                <li><a href="#">Accessories</a>
-                                </li>
-                                <li><a href="#">Kid's Fashion</a>
-                                </li>
-                            </ul>
-                        </li>
-                        <li class="menu-item-has-children"><a href="#">Garden &amp; Kitchen</a><span class="sub-toggle"><i class="fa fa-angle-down"></i></span>
-                            <ul class="sub-menu">
-                                <li><a href="#">Cookware</a>
-                                </li>
-                                <li><a href="#">Decoration</a>
-                                </li>
-                                <li><a href="#">Furniture</a>
-                                </li>
-                                <li><a href="#">Garden Tools</a>
-                                </li>
-                                <li><a href="#">Home Improvement</a>
-                                </li>
-                                <li><a href="#">Powers And Hand Tools</a>
-                                </li>
-                                <li><a href="#">Utensil &amp; Gadget</a>
-                                </li>
-                            </ul>
-                        </li>
-                        <li class="menu-item-has-children"><a href="#">Consumer Electrics</a><span class="sub-toggle"><i class="fa fa-angle-down"></i></span>
-                            <ul class="sub-menu">
-                                <li class="menu-item-has-children"><a href="#">Air Conditioners</a><span class="sub-toggle"><i class="fa fa-angle-down"></i></span>
-                                    <ul class="sub-menu">
-                                        <li><a href="#">Accessories</a>
-                                        </li>
-                                        <li><a href="#">Type Hanging Cell</a>
-                                        </li>
-                                        <li><a href="#">Type Hanging Wall</a>
-                                        </li>
-                                    </ul>
-                                </li>
-                                <li class="menu-item-has-children"><a href="#">Audios &amp; Theaters</a><span class="sub-toggle"><i class="fa fa-angle-down"></i></span>
-                                    <ul class="sub-menu">
-                                        <li><a href="#">Headphone</a>
-                                        </li>
-                                        <li><a href="#">Home Theater System</a>
-                                        </li>
-                                        <li><a href="#">Speakers</a>
-                                        </li>
-                                    </ul>
-                                </li>
-                                <li class="menu-item-has-children"><a href="#">Car Electronics</a><span class="sub-toggle"><i class="fa fa-angle-down"></i></span>
-                                    <ul class="sub-menu">
-                                        <li><a href="#">Audio &amp; Video</a>
-                                        </li>
-                                        <li><a href="#">Car Security</a>
-                                        </li>
-                                        <li><a href="#">Radar Detector</a>
-                                        </li>
-                                        <li><a href="#">Vehicle GPS</a>
-                                        </li>
-                                    </ul>
-                                </li>
-                                <li class="menu-item-has-children"><a href="#">Office Electronics</a><span class="sub-toggle"><i class="fa fa-angle-down"></i></span>
-                                    <ul class="sub-menu">
-                                        <li><a href="#">Printers</a>
-                                        </li>
-                                        <li><a href="#">Projectors</a>
-                                        </li>
-                                        <li><a href="#">Scanners</a>
-                                        </li>
-                                        <li><a href="#">Store &amp; Business</a>
-                                        </li>
-                                    </ul>
-                                </li>
-                                <li class="menu-item-has-children"><a href="#">TV Televisions</a><span class="sub-toggle"><i class="fa fa-angle-down"></i></span>
-                                    <ul class="sub-menu">
-                                        <li><a href="#">4K Ultra HD TVs</a>
-                                        </li>
-                                        <li><a href="#">LED TVs</a>
-                                        </li>
-                                        <li><a href="#">OLED TVs</a>
-                                        </li>
-                                    </ul>
-                                </li>
-                                <li class="menu-item-has-children"><a href="#">Washing Machines</a><span class="sub-toggle"><i class="fa fa-angle-down"></i></span>
-                                    <ul class="sub-menu">
-                                        <li><a href="#">Type Drying Clothes</a>
-                                        </li>
-                                        <li><a href="#">Type Horizontal</a>
-                                        </li>
-                                        <li><a href="#">Type Vertical</a>
-                                        </li>
-                                    </ul>
-                                </li>
-                                <li><a href="#">Refrigerators</a>
-                                </li>
-                            </ul>
-                        </li>
-                        <li class="menu-item-has-children"><a href="#">Health &amp; Beauty</a><span class="sub-toggle"><i class="fa fa-angle-down"></i></span>
-                            <ul class="sub-menu">
-                                <li><a href="#">Equipments</a>
-                                </li>
-                                <li><a href="#">Hair Care</a>
-                                </li>
-                                <li><a href="#">Perfumer</a>
-                                </li>
-                                <li><a href="#">Skin Care</a>
-                                </li>
-                            </ul>
-                        </li>
-                        <li class="menu-item-has-children"><a href="#">Computers &amp; Technologies</a><span class="sub-toggle"><i class="fa fa-angle-down"></i></span>
-                            <ul class="sub-menu">
-                                <li><a href="#">Desktop PC</a>
-                                </li>
-                                <li><a href="#">Laptop</a>
-                                </li>
-                                <li><a href="#">Smartphones</a>
-                                </li>
-                            </ul>
-                        </li>
-                        <li class="menu-item-has-children"><a href="#">Jewelry &amp; Watches</a><span class="sub-toggle"><i class="fa fa-angle-down"></i></span>
-                            <ul class="sub-menu">
-                                <li><a href="#">Gemstone Jewelry</a>
-                                </li>
-                                <li><a href="#">Men's Watches</a>
-                                </li>
-                                <li><a href="#">Women's Watches</a>
-                                </li>
-                            </ul>
-                        </li>
-                        <li class="menu-item-has-children"><a href="#">Phones &amp; Accessories</a><span class="sub-toggle"><i class="fa fa-angle-down"></i></span>
-                            <ul class="sub-menu">
-                                <li><a href="#">Iphone 8</a>
-                                </li>
-                                <li><a href="#">Iphone X</a>
-                                </li>
-                                <li><a href="#">Sam Sung Note 8</a>
-                                </li>
-                                <li><a href="#">Sam Sung S8</a>
-                                </li>
-                            </ul>
-                        </li>
-                        <li class="menu-item-has-children"><a href="#">Sport &amp; Outdoor</a><span class="sub-toggle"><i class="fa fa-angle-down"></i></span>
-                            <ul class="sub-menu">
-                                <li><a href="#">Freezer Burn</a>
-                                </li>
-                                <li><a href="#">Fridge Cooler</a>
-                                </li>
-                                <li><a href="#">Wine Cabinets</a>
-                                </li>
-                            </ul>
-                        </li>
-                        <li><a href="#">Babies &amp; Moms</a>
-                        </li>
-                        <li><a href="#">Books &amp; Office</a>
-                        </li>
-                        <li><a href="#">Cars &amp; Motocycles</a>
-                        </li>
-                    </ul>
-                </aside>
-
-                <aside class="widget widget_shop">
-                    <h4 class="widget-title">BY BRANDS</h4>
-                    <form class="ps-form--widget-search" action="http://nouthemes.net/html/martfury/do_action" method="get">
-                        <input class="form-control" type="text" placeholder="">
-                        <button><i class="icon-magnifier"></i></button>
-                    </form>
-                    <figure class="ps-custom-scrollbar" data-height="250">
-                        <div class="ps-checkbox">
-                            <input class="form-control" type="checkbox" id="brand-1" name="brand">
-                            <label for="brand-1">Adidas (3)</label>
-                        </div>
-                        <div class="ps-checkbox">
-                            <input class="form-control" type="checkbox" id="brand-2" name="brand">
-                            <label for="brand-2">Amcrest (1)</label>
-                        </div>
-                        <div class="ps-checkbox">
-                            <input class="form-control" type="checkbox" id="brand-3" name="brand">
-                            <label for="brand-3">Apple (2)</label>
-                        </div>
-                        <div class="ps-checkbox">
-                            <input class="form-control" type="checkbox" id="brand-4" name="brand">
-                            <label for="brand-4">Asus (19)</label>
-                        </div>
-                        <div class="ps-checkbox">
-                            <input class="form-control" type="checkbox" id="brand-5" name="brand">
-                            <label for="brand-5">Baxtex (20)</label>
-                        </div>
-                        <div class="ps-checkbox">
-                            <input class="form-control" type="checkbox" id="brand-6" name="brand">
-                            <label for="brand-6">Adidas (11)</label>
-                        </div>
-                        <div class="ps-checkbox">
-                            <input class="form-control" type="checkbox" id="brand-7" name="brand">
-                            <label for="brand-7">Casio (9)</label>
-                        </div>
-                        <div class="ps-checkbox">
-                            <input class="form-control" type="checkbox" id="brand-8" name="brand">
-                            <label for="brand-8">Electrolux (0)</label>
-                        </div>
-                        <div class="ps-checkbox">
-                            <input class="form-control" type="checkbox" id="brand-9" name="brand">
-                            <label for="brand-9">Gallaxy (0)</label>
-                        </div>
-                        <div class="ps-checkbox">
-                            <input class="form-control" type="checkbox" id="brand-10" name="brand">
-                            <label for="brand-10">Samsung (0)</label>
-                        </div>
-                        <div class="ps-checkbox">
-                            <input class="form-control" type="checkbox" id="brand-11" name="brand">
-                            <label for="brand-11">Sony (0)</label>
-                        </div>
-                    </figure>
-                    <figure>
-                        <h4 class="widget-title">By Price</h4>
-                        <div class="ps-slider" data-default-min="13" data-default-max="1300" data-max="1311" data-step="100" data-unit="$"></div>
-                        <p class="ps-slider__meta">Price:<span class="ps-slider__value ps-slider__min"></span>-<span class="ps-slider__value ps-slider__max"></span></p>
-                    </figure>
-                    <figure>
-                        <h4 class="widget-title">By Price</h4>
-                        <div class="ps-checkbox">
-                            <input class="form-control" type="checkbox" id="review-1" name="review">
-                            <label for="review-1"><span><i class="fa fa-star rate"></i><i class="fa fa-star rate"></i><i class="fa fa-star rate"></i><i class="fa fa-star rate"></i><i class="fa fa-star rate"></i></span><small>(13)</small></label>
-                        </div>
-                        <div class="ps-checkbox">
-                            <input class="form-control" type="checkbox" id="review-2" name="review">
-                            <label for="review-2"><span><i class="fa fa-star rate"></i><i class="fa fa-star rate"></i><i class="fa fa-star rate"></i><i class="fa fa-star rate"></i><i class="fa fa-star"></i></span><small>(13)</small></label>
-                        </div>
-                        <div class="ps-checkbox">
-                            <input class="form-control" type="checkbox" id="review-3" name="review">
-                            <label for="review-3"><span><i class="fa fa-star rate"></i><i class="fa fa-star rate"></i><i class="fa fa-star rate"></i><i class="fa fa-star"></i><i class="fa fa-star"></i></span><small>(5)</small></label>
-                        </div>
-                        <div class="ps-checkbox">
-                            <input class="form-control" type="checkbox" id="review-4" name="review">
-                            <label for="review-4"><span><i class="fa fa-star rate"></i><i class="fa fa-star rate"></i><i class="fa fa-star"></i><i class="fa fa-star"></i><i class="fa fa-star"></i></span><small>(5)</small></label>
-                        </div>
-                        <div class="ps-checkbox">
-                            <input class="form-control" type="checkbox" id="review-5" name="review">
-                            <label for="review-5"><span><i class="fa fa-star rate"></i><i class="fa fa-star"></i><i class="fa fa-star"></i><i class="fa fa-star"></i><i class="fa fa-star"></i></span><small>(1)</small></label>
-                        </div>
-                    </figure>
-                    <figure>
-                        <h4 class="widget-title">By Color</h4>
-                        <div class="ps-checkbox ps-checkbox--color color-1 ps-checkbox--inline">
-                            <input class="form-control" type="checkbox" id="color-1" name="size">
-                            <label for="color-1"></label>
-                        </div>
-                        <div class="ps-checkbox ps-checkbox--color color-2 ps-checkbox--inline">
-                            <input class="form-control" type="checkbox" id="color-2" name="size">
-                            <label for="color-2"></label>
-                        </div>
-                        <div class="ps-checkbox ps-checkbox--color color-3 ps-checkbox--inline">
-                            <input class="form-control" type="checkbox" id="color-3" name="size">
-                            <label for="color-3"></label>
-                        </div>
-                        <div class="ps-checkbox ps-checkbox--color color-4 ps-checkbox--inline">
-                            <input class="form-control" type="checkbox" id="color-4" name="size">
-                            <label for="color-4"></label>
-                        </div>
-                        <div class="ps-checkbox ps-checkbox--color color-5 ps-checkbox--inline">
-                            <input class="form-control" type="checkbox" id="color-5" name="size">
-                            <label for="color-5"></label>
-                        </div>
-                    </figure>
-                    <figure class="sizes">
-                        <h4 class="widget-title">BY SIZE</h4><a href="#">L</a><a href="#">M</a><a href="#">S</a><a href="#">XL</a>
-                    </figure>
-                </aside>
-            </div>
-        </div>
-    {% endif %}
 
     <div id="back2top"><i class="icon icon-arrow-up"></i></div>
 

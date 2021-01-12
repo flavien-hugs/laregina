@@ -1,83 +1,36 @@
-<div class="menu--product-categories">
-    <div class="menu__toggle"><i class="icon-menu"></i><span>Catégories</span></div>
-    <div class="menu__content">
-        <ul class="menu--dropdown">
-            <li><a href="#"><i class="icon-star"></i> Promotions chaudes</a></li>
-            <li class="menu-item-has-children has-mega-menu">
-                <a href="#"><i class="icon-laundry"></i> Électronique grand public</a>
-                <div class="mega-menu">
-                    <div class="mega-menu__column">
-                        <h4>Electronic<span class="sub-toggle"></span></h4>
-                        <ul class="mega-menu__list">
-                            <li><a href="#">Home Audio &amp; Theathers</a>
-                            </li>
-                            <li><a href="#">TV &amp; Videos</a>
-                            </li>
-                            <li><a href="#">Camera, Photos &amp; Videos</a>
-                            </li>
-                            <li><a href="#">Cellphones &amp; Accessories</a>
-                            </li>
-                            <li><a href="#">Headphones</a>
-                            </li>
-                            <li><a href="#">Videosgames</a>
-                            </li>
-                            <li><a href="#">Wireless Speakers</a>
-                            </li>
-                            <li><a href="#">Office Electronic</a>
-                            </li>
-                        </ul>
-                    </div>
-                    <div class="mega-menu__column">
-                        <h4>Accessories &amp; Parts<span class="sub-toggle"></span></h4>
-                        <ul class="mega-menu__list">
-                            <li><a href="#">Digital Cables</a>
-                            </li>
-                            <li><a href="#">Audio &amp; Video Cables</a>
-                            </li>
-                            <li><a href="#">Batteries</a>
-                            </li>
-                        </ul>
-                    </div>
-                </div>
-            </li>
-            <li><a href="#"><i class="icon-shirt"></i> Vêtements et accessoires</a></li>
-            <li><a href="#"><i class="icon-lampshade"></i> Maison, jardin &amp; cuisine</a></li>
-            <li><a href="#"><i class="icon-heart-pulse"></i> Santé &amp; Beauté</a></li>
-            <li><a href="#"><i class="icon-diamond2"></i> Bijoux &amp; Montres</a></li>
-            <li class="menu-item-has-children has-mega-menu">
-                <a href="#"><i class="icon-desktop"></i> Informatique</a>
-                <div class="mega-menu">
-                    <div class="mega-menu__column">
-                        <h4>Computer &amp; Technologies<span class="sub-toggle"></span></h4>
-                        <ul class="mega-menu__list">
-                            <li><a href="#">Computer &amp; Tablets</a>
-                            </li>
-                            <li><a href="#">Laptop</a>
-                            </li>
-                            <li><a href="#">Monitors</a>
-                            </li>
-                            <li><a href="#">Networking</a>
-                            </li>
-                            <li><a href="#">Drive &amp; Storages</a>
-                            </li>
-                            <li><a href="#">Computer Components</a>
-                            </li>
-                            <li><a href="#">Security &amp; Protection</a>
-                            </li>
-                            <li><a href="#">Gaming Laptop</a>
-                            </li>
-                            <li><a href="#">Accessories</a>
-                            </li>
-                        </ul>
-                    </div>
-                </div>
-            </li>
-            <li><a href="#"><i class="icon-baby-bottle"></i> Bébés &amp; Mamans</a></li>
-            <li><a href="#"><i class="icon-baseball"></i> Sport &amp; plain air</a></li>
-            <li><a href="#"><i class="icon-smartphone"></i> Téléphones &amp; Accessoires</a></li>
-            <li><a href="#"><i class="icon-book2"></i> Livres &amp; Bureau</a></li>
-            <li><a href="#"><i class="icon-car-siren"></i> Voitures, Vélos, &amp; Motos</a></li>
-            <li><a href="#"><i class="icon-tag"></i> Bons &amp; Services</a></li>
-        </ul>
+{% load cache mptt_tags %}
+
+{% cache 500 category request.user.id %}
+    <div class="menu--product-categories">
+        <div class="menu__toggle"><i class="icon-menu"></i><span>Catégories</span></div>
+        <div class="menu__content">
+            <ul class="menu--dropdown">
+                {% recursetree category %}
+                    <li {% if not node.is_leaf_instance %}class="menu-item-has-children has-mega-menu"{% endif %}>
+                        <a href="{{ node.get_absolute_url }}">
+                            <i class="{% if node.id == 1 %} icon-star {% elif node.id == 2 %} icon-laundry {% elif node.id == 3 %} icon-shirt {% elif node.id == 4 %} icon-lampshade {% elif node.id == 5 %} icon-heart-pulse {% elif node.id == 6 %} icon-diamond2 {% elif node.id == 7 %} icon-desktop {% elif node.id == 8 %} icon-baby-bottle {% elif node.id == 9 %} icon-baseball {% elif node.id == 10 %} icon-smartphone {% elif node.id == 11 %} icon-book2  {% elif node.id == 12 %} icon-car-siren {% elif node.id == 13 %} icon-tag {% endif %}"></i>
+                            {{ node.name|safe }}
+                        </a>
+
+                        {% if not node.is_leaf_node and node.children.all %}
+                            <div class="mega-menu">
+                                {% for children in node.children.all %}
+                                    <div class="mega-menu__column">
+                                        <h4>{{ children }}<span class="sub-toggle"></span></h4>
+                                        {% for obj in children.children.all %}
+                                            <ul class="mega-menu__list">
+                                                <li>
+                                                    <a href="{{ obj.get_absolute_url }}">{{ obj.name }}</a>
+                                                </li>
+                                            </ul>
+                                        {% endfor %}
+                                    </div>
+                                {% endfor %} 
+                            </div>
+                        {% endif %}
+                    </li>
+                {% endrecursetree %}
+            </ul>
+        </div>
     </div>
-</div>
+{% endcache %}

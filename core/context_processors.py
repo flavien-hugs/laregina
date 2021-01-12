@@ -1,6 +1,7 @@
 # core/context.py
 
 from core import settings
+from category.models import Category
 
 
 # HEAD META
@@ -14,3 +15,7 @@ def context(request):
         'twitter': 'https://twitter.com/CoteLaregina',
         'request': request
     }
+
+# category
+def category(request):
+    return {'category': Category.objects.all()}

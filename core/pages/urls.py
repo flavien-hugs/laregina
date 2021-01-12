@@ -17,6 +17,7 @@ urlpatterns  = [
     path('list/', TemplateView.as_view(
         extra_context={'page_title': 'Liste des produits', 'page_description': "Tous les produits des magasins"
         }, template_name='catalogue/list.html'), name='list'),
+    
     path('detail/', TemplateView.as_view(
         extra_context={'page_title': 'Detail du produit', 'page_description': "Detail du produit"
         }, template_name='catalogue/detail.html'), name='detail'),

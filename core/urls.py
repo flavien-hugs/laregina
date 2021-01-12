@@ -14,6 +14,7 @@ from django.shortcuts import redirect, render
 from django.views.generic import TemplateView
 
 from accounts.views import customer, seller
+from category.views import CategoryListView, CategoryDetailView
 
 admin.autodiscover()
 
@@ -40,6 +41,7 @@ def home(request, template='index.html'):
 
 urlpatterns = [
     path('', home, name='home'),
+    path('', include('category.urls', namespace='category')),
     path('', include("core.pages.urls")),
     path('accounts/signup/customer/', customer.CustomerSignUpView.as_view(), name='customer_signup'),
     path('accounts/', include('allauth.urls')),

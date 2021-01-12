@@ -1,6 +1,6 @@
 {% load cache %}
 
-{% cache 360 javascript request.user.pk|default_if_none:"0" %}
+{% cache 500 javascript request.user.id %}
 
     {% include "includes/assets/javascript_file.html" %}
 
