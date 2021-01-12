@@ -1,11 +1,15 @@
 # accounts/urls.py
 
 from django.urls import path, include
+from django.views.generic import TemplateView
+
 from accounts.views import customer, seller
 
 
 urlpatterns = [
     path('customer/', include(([
+        path('dashboard/', TemplateView.as_view(
+            template_name='dashboard/customer/index.html'), name='customer_dashboard'),
         # path('', customer.QuizListView.as_view(), name='quiz_list'),
         # path('interests/', customer.StudentInterestsView.as_view(), name='student_interests'),
         # path('taken/', customer.TakenQuizListView.as_view(), name='taken_quiz_list'),
@@ -13,16 +17,11 @@ urlpatterns = [
     ], 'accounts'), namespace='customer')),
 
     path('seller/', include(([
+        path('dashboard/', seller.StoreProfileDetailView.as_view(
+            extra_context={'page_description': "Tableau de bord"}), name='profile'),
 
-        path('store/', seller.StoreProfileSelfDetailView.as_view(
-            extra_context={'page_title': 'Tableau de bord', 'page_description': "Tableau de bord"}
-            ), name='profile'),
-
-        path('settings/', seller.StoreProfileUpdateView.as_view(
-            extra_context={'page_title': 'Configuration', 'page_description': "Configuration"}
-            ), name='update'),
-
-        path('store/<slug>/', seller.StoreProfileDetailView.as_view(), name='detail'),
+        path('settings/', seller.StoreUpdateView.as_view(
+            extra_context={'page_description': "Configuration"}), name='update'),
 
         # path('', seller.QuizListView.as_view(), name='quiz_change_list'),
         # path('quiz/add/', teachers.QuizCreateView.as_view(), name='quiz_add'),

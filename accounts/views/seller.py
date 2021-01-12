@@ -5,37 +5,38 @@ from django.db import transaction
 from django.contrib import messages
 from django.contrib.auth import login
 from django.db.models import Avg, Count
+from django.http import HttpResponseRedirect
 from django.urls import reverse, reverse_lazy
 from django.forms import inlineformset_factory
 from django.shortcuts import get_object_or_404, redirect, render
 from django.views.generic import FormView, CreateView, DeleteView, DetailView, RedirectView, ListView, UpdateView
 
 from ..models import User
-from ..forms import MarketSignupForm, StoreProfileUpdateForm
-from ..mixins import OwnerRequiredMixin, SellerRequiredMixin
+from ..forms import MarketSignupForm, StoreUpdateForm
+from ..mixins import CustomerWithOwnerMixin, SellerRequiredMixin, UserAccountMixin
 
 
-# class SellerSignUpView(CreateView):
-#     model = User
-#     form_class = MarketSignupForm
-#     template_name = 'account/signup.html'
-
-#     def get_context_data(self, **kwargs):
-#         kwargs['user_type'] = 'seller'
-#         return super().get_context_data(**kwargs)
-
-#     def form_valid(self, form):
-#         user = form.save()
-#         login(self.request, user)
-#         return redirect('accounts:profile')
-
-
-class StoreProfileSelfDetailView(SellerRequiredMixin, DetailView):
+class StoreProfileDetailView(SellerRequiredMixin, UserAccountMixin, DetailView):
     model = User
-    template_name = 'seller_dashboard/index.html'
+    template_name = 'dashboard/seller/index.html'
+    extra_context = {'user_type': 'seller'}
 
     def get_object(self, *args, **kwargs):
         return self.request.user
+
+    def get_context_data(self, *args, **kwargs):
+        kwargs['page_title'] = self.object.store
+        return super().get_context_data(*args, **kwargs)
+
+    def dispatch(self, request, *args, **kwargs):
+        if request.user.is_authenticated:
+            if request.user.is_buyer:
+                return redirect('customer:customer_dashboard')
+            elif request.user.is_anonymous:
+                return redirect('/')
+            elif request.user.is_superuser:
+                return redirect('/admin/')
+        return super().dispatch(self.request, *args, **kwargs)
 
     # def get_context_data(self, **kwargs):
     #     context = super().get_context_data(**kwargs)
@@ -66,9 +67,14 @@ class StoreProfileSelfDetailView(SellerRequiredMixin, DetailView):
 
 
 # Même chose que ci-dessus, mais pour voir un autre vendeur.
-class StoreProfileDetailView(DetailView):
+class StoreDetailView(DetailView):
     model = User
-    template_name = 'seller_dashboard/index.html'
+    template_name='dashboard/seller/layouts/vendor-store.html'
+
+    def get_context_data(self, *args, **kwargs):
+        kwargs['page_title'] = self.object.store
+        return super().get_context_data(*args, **kwargs)
+
 
     # def get_context_data(self, **kwargs):
     #     context = super().get_context_data(**kwargs)
@@ -96,14 +102,15 @@ class StoreProfileDetailView(DetailView):
 
 
 # Update a profile.
-class StoreProfileUpdateView(SellerRequiredMixin, OwnerRequiredMixin, UpdateView):
+class StoreUpdateView(SellerRequiredMixin, UpdateView):
     model = User
-    form_class = StoreProfileUpdateForm
-    template_name = 'seller_dashboard/layouts/settings-store.html'
+    form_class = StoreUpdateForm
+    template_name = 'dashboard/seller/layouts/settings-store.html'
+    success_url = reverse_lazy('seller:profile')
 
     def get_object(self, *args, **kwargs):
         return self.request.user
 
-    def get_success_url(self):
-        messages.success(self.request, 'Seller profile updated!', extra_tags='fa fa-check')
-        return reverse('seller:profile')
+    def get_context_data(self, *args, **kwargs):
+        kwargs['page_title'] = 'Configuration boutique : {}'.format(self.object.store)
+        return super().get_context_data(*args, **kwargs)

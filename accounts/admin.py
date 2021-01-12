@@ -6,6 +6,9 @@ from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
 from accounts.models import User
 from accounts.forms import MarketSignupForm, MarketChangeForm
 
+admin.site.site_header = "CGIC MARKET"
+admin.site.site_title = "CGIC MARKET Admin"
+admin.site.index_title = "Espace d'Administration CGIC MARKET"
 
 @admin.register(User)
 class UserAdmin(BaseUserAdmin):
@@ -15,20 +18,22 @@ class UserAdmin(BaseUserAdmin):
 
     fieldsets = (
         (None, {'fields':
-            (
+            (   
+                "store_id",
                 "name",
                 "email",
                 "store",
+                "slug",
                 "phone_number",
                 "whatsapp_number",
                 "country",
                 "city",
+                "store_description",
                 "address",
                 "facebook",
                 "linkedin",
                 "instagramm",
                 "password",
-                "last_login",
             )}
         ),
 
@@ -45,12 +50,13 @@ class UserAdmin(BaseUserAdmin):
             None,
             {
                 'classes': ('wide',),
-                'fields': ('email', 'password1', 'password2', 'is_staff', 'is_staff')
+                'fields': ('email', 'slug', 'password1', 'password2', 'is_staff', 'is_active')
             }
         ),
     )
 
     list_display = (
+        "store_id",
         "email",
         "name",
         "store",
@@ -82,6 +88,7 @@ class UserAdmin(BaseUserAdmin):
         "is_seller",
     )
 
+    prepopulated_fields = {'slug': ('store',)}
     search_fields = ('email', 'user', 'store',)
-    ordering = ('email',)
+    ordering = ('date_joined',)
     filter_horizontal = ('groups', 'user_permissions',)

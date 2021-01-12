@@ -11,7 +11,6 @@ https://docs.djangoproject.com/en/3.1/ref/settings/
 import os
 from pathlib import Path
 from decouple import config
-from django.core.exceptions import ImproperlyConfigured
 from django.contrib.messages import constants as messages
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -75,7 +74,10 @@ OTHERS_APPS = [
 LOCAL_APPS = [
     'accounts.apps.AccountsConfig',
     'category.apps.CategoryConfig',
-    'catalogue.apps.CatalogueConfig'
+    'catalogue.apps.CatalogueConfig',
+    'cart.apps.CartConfig',
+    'order.apps.OrderConfig',
+    'caching',
 ]
 
 INSTALLED_APPS += OTHERS_APPS + LOCAL_APPS
@@ -92,9 +94,13 @@ AUTHENTICATION_BACKENDS = [
     'allauth.account.auth_backends.AuthenticationBackend',
 ]
 
-# Logged in users redirected here if they view login/signup pages
+# Les utilisateurs connectés sont redirigés ici s'ils consultent les pages de connexion/inscription
 LOGIN_URL = 'account_login'
 LOGIN_REDIRECT_URL = 'seller:profile'
+    
+
+# Ne pas afficher la confirmation de déconnexion
+ACCOUNT_LOGOUT_ON_GET = True
 
 # Configuration django-allauth
 # https://django-allauth.readthedocs.io/en/latest/configuration.html
@@ -113,12 +119,9 @@ ACCOUNT_EMAIL_CONFIRMATION_EXPIRE_DAYS = 7
 ACCOUNT_EMAIL_SUBJECT_PREFIX = "LaRegina Deals <info@anobra.com>"
 
 ACCOUNT_FORMS = {
-    'login': 'accounts.forms.MarketLoginForm',
+    'login': 'accounts.forms.LoginForm',
     'signup': 'accounts.forms.MarketSignupForm',
 }
-
-# Ne pas afficher la confirmation de déconnexion
-ACCOUNT_LOGOUT_ON_GET = True
 
 # La valeur d'affichage de l'utilisateur est le nom du profil associé
 ACCOUNT_USER_DISPLAY = lambda user: user.name
@@ -144,11 +147,15 @@ EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 # Let's Encrypt ssl/tls https
 SECURE_FRAME_DENY = True
 CSRF_COOKIE_SECURE = True
-SESSION_COOKIE_NAME = 'sessioncgc'
-SESSION_COOKIE_AGE = 3600
+SESSION_COOKIE_NAME = 'cookies'
+SESSION_COOKIE_DAYS = 90
+SESSION_COOKIE_AGE = 60 * 60 * 24 * SESSION_COOKIE_DAYS 
 SESSION_EXPIRE_AT_BROWSER_CLOSE = False
 SESSION_COOKIE_SECURE = True
-
+CACHE_MIDDLEWARE_ALIAS = 'default'
+CACHE_MIDDLEWARE_SECONDS = 600
+CACHE_MIDDLEWARE_KEY_PREFIX = ''
+CACHE_TIMEOUT = 60 * 60
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',

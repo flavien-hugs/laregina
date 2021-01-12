@@ -30,24 +30,20 @@ def handler500(request, template_name='500.html'):
         status=500, context={'page_title': 'Erreur interne'})
 
 def home(request, template='index.html'):
-    if request.user.is_authenticated:
-
-        if request.user.is_seller:
-            return redirect('accounts:profile')
-        else:
-            return redirect('home')
-
+    # if request.user.is_authenticated:
+    #     if request.user.is_seller:
+    #         return redirect('accounts:profile')
+    #     elif request.user.is_buyer:
+    #         return redirect('customer:customer_dashboard')
     return render(request, template)
 
 
 urlpatterns = [
     path('', home, name='home'),
-
-    path('dashboard/', include("core.pages.urls")),
+    path('', include("core.pages.urls")),
     path('accounts/signup/customer/', customer.CustomerSignUpView.as_view(), name='customer_signup'),
-    
     path('accounts/', include('allauth.urls')),
-    path('vendor/', include('accounts.urls')),
+    path('accounts/profile/', include('accounts.urls')),
     path('admin/', admin.site.urls),
 ]
 

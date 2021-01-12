@@ -1,6 +1,13 @@
 # accounts/models.py
 
+import math
+import random
+import string
+import datetime
+
 from django.db import models
+from django.urls import reverse
+from django.utils.text import slugify
 from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin
 
 from django_countries.fields import CountryField
@@ -25,7 +32,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     """
 
     CIVILITY_CHOICES = (('Mr', 'Monsieur'), ('Mme', 'Madame'), ('Mlle', 'Mademoiselle'),)
-
+    store_id = models.CharField(max_length=120, verbose_name='ID STORE', unique=True, blank=True)
     email = models.EmailField(verbose_name='email', max_length=254, unique=True,
         error_messages={'unique': "Un utilisateur disposant de ce courriel existe déjà.",})
     civility = models.CharField(verbose_name='civilité', max_length=4, choices=CIVILITY_CHOICES, default="Mr")
@@ -50,6 +57,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     is_seller = models.BooleanField(verbose_name='statut vendeur', default=False)
     last_login = models.DateTimeField(verbose_name='date de derniere connexion', auto_now_add=True)
     date_joined = models.DateTimeField(verbose_name="date d'inscription", auto_now_add=True)
+    slug = models.SlugField("URL de la boutique", blank=True, help_text="lien vers la boutique")
 
     USERNAME_FIELD = 'email'
     EMAIL_FIELD = 'email'
@@ -64,7 +72,19 @@ class User(AbstractBaseUser, PermissionsMixin):
         verbose_name_plural = 'utilisateurs'
 
     def __str__(self):
-        return self.email
+        return self.name
+
+    def save(self, *args, **kwargs):
+        self.generate(8)
+        if not self.slug:
+            self.slug = slugify(self.store)
+        super().save(*args, **kwargs)
+
+    def generate(self, nb_carac):
+        today = datetime.date.today().strftime('%d%m%y')
+        carac = string.digits
+        random_carac = [random.choice(carac) for _ in range(nb_carac)]
+        self.store_id = today + ''.join(random_carac)
 
     def get_fullname(self):
         if self.civility and self.name:
@@ -81,4 +101,4 @@ class User(AbstractBaseUser, PermissionsMixin):
         return True
 
     def get_absolute_url(self):
-        return "/users/{}/".formal(self.email)
+        return reverse('store_detail_view', kwargs={'slug': self.slug})

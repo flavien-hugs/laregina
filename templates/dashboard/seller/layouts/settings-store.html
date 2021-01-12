@@ -1,0 +1,29 @@
+{% extends "dashboard/seller/base.html" %}
+{% load crispy_forms_tags %}
+
+{% block content %}
+    <div class="ps-main__wrapper">
+        <header class="header--dashboard">
+            <div class="header__left">
+                <h3>Réglages</h3>
+                <p>Paramètres du compte</p>
+            </div>
+
+            {% include "dashboard/seller/partials/header_top.html" %}
+        </header>
+
+        <section class="ps-dashboard ps-items-listing">
+            <div class="ps-section__left">
+                <section class="ps-card">
+                    <div class="ps-card__header">
+                        <h4>Paramètres du compte</h4>
+                    </div>
+                    <div class="ps-card__content">
+                        {% crispy form %}
+                    </div>
+                </section>
+            </div>
+            <div class="ps-section__right"></div>
+        </section>
+    </div>
+{% endblock content %}

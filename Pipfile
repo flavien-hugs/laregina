@@ -26,6 +26,7 @@ django-phonenumber-field = "*"
 phonenumbers = "*"
 babel = "*"
 pillow = "*"
+django-admin-thumbnails = "*"
 
 [requires]
 python_version = "3.8"

@@ -4,7 +4,7 @@
 
 {% block content %}
     <div class="ps-page--my-account">
-        <div class="ps-breadcrumb">
+        <div class="ps-breadcrumb text-center">
             <div class="container">
                 <ul class="breadcrumb">
                     <li><a href="{% url 'home' %}">Accueil</a></li>
@@ -13,13 +13,14 @@
             </div>
         </div>
 
-        <div class="ps-my-account">
+        <div class="">
             <div class="container">
                 <div class="row justify-content-center">
-                    <div class="col-md-9 col-sm-10">
+                    <div class="col-md-7 col-sm-10">
                         <div class="pb-5">
                             <div class="col bg-white p-5">
-                                <h3 class="font-weight-bold pb-5">Créer un compte</h3>
+                                <h3 class="font-weight-bold text-center">Créer un compte</h3>
+                                <p class="text-center font-weight-normal pb-4">Inscrivez-vous et commencez à vendre dès aujourd'hui - créez votre propre compte vendeur.</p>
 
                                 {% crispy form %}
 

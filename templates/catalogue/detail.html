@@ -53,7 +53,7 @@
                                     </div>
                                     <h4 class="ps-product__price">$36.78 – $56.99</h4>
                                     <div class="ps-product__desc">
-                                        <p>Vendu par: <a href="{% url "vendor-store" %}" target="_blank"><strong> Go Pro</strong></a></p>
+                                        <p>Vendu par: <a href="#" target="_blank"><strong> Go Pro</strong></a></p>
                                         <ul class="ps-list--dot">
                                             <li> Unrestrained and portable active stereo speaker</li>
                                             <li> Free from the confines of wires and chords</li>
@@ -256,10 +256,18 @@
                             <p><i class="icon-receipt"></i> Le fournisseur donne des factures pour ce produit.</p>
                             <p><i class="icon-credit-card"></i> Payer en ligne ou lors de la réception de marchandises</p>
                         </aside>
+
                         <aside class="widget widget_sell-on-site">
-                            <p><i class="icon-store"></i> Vendre sur {{ title }} ?<a href="{% url "register" %}" target="_blank"> Inscrivez-vous maintenant</a></p>
+                            <p>
+                                <i class="icon-store"></i> Vendre sur {{ title }} ?
+                                <a href="{% url "account_signup" %}" target="_blank"> Inscrivez-vous maintenant</a>
+                            </p>
                         </aside>
-                        <aside class="widget widget_ads"><a href="#"><img src="{{ STATIC_PREFIX }}img/ads/product-ads.png" alt=""></a></aside>
+
+                        <aside class="widget widget_ads">
+                            <a href="#"><img src="{{ STATIC_PREFIX }}img/ads/product-ads.png" alt=""></a>
+                        </aside>
+                        
                         <aside class="widget widget_same-brand">
                             <h3>Même marque</h3>
                             <div class="widget__content">

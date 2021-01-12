@@ -1,0 +1,30 @@
+{% spaceless %}
+    <!DOCTYPE html>
+    <html lang="fr">
+        <head>
+            {% load static cache %}{% get_static_prefix as STATIC_PREFIX %}
+            {% include "dashboard/seller/includes/meta.html" %}
+            {% include "dashboard/seller/includes/css.html" %}
+
+            <title>
+                {% block title %}
+                    {% if page_title %}
+                        {{ page_title|title }}
+                    {% endif %} &smid; Tableau de bord
+                {% endblock title %}
+            </title>
+
+        </head>
+
+        <body class="d-flex flex-column">
+            <div class="flex-grow-1 flex-shrink-0">
+                <main class="ps-main">
+                    {% include "dashboard/seller/partials/navigation.html" %}
+                    {% block content %}
+                    {% endblock content %}
+                </main>
+            </div>
+            {% include "dashboard/seller/includes/javascript.html" %}
+        </body>
+    </html>
+{% endspaceless %}

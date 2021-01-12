@@ -20,12 +20,14 @@ local-migrate:
 	$(MANAGE) migrate
 
 dumpdata:
-	$(MANAGE) dumpdata --indent=4 accounts.user > backups/accounts_user.json
-	$(MANAGE) dumpdata --indent=4 category.category > backups/category.json
+	$(MANAGE) dumpdata --indent=4 accounts.user > backups/users_data.json
+	$(MANAGE) dumpdata --indent=4 category.category > backups/category_data.json
+	$(MANAGE) dumpdata --indent=4 catalogue.product > backups/product_data.json
 
 loaddata:
-	$(MANAGE) loaddata backups/accounts_user.json
-	$(MANAGE) loaddata backups/category.json
+	$(MANAGE) loaddata backups/users_data.json
+	$(MANAGE) loaddata backups/category_data.json
+	$(MANAGE) loaddata backups/product_data.json
 
 test:
 	$(MANAGE) test $(TEST_SETTINGS)

@@ -2,6 +2,7 @@
 
 from django import forms
 from django.db import transaction
+from django.contrib.auth import get_user_model
 from django.forms.utils import ValidationError
 from django.contrib.auth.forms import UserCreationForm, UserChangeForm
 
@@ -13,22 +14,23 @@ from django_countries.fields import CountryField
 from phonenumber_field.formfields import PhoneNumberField
 from phonenumber_field.widgets import PhoneNumberPrefixWidget
 
-from accounts.models import User
+# User Manager
+User = get_user_model()
 from category.models import Category
 
 
-class MarketLoginForm(LoginForm):
+class LoginForm(LoginForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.request = self.request.user
         self.helper = FormHelper(self)
+        self.helper.form_id = 'login_form_ajax'
+        self.helper.form_class = 'login_form_ajax form-group'
+        self.helper.form_method = 'POST'
         
         self.helper.layout = layout.Layout(
-            layout.Fieldset(
-                'Veuillez saisir votre adresse email et mot de passe pour vous connecter.',
-                bootstrap.PrependedText('login', '', placeholder="Entrez votre adresse email"),
-                bootstrap.PrependedText('password', '', placeholder="Entrez votre mot de passe"),
-            ),
+            bootstrap.PrependedText('login', '', placeholder="Entrez votre adresse email"),
+            bootstrap.PrependedText('password', '', placeholder="Entrez votre mot de passe"),
 
             bootstrap.FormActions(
                 layout.Submit('submit', 'Se connecter', css_class='mt-4 ps-btn btn-block text-uppercase border-0'),
@@ -43,30 +45,78 @@ class MarketLoginForm(LoginForm):
 
 
 class MarketSignupForm(UserCreationForm):
-    civility = forms.ChoiceField(label="Civilité", choices=User.CIVILITY_CHOICES)
-    name = forms.CharField(label='Nom & Prénoms', max_length=120)
+    civility = forms.TypedChoiceField(
+        label="Civilité", choices=User.CIVILITY_CHOICES,
+        initial = '1', coerce=str, required = True,
+    )
+    name = forms.CharField(label='Nom & Prénoms', max_length=120,
+        widget=forms.TextInput(attrs={'placeholder': 'Entrez votre nom complet'}))
     phone_number = PhoneNumberField(label='Numéro de téléphone', initial='+225',
-        widget=PhoneNumberPrefixWidget(attrs={'placeholder': '00 00 00 00', 'class': "form-control"}))
-    whatsapp_number = PhoneNumberField(label='Numéro de téléphone WhatsApp (optionel)', initial='+225', required=False,
         widget=PhoneNumberPrefixWidget(attrs={'placeholder': '00 00 00 00', 'class': "form-control"}))
     store = forms.CharField(label='Nom de votre Magasin', max_length=254, required=True)
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.helper = FormHelper(self)
+        self.helper.form_id = 'signup_form_ajax'
+        self.helper.form_class = 'signup_form_ajax'
+        self.helper.form_method = 'POST'
 
         self.helper.layout = layout.Layout(
-            layout.Fieldset(
-                'Inscrivez-vous et commencez à vendre dès aujourd\'hui - créez votre propre compte vendeur.',
-                bootstrap.PrependedText('email', '', placeholder="Entrez le nom de votre Adresse e-mail"),
-                bootstrap.PrependedText('civility', '', placeholder="choisir", css_class='custom-control'),
-                bootstrap.PrependedText('name', '', placeholder="Entrez votre nom et prénoms"),
-                bootstrap.PrependedText('store', '', placeholder="Entrez le nom de votre Magasin"),
-                bootstrap.PrependedText('phone_number', '', placeholder=''),
-                bootstrap.PrependedText('whatsapp_number', '', placeholder=''),
-                bootstrap.PrependedText('password1', '', placeholder="Entrez votre mot de passe"),
-                bootstrap.PrependedText('password2', '', placeholder="Confirmez le mot de passe"),
+            layout.Row(
+                layout.Column('civility', css_class='form-group col-md-3 mb-0'),
+                layout.Column('name', css_class='form-group col-md-9 mb-0'),
+                css_class='form-row'
             ),
+
+            bootstrap.PrependedText('email', '', placeholder='Entrez votre adresse email', css_class='form-group'),
+            bootstrap.PrependedText('store', '', placeholder='Entrez le nom du votre magasin', css_class='form-group'),
+            bootstrap.PrependedText('phone_number', '', css_class='form-group custom-select'),
+
+            bootstrap.Field('password1', '', placeholder="Entrez votre mot de passe"),
+            bootstrap.Field('password2', '', placeholder="Confirmez le mot de passe"),
+
+            bootstrap.FormActions(
+                layout.Submit('submit', 'Créer mon compte', css_class='mt-4 ps-btn btn-block text-uppercase border-0')
+            ),
+        )
+
+    class Meta:
+        model = User
+        fields = ('email', 'civility', 'name', 'store', 'phone_number')
+
+    def save(self, commit=True):
+        user = super().save(commit=False)
+        user.is_seller = True
+        if commit:
+            user.save()
+        return user
+
+
+class CustomerSignUpForm(UserCreationForm):
+    civility = forms.TypedChoiceField(
+        label="Civilité", choices=User.CIVILITY_CHOICES,
+        initial = '1', coerce=str, required = True,
+    )
+    name = forms.CharField(label='Nom & Prénoms', max_length=120,
+        widget=forms.TextInput(attrs={'placeholder': 'Entrez votre nom complet'}))
+    phone_number = PhoneNumberField(label='Numéro de téléphone', initial='+225',
+        widget=PhoneNumberPrefixWidget(attrs={'placeholder': '00 00 00 00', 'class': "form-control"}))
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.helper = FormHelper(self)
+
+        self.helper.layout = layout.Layout(
+            layout.Row(
+                layout.Column('civility', css_class='form-group col-md-3 mb-0'),
+                layout.Column('name', css_class='form-group col-md-9 mb-0'),
+                css_class='form-row'
+            ),
+            bootstrap.PrependedText('email', '', placeholder="Entrez votre adresse email"),
+            bootstrap.PrependedText('phone_number', '', css_class='custom-select'),
+            bootstrap.PrependedText('password1', '', placeholder="Entrez votre mot de passe"),
+            bootstrap.PrependedText('password2', '', placeholder="Confirmez le mot de passe"),
 
             bootstrap.FormActions(
                 layout.Submit('submit', 'Créer mon compte', css_class='mt-4 ps-btn btn-block text-uppercase border-0'),
@@ -75,11 +125,12 @@ class MarketSignupForm(UserCreationForm):
 
     class Meta:
         model = User
-        fields = ('email', 'civility', 'name', 'store', 'phone_number', 'whatsapp_number')
+        fields = ('email', 'civility', 'name', 'phone_number')
 
-    def save(self, commit=True):
+    @transaction.atomic
+    def save(self):
         user = super().save(commit=False)
-        user.is_seller = True
+        user.is_buyer = True
         if commit:
             user.save()
         return user
@@ -91,61 +142,7 @@ class MarketChangeForm(UserChangeForm):
         fields = ("email", "logo")
 
 
-class CustomerSignUpForm(UserCreationForm):
-    civility = forms.ChoiceField(label="Civilité", choices=User.CIVILITY_CHOICES)
-    interests = forms.ModelMultipleChoiceField(
-        queryset=Category.objects.all(),
-        widget=forms.CheckboxSelectMultiple,
-        required=True
-    )
-
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        self.helper = FormHelper(self)
-
-        self.helper.layout = layout.Layout(
-            layout.Fieldset(
-                'Inscrivez-vous et commencez à acheter dès aujourd\'hui - créez votre propre compte acheteur.',
-                bootstrap.PrependedText('email', '', placeholder="Entrez votre adresse email"),
-                bootstrap.PrependedText('civility', '', placeholder="Votre civilité"),
-                bootstrap.PrependedText('name', '', placeholder="Entrez votre nom complet"),
-                bootstrap.PrependedText('password1', '', placeholder="Entrez votre mot de passe"),
-                bootstrap.PrependedText('password2', '', placeholder="Confirmez le mot de passe"),
-            ),
-
-            layout.Fieldset(
-                'Inscrivez-vous et commencez à acheter dès aujourd\'hui - créez votre propre compte acheteur.',
-                'interests',
-            ),
-
-            bootstrap.FormActions(
-                layout.Submit('submit', 'Créer mon compte', css_class='mt-4 ps-btn btn-block text-uppercase border-0'),
-            ),
-        )
-
-    class Meta:
-        model = User
-        fields = ('email', 'civility', 'name', 'interests')
-
-    @transaction.atomic
-    def save(self):
-        user = super().save(commit=False)
-        user.is_buyer = True
-        user.save()
-        user.interests.add(*self.cleaned_data.get('interests'))
-        return user
-
-
-class CustomerInterestsForm(forms.ModelForm):
-    class Meta:
-        model = User
-        fields = ('interests',)
-        widgets = {
-            'interests': forms.CheckboxSelectMultiple
-        }
-
-
-class StoreProfileUpdateForm(forms.ModelForm):
+class StoreUpdateForm(forms.ModelForm):
 
     logo = forms.FileField(
         label="Logo du Magasin",
@@ -154,8 +151,35 @@ class StoreProfileUpdateForm(forms.ModelForm):
                 "class": "as-parent file-upload",
                 "accept": "image/*",
             }
-        ),
+        ), required=False,
     )
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.helper = FormHelper(self)
+
+        self.helper.layout = layout.Layout(
+            layout.Fieldset(
+                '',
+                "civility",
+                "name",
+                "store",
+                "logo",
+                "phone_number",
+                "whatsapp_number",
+                "country",
+                "city",
+                "store_description",
+                "address",
+                "facebook",
+                "linkedin",
+                "instagramm"
+            ),
+
+            bootstrap.FormActions(
+                layout.Submit('submit', 'Mettre à jour', css_class='mt-4 ps-btn btn-block text-uppercase border-0'),
+            ),
+        )
 
     class Meta:
         model = User
@@ -168,33 +192,9 @@ class StoreProfileUpdateForm(forms.ModelForm):
             "whatsapp_number",
             "country",
             "city",
+            "store_description",
             "address",
             "facebook",
             "linkedin",
             "instagramm",
         ]
-
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        self.helper = FormHelper(self)
-        self.helper.layout = layout.Layout(
-            layout.Fieldset(
-                '',
-                "civility",
-                "name",
-                "store",
-                "logo",
-                "phone_number",
-                "whatsapp_number",
-                "country",
-                "city",
-                "address",
-                "facebook",
-                "linkedin",
-                "instagramm"
-            ),
-
-            bootstrap.FormActions(
-                layout.Submit('submit', 'Mettre à jour', css_class='mt-4 ps-btn btn-block text-uppercase border-0'),
-            ),
-        )

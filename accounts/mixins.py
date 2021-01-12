@@ -1,10 +1,16 @@
 # accounts/mixins.py
 
+import datetime
+from django.db.models import Sum, Avg
+from django.contrib.auth import get_user_model
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
-from accounts.models import User
+
+from catalogue.models import Product
+
+User = get_user_model()
 
 
-class CreateWithOwnerMixin(LoginRequiredMixin):
+class CustomerWithOwnerMixin(LoginRequiredMixin):
     """
         Injecte l'utilisateur actuellement connecté dans le champ propriétaire du formulaire dans cette vue.
     """
@@ -50,7 +56,7 @@ class CreateWithOwnerMixin(LoginRequiredMixin):
 #         return form
 
 
-class OwnerRequiredMixin(LoginRequiredMixin, UserPassesTestMixin):
+class CustomerRequiredMixin(LoginRequiredMixin, UserPassesTestMixin):
     """
         Limite l'accès à cette vue à l'utilisateur qui est
         le propriétaire de cet objet (dans une vue d'objet unique).
@@ -76,3 +82,32 @@ class SellerRequiredMixin(LoginRequiredMixin, UserPassesTestMixin):
         # TODO: Utilisez plutôt des groupes d'utilisateurs
         # return self.request.user.groups.filter(name='Vendeur').exists()
         return self.request.user.is_seller
+
+
+class UserAccountMixin(LoginRequiredMixin, object):
+    product = []
+
+    def get_user_product(self):
+        product = Product.objects.filter(user=self.get_account())
+        self.product = product
+        return product
+
+    # def get_user_payment(self):
+    #     payment = Payment.objects.filter(product__in=self.get_product())
+    #     return payment
+
+    # def get_payment_today(self):
+    #     today = datetime.date.today()
+    #     today_min = datetime.datetime.combine(today, datetime.time.min)
+    #     today_max = datetime.datetime.combine(today, datetime.time.max)
+    #     return self.get_payment().filter(created__range=(today_min, today_max))
+
+    # def get_total_sale(self):
+    #     payment = self.get_payment().aggregate(Sum("price"))
+    #     total_sale = payment["price__sum"]
+    #     return total_sale
+
+    # def get_today_sale(self):
+    #     payment = self.get_payment_today().aggregate(Sum("price"), Avg("price"))
+    #     total_sale = payment["price__sum"]
+    #     return total_sale

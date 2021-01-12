@@ -1,0 +1,166 @@
+{% extends "dashboard/seller/base.html" %}
+
+{% block content %}
+<div class="ps-main__wrapper">
+    <header class="header--dashboard">
+        <div class="header__left">
+            <h3>#ABD-235711</h3>
+            <p>Détail de la commande #ABD-235711</p>
+        </div>
+
+        {% include "dashboard/seller/partials/header_top.html" %}
+    </header>
+
+    <section class="ps-dashboard">
+        <div class="ps-section__left">
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="ps-card ps-card--order-information ps-card--small">
+                        <div class="ps-card__header">
+                            <h4>Informations sur la livraison</h4>
+                        </div>
+                        <div class="ps-card__content">
+                            <h5>John Doe</h5>
+                            <p><strong>Address:</strong> 117-195 Iroquois Ave London, ON N6C 2K9</p>
+                            <p><strong>Phone No.:</strong> (+998) 117-211-31</p>
+                            <p><strong>Email:</strong>
+                                <a href="#">flavienhugs@pm.me</a></p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-4">
+                    <div class="ps-card ps-card--order-information ps-card--small">
+                        <div class="ps-card__header">
+                            <h4>Détails de facturation</h4>
+                        </div>
+                        <div class="ps-card__content">
+                            <p><strong>Payment Type:</strong> Visa</p>
+                            <p><strong>Provider:</strong> **** **** **** *2121</p>
+                            <p><strong>Valid Date:</strong> 02-2025</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-4">
+                    <div class="ps-card ps-card--order-information ps-card--small">
+                        <div class="ps-card__header">
+                            <h4>Informations sur la livraison</h4>
+                        </div>
+                        <div class="ps-card__content">
+                            <h5>John Doe</h5>
+                            <p><strong>Address:</strong> 117-195 Iroquois Ave London, ON N6C 2K9</p>
+                            <p><strong>Phone No.:</strong> (+998) 117-211-31</p>
+                            <p><strong>Email:</strong> <a href="#">flavienhugs@pm.me</a></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="ps-card ps-card--track-order">
+                <div class="ps-card__header">
+                    <h4>#ABD-235711</h4>
+                </div>
+                <div class="ps-card__content">
+                    <div class="table-responsive">
+                        <table class="table ps-table">
+                            <thead>
+                                <tr>
+                                    <th>Produit</th>
+                                    <th>Quantité</th>
+                                    <th>Prix</th>
+                                    <th>Total</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><a href="#">Herschel Leather Duffle Bag In Brown Color</a></td>
+                                    <td>1</td>
+                                    <td>$29.59</td>
+                                    <td>$29.59</td>
+                                </tr>
+                                <tr>
+                                    <td><a href="#">Herschel Leather Duffle Bag In Brown Color</a></td>
+                                    <td>1</td>
+                                    <td>$29.59</td>
+                                    <td>$29.59</td>
+                                </tr>
+                                <tr>
+                                    <td><a href="#">Herschel Leather Duffle Bag In Brown Color</a></td>
+                                    <td>1</td>
+                                    <td>$29.59</td>
+                                    <td>$29.59</td>
+                                </tr>
+                                <tr>
+                                    <td colspan="3"><strong>Sous-total::</strong></td>
+                                    <td><strong>$199.90</strong></td>
+                                </tr>
+                                <tr>
+                                    <td colspan="3"><strong>Frais de livraison:</strong></td>
+                                    <td><strong>$24.00</strong></td>
+                                </tr>
+                                <tr>
+                                    <td colspan="3"><strong>Estimé:</strong></td>
+                                    <td><strong>$12.00</strong></td>
+                                </tr>
+                                <tr>
+                                    <td colspan="3"><strong>Total:</strong></td>
+                                    <td><strong>$211.00</strong></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="ps-section__right">
+            <div class="ps-card ps-card--track-order">
+                <div class="ps-card__header">
+                    <h4>Suivi de commande</h4>
+                </div>
+                <div class="ps-card__content">
+                    <div class="ps-block--track-order">
+                        <div class="ps-block__header">
+                            <div class="row">
+                                <div class="col-6">
+                                    <figure>
+                                        <figcaption>Numéro de commande:</figcaption>
+                                        <p>#ABD-235711</p>
+                                    </figure>
+                                </div>
+                                <div class="col-6">
+                                    <figure>
+                                        <figcaption>ID Suivi:</figcaption>
+                                        <p>21191818abs1</p>
+                                    </figure>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="ps-block__content">
+                            <div class="ps-block__timeline">
+                                <figure class="active">
+                                    <figcaption>Commande passée</figcaption>
+                                    <p>Sep 19, 2020 <small>7:00am</small></p>
+                                </figure>
+                                <figure class="active">
+                                    <figcaption>Emballé</figcaption>
+                                    <p>Sep 19, 2020 <small>10:00am</small></p>
+                                </figure>
+                                <figure class="active">
+                                    <figcaption>Expédié</figcaption>
+                                    <p>Sep 19, 2020 <small>4:00pm</small></p>
+                                </figure>
+                                <figure>
+                                    <figcaption>Livré</figcaption>
+                                    <p>Livraison estimée sous 1 jour</p>
+                                </figure>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
+{% endblock content %}
+

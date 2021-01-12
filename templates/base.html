@@ -24,21 +24,87 @@
             <div class="flex-grow-1 flex-shrink-0">
                 <main class="ps-page--single">
                     <!-- mise en cache du header pendant 120ms -->
-                    {% cache 60 header %}
-                        {% include "includes/header.html" %}
-                    {% endcache %}
+                    {% if request.resolver_match.url_name == 'account_signup' or request.resolver_match.url_name == 'account_login' or request.resolver_match.url_name == 'customer_signup' %} 
+                    {% else %}
+                        {% cache 500 header %}{% include "includes/header.html" %}{% endcache %}
+                    {% endif %}
+
+                    {% if messages %}
+                        {% for message in messages %}
+                            <div class="alert {{ message.tags }} alert-dismissible" role="alert">
+                                <button class="close" type="button" data-dismiss="alert" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                                {{ message|safe }}
+                            </div>
+                        {% endfor %}
+                    {% endif %}
 
                     {% block content %}
                     {% endblock content %}
                 </main>
 
                 <!-- mise en cache du header pendant 120ms -->
-                {% cache 60 footer %}
-                    {% include "includes/footer.html" %}
-                {% endcache %}
+                {% if request.resolver_match.url_name == 'account_signup' or request.resolver_match.url_name == 'account_login' or request.resolver_match.url_name == 'customer_signup' %}
+                <footer class="ps-footer pt-5 flex-shrink-0 bg-light">
+                    <div class="ps-container">
+                        <div class="ps-footer__widgets pb-0">
+                            <aside class="widget widget_footer widget_contact-us">
+                                <h4 class="widget-title">Contactez-nous</h4>
+                                <div class="widget_content">
+                                    <p>Appelez-nous 24/7</p>
+                                    <h3>+225 77 27 48 86</h3>
+                                    <p>Ahougnansou, Bouaké - Côte d'Ivoire 
+                                    </p>
+                                </div>
+                            </aside>
+
+                            <aside class="widget widget_footer">
+                                <h4 class="widget-title">Liens utiles</h4>
+                                <ul class="ps-list--link">
+                                    <li><a href="{% url "contact" %}">Contact</a></li>
+                                    <li><a href="#">Privacy policy</a></li>
+                                    <li><a href="#">Term &amp; Condition</a></li>
+                                </ul>
+                            </aside>
+
+                            <aside class="widget widget_footer">
+                                <h4 class="widget-title">Entreprise</h4>
+                                <ul class="ps-list--link">
+                                    <li><a href="{% url "about-us" %}">À propos de nous</a></li>
+                                    <li><a href="#">Soumettre une annonce</a></li>
+                                    <li><a href="#">Points de livraison</a></li>
+                                </ul>
+                            </aside>
+
+                            <aside class="widget widget_footer">
+                                <h4 class="widget-title">Aide(FAQ)</h4>
+                                <ul class="ps-list--link">
+                                    <li><a href="#">Poliques vendeurs</a></li>
+                                    <li><a href="#">Conseils pour son magasin</a></li>
+                                    <li><a href="#">Conseils pour son produit</a></li>
+                                </ul>
+                            </aside>
+                        </div>
+
+                        <div class="ps-footer__copyright py-3">
+                            <p>&copy; <script>document.write(new Date().getFullYear());</script> {{ title }}.</p>
+
+                            <ul class="ps-list--social">
+                                <li><a class="twitter" href="#"><i class="fa fa-twitter"></i></a></li>
+                                <li><a class="facebook" href="#"><i class="fa fa-facebook"></i></a></li>
+                                <li><a class="youtube" href="#"><i class="fa fa-youtube"></i></a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </footer>
+                {% else %}
+                    {% cache 500 footer %}{% include "includes/footer.html" %}{% endcache %}
+                {% endif %}
             </div>
 
             {% include "includes/assets/javascript.html" %}
+            {% block others_javascript %}{% endblock others_javascript %}
         </body>
     </html>
 {% endspaceless %}
