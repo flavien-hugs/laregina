@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% load cache %}
+{% load cache mptt_tags %}
 
 
 {% block content %}
@@ -12,6 +12,7 @@
                 <a class="ps-btn ps-btn--lg" href="{% url "account_signup" %}">Commencer à vendre</a>
             </div>
         </div>
+
         <div class="ps-section--vendor ps-vendor-about">
             <div class="container">
                 <div class="ps-section__header">
@@ -57,6 +58,7 @@
                 </div>
             </div>
         </div>
+
         <div class="ps-section--vendor ps-vendor-milestone">
             <div class="container">
                 <div class="ps-section__header">
@@ -111,6 +113,7 @@
                 </div>
             </div>
         </div>
+
         <div class="ps-section--vendor ps-vendor-best-fees">
             <div class="container">
                 <div class="ps-section__header">
@@ -148,6 +151,7 @@
                 </div>
             </div>
         </div>
+
         <div class="ps-section--vendor ps-vendor-testimonials">
             <div class="container">
                 <div class="ps-section__header">
@@ -181,6 +185,7 @@
                 </div>
             </div>
         </div>
+
         <div class="ps-section--vendor ps-vendor-faqs">
             <div class="container">
                 <div class="ps-section__header">
@@ -228,6 +233,7 @@
                 </div>
             </div>
         </div>
+        
         <div class="ps-vendor-banner bg--cover" data-background="{{ STATIC_PREFIX }}img/bg/vendor.jpg">
             <div class="container">
                 <h2>Il est temps de commencer à gagner de l'argent.</h2>
