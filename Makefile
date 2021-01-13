@@ -27,7 +27,6 @@ dumpdata:
 loaddata:
 	$(MANAGE) loaddata backups/users_data.json
 	$(MANAGE) loaddata backups/category_data.json
-	$(MANAGE) loaddata backups/product_data.json
 
 test:
 	$(MANAGE) test $(TEST_SETTINGS)
