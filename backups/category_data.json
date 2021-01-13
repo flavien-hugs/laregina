@@ -1,2 +1,18 @@
 [
+{
+    "model": "category.category",
+    "pk": 1,
+    "fields": {
+        "parent": null,
+        "name": "Promotions chaudes",
+        "slug": "promotions-chaudes",
+        "timestamp": "2021-01-13T19:40:30.614Z",
+        "updated": "2021-01-13T19:40:30.614Z",
+        "lft": 1,
+        "rght": 2,
+        "tree_id": 1,
+        "level": 0,
+        "keywords": []
+    }
+}
 ]

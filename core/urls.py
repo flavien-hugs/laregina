@@ -40,13 +40,13 @@ def home(request, template='index.html'):
 
 
 urlpatterns = [
+    path('admin/', admin.site.urls),
     path('', home, name='home'),
     path('', include('category.urls', namespace='category')),
     path('', include("core.pages.urls")),
     path('accounts/signup/customer/', customer.CustomerSignUpView.as_view(), name='customer_signup'),
     path('accounts/', include('allauth.urls')),
     path('accounts/profile/', include('accounts.urls')),
-    path('admin/', admin.site.urls),
 ]
 
 handler404 = handler404
