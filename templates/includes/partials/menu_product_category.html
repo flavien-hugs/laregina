@@ -1,6 +1,6 @@
 {% load cache mptt_tags %}
 
-{% cache 500 category request.user.id %}
+{% cache 120 category request.user.id %}
     <div class="menu--product-categories">
         <div class="menu__toggle"><i class="icon-menu"></i><span>Catégories</span></div>
         <div class="menu__content">

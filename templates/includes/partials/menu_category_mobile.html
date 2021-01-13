@@ -2,7 +2,7 @@
 
 {% load cache mptt_tags %}
 
-{% cache 500 category request.user.id %}
+{% cache 120 category request.user.id %}
     <nav class="ps-panel--sidebar" id="navigation-mobile">
         <div class="ps-panel__header"><h3>Catégories</h3></div>
 
