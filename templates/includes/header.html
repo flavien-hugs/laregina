@@ -1,28 +1,32 @@
 <!-- includes/header.html -->
 
-{% load cache %}
-    
+{% load cache humanize %}
+
     <!-- affficher sur la page detail de produit -->
-    {% if request.resolver_match.url_name == 'detail' %}
+    {% if request.resolver_match.url_name == 'product_detail' %}
         <header class="header header--product" data-sticky="true">
             <nav class="navigation">
                 <div class="container">
                     <article class="ps-product--header-sticky">
                         <div class="ps-product__thumbnail">
-                            <img src="{{ STATIC_PREFIX }}img/products/detail/fullwidth/1.jpg" alt="">
+                            <img src="{{ object.get_image_url }}" alt="{{ object.name }}">
                         </div>
+
                         <div class="ps-product__wrapper">
-                            <div class="ps-product__content"><a class="ps-product__title" href="#">
-                            Marshall Kilburn Portable Wireless Speaker</a>
+                            <div class="ps-product__content">
+                                <a class="ps-product__title" href="{{ object.get_absolute_url }}">{{ object.name }}</a>
                                 <ul class="ps-tab-list">
                                     <li class="active"><a href="#tab-1">Description</a></li>
-                                    <li><a href="#tab-2">Spécification</a></li>
                                     <li><a href="#tab-3">Vendeur</a></li>
                                     <li><a href="#tab-4">Avis client (1)</a></li>
                                 </ul>
                             </div>
-                            <div class="ps-product__shopping"><span class="ps-product__price"><span>$100.56</span>
-                                <del>$106.22</del></span><a class="ps-btn" href="#"> Ajout au panier</a>
+                            <div class="ps-product__shopping">
+                                <span class="ps-product__price">
+                                    <span>{{ object.price|intcomma|add:' Fr CFA' }}</span>
+                                    {% if old_price %}<del>{{ object.old_price }}</del>{% endif %}
+                                </span>
+                                <a class="ps-btn" href="#">Ajout au panier</a>
                             </div>
                         </div>
                     </article>
@@ -47,7 +51,6 @@
                     </form>
                 </div>
 
-                
                 <div class="header__right">
                     <div class="header__actions">
                         {% if request.user.is_authenticated %}

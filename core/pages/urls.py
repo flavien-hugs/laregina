@@ -14,14 +14,6 @@ CACHE_TTL = getattr(settings, 'CACHE_TTL', DEFAULT_TIMEOUT)
 
 urlpatterns  = [
 
-    path('list/', TemplateView.as_view(
-        extra_context={'page_title': 'Liste des produits', 'page_description': "Tous les produits des magasins"
-        }, template_name='catalogue/list.html'), name='list'),
-    
-    path('detail/', TemplateView.as_view(
-        extra_context={'page_title': 'Detail du produit', 'page_description': "Detail du produit"
-        }, template_name='catalogue/detail.html'), name='detail'),
-
     path('panier/', TemplateView.as_view(
         extra_context={'page_title': 'Panier', 'page_description': "Detail du panier"
         }, template_name='cart/cart.html'), name='cart'),

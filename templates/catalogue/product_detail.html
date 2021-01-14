@@ -1,15 +1,14 @@
 {% extends "base.html" %}
-{% load cache %}
+{% load cache humanize mptt_tags %}
 
 {% block content %}
-    {% cache 120 detail request.user.pk|default_if_none:"0" %}
+    {% cache 120 product_detail request.user.pk|default_if_none:"0" %}
         <div class="ps-breadcrumb">
             <div class="ps-container">
                 <ul class="breadcrumb">
-                    <li><a href="/">Accueil</a></li>
-                    <li><a href="#">Consumer Electrics</a></li>
-                    <li><a href="#">Refrigerators</a></li>
-                    <li>Marshall Kilburn Portable Wireless Speaker</li>
+                    <li><a href="{% url "home" %}">Accueil</a></li>
+                    <li><a href="{{ object.category.get_absolute_url }}">{{ object.category }}</a></li>
+                    <li>{{ object.name|striptags|safe }}</li>
                 </ul>
             </div>
         </div>
@@ -24,21 +23,30 @@
                                     <figure>
                                         <div class="ps-wrapper">
                                             <div class="ps-product__gallery" data-arrow="true">
-                                                <div class="item"><a href="{{ STATIC_PREFIX }}img/products/detail/fullwidth/1.jpg"><img src="{{ STATIC_PREFIX }}img/products/detail/fullwidth/1.jpg" alt=""></a></div>
-                                                <div class="item"><a href="{{ STATIC_PREFIX }}img/products/detail/fullwidth/2.jpg"><img src="{{ STATIC_PREFIX }}img/products/detail/fullwidth/2.jpg" alt=""></a></div>
-                                                <div class="item"><a href="{{ STATIC_PREFIX }}img/products/detail/fullwidth/3.jpg"><img src="{{ STATIC_PREFIX }}img/products/detail/fullwidth/3.jpg" alt=""></a></div>
+                                                {% for image in product_image %}
+                                                    <div class="item">
+                                                        <a href="{{ image.product.get_image_url }}">
+                                                            <img src="{{ image.product.get_image_url }}" alt="{{ image.product.name }}">
+                                                        </a>
+                                                    </div>
+                                                {% endfor %}
                                             </div>
                                         </div>
                                     </figure>
+
                                     <div class="ps-product__variants" data-item="4" data-md="4" data-sm="4" data-arrow="false">
-                                        <div class="item"><img src="{{ STATIC_PREFIX }}img/products/detail/fullwidth/1.jpg" alt=""></div>
-                                        <div class="item"><img src="{{ STATIC_PREFIX }}img/products/detail/fullwidth/2.jpg" alt=""></div>
-                                        <div class="item"><img src="{{ STATIC_PREFIX }}img/products/detail/fullwidth/3.jpg" alt=""></div>
+                                        {% for image in product_image %}
+                                            <div class="item">
+                                                <a href="{{ image.product.get_image_url }}">
+                                                    <img src="{{ image.product.get_image_url }}" alt="{{ image.product.name }}">
+                                                </a>
+                                            </div>
+                                        {% endfor %}
                                     </div>
                                 </div>
 
                                 <div class="ps-product__info">
-                                    <h1>Marshall Kilburn Portable Wireless Speaker</h1>
+                                    <h1>{{ object.name }}</h1>
                                     <div class="ps-product__meta">
                                         <p>Marque: <a href="#">Sony</a></p>
                                         <div class="ps-product__rating">
@@ -48,30 +56,23 @@
                                                 <option value="1">3</option>
                                                 <option value="1">4</option>
                                                 <option value="2">5</option>
-                                            </select><span>(1 review)</span>
+                                            </select><span>(1 avis)</span>
                                         </div>
                                     </div>
-                                    <h4 class="ps-product__price">$36.78 – $56.99</h4>
+                                    <h4 class="ps-product__price">{{ object.price|intcomma|add:' Fr CFA' }}</h4>
+                                    
                                     <div class="ps-product__desc">
-                                        <p>Vendu par: <a href="#" target="_blank"><strong> Go Pro</strong></a></p>
+                                        <p>Vendu par: <a href="{{ object.user.get_absolute_url }}">
+                                            <strong> {{ object.user.store }}</strong></a>
+                                        </p>
+                                        
                                         <ul class="ps-list--dot">
-                                            <li> Unrestrained and portable active stereo speaker</li>
-                                            <li> Free from the confines of wires and chords</li>
-                                            <li> 20 hours of portable capabilities</li>
-                                            <li> Double-ended Coil Cord with 3.5mm Stereo Plugs Included</li>
-                                            <li> 3/4″ Dome Tweeters: 2X and 4″ Woofer: 1X</li>
+                                            {{ object.description|truncatewords:'30' }}
                                         </ul>
                                     </div>
-                                    <div class="ps-product__variations">
-                                        <figure>
-                                            <figcaption>Color</figcaption>
-                                            <div class="ps-variant ps-variant--color color--1"><span class="ps-variant__tooltip">Black</span></div>
-                                            <div class="ps-variant ps-variant--color color--2"><span class="ps-variant__tooltip"> Gray</span></div>
-                                        </figure>
-                                    </div>
+
                                     <div class="ps-product__shopping">
                                         <figure>
-                                            <figcaption>Quantité</figcaption>
                                             <div class="form-group--number">
                                                 <button class="up"><i class="fa fa-plus"></i></button>
                                                 <button class="down"><i class="fa fa-minus"></i></button>
@@ -82,10 +83,11 @@
                                     </div>
                                     <div class="ps-product__specification"><a class="report" href="#">Signaler un abus</a>
                                         <p class="categories">
-                                            <strong> Catégories:</strong><a href="#">Consumer Electronics</a>,<a href="#"> Refrigerator</a>,<a href="#">Babies & Moms</a>
+                                            <strong> Catégories:</strong><a href="#">Consumer Electronics</a>,<a href="#"> Refrigerator</a>,<a href="#">Babies &amp; Moms</a>
                                         </p>
                                         <p class="tags">
-                                            <strong> Tags</strong><a href="#">sofa</a>,<a href="#">technologies</a>,<a href="#">wireless</a>
+                                            <strong> Tags: </strong>
+                                            <a href="#">{{ object.keywords|title }}</a>
                                         </p>
                                     </div>
 
@@ -100,71 +102,25 @@
                             <div class="ps-product__content ps-tab-root">
                                 <ul class="ps-tab-list">
                                     <li class="active"><a href="#tab-1">Description</a></li>
-                                    <li><a href="#tab-2">Spécification</a></li>
                                     <li><a href="#tab-3">Vendeur</a></li>
                                     <li><a href="#tab-4">Avis client (1)</a></li>
                                 </ul>
 
                                 <div class="ps-tabs">
-                                    <div class="ps-tab active" id="tab-1">
+                                    <div class="ps-tab" id="tab-1">
                                         <div class="ps-document">
-                                            <h5>Embodying the Raw, Wayward Spirit of Rock 'N' Roll</h5>
-                                            <p>Embodying the raw, wayward spirit of rock ‘n’ roll, the Kilburn portable active stereo speaker takes the unmistakable look and sound of Marshall, unplugs the chords, and takes the show on the road.</p>
-                                            <p>Weighing in under 7 pounds, the Kilburn is a lightweight piece of vintage styled engineering. Setting the bar as one of the loudest speakers in its class, the Kilburn is a compact, stout-hearted hero with a well-balanced audio which boasts a clear midrange and extended highs for a sound that is both articulate and pronounced. The analogue knobs allow you to fine tune the controls to your personal preferences while the guitar-influenced leather strap enables easy and stylish travel.</p><img class="mb-30" src="{{ STATIC_PREFIX }}img/products/detail/content/description.jpg" alt="">
-                                            <h5>What do you get</h5>
-                                            <p>Sound of Marshall, unplugs the chords, and takes the show on the road.</p>
-                                            <p>Weighing in under 7 pounds, the Kilburn is a lightweight piece of vintage styled engineering. Setting the bar as one of the loudest speakers in its class, the Kilburn is a compact, stout-hearted hero with a well-balanced audio which boasts a clear midrange and extended highs for a sound that is both articulate and pronounced. The analogue knobs allow you to fine tune the controls to your personal preferences while the guitar-influenced leather strap enables easy and stylish travel.</p>
-                                            <p>The FM radio is perhaps gone for good, the assumption apparently being that the jury has ruled in favor of streaming over the internet. The IR blaster is another feature due for retirement – the S6 had it, then the Note5 didn’t, and now with the S7 the trend is clear.</p>
-                                            <h5>Perfectly Done</h5>
-                                            <p>Meanwhile, the IP68 water resistance has improved from the S5, allowing submersion of up to five feet for 30 minutes, plus there’s no annoying flap covering the charging port</p>
-                                            <ul class="pl-0">
-                                                <li>No FM radio (except for T-Mobile units in the US, so far)</li>
-                                                <li>No IR blaster</li>
-                                                <li>No stereo speakers</li>
-                                            </ul>
-                                            <p>If you’ve taken the phone for a plunge in the bath, you’ll need to dry the charging port before plugging in. Samsung hasn’t reinvented the wheel with the design of the Galaxy S7, but it didn’t need to. The Gala S6 was an excellently styled device, and the S7 has managed to improve on that.</p>
+                                            {{ object.description }}
                                         </div>
                                     </div>
-                                    <div class="ps-tab" id="tab-2">
-                                        <div class="table-responsive">
-                                            <table class="table table-bordered ps-table ps-table--specification">
-                                                <tbody>
-                                                    <tr>
-                                                        <td>Color</td>
-                                                        <td>Black, Gray</td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td>Style</td>
-                                                        <td>Ear Hook</td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td>Wireless</td>
-                                                        <td>Yes</td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td>Dimensions</td>
-                                                        <td>5.5 x 5.5 x 9.5 inches</td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td>Weight</td>
-                                                        <td>6.61 pounds</td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td>Battery Life</td>
-                                                        <td>20 hours</td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td>Bluetooth</td>
-                                                        <td>Yes</td>
-                                                    </tr>
-                                                </tbody>
-                                            </table>
-                                        </div>
-                                    </div>
+
                                     <div class="ps-tab" id="tab-3">
-                                        <h4>GoPro</h4>
-                                        <p>Digiworld US, New York’s no.1 online retailer was established in May 2012 with the aim and vision to become the one-stop shop for retail in New York with implementation of best practices both online</p><a href="#">More Products from gopro</a>
+                                        <h4>{{ object.user.store|upper }}</h4>
+                                        <p>{{ object.user.store_description }}</p>
+                                        <a href="{{ object.user.get_absolute_url }}">
+                                            Voir le magasin de <strong>{{ object.user.store }}</strong>
+                                        </a>
                                     </div>
+
                                     <div class="ps-tab" id="tab-4">
                                         <div class="row">
                                             <div class="col-xl-5 col-lg-5 col-md-12 col-sm-12 col-12 ">
@@ -198,7 +154,7 @@
                                             </div>
                                             <div class="col-xl-7 col-lg-7 col-md-12 col-sm-12 col-12 ">
                                                 <form class="ps-form--review" action="#" method="get">
-                                                    <h4>Submit Your Review</h4>
+                                                    <h4>Ajouter votre avis a ce produit./h4>
                                                     <p>Your email address will not be published. Required fields are marked<sup>*</sup></p>
                                                     <div class="form-group form-group__rating">
                                                         <label>Your rating of this product</label>
@@ -476,207 +432,20 @@
                     </div>
                 </div>
 
-                <div class="ps-section--default">
-                    <div class="ps-section__header">
-                        <h3>Produits de la même catégories</h3>
-                    </div>
-                    <div class="ps-section__content">
-                        <div class="ps-carousel--nav owl-slider" data-owl-auto="true" data-owl-loop="true" data-owl-speed="10000" data-owl-gap="30" data-owl-nav="true" data-owl-dots="true" data-owl-item="6" data-owl-item-xs="2" data-owl-item-sm="2" data-owl-item-md="3" data-owl-item-lg="4" data-owl-item-xl="5" data-owl-duration="1000" data-owl-mousedrag="on">
-                            <div class="ps-product">
-                                <div class="ps-product__thumbnail"><a href="#"><img src="{{ STATIC_PREFIX }}img/products/shop/11.jpg" alt=""></a>
-                                </div>
-                                <div class="ps-product__container"><a class="ps-product__vendor" href="#">Robert's Store</a>
-                                    <div class="ps-product__content"><a class="ps-product__title" href="#">Men’s Sports Runnning Swim Board Shorts</a>
-                                        <div class="ps-product__rating">
-                                            <select class="ps-rating" data-read-only="true">
-                                                <option value="1">1</option>
-                                                <option value="1">2</option>
-                                                <option value="1">3</option>
-                                                <option value="1">4</option>
-                                                <option value="2">5</option>
-                                            </select><span>01</span>
-                                        </div>
-                                        <p class="ps-product__price">$13.43</p>
-                                    </div>
-                                    <div class="ps-product__content hover"><a class="ps-product__title" href="#">Men’s Sports Runnning Swim Board Shorts</a>
-                                        <p class="ps-product__price">$13.43</p>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="ps-product">
-                                <div class="ps-product__thumbnail"><a href="#"><img src="{{ STATIC_PREFIX }}img/products/shop/12.jpg" alt=""></a>
-                                </div>
-                                <div class="ps-product__container"><a class="ps-product__vendor" href="#">Global Office</a>
-                                    <div class="ps-product__content"><a class="ps-product__title" href="#">Paul’s Smith Sneaker InWhite Color</a>
-                                        <div class="ps-product__rating">
-                                            <select class="ps-rating" data-read-only="true">
-                                                <option value="1">1</option>
-                                                <option value="1">2</option>
-                                                <option value="1">3</option>
-                                                <option value="1">4</option>
-                                                <option value="2">5</option>
-                                            </select><span>01</span>
-                                        </div>
-                                        <p class="ps-product__price">$75.44</p>
-                                    </div>
-                                    <div class="ps-product__content hover"><a class="ps-product__title" href="#">Paul’s Smith Sneaker InWhite Color</a>
-                                        <p class="ps-product__price">$75.44</p>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="ps-product">
-                                <div class="ps-product__thumbnail"><a href="#"><img src="{{ STATIC_PREFIX }}img/products/shop/13.jpg" alt=""></a>
-                                    <div class="ps-product__badge">-7%</div>
-                                </div>
-                                <div class="ps-product__container"><a class="ps-product__vendor" href="#">Young Shop</a>
-                                    <div class="ps-product__content"><a class="ps-product__title" href="#">MVMTH Classical Leather Watch In Black</a>
-                                        <div class="ps-product__rating">
-                                            <select class="ps-rating" data-read-only="true">
-                                                <option value="1">1</option>
-                                                <option value="1">2</option>
-                                                <option value="1">3</option>
-                                                <option value="1">4</option>
-                                                <option value="2">5</option>
-                                            </select><span>01</span>
-                                        </div>
-                                        <p class="ps-product__price sale">$57.99 <del>$62.99 </del></p>
-                                    </div>
-                                    <div class="ps-product__content hover"><a class="ps-product__title" href="#">MVMTH Classical Leather Watch In Black</a>
-                                        <p class="ps-product__price sale">$57.99 <del>$62.99 </del></p>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="ps-product">
-                                <div class="ps-product__thumbnail"><a href="#"><img src="{{ STATIC_PREFIX }}img/products/shop/14.jpg" alt=""></a>
-                                    <div class="ps-product__badge">-7%</div>
-                                </div>
-                                <div class="ps-product__container"><a class="ps-product__vendor" href="#">Global Office</a>
-                                    <div class="ps-product__content"><a class="ps-product__title" href="#">Beat Spill 2.0 Wireless Speaker – White</a>
-                                        <div class="ps-product__rating">
-                                            <select class="ps-rating" data-read-only="true">
-                                                <option value="1">1</option>
-                                                <option value="1">2</option>
-                                                <option value="1">3</option>
-                                                <option value="1">4</option>
-                                                <option value="2">5</option>
-                                            </select><span>01</span>
-                                        </div>
-                                        <p class="ps-product__price sale">$57.99 <del>$62.99 </del></p>
-                                    </div>
-                                    <div class="ps-product__content hover"><a class="ps-product__title" href="#">Beat Spill 2.0 Wireless Speaker – White</a>
-                                        <p class="ps-product__price sale">$57.99 <del>$62.99 </del></p>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="ps-product">
-                                <div class="ps-product__thumbnail"><a href="#"><img src="{{ STATIC_PREFIX }}img/products/shop/15.jpg" alt=""></a>
-                                </div>
-                                <div class="ps-product__container"><a class="ps-product__vendor" href="#">Young Shop</a>
-                                    <div class="ps-product__content"><a class="ps-product__title" href="#">ASUS Chromebook Flip – 10.2 Inch</a>
-                                        <div class="ps-product__rating">
-                                            <select class="ps-rating" data-read-only="true">
-                                                <option value="1">1</option>
-                                                <option value="1">2</option>
-                                                <option value="1">3</option>
-                                                <option value="1">4</option>
-                                                <option value="2">5</option>
-                                            </select><span>01</span>
-                                        </div>
-                                        <p class="ps-product__price sale">$332.38</p>
-                                    </div>
-                                    <div class="ps-product__content hover"><a class="ps-product__title" href="#">ASUS Chromebook Flip – 10.2 Inch</a>
-                                        <p class="ps-product__price sale">$332.38</p>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="ps-product">
-                                <div class="ps-product__thumbnail"><a href="#"><img src="{{ STATIC_PREFIX }}img/products/shop/16.jpg" alt=""></a>
-                                    <div class="ps-product__badge">-7%</div>
-                                </div>
-                                <div class="ps-product__container"><a class="ps-product__vendor" href="#">Young Shop</a>
-                                    <div class="ps-product__content"><a class="ps-product__title" href="#">Apple Macbook Retina Display 12&quot;</a>
-                                        <div class="ps-product__rating">
-                                            <select class="ps-rating" data-read-only="true">
-                                                <option value="1">1</option>
-                                                <option value="1">2</option>
-                                                <option value="1">3</option>
-                                                <option value="1">4</option>
-                                                <option value="2">5</option>
-                                            </select><span>01</span>
-                                        </div>
-                                        <p class="ps-product__price sale">$1200.00 <del>$1362.99 </del></p>
-                                    </div>
-                                    <div class="ps-product__content hover"><a class="ps-product__title" href="#">Apple Macbook Retina Display 12&quot;</a>
-                                        <p class="ps-product__price sale">$1200.00 <del>$1362.99 </del></p>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="ps-product">
-                                <div class="ps-product__thumbnail"><a href="#"><img src="{{ STATIC_PREFIX }}img/products/shop/17.jpg" alt=""></a>
-                                </div>
-                                <div class="ps-product__container"><a class="ps-product__vendor" href="#">Robert's Store</a>
-                                    <div class="ps-product__content"><a class="ps-product__title" href="#">Samsung UHD TV 24inch</a>
-                                        <div class="ps-product__rating">
-                                            <select class="ps-rating" data-read-only="true">
-                                                <option value="1">1</option>
-                                                <option value="1">2</option>
-                                                <option value="1">3</option>
-                                                <option value="1">4</option>
-                                                <option value="2">5</option>
-                                            </select><span>01</span>
-                                        </div>
-                                        <p class="ps-product__price">$599.00</p>
-                                    </div>
-                                    <div class="ps-product__content hover"><a class="ps-product__title" href="#">Samsung UHD TV 24inch</a>
-                                        <p class="ps-product__price">$599.00</p>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="ps-product">
-                                <div class="ps-product__thumbnail"><a href="#"><img src="{{ STATIC_PREFIX }}img/products/shop/18.jpg" alt=""></a>
-                                </div>
-                                <div class="ps-product__container"><a class="ps-product__vendor" href="#">Robert's Store</a>
-                                    <div class="ps-product__content"><a class="ps-product__title" href="#">EPSION Plaster Printer</a>
-                                        <div class="ps-product__rating">
-                                            <select class="ps-rating" data-read-only="true">
-                                                <option value="1">1</option>
-                                                <option value="1">2</option>
-                                                <option value="1">3</option>
-                                                <option value="1">4</option>
-                                                <option value="2">5</option>
-                                            </select><span>01</span>
-                                        </div>
-                                        <p class="ps-product__price">$233.28</p>
-                                    </div>
-                                    <div class="ps-product__content hover"><a class="ps-product__title" href="#">EPSION Plaster Printer</a>
-                                        <p class="ps-product__price">$233.28</p>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="ps-product">
-                                <div class="ps-product__thumbnail"><a href="#"><img src="{{ STATIC_PREFIX }}img/products/shop/19.jpg" alt=""></a>
-                                </div>
-                                <div class="ps-product__container"><a class="ps-product__vendor" href="#">Robert's Store</a>
-                                    <div class="ps-product__content"><a class="ps-product__title" href="#">EPSION Plaster Printer</a>
-                                        <div class="ps-product__rating">
-                                            <select class="ps-rating" data-read-only="true">
-                                                <option value="1">1</option>
-                                                <option value="1">2</option>
-                                                <option value="1">3</option>
-                                                <option value="1">4</option>
-                                                <option value="2">5</option>
-                                            </select><span>01</span>
-                                        </div>
-                                        <p class="ps-product__price">$233.28</p>
-                                    </div>
-                                    <div class="ps-product__content hover"><a class="ps-product__title" href="#">EPSION Plaster Printer</a>
-                                        <p class="ps-product__price">$233.28</p>
-                                    </div>
-                                </div>
+                {% if related_product %}
+                    <div class="ps-section--default">
+                        <div class="ps-section__header">
+                            <h3>Produits de la même catégories</h3>
+                        </div>
+                        <div class="ps-section__content">
+                            <div class="ps-carousel--nav owl-slider" data-owl-auto="true" data-owl-loop="true" data-owl-speed="10000" data-owl-gap="30" data-owl-nav="true" data-owl-dots="true" data-owl-item="6" data-owl-item-xs="2" data-owl-item-sm="2" data-owl-item-md="3" data-owl-item-lg="4" data-owl-item-xl="5" data-owl-duration="1000" data-owl-mousedrag="on">
+                                {% for object in related_product %}
+                                    {% include "catalogue/snippet/product_related.html" with instance=object %}
+                                {% endfor %}
                             </div>
                         </div>
                     </div>
-                </div>
+                {% endif %}
             </div>
         </div>
     {% endcache %}

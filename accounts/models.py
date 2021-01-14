@@ -75,7 +75,9 @@ class User(AbstractBaseUser, PermissionsMixin):
         return self.name
 
     def save(self, *args, **kwargs):
-        self.generate(8)
+        if self.is_seller:
+            self.generate(8)
+
         if not self.slug:
             self.slug = slugify(self.store)
         super().save(*args, **kwargs)

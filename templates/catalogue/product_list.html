@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+
+{% block content %}
+    {% include "partials/breadcrumb.html" %}
+
+    <div class="ps-page--shop">
+        <div class="ps-container">
+            <div class="ps-shop-banner">
+                {% include "catalogue/partials/promotions.html" %}
+            </div>
+
+            <div class="ps-shop-brand">
+                {% include "catalogue/partials/brand.html" %}
+            </div>
+
+            <div class="ps-shop-categories">
+                {% include "catalogue/partials/category_list.html" %}
+            </div>
+
+            <div class="ps-layout--shop">
+                {% include "catalogue/partials/shop.html" %}
+            </div>
+        </div>
+    </div>
+{% endblock content %}

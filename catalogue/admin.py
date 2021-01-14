@@ -28,8 +28,6 @@ class ProductAdmin(admin.ModelAdmin):
     list_display = [
         '__str__',
         'current_price',
-        'category',
-        'live_link',
         'show_image_tag',
         'is_stock',
         'is_active'
@@ -38,7 +36,6 @@ class ProductAdmin(admin.ModelAdmin):
     list_filter = [
         'price',
         'old_price',
-        'category',
         'is_stock',
         'is_active',
         'created_at'
@@ -65,16 +62,3 @@ class ProductAdmin(admin.ModelAdmin):
             return obj.old_price
         else:
             return obj.price
-
-    def category(self, obj):
-        cat = []
-        for i in obj.category_set.all():
-            link = "<a href='/admin/products/category/"+ str(i.id) + "/'>" + i.name + "</a>"
-            cat.append(link)
-        return ", ".join(cat)
-    category.allow_tags = True
-    
-    def live_link(self, obj):
-        link = "<a href='/products/"+ str(obj.slug) + "/'>" + obj.name + "</a>"
-        return link
-    live_link.allow_tags = True

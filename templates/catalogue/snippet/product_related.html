@@ -1,0 +1,30 @@
+{% load humanize %}
+
+<!-- articles similaires -->
+<div class="ps-product">
+    <div class="ps-product__thumbnail">
+        <a href="{{ instance.get_absolute_url }}"><img src="{{ instance.get_image_url }}" alt="{{ instance.name }}"></a>
+    </div>
+
+    <div class="ps-product__container">
+        <a class="ps-product__vendor" href="{{ instance.user.get_absolute_url }}">{{ instance.user.store|upper }}</a>
+
+        <div class="ps-product__content">
+            <a class="ps-product__title" href="{{ instance.get_absolute_url }}">{{ instance.name }}</a>
+            <div class="ps-product__rating">
+                <select class="ps-rating" data-read-only="true">
+                    <option value="1">1</option>
+                    <option value="1">2</option>
+                    <option value="1">3</option>
+                    <option value="1">4</option>
+                    <option value="2">5</option>
+                </select><span>01</span>
+            </div>
+            <p class="ps-product__price">{{ instance.price|intcomma|add:' Fr CFA' }}</p>
+        </div>
+        <div class="ps-product__content hover">
+            <a class="ps-product__title" href="{{ instance.get_absolute_url }}">{{ instance.name }}</a>
+            <p class="ps-product__price">{{ instance.price|intcomma|add:' Fr CFA' }}</p>
+        </div>
+    </div>
+</div>

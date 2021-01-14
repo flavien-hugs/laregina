@@ -2,6 +2,7 @@
 
 import random
 from django.db import models
+from django.urls import reverse
 from django.dispatch import receiver
 from django.utils.text import slugify
 from django.utils.safestring import mark_safe
@@ -11,7 +12,7 @@ from tagulous.models import TagField
 from category.models import Category
 from catalogue.managers import CatalogueManager
 
-from mptt.models import TreeManyToManyField
+from mptt.models import TreeForeignKey
 from core.utils import upload_image_path, unique_slug_generator
 
 # User Manager
@@ -30,7 +31,7 @@ class Product(models.Model):
         related_name='seller',
         verbose_name='vendeur'
     )
-    category = TreeManyToManyField(Category, verbose_name='catégorie', help_text="Selectionner la/les catégorie(s) du produit.")
+    category = TreeForeignKey(Category, on_delete=models.CASCADE, verbose_name='catégorie', help_text="Selectionner la/les catégorie(s) du produit.")
     name = models.CharField(verbose_name='nom du produit', max_length=250)
     price = models.DecimalField(verbose_name='prix', **DECIMAFIELD_OPTION)
     quantity = models.PositiveIntegerField(verbose_name='quantité', default=1, blank=True)
@@ -43,9 +44,7 @@ class Product(models.Model):
     
     # mots clés
     keywords = TagField(
-        verbose_name='mots clés',
-        blank=True,
-        help_text='Comma-delimited set of SEO keywords for keywords meta tag'
+        verbose_name='mots clés', blank=True, help_text='Comma-delimited set of SEO keywords for keywords meta tag'
     )
 
     is_external = models.BooleanField('Livrez-vous en dehors de votre pays ?', default=False)
@@ -56,8 +55,7 @@ class Product(models.Model):
     is_stock = models.BooleanField("en stock", default=True, help_text="produit en stock")
     slug = models.SlugField(
         verbose_name="URL du produit",
-        blank=True,
-        help_text='Unique value for product page URL, created automatically from name.'
+        blank=True, help_text='Unique value for product page URL, created automatically from name.'
     )
 
     # date de création et date de modification
@@ -81,7 +79,7 @@ class Product(models.Model):
         if self.old_price > self.price:
             return self.price
         else:
-            return None
+            return self.price
 
     def save(self, *args, **kwargs):
         if not self.slug:
@@ -95,9 +93,9 @@ class Product(models.Model):
         except:
             return None
         
-        if img:
-            return img.image.url
-        return img
+        if images:
+            return images.image.url
+        return images
 
     def show_image_tag(self):
         """Method to create a fake table field in read only mode"""
@@ -111,18 +109,18 @@ class Product(models.Model):
         return self.description
     show_description.allow_tags = True
 
-    def recomended_products(self):
+    def recomended_product(self):
         products = Product.objects.filter(user=self.user, is_active=True).exclude(id=self.id)
         a = list(products)
         random.shuffle(a)
         return a[:5]
 
-    # def get_absolute_url(self):
-    #     return ('catalog_product', (), { 'product_slug': self.slug })
+    def get_absolute_url(self):
+        return reverse('catalogue:product_detail', kwargs={'slug': str(self.slug)})
 
-    # @property
-    # def cache_key(self):
-    #     return self.get_absolute_url()
+    @property
+    def cache_key(self):
+        return self.get_absolute_url()
 
 
 @receiver(models.signals.pre_save, sender=Product)

@@ -1,2 +1,55 @@
 [
+{
+    "model": "catalogue.product",
+    "pk": 1,
+    "fields": {
+        "user": 2,
+        "category": 1,
+        "name": "Apple iPhone Retina 6s Plus 64GB",
+        "price": "60000.00",
+        "quantity": 1,
+        "old_price": "0.00",
+        "description": "Apple iPhone Retina 6s Plus 64GB",
+        "image": "4765483164607/4765483164607.jpg",
+        "is_promotion": false,
+        "promotion_price": "0.00",
+        "is_external": false,
+        "external_delivery": "0.00",
+        "is_active": true,
+        "is_stock": true,
+        "slug": "apple-iphone-retina-6s-plus-64gb",
+        "timestamp": "2021-01-13T20:32:23.096Z",
+        "created_at": "2021-01-13T20:32:23.096Z",
+        "updated_at": "2021-01-13T20:32:23.096Z",
+        "keywords": [
+            1,
+            2
+        ]
+    }
+},
+{
+    "model": "catalogue.product",
+    "pk": 2,
+    "fields": {
+        "user": 2,
+        "category": 1,
+        "name": "Marshall Kilburn Portable Wireless Speaker",
+        "price": "5000.00",
+        "quantity": 1,
+        "old_price": "0.00",
+        "description": "Embodying the raw, wayward spirit of rock ‘n’ roll, the Kilburn portable active stereo speaker takes the unmistakable look and sound of Marshall, unplugs the chords, and takes the show on the road.\r\n\r\nWeighing in under 7 pounds, the Kilburn is a lightweight piece of vintage styled engineering. Setting the bar as one of the loudest speakers in its class, the Kilburn is a compact, stout-hearted hero with a well-balanced audio which boasts a clear midrange and extended highs for a sound that is both articulate and pronounced. The analogue knobs allow you to fine tune the controls to your personal preferences while the guitar-influenced leather strap enables easy and stylish travel.",
+        "image": "9090674863030/9090674863030.jpg",
+        "is_promotion": false,
+        "promotion_price": "0.00",
+        "is_external": false,
+        "external_delivery": "0.00",
+        "is_active": true,
+        "is_stock": true,
+        "slug": "marshall-kilburn-portable-wireless-speaker",
+        "timestamp": "2021-01-13T22:57:38.490Z",
+        "created_at": "2021-01-13T22:57:38.490Z",
+        "updated_at": "2021-01-13T22:57:38.490Z",
+        "keywords": []
+    }
+}
 ]

@@ -9,13 +9,14 @@ from category.models import Category
 
 # LIST CATEGORY VIEW
 class CategoryListView(ListView):
+    paginate_by = 50
     queryset = Category.objects.all()
     template_name = "category/category_list.html"
     extra_context = {'page_title': 'toutes les catégories de produit'}
 
     def get_context_data(self, **kwargs):
         obj = self.queryset.get_descendants(include_self=True)
-        kwargs['object_list'] = Product.objects.filter(categories__in=obj)
+        kwargs['object_list'] = Product.objects.filter(category__in=obj)
         return super().get_context_data(**kwargs)
 
 
@@ -23,7 +24,6 @@ class CategoryListView(ListView):
 class CategoryDetailView(DetailView):
     queryset = Category.objects.all()
     template_name = "category/category_detail.html"
-    paginate_by = 50
 
     def get_context_data(self, **kwargs):
         obj = self.get_object().get_descendants(include_self=True)

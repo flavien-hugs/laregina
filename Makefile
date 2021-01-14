@@ -13,9 +13,9 @@ help:
 	@echo "  make test - run automated tests"
 
 deps:
-	pipenv install -r requirements.txt
+	pipenv install
 
-local-migrate:
+migrate:
 	$(MANAGE) makemigrations
 	$(MANAGE) migrate
 
@@ -27,6 +27,7 @@ dumpdata:
 loaddata:
 	$(MANAGE) loaddata backups/users_data.json
 	$(MANAGE) loaddata backups/category_data.json
+	$(MANAGE) loaddata backups/product_data.json
 
 test:
 	$(MANAGE) test $(TEST_SETTINGS)
