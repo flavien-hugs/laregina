@@ -7,14 +7,8 @@
 
 {% block content %}
     <div class="ps-page--my-account">
-        <div class="ps-breadcrumb text-center">
-            <div class="container">
-                <ul class="breadcrumb">
-                    <li><a href="{% url 'home' %}">Accueil</a></li>
-                    <li>Connexion</li>
-                </ul>
-            </div>
-        </div>
+        
+        {% include "partials/breadcrumb.html" %}
 
         <div class="">
             <div class="container">
@@ -23,6 +17,7 @@
                         <div class="pb-5 align-middle">
                             <div class="col bg-white p-5">
                                 <h3 class="font-weight-bold text-center">Connexion</h3>
+
                                 <p class="text-center font-weight-normal pb-4">
                                     Veuillez saisir votre adresse email et mot de passe pour vous connecter.
                                 </p>
@@ -33,12 +28,13 @@
                                 <div class="text-center w-100 pt-5 pb-3">
                                     Vous êtes un nouvel utilisateur ?
                                     <span class="font-weight-bold">
-                                      <a href="{% url 'account_signup' %}">
-                                        <span><u>Créer votre compte</u></span>
-                                    </a> &smid;
+                                        <a href="{% url 'account_signup' %}">
+                                            <span><u>Créer votre compte</u></span>
+                                        </a> &smid;
 
-                                    <a href="{% url 'account_reset_password' %}">
-                                        <span><u>Mot de passe oublié ?</u></span></a>
+                                        <a href="{% url 'account_reset_password' %}">
+                                            <span><u>Mot de passe oublié ?</u></span>
+                                        </a>
                                     </span>
                                 </div>
                             </div>

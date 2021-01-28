@@ -1,0 +1,25 @@
+<!-- subscribe forms -->
+
+<div class="ps-newsletter">
+    <div class="container">
+        <div class="ps-form--newsletter">
+            <div class="row">
+                <div class="col-xl-5 col-lg-12 col-md-12 col-sm-12 col-12 ">
+                    <div class="ps-form__left">
+                        <h3>Newsletter</h3>
+                        <p>Abonnez-vous pour obtenir des informations sur nos meilleures offres !</p>
+                    </div>
+                </div>
+                <div class="col-xl-7 col-lg-12 col-md-12 col-sm-12 col-12 ">
+                    <div class="ps-form__right">
+                        <form id='subscribe_form' class="form-group--nest" method="post">
+                            {% csrf_token %}
+                            <input id='id_email' name='id_email' class="form-control" type="email" placeholder="Adresse e-mail">
+                            <button value='Souscrire' id='subscribe_email' type="submit" class="ps-btn">Souscrire</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

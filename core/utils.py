@@ -1,12 +1,44 @@
 # core.utils.py
 
 import os
-import random
 import string
+import random
 import threading
+import mailchimp
 from django.conf import settings
 from django.utils.text import slugify
 from django.core.validators import EmailValidator
+
+
+def random_string_generator(size=10, carac=string.ascii_lowercase + string.digits):
+    return ''.join(random.choice(carac) for _ in range(size))
+
+
+class SendSubscribeMail(object):
+    
+    def __init__(self, email):
+        self.email = email
+        thread = threading.Thread(target=self.run, args=())
+        thread.daemon = True
+        thread.start()
+
+    def run(self):
+        API_KEY = settings.MAILCHIMP_API_KEY
+        LIST_ID = settings.MAILCHIMP_SUBSCRIBE_LIST_ID
+        api = mailchimp.Mailchimp(API_KEY)
+        try:
+            api.lists.subscribe(LIST_ID, {"email": self.email})
+        except Exception:
+            return False
+
+def unique_key_generator(instance):
+    size = random.randint(20, 45)
+    key = random_string_generator(size=size)
+    Klass = instance.__class__
+    qsx = Klass.objects.filter(key=key).exists()
+    if qsx:
+        return unique_slug_generator(instance)
+    return key
 
 
 def get_filename_ext(filepath):
@@ -16,13 +48,20 @@ def get_filename_ext(filepath):
 
 
 def upload_image_path(instance, filename):
-    new_filename = random.randint(1, 9347326742427)
+    new_filename = slugify(instance.product.name)
     name, ext = get_filename_ext(filename)
-    final_filename = "{new_filename}{ext}".format(new_filename=new_filename, ext=ext)
-    return "{new_filename}/{final_filename}".format(
-        new_filename=new_filename, final_filename=final_filename
-    )
+    final_filename = "{new_filename}-{filename}{ext}".format(
+        new_filename=new_filename, filename=instance.id, ext=ext)
+    return "images/{final_filename}".format(final_filename=final_filename)
 
+
+def unique_order_id_generator(instance):
+    order_new_id = random_string_generator()
+    Klass = instance.__class__
+    qs_exists = Klass.objects.filter(order_id=order_new_id).exists()
+    if qs_exists:
+        return unique_slug_generator(instance)
+    return order_new_id
 
 def email_validation_function(value):
     validator = EmailValidator()
@@ -31,7 +70,7 @@ def email_validation_function(value):
 
 
 def generate_key():
-    key = "".join(random.choices(string.digits, k=4))
+    key = "".join(random.choices(string.digits, k=50))
     return key
 
 

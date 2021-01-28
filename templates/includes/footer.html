@@ -1,9 +1,9 @@
 <!-- includes/footer.html -->
 {% load mptt_tags %}
+    
+    <!-- subscribe form -->
 
-    {% include "partials/newsletter.html" %}
-
-    <footer class="ps-footer pt-5 flex-shrink-0">
+    <footer class="ps-footer pt-5 flex-shrink-0 border">
         <div class="ps-container">
             <div class="ps-footer__widgets pb-0">
                 <aside class="widget widget_footer widget_contact-us">
@@ -19,17 +19,17 @@
                 <aside class="widget widget_footer">
                     <h4 class="widget-title">Liens rapides</h4>
                     <ul class="ps-list--link">
-                        <li><a href="{% url "faqs" %}">FAQs</a></li>
-                        <li><a href="{% url "contact" %}">Contact</a></li>
-                        <li><a href="#">Privacy policy</a></li>
-                        <li><a href="#">Term &amp; Condition</a></li>
+                        <li><a href="{% url "pages:faqs" %}">FAQs</a></li>
+                        <li><a href="{% url "pages:contact" %}">Contact</a></li>
+                        <li><a href="{% url "pages:terms" %}">Politique de Confidentialité</a></li>
+                        <li><a href="{% url "pages:cgu" %}">Conditions Générales d'Utilisation</a></li>
                     </ul>
                 </aside>
 
                 <aside class="widget widget_footer">
                     <h4 class="widget-title">Entreprise</h4>
                     <ul class="ps-list--link">
-                        <li><a href="{% url "about-us" %}">À propos de nous</a></li>
+                        <li><a href="{% url "pages:about-us" %}">À propos de nous</a></li>
                         <li><a href="#">Soumettre une annonce</a></li>
                         <li><a href="#">Liste des magasins</a></li>
                         <li><a href="#">Mode de livraison</a></li>
@@ -67,9 +67,17 @@
                 <p>&copy; <script>document.write(new Date().getFullYear());</script> {{ title }}.</p>
 
                 <ul class="ps-list--social">
-                    <li><a class="twitter" href="#"><i class="fa fa-twitter"></i></a></li>
-                    <li><a class="facebook" href="#"><i class="fa fa-facebook"></i></a></li>
-                    <li><a class="youtube" href="#"><i class="fa fa-youtube"></i></a></li>
+                    <li>
+                        <a class="twitter" href="{{ twitter }}">
+                            <i class="fa fa-twitter"></i>
+                        </a>
+                    </li>
+                    
+                    <li>
+                        <a class="facebook" href="{{ facebook }}">
+                            <i class="fa fa-facebook"></i>
+                        </a>
+                    </li>
                 </ul>
             </div>
         </div>

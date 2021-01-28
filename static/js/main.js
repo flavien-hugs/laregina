@@ -1,5 +1,35 @@
 (function($) {
     'use strict';
+
+    function getCookie(name) {
+        var cookieValue = null;
+        if (document.cookie && document.cookie !== '') {
+            var cookies = document.cookie.split(';');
+            for (var i = 0; i < cookies.length; i++) {
+                var cookie = jQuery.trim(cookies[i]);
+                if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                    break;
+                }
+            }
+        }
+        return cookieValue;
+    }
+
+    var csrftoken = jQuery("[name=csrfmiddlewaretoken]").val();
+
+    function csrfSafeMethod(method) {
+        return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
+    }
+
+    $.ajaxSetup({
+        beforeSend: function(xhr, settings) {
+            if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
+                xhr.setRequestHeader("X-CSRFToken", csrftoken);
+            }
+        }
+    });
+
     var iOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
 
     var isMobile = {
@@ -131,16 +161,10 @@
                     .find('.sub-toggle')
                     .removeClass('active');
                 current.children('.sub-menu').slideToggle(350);
-                current
-                    .siblings()
-                    .find('.sub-menu')
-                    .slideUp(350);
+                current.siblings().find('.sub-menu').slideUp(350);
                 if (current.hasClass('has-mega-menu')) {
                     current.children('.mega-menu').slideToggle(350);
-                    current
-                        .siblings('.has-mega-menu')
-                        .find('.mega-menu')
-                        .slideUp(350);
+                    current.siblings('.has-mega-menu').find('.mega-menu').slideUp(350);
                 }
             }
         );
@@ -682,12 +706,14 @@
     function subscribePopup() {
         var subscribe = $('#subscribe'),
             time = subscribe.data('time');
+
         setTimeout(function() {
             if (subscribe.length > 0) {
                 subscribe.addClass('active');
                 $('body').css('overflow', 'hidden');
             }
         }, time);
+
         $('.ps-popup__close').on('click', function(e) {
             e.preventDefault();
             $(this)
@@ -695,6 +721,7 @@
                 .removeClass('active');
             $('body').css('overflow', 'auto');
         });
+
         $('#subscribe').on('click', function(event) {
             if (!$(event.target).closest('.ps-popup__content').length) {
                 subscribe.removeClass('active');
@@ -816,37 +843,6 @@
         });
     }
 
-    function filterSlider() {
-        var nonLinearSlider = document.getElementById('nonlinear');
-        if (typeof nonLinearSlider != 'undefined' && nonLinearSlider != null) {
-            noUiSlider.create(nonLinearSlider, {
-                connect: true,
-                behaviour: 'tap',
-                start: [0, 1000],
-                range: {
-                    min: 0,
-                    '10%': 100,
-                    '20%': 200,
-                    '30%': 300,
-                    '40%': 400,
-                    '50%': 500,
-                    '60%': 600,
-                    '70%': 700,
-                    '80%': 800,
-                    '90%': 900,
-                    max: 1000,
-                },
-            });
-            var nodes = [
-                document.querySelector('.ps-slider__min'),
-                document.querySelector('.ps-slider__max'),
-            ];
-            nonLinearSlider.noUiSlider.on('update', function(values, handle) {
-                nodes[handle].innerHTML = Math.round(values[handle]);
-            });
-        }
-    }
-
     function handleLiveSearch() {
         $('body').on('click', function(e) {
             if (
@@ -886,7 +882,6 @@
         select2Cofig();
         carouselNavigation();
         $('[data-toggle="tooltip"]').tooltip();
-        filterSlider();
         handleLiveSearch();
         $('.ps-product--quickview .ps-product__images').slick({
             slidesToShow: 1,
@@ -905,7 +900,6 @@
     });
 
     $(window).on('load', function() {
-        $('body').addClass('loaded');
         subscribePopup();
     });
 })(jQuery);

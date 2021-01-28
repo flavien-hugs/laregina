@@ -26,24 +26,28 @@ UNIQUE_AND_DB_INDEX = {'null': False, 'unique': True, 'db_index': True}
 class User(AbstractBaseUser, PermissionsMixin):
 
     """ 
-        Un modèle d'utilisateur complet avec des autorisations compatibles avec l'administrateur qui utilise 
-        un champ de courrier électronique complet comme nom d'utilisateur. Email et mot de passe sont requis.
+        Un modèle d'utilisateur complet avec des autorisations compatibles
+        avec l'administrateur qui utilise un champ de courrier électronique
+        complet comme nom d'utilisateur. Email et mot de passe sont requis.
         Les autres champs sont facultatifs. 
     """
 
-    CIVILITY_CHOICES = (('Mr', 'Monsieur'), ('Mme', 'Madame'), ('Mlle', 'Mademoiselle'),)
+    CIVILITY_CHOICES = (('M.', 'Monsieur'), ('Mme', 'Madame'), ('Mlle', 'Mademoiselle'),)
     store_id = models.CharField(max_length=120, verbose_name='ID STORE', unique=True, blank=True)
     email = models.EmailField(verbose_name='email', max_length=254, unique=True,
         error_messages={'unique': "Un utilisateur disposant de ce courriel existe déjà.",})
     civility = models.CharField(verbose_name='civilité', max_length=4, choices=CIVILITY_CHOICES, default="Mr")
     name = models.CharField(verbose_name="nom & prénoms", max_length=120)
     store = models.CharField(verbose_name='boutique', max_length=254, **NULL_AND_BLANK)
-    phone_number = PhoneNumberField('numéro de téléphone')
-    whatsapp_number = PhoneNumberField('numéro de téléphone WhatsApp', null=True)
+    phone_number = PhoneNumberField('numéro de téléphone', help_text="+225xxxxxxxx",)
+    whatsapp_number = PhoneNumberField(
+        verbose_name='numéro de téléphone WhatsApp',
+        blank=True,
+        help_text="+225xxxxxxxx"
+    )
     country = CountryField(blank_label='choisir le pays', **NULL_AND_BLANK)
     city = models.CharField(verbose_name='ville', max_length=250, **NULL_AND_BLANK)
     address = models.CharField(verbose_name='adresse', max_length=250, **NULL_AND_BLANK)
-    interests = models.ManyToManyField(Category, related_name='interested_customers')
     store_description = models.TextField('description de la boutique', max_length=2000, **NULL_AND_BLANK)
     logo = models.ImageField(verbose_name='logo', upload_to=upload_image_path, **NULL_AND_BLANK)
     facebook = models.URLField(verbose_name='lien facebook', max_length=250, **NULL_AND_BLANK)

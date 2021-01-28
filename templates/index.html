@@ -3,13 +3,14 @@
 
 
 {% block content %}
-
-    {% cache 500 home request.user.id %}
-
+    {% url "account_signup" as signup %}
+    {% url "contact" as contact %}
+    
+    {% cache 120 home request.user.id %}
         <div class="ps-vendor-banner bg--cover" data-background="{{ STATIC_PREFIX }}img/bg/vendor.jpg">
             <div class="container">
                 <h2>Des millions d'acheteurs ont hâte de voir ce que vous avez en magasin</h2>
-                <a class="ps-btn ps-btn--lg" href="{% url "account_signup" %}">Commencer à vendre</a>
+                <a class="ps-btn ps-btn--lg" href="{{ signup }}">Commencer à vendre</a>
             </div>
         </div>
 
@@ -117,7 +118,7 @@
         <div class="ps-section--vendor ps-vendor-best-fees">
             <div class="container">
                 <div class="ps-section__header">
-                    <p class="text-uppercase">milleurs frais pour commencer</p>
+                    <p class="text-uppercase">meilleurs frais pour commencer</p>
                     <h4>Abordable, transparent et sécurisé</h4>
                 </div>
                 <div class="ps-section__content">
@@ -152,6 +153,7 @@
             </div>
         </div>
 
+        <!-- user testimonial -->
         <div class="ps-section--vendor ps-vendor-testimonials">
             <div class="container">
                 <div class="ps-section__header">
@@ -186,6 +188,7 @@
             </div>
         </div>
 
+        <!-- faq -->
         <div class="ps-section--vendor ps-vendor-faqs">
             <div class="container">
                 <div class="ps-section__header">
@@ -229,7 +232,7 @@
                 </div>
                 <div class="ps-section__footer">
                     <p>Vous avez encore d'autres questions? N'hésitez pas à nous contacter.</p>
-                    <a class="ps-btn" href="#">Nous contacter</a>
+                    <a class="ps-btn" href="{{ contact }}">Nous contacter</a>
                 </div>
             </div>
         </div>
@@ -237,9 +240,8 @@
         <div class="ps-vendor-banner bg--cover" data-background="{{ STATIC_PREFIX }}img/bg/vendor.jpg">
             <div class="container">
                 <h2>Il est temps de commencer à gagner de l'argent.</h2>
-                <a class="ps-btn ps-btn--lg" href="#">Commencer à vendre</a>
+                <a class="ps-btn ps-btn--lg" href="{{ signup }}">Commencer à vendre</a>
             </div>
         </div>
-
     {% endcache %}
 {% endblock content %}

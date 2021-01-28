@@ -1,13 +1,5 @@
 # core/settings.py
 
-"""
-For more information on this file, see
-https://docs.djangoproject.com/en/3.1/topics/settings/
-
-For the full list of settings and their values, see
-https://docs.djangoproject.com/en/3.1/ref/settings/
-"""
-
 import os
 from pathlib import Path
 from decouple import config
@@ -15,7 +7,6 @@ from django.contrib.messages import constants as messages
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
-
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/3.1/howto/deployment/checklist/
@@ -33,6 +24,12 @@ SITE_NAME = 'LaRegina Deals'
 USE_THOUSAND_SEPARATOR = True
 THOUSAND_SEPARATOR = ' '
 APPEND_SLASH = True
+
+ADMINS = (
+    #(, )
+)
+
+MANAGERS = ADMINS
 
 # DJANGO-ADMIN CONFIGURATION
 # Location of root django.contrib.admin URL
@@ -55,7 +52,10 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
 
     'django.contrib.humanize',
-    'django.contrib.admin',    
+    'django.contrib.admin',
+
+    'django.contrib.sitemaps',
+    'django.contrib.redirects',    
 ]
 
 OTHERS_APPS = [
@@ -64,6 +64,7 @@ OTHERS_APPS = [
     'allauth',
     'allauth.account',
 
+    'django_filters',
     'django_countries',
     'phonenumber_field',
     'phonenumbers',
@@ -75,8 +76,12 @@ LOCAL_APPS = [
     'accounts.apps.AccountsConfig',
     'category.apps.CategoryConfig',
     'catalogue.apps.CatalogueConfig',
+    'reviews.apps.ReviewsConfig',
     'cart.apps.CartConfig',
     'order.apps.OrderConfig',
+    'search.apps.SearchConfig',
+    'analytics.apps.AnalyticsConfig',
+    'pages.apps.PagesConfig',
     'caching',
 ]
 
@@ -87,6 +92,7 @@ AUTH_USER_MODEL = 'accounts.User'
 
 # Site ID for allauth
 SITE_ID = 1
+# SITE_ID = config('SITE_ID', cast=int)
 
 # AUTHENTICATION CONFIGURATION
 AUTHENTICATION_BACKENDS = [
@@ -105,18 +111,19 @@ ACCOUNT_LOGOUT_ON_GET = True
 # Configuration django-allauth
 # https://django-allauth.readthedocs.io/en/latest/configuration.html
 
+ACCOUNT_UNIQUE_EMAIL = True
 ACCOUNT_EMAIL_REQUIRED = True
-ACCOUNT_SESSION_REMEMBER = True
+ACCOUNT_SESSION_REMEMBER = 'yes'
 ACCOUNT_USERNAME_MIN_LENGTH = 4
 ACCOUNT_USERNAME_REQUIRED = False
 ACCOUNT_AUTHENTICATION_METHOD = 'email'
 ACCOUNT_EMAIL_VERIFICATION = "mandatory"
 ACCOUNT_USER_MODEL_EMAIL_FIELD = 'email'
+ACCOUNT_EMAIL_CONFIRMATION_EXPIRE_DAYS = 7
 ACCOUNT_USER_MODEL_USERNAME_FIELD = 'username'
 ACCOUNT_EMAIL_CONFIRMATION_ANONYMOUS_REDIRECT_URL = 'account_login'
 ACCOUNT_EMAIL_CONFIRMATION_AUTHENTICATED_REDIRECT_URL = 'account_login'
-ACCOUNT_EMAIL_CONFIRMATION_EXPIRE_DAYS = 7
-ACCOUNT_EMAIL_SUBJECT_PREFIX = "LaRegina Deals <info@anobra.com>"
+ACCOUNT_EMAIL_SUBJECT_PREFIX = "LaRegina Deals <infos@laregina-ci.com>"
 
 ACCOUNT_FORMS = {
     'login': 'accounts.forms.LoginForm',
@@ -132,12 +139,6 @@ EMAIL_HOST = 'smtp-relay.sendinblue.com'
 EMAIL_HOST_USER = 'flavienhgs@gmail.com'
 EMAIL_HOST_PASSWORD = config('EMAIL_HOST_PASSWORD')
 SENDGRID_API_KEY = config('SENDGRID_API_KEY', default='')
-
-# https://docs.djangoproject.com/fr/3.0/ref/settings/
-# Let's Encrypt ssl/tls https
-
-SECURE_FRAME_DENY = True
-CSRF_COOKIE_SECURE = True
 
 # Pour le développement, envoyer tous les courriers électroniques
 # à la console au lieu de les envoyer
@@ -157,14 +158,19 @@ CACHE_MIDDLEWARE_SECONDS = 600
 CACHE_MIDDLEWARE_KEY_PREFIX = ''
 CACHE_TIMEOUT = 60 * 60
 
+# Upon deployment, change to True
+ENABLE_SSL = False
+
 MIDDLEWARE = [
-    'django.middleware.security.SecurityMiddleware',
-    'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
-    'django.middleware.csrf.CsrfViewMiddleware',
+    'django.contrib.sessions.middleware.SessionMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
+    'django.middleware.csrf.CsrfViewMiddleware',
+    'django.middleware.security.SecurityMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    # 'core.SSLMiddleware.SSLRedirect',
+    'django.contrib.redirects.middleware.RedirectFallbackMiddleware',
 
     # Custom middleware
     # 'accounts.middleware.UserProfileMiddleware',
@@ -189,10 +195,11 @@ TEMPLATES = [
                 'django.contrib.messages.context_processors.messages',
 
                 # Custom context processors
-                'core.context_processors.context',
-                'core.context_processors.category',
-                'accounts.context_processors.customization',
-                'accounts.context_processors.profile',
+                'core.context.context',
+                'core.context.category',
+                'core.context.cart_items',
+                'accounts.context.profile',
+                'accounts.context.customization',
             ],
 
             'debug': DEBUG,
@@ -205,6 +212,9 @@ CRISPY_TEMPLATE_PACK = 'bootstrap4'
 # See: https://docs.djangoproject.com/en/1.11/ref/settings/#wsgi-application
 WSGI_APPLICATION = 'core.wsgi.application'
 
+ANALYTICS_TRACKING_ID = ''
+PRODUCT_PER_PAGE = 1
+PRODUCT_PER_ROW = 4
 
 # Database
 # https://docs.djangoproject.com/en/3.1/ref/settings/#databases
@@ -274,8 +284,9 @@ STATICFILES_FINDERS = [
 ]
 
 
-# Turn on WhiteNoise storage backend that takes care of compressing static files
-# and creating unique names for each version so they can safely be cached forever.
+# Activez le backend de stockage WhiteNoise qui se charge de compresser
+# les fichiers statiques et de créer des noms uniques pour chaque version
+# afin qu'ils puissent être mis en cache à jamais en toute sécurité.
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 # Messages built-in framework
@@ -356,8 +367,32 @@ DJANGO_REDIS_IGNORE_EXCEPTIONS = True
 PHONENUMBER_DEFAULT_REGION = "CI"
 PHONENUMBER_DB_FORMAT = "NATIONAL"
 
-# Django has switched to JSON serializing for security reasons, but it does not
-# serialize Models. We should resolve this by extending the
-# django/core/serializers/json.Serializer to have the `dumps` function. Also
-# in tests/config.py
+# à utiliser avec l'URL Canonicalization Middleware:
+# c'est le nom d'hôte canonique à utiliser par l'application (obligatoire)
+CANON_URL_HOST = 'www.your-domain.com'
+
+# voici les noms d'hôtes qui seront redirigés vers le CANON_URL_HOSTNAME 
+# (facultatif; s'il n'est pas fourni, tout ce qui ne correspond pas sera redirigé)
+CANON_URLS_TO_REWRITE = ['your-domain.com', 'other-domain.com']
+
+# Google Checkout API credentials
+GOO_URL = config('GOO_URL')
+GOOGLE_CHECKOUT_MERCHANT_ID = config('GOOGLE_CHECKOUT_MERCHANT_ID')
+GOOGLE_CHECKOUT_MERCHANT_KEY = config('GOOGLE_CHECKOUT_MERCHANT_KEY')
+GOOGLE_CHECKOUT_URL = GOO_URL + GOOGLE_CHECKOUT_MERCHANT_ID
+
+# Authorize.Net API Credentials
+AUTHNET_POST_URL = 'test.authorize.net'
+AUTHNET_POST_PATH = '/gateway/transact.dll'
+AUTHNET_LOGIN = ''
+AUTHNET_KEY = ''
+
+# Mailchimp Configuration
+MAILCHIMP_API_KEY = config('MAILCHIMP_API_KEY')
+MAILCHIMP_SUBSCRIBE_LIST_ID = config('MAILCHIMP_SUBSCRIBE_LIST_ID')
+
+# Django est passé à la sérialisation JSON pour des raisons de sécurité, mais il ne
+# sérialise pas les modèles. Nous devrions résoudre ce problème en étendant la
+# django/core/serializers/json.Serializer pour avoir la fonction de `dumps`.
+# dans tests/config.py
 SESSION_SERIALIZER = 'django.contrib.sessions.serializers.JSONSerializer'

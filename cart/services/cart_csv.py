@@ -34,4 +34,4 @@ def export_to_csv(modeladmin, request, queryset):
 
     return response
 
-export_to_csv.short_description = "Export to CSV"
+export_to_csv.short_description = "Exporter les données"

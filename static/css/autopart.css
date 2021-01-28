@@ -1,10 +1,3 @@
-.ps-btn, button.ps-btn {
-  color: #ffffff;
-}
-
-.ps-btn:hover, button.ps-btn:hover {
-  background-color: #c42000;
-}
 
 .menu--autopart > li > a {
   text-transform: uppercase;

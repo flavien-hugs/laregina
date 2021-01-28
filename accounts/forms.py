@@ -4,7 +4,9 @@ from django import forms
 from django.db import transaction
 from django.contrib.auth import get_user_model
 from django.forms.utils import ValidationError
+from django.contrib.auth.decorators import permission_required
 from django.contrib.auth.forms import UserCreationForm, UserChangeForm
+
 
 from crispy_forms import bootstrap, layout
 from crispy_forms.helper import FormHelper
@@ -20,6 +22,7 @@ from category.models import Category
 
 
 class LoginForm(LoginForm):
+
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.request = self.request.user
@@ -36,6 +39,12 @@ class LoginForm(LoginForm):
                 layout.Submit('submit', 'Se connecter', css_class='mt-4 ps-btn btn-block text-uppercase border-0'),
             ),
         )
+
+    def clean_email(self):
+        email = self.cleaned_data.get('email')
+        email_base, provider = email.split("@")
+        domain, extension = provider.split('.')
+        return email
 
     def form_valid(self, form):
         user = form.save()
@@ -142,6 +151,7 @@ class MarketChangeForm(UserChangeForm):
         fields = ("email", "logo")
 
 
+@permission_required('user.is_seller', raise_exception=True)
 class StoreUpdateForm(forms.ModelForm):
 
     logo = forms.FileField(

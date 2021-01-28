@@ -1,0 +1,128 @@
+<!-- review form -->
+
+<div class="col-xl-5 col-lg-5 col-md-12 col-sm-12 col-12 ">
+    <div class="ps-block--average-rating">
+        <div class="ps-block__header">
+            <h3>{{ object.avaregereview }}</h3>
+            <select class="ps-rating" data-read-only="true">
+                {% if object.avaregereview <= 1 %}
+                    <option value="1">1</option>
+                    <option value="2">1</option>
+                    <option value="2">1</option>
+                    <option value="2">1</option>
+                    <option value="2">1</option>
+                {% elif object.avaregereview >= 2 %}
+                    <option value="1">1</option>
+                    <option value="1">1</option>
+                    <option value="2">1</option>
+                    <option value="2">1</option>
+                    <option value="2">1</option>
+                {% elif object.avaregereview >= 3 %}
+                    <option value="1">1</option>
+                    <option value="1">1</option>
+                    <option value="1">1</option>
+                    <option value="2">1</option>
+                    <option value="2">1</option>
+                {% elif object.avaregereview >= 4 %}
+                    <option value="1">1</option>
+                    <option value="1">1</option>
+                    <option value="1">1</option>
+                    <option value="1">1</option>
+                    <option value="2">1</option>
+                {% elif object.avaregereview >= 5 %}
+                    <option value="1">1</option>
+                    <option value="1">1</option>
+                    <option value="1">1</option>
+                    <option value="1">1</option>
+                    <option value="1">1</option>
+                {% endif %}
+            </select><span>{{ object.countreview }} Avis utilisateurs</span>
+        </div>
+
+        {% if object.avaregereview >= 5 %}
+            <div class="ps-block__star">
+                <span>5 Star</span>
+                <div class="ps-progress" data-value="100">
+                    <span></span>
+                </div>
+                <span>{{ object.avaregereview }}</span>
+            </div>
+        {% elif object.avaregereview == 4 %}
+            <div class="ps-block__star">
+                <span>4 Star</span>
+                <div class="ps-progress" data-value="75">
+                    <span></span>
+                </div>
+                <span>{{ object.avaregereview }}</span>
+            </div>
+        {% elif object.avaregereview == 3 %}
+            <div class="ps-block__star">
+                <span>3 Star</span>
+                <div class="ps-progress" data-value="50">
+                    <span></span>
+                </div>
+                <span>{{ object.avaregereview }}</span>
+            </div>
+        {% elif object.avaregereview == 2 %}
+            <div class="ps-block__star">
+                <span>2 Star</span>
+                <div class="ps-progress" data-value="25">
+                    <span></span>
+                </div>
+                <span>{{ object.avaregereview }}</span>
+            </div>
+        {% elif object.avaregereview >= 1 %}
+            <div class="ps-block__star">
+                <span>1 Star</span>
+                <div class="ps-progress" data-value="10">
+                    <span></span>
+                </div>
+                <span>{{ object.avaregereview }}</span>
+            </div>
+        {% endif %}
+    </div>
+</div>
+
+<div class="col-xl-7 col-lg-7 col-md-12 col-sm-12 col-12">
+    {% if request.user.is_authenticated %}
+        {% url "reviews:add_product_review" object.slug as review_url %} 
+        <form id="reviewForm" action="{{ review_url }}" method="post" class="ps-form--review" novalidate>
+            {% csrf_token %}
+
+            <h4>Soumettre votre avis sur ce produit.</h4>
+            <p>Votre adresse électronique ne sera pas publiée. Les champs obligatoires sont marqués<sup>*</sup></p>
+
+            <div class="form-group form-group__rating">
+                <label for='{{ review_form.rating.id_for_label }}'>Votre évaluation de ce produit</label>
+
+                <div class="br-wrapper br-theme-fontawesome-stars">
+                    {{ review_form.rating }}
+                </div>
+            </div>
+
+            <div class="form-group">
+                {% if request.user.is_authenticated %}
+                    <input id='{{ review_form.email.id_for_label }}' name='{{ review_form.email.name }}' class="form-control" type="email" value="{{ user.email }}" required>
+                {% else %}
+                    {{ review_form.email }}
+                {% endif %}
+            </div>
+
+            <div class="form-group">
+                {{ review_form.content }}
+            </div>
+
+            <div class="row">
+                <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12">
+                    <div class="form-group"><button type='submit' class="ps-btn form-control">Ajouter votre avis
+                    </button></div>
+                </div>
+            </div>
+        </form>
+    {% else %}
+        Vous devez être connecté pour publier un avis.
+        <a href="{% url 'account_login' %}?next={{ request.path }}">
+            <span class="font-weight-bold">Connectez-vous.</span>
+        </a>
+    {% endif %}
+</div>

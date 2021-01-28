@@ -1,8 +1,16 @@
-{% load cache mptt_tags %}
+<!-- sidebar categories -->
+
+{% load cache mptt_tags crispy_forms_tags %}
 
 {% cache 500 category request.user.id %}
     <aside class="widget widget_shop">
         <h4 class="widget-title">Catégories</h4>
+
+        <form role='search' class="ps-form--widget-search" action="{% url "search" %}" method="GET">
+            <input class="form-control" type="search" name='q' value='{{ request.GET.q }}' placeholder="Rechercher ...">
+            <button><i class="icon-magnifier"></i></button>
+        </form>
+
         <ul class="ps-list--categories">
             {% recursetree category %}
                 <li {% if not node.is_leaf_instance %}class="menu-item-has-children"{% endif %}>
@@ -24,10 +32,7 @@
 
     <aside class="widget widget_shop">
         <h4 class="widget-title">par marques</h4>
-        <form class="ps-form--widget-search" action="http://nouthemes.net/html/martfury/do_action" method="get">
-            <input class="form-control" type="text" placeholder="">
-            <button><i class="icon-magnifier"></i></button>
-        </form>
+
         <figure class="ps-custom-scrollbar" data-height="250">
             <div class="ps-checkbox">
                 <input class="form-control" type="checkbox" id="brand-1" name="brand">
@@ -76,12 +81,7 @@
         </figure>
 
         <figure>
-            <h4 class="widget-title">par prix</h4>
-            <div id="nonlinear"></div>
-            <p class="ps-slider__meta">Prix:<span class="ps-slider__value">$<span class="ps-slider__min"></span></span>-<span class="ps-slider__value">$<span class="ps-slider__max"></span></span></p>
-        </figure>
-        <figure>
-            <h4 class="widget-title">Par prix</h4>
+            <h4 class="widget-title">Par avis des clients</h4>
             <div class="ps-checkbox">
                 <input class="form-control" type="checkbox" id="review-1" name="review">
                 <label for="review-1"><span><i class="fa fa-star rate"></i><i class="fa fa-star rate"></i><i class="fa fa-star rate"></i><i class="fa fa-star rate"></i><i class="fa fa-star rate"></i></span><small>(13)</small></label>
@@ -141,7 +141,11 @@
         </figure>
 
         <figure class="sizes">
-            <h4 class="widget-title">par taille</h4><a href="#">L</a><a href="#">M</a><a href="#">S</a><a href="#">XL</a>
+            <h4 class="widget-title">par taille</h4>
+            <a href="#">L</a>
+            <a href="#">M</a>
+            <a href="#">S</a>
+            <a href="#">XL</a>
         </figure>
     </aside>
 {% endcache %}

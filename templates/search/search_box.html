@@ -1,0 +1,6 @@
+<!-- formulaire de recherche -->
+
+<form role='search' class="ps-form--quick-search" action="{% url 'search' %}" method="get" accept-charset="utf-8">
+    {{ form.q }}
+    <button type="submit">Rechercher</button>
+</form>

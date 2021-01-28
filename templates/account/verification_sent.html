@@ -6,14 +6,7 @@
 
 {% block content %}
     <div class="ps-page--my-account">
-        <div class="ps-breadcrumb">
-            <div class="container">
-                <ul class="breadcrumb">
-                    <li><a href="{% url 'home' %}">Accueil</a></li>
-                    <li>Vérifiez votre adresse e-mail</li>
-                </ul>
-            </div>
-        </div>
+        {% include "partials/breadcrumb.html" %}
 
         <div class="ps-my-account">
             <div class="container">
@@ -25,7 +18,7 @@
 
                                 <p>Nous vous avons envoyé un e-mail pour vérification. Suivez le lien fourni pour finaliser le processus d'inscription. Veuillez nous contacter si vous ne le recevez pas dans les quelques minutes.
                                 <span class="font-weight-bold">
-                                    <a href="{% url 'account_login' %}"><span><u>Connectz-vous</u></span></a></span>
+                                    <a href="{% url 'account_login' %}?next={{ request.path }}"><span><u>Connectz-vous</u></span></a></span>
                                 </p>
                             </div>
                         </div>

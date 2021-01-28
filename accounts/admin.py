@@ -88,6 +88,7 @@ class UserAdmin(BaseUserAdmin):
         "is_seller",
     )
 
+    list_display_links = ('store_id', 'email', 'store')
     prepopulated_fields = {'slug': ('store',)}
     search_fields = ('email', 'user', 'store',)
     ordering = ('date_joined',)

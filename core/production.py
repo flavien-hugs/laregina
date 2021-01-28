@@ -29,6 +29,7 @@ MIDDLEWARE += [
 # https://docs.djangoproject.com/fr/3.0/ref/settings/
 # Let's Encrypt ssl/tls https
 
+ENABLE_SSL = True
 HOST_SCHEME = "https://"
 X_FRAME_OPTIONS = 'DENY'
 SECURE_FRAME_DENY = True

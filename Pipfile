@@ -27,6 +27,7 @@ phonenumbers = "*"
 babel = "*"
 pillow = "*"
 django-admin-thumbnails = "*"
+mailchimp = "*"
 
 [requires]
 python_version = "3.8"

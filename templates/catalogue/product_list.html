@@ -1,21 +1,24 @@
 {% extends "base.html" %}
 
 {% block content %}
-    {% include "partials/breadcrumb.html" %}
+    {% include "includes/partials/_partials_breadcrumb.html" %}
 
-    <div class="ps-page--shop">
+    <div class="ps-page--shop pt-4">
         <div class="ps-container">
-            <div class="ps-shop-banner">
-                {% include "catalogue/partials/promotions.html" %}
-            </div>
+            {% if not request.resolver_match.url_name == 'product_list' and not request.resolver_match.url_name == 'search' %}
 
-            <div class="ps-shop-brand">
-                {% include "catalogue/partials/brand.html" %}
-            </div>
+                <div class="ps-shop-banner">
+                    {% include "catalogue/partials/promotions.html" %}
+                </div>
 
-            <div class="ps-shop-categories">
-                {% include "catalogue/partials/category_list.html" %}
-            </div>
+                <div class="ps-shop-brand">
+                    {% include "catalogue/partials/brand.html" %}
+                </div>
+
+                <div class="ps-shop-categories">
+                    {% include "catalogue/partials/category_list.html" %}
+                </div>
+            {% endif %}
 
             <div class="ps-layout--shop">
                 {% include "catalogue/partials/shop.html" %}

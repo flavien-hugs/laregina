@@ -26,18 +26,7 @@
                     <!-- mise en cache du header pendant 120ms -->
                     {% if request.resolver_match.url_name == 'account_signup' or request.resolver_match.url_name == 'account_login' or request.resolver_match.url_name == 'customer_signup' %} 
                     {% else %}
-                        {% cache 500 header %}{% include "includes/header.html" %}{% endcache %}
-                    {% endif %}
-
-                    {% if messages %}
-                        {% for message in messages %}
-                            <div class="alert {{ message.tags }} alert-dismissible" role="alert">
-                                <button class="close" type="button" data-dismiss="alert" aria-label="Close">
-                                    <span aria-hidden="true">&times;</span>
-                                </button>
-                                {{ message|safe }}
-                            </div>
-                        {% endfor %}
+                        {% cache 120 header %}{% include "includes/header.html" %}{% endcache %}
                     {% endif %}
 
                     {% block content %}
@@ -53,7 +42,7 @@
                                 <h4 class="widget-title">Contactez-nous</h4>
                                 <div class="widget_content">
                                     <p>Appelez-nous 24/7</p>
-                                    <h3>+225 77 27 48 86</h3>
+                                    <h3>+225 {{ contact_one }}</h3>
                                     <p>Ahougnansou, Bouaké - Côte d'Ivoire 
                                     </p>
                                 </div>
@@ -62,16 +51,16 @@
                             <aside class="widget widget_footer">
                                 <h4 class="widget-title">Liens utiles</h4>
                                 <ul class="ps-list--link">
-                                    <li><a href="{% url "contact" %}">Contact</a></li>
-                                    <li><a href="#">Privacy policy</a></li>
-                                    <li><a href="#">Term &amp; Condition</a></li>
+                                    <li><a href="{% url "pages:contact" %}">Contact</a></li>
+                                    <li><a href="{% url "pages:cgu" %}">Conditions Générales d'Utilisation</a></li>
+                                    <li><a href="{% url "pages:terms" %}">Politique de Confidentialité</a></li>
                                 </ul>
                             </aside>
 
                             <aside class="widget widget_footer">
                                 <h4 class="widget-title">Entreprise</h4>
                                 <ul class="ps-list--link">
-                                    <li><a href="{% url "about-us" %}">À propos de nous</a></li>
+                                    <li><a href="{% url "pages:about-us" %}">À propos de nous</a></li>
                                     <li><a href="#">Soumettre une annonce</a></li>
                                     <li><a href="#">Points de livraison</a></li>
                                 </ul>
@@ -91,9 +80,8 @@
                             <p>&copy; <script>document.write(new Date().getFullYear());</script> {{ title }}.</p>
 
                             <ul class="ps-list--social">
-                                <li><a class="twitter" href="#"><i class="fa fa-twitter"></i></a></li>
-                                <li><a class="facebook" href="#"><i class="fa fa-facebook"></i></a></li>
-                                <li><a class="youtube" href="#"><i class="fa fa-youtube"></i></a></li>
+                                <li><a class="twitter" href="{{ twitter }}"><i class="fa fa-twitter"></i></a></li>
+                                <li><a class="facebook" href="{{ facebook }}"><i class="fa fa-facebook"></i></a></li>
                             </ul>
                         </div>
                     </div>

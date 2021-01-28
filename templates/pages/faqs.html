@@ -2,6 +2,7 @@
 
 {% block content %}
     {% include "partials/breadcrumb.html" %}
+    {% url "contact" as contact %}
     
     <div class="ps-faqs">
         <div class="container">
@@ -67,7 +68,7 @@
 
     <div class="ps-call-to-action">
         <div class="container">
-            <h3>Nous sommes là pour vous aider !<a href="#"> Nous contacter</a></h3>
+            <h3>Nous sommes là pour vous aider !<a href="{{ contact }}"> Nous contacter</a></h3>
         </div>
     </div>
 {% endblock content %}

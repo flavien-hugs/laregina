@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% load cache humanize mptt_tags %}
+{% load cache mptt_tags crispy_forms_tags catalogue_tags %}
 
 {% block content %}
     {% cache 120 product_detail request.user.pk|default_if_none:"0" %}
@@ -7,11 +7,22 @@
             <div class="ps-container">
                 <ul class="breadcrumb">
                     <li><a href="{% url "home" %}">Accueil</a></li>
-                    <li><a href="{{ object.category.get_absolute_url }}">{{ object.category }}</a></li>
+                    <li><a href="{{ object.category.get_absolute_url }}">
+                    {{ object.category }}</a></li>
                     <li>{{ object.name|striptags|safe }}</li>
                 </ul>
             </div>
         </div>
+        {% if messages %}
+            {% for message in messages %}
+                <div class="alert alert-block {{ message.tags }} alert-dismissible font-weight-bold" role="alert">
+                    {{ message|safe }}
+                    <button class="close" type="button" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+            {% endfor %}
+        {% endif %}
 
         <div class="ps-page--product">
             <div class="ps-container">
@@ -19,31 +30,8 @@
                     <div class="ps-page__left">
                         <div class="ps-product--detail ps-product--fullwidth">
                             <div class="ps-product__header">
-                                <div class="ps-product__thumbnail" data-vertical="true">
-                                    <figure>
-                                        <div class="ps-wrapper">
-                                            <div class="ps-product__gallery" data-arrow="true">
-                                                {% for image in product_image %}
-                                                    <div class="item">
-                                                        <a href="{{ image.product.get_image_url }}">
-                                                            <img src="{{ image.product.get_image_url }}" alt="{{ image.product.name }}">
-                                                        </a>
-                                                    </div>
-                                                {% endfor %}
-                                            </div>
-                                        </div>
-                                    </figure>
 
-                                    <div class="ps-product__variants" data-item="4" data-md="4" data-sm="4" data-arrow="false">
-                                        {% for image in product_image %}
-                                            <div class="item">
-                                                <a href="{{ image.product.get_image_url }}">
-                                                    <img src="{{ image.product.get_image_url }}" alt="{{ image.product.name }}">
-                                                </a>
-                                            </div>
-                                        {% endfor %}
-                                    </div>
-                                </div>
+                                {% include "catalogue/partials/_partials_product_image.html" %}
 
                                 <div class="ps-product__info">
                                     <h1>{{ object.name }}</h1>
@@ -56,45 +44,42 @@
                                                 <option value="1">3</option>
                                                 <option value="1">4</option>
                                                 <option value="2">5</option>
-                                            </select><span>(1 avis)</span>
+                                            </select>
+                                            <span>({{ object.countreview|safe }} avis)</span>
                                         </div>
                                     </div>
-                                    <h4 class="ps-product__price">{{ object.price|intcomma|add:' Fr CFA' }}</h4>
+
+                                    <h4 class="ps-product__price">
+                                    {{ object.price|currency }}</h4>
                                     
                                     <div class="ps-product__desc">
-                                        <p>Vendu par: <a href="{{ object.user.get_absolute_url }}">
-                                            <strong> {{ object.user.store }}</strong></a>
-                                        </p>
+                                        {% if object.user.store %}
+                                            <p>Vendu par: <a href="{{ object.user.get_absolute_url }}">
+                                                <strong> {{ object.user.store }}</strong></a>
+                                            </p>
+                                        {% endif %}
                                         
                                         <ul class="ps-list--dot">
                                             {{ object.description|truncatewords:'30' }}
                                         </ul>
                                     </div>
 
-                                    <div class="ps-product__shopping">
-                                        <figure>
-                                            <div class="form-group--number">
-                                                <button class="up"><i class="fa fa-plus"></i></button>
-                                                <button class="down"><i class="fa fa-minus"></i></button>
-                                                <input class="form-control" type="text" placeholder="1">
-                                            </div>
-                                        </figure>
-                                        <a class="ps-btn" href="{% url "cart" %}">Ajouter au panier</a>
-                                    </div>
-                                    <div class="ps-product__specification"><a class="report" href="#">Signaler un abus</a>
+                                    {% include "cart/snippet/form.html" with product=object %}
+
+                                    <div class="ps-product__specification">
+                                        <a class="report" href="#">Signaler un abus</a>
+
                                         <p class="categories">
-                                            <strong> Catégories:</strong><a href="#">Consumer Electronics</a>,<a href="#"> Refrigerator</a>,<a href="#">Babies &amp; Moms</a>
-                                        </p>
-                                        <p class="tags">
-                                            <strong> Tags: </strong>
-                                            <a href="#">{{ object.keywords|title }}</a>
+                                            <strong> Catégorie{{ category.count|pluralize }}:</strong>
+                                            <a href="{{ object.category.get_absolute_url }}">
+                                                {{ object.category.name }}
+                                            </a>
                                         </p>
                                     </div>
 
                                     <div class="ps-product__sharing">
                                         <a class="facebook" href="#"><i class="fa fa-facebook"></i></a>
                                         <a class="twitter" href="#"><i class="fa fa-twitter"></i></a>
-                                        <a class="instagram" href="#"><i class="fa fa-instagram"></i></a>
                                     </div>
                                 </div>
                             </div>
@@ -102,8 +87,10 @@
                             <div class="ps-product__content ps-tab-root">
                                 <ul class="ps-tab-list">
                                     <li class="active"><a href="#tab-1">Description</a></li>
-                                    <li><a href="#tab-3">Vendeur</a></li>
-                                    <li><a href="#tab-4">Avis client (1)</a></li>
+                                    <li><a href="#tab-2">Vendeur</a></li>
+                                    <li><a href="#tab-3">Avis client ({{ object.countreview|safe }})</a></li>
+                                    <li><a href="#tab-4">FAQ</a></li>
+                                    <li><a href="#tab-5">Plus d'Offres</a></li>
                                 </ul>
 
                                 <div class="ps-tabs">
@@ -113,7 +100,7 @@
                                         </div>
                                     </div>
 
-                                    <div class="ps-tab" id="tab-3">
+                                    <div class="ps-tab" id="tab-2">
                                         <h4>{{ object.user.store|upper }}</h4>
                                         <p>{{ object.user.store_description }}</p>
                                         <a href="{{ object.user.get_absolute_url }}">
@@ -121,84 +108,24 @@
                                         </a>
                                     </div>
 
-                                    <div class="ps-tab" id="tab-4">
+                                    <div class="ps-tab" id="tab-3">
                                         <div class="row">
-                                            <div class="col-xl-5 col-lg-5 col-md-12 col-sm-12 col-12 ">
-                                                <div class="ps-block--average-rating">
-                                                    <div class="ps-block__header">
-                                                        <h3>4.00</h3>
-                                                        <select class="ps-rating" data-read-only="true">
-                                                            <option value="1">1</option>
-                                                            <option value="1">2</option>
-                                                            <option value="1">3</option>
-                                                            <option value="1">4</option>
-                                                            <option value="2">5</option>
-                                                        </select><span>1 Review</span>
-                                                    </div>
-                                                    <div class="ps-block__star"><span>5 Star</span>
-                                                        <div class="ps-progress" data-value="100"><span></span></div><span>100%</span>
-                                                    </div>
-                                                    <div class="ps-block__star"><span>4 Star</span>
-                                                        <div class="ps-progress" data-value="0"><span></span></div><span>0</span>
-                                                    </div>
-                                                    <div class="ps-block__star"><span>3 Star</span>
-                                                        <div class="ps-progress" data-value="0"><span></span></div><span>0</span>
-                                                    </div>
-                                                    <div class="ps-block__star"><span>2 Star</span>
-                                                        <div class="ps-progress" data-value="0"><span></span></div><span>0</span>
-                                                    </div>
-                                                    <div class="ps-block__star"><span>1 Star</span>
-                                                        <div class="ps-progress" data-value="0"><span></span></div><span>0</span>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="col-xl-7 col-lg-7 col-md-12 col-sm-12 col-12 ">
-                                                <form class="ps-form--review" action="#" method="get">
-                                                    <h4>Ajouter votre avis a ce produit./h4>
-                                                    <p>Your email address will not be published. Required fields are marked<sup>*</sup></p>
-                                                    <div class="form-group form-group__rating">
-                                                        <label>Your rating of this product</label>
-                                                        <select class="ps-rating" data-read-only="false">
-                                                            <option value="0">0</option>
-                                                            <option value="1">1</option>
-                                                            <option value="2">2</option>
-                                                            <option value="3">3</option>
-                                                            <option value="4">4</option>
-                                                            <option value="5">5</option>
-                                                        </select>
-                                                    </div>
-                                                    <div class="form-group">
-                                                        <textarea class="form-control" rows="6" placeholder="Write your review here"></textarea>
-                                                    </div>
-                                                    <div class="row">
-                                                        <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12  ">
-                                                            <div class="form-group">
-                                                                <input class="form-control" type="text" placeholder="Your Name">
-                                                            </div>
-                                                        </div>
-                                                        <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12  ">
-                                                            <div class="form-group">
-                                                                <input class="form-control" type="email" placeholder="Your Email">
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    <div class="form-group submit">
-                                                        <button class="ps-btn">Submit Review</button>
-                                                    </div>
-                                                </form>
+                                            {% include "includes/partials/_partials_product_review.html" %}
+                                        </div>
+                                    </div>
+
+                                    <div class="ps-tab" id="tab-4">
+                                        <div class="ps-block--questions-answers">
+                                            <h3>Questions et Réponses</h3>
+                                            <div class="form-group">
+                                                <input class="form-control" type="text" placeholder="Vous avez une question ? Chercher une réponse ?">
                                             </div>
                                         </div>
                                     </div>
                                     <div class="ps-tab" id="tab-5">
-                                        <div class="ps-block--questions-answers">
-                                            <h3>Questions and Answers</h3>
-                                            <div class="form-group">
-                                                <input class="form-control" type="text" placeholder="Have a question? Search for answer?">
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="ps-tab active" id="tab-6">
-                                        <p>Sorry no more offers available</p>
+                                        <p>
+                                            Désolé, il n'y a plus d'offres disponibles
+                                        </p>
                                     </div>
                                 </div>
                             </div>
@@ -206,6 +133,7 @@
                     </div>
 
                     <div class="ps-page__right">
+                        <!-- delivery information -->
                         <aside class="widget widget_product widget_features">
                             <p><i class="icon-network"></i> Expédition dans le monde entier</p>
                             <p><i class="icon-3d-rotate"></i> Retour gratuit sous 7 jours si éligible, si facile</p>
@@ -213,6 +141,7 @@
                             <p><i class="icon-credit-card"></i> Payer en ligne ou lors de la réception de marchandises</p>
                         </aside>
 
+                        <!-- signup for vendor -->
                         <aside class="widget widget_sell-on-site">
                             <p>
                                 <i class="icon-store"></i> Vendre sur {{ title }} ?
@@ -220,231 +149,27 @@
                             </p>
                         </aside>
 
+                        <!-- promotion slider -->
                         <aside class="widget widget_ads">
-                            <a href="#"><img src="{{ STATIC_PREFIX }}img/ads/product-ads.png" alt=""></a>
+                            <a href="#">
+                                <img src="{{ STATIC_PREFIX }}img/ads/product-ads.png" alt="">
+                            </a>
                         </aside>
                         
-                        <aside class="widget widget_same-brand">
-                            <h3>Même marque</h3>
-                            <div class="widget__content">
-                                <div class="ps-product">
-                                    <div class="ps-product__thumbnail">
-                                        <a href="#"><img src="{{ STATIC_PREFIX }}img/products/shop/5.jpg" alt=""></a>
-                                        <div class="ps-product__badge">-37%</div>
-                                    </div>
-                                    <div class="ps-product__container"><a class="ps-product__vendor" href="#">Robert's Store</a>
-                                        <div class="ps-product__content"><a class="ps-product__title" href="#">Grand Slam Indoor Of Show Jumping Novel</a>
-                                            <div class="ps-product__rating">
-                                                <select class="ps-rating" data-read-only="true">
-                                                    <option value="1">1</option>
-                                                    <option value="1">2</option>
-                                                    <option value="1">3</option>
-                                                    <option value="1">4</option>
-                                                    <option value="2">5</option>
-                                                </select><span>01</span>
-                                            </div>
-                                            <p class="ps-product__price sale">$32.99 <del>$41.00 </del></p>
-                                        </div>
-                                        <div class="ps-product__content hover"><a class="ps-product__title" href="#">Grand Slam Indoor Of Show Jumping Novel</a>
-                                            <p class="ps-product__price sale">$32.99 <del>$41.00 </del></p>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="ps-product">
-                                    <div class="ps-product__thumbnail"><a href="#"><img src="{{ STATIC_PREFIX }}img/products/shop/6.jpg" alt=""></a>
-                                        <div class="ps-product__badge">-5%</div>
-                                    </div>
-                                    <div class="ps-product__container"><a class="ps-product__vendor" href="#">Youngshop</a>
-                                        <div class="ps-product__content"><a class="ps-product__title" href="#">Sound Intone I65 Earphone White Version</a>
-                                            <div class="ps-product__rating">
-                                                <select class="ps-rating" data-read-only="true">
-                                                    <option value="1">1</option>
-                                                    <option value="1">2</option>
-                                                    <option value="1">3</option>
-                                                    <option value="1">4</option>
-                                                    <option value="2">5</option>
-                                                </select><span>01</span>
-                                            </div>
-                                            <p class="ps-product__price sale">$100.99 <del>$106.00 </del></p>
-                                        </div>
-                                        <div class="ps-product__content hover"><a class="ps-product__title" href="#">Sound Intone I65 Earphone White Version</a>
-                                            <p class="ps-product__price sale">$100.99 <del>$106.00 </del></p>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </aside>
+                        <!-- produit similaire -->
+                        {% if related_product %}
+                            {% include "includes/partials/_partials_similary_product.html" %}
+                        {% endif %}
                     </div>
                 </div>
 
-                <div class="ps-section--default ps-customer-bought">
-                    <div class="ps-section__header">
-                        <h3>Les clients ayant acheté cet article ont également acheté</h3>
-                    </div>
-                    <div class="ps-section__content">
-                        <div class="row">
-                            <div class="col-xl-3 col-lg-3 col-md-4 col-sm-6 col-6 ">
-                                <div class="ps-product">
-                                    <div class="ps-product__thumbnail"><a href="#"><img src="{{ STATIC_PREFIX }}img/products/shop/4.jpg" alt=""></a>
-                                        <div class="ps-product__badge hot">hot</div>
-                                    </div>
-                                    <div class="ps-product__container"><a class="ps-product__vendor" href="#">Global Office</a>
-                                        <div class="ps-product__content"><a class="ps-product__title" href="#">Xbox One Wireless Controller Black Color</a>
-                                            <div class="ps-product__rating">
-                                                <select class="ps-rating" data-read-only="true">
-                                                    <option value="1">1</option>
-                                                    <option value="1">2</option>
-                                                    <option value="1">3</option>
-                                                    <option value="1">4</option>
-                                                    <option value="2">5</option>
-                                                </select><span>01</span>
-                                            </div>
-                                            <p class="ps-product__price">$55.99</p>
-                                        </div>
-                                        <div class="ps-product__content hover"><a class="ps-product__title" href="#">Xbox One Wireless Controller Black Color</a>
-                                            <p class="ps-product__price">$55.99</p>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-xl-3 col-lg-3 col-md-4 col-sm-6 col-6 ">
-                                <div class="ps-product">
-                                    <div class="ps-product__thumbnail"><a href="#"><img src="{{ STATIC_PREFIX }}img/products/shop/5.jpg" alt=""></a>
-                                        <div class="ps-product__badge">-37%</div>
-                                    </div>
-                                    <div class="ps-product__container"><a class="ps-product__vendor" href="#">Robert's Store</a>
-                                        <div class="ps-product__content"><a class="ps-product__title" href="#">Grand Slam Indoor Of Show Jumping Novel</a>
-                                            <div class="ps-product__rating">
-                                                <select class="ps-rating" data-read-only="true">
-                                                    <option value="1">1</option>
-                                                    <option value="1">2</option>
-                                                    <option value="1">3</option>
-                                                    <option value="1">4</option>
-                                                    <option value="2">5</option>
-                                                </select><span>01</span>
-                                            </div>
-                                            <p class="ps-product__price sale">$32.99 <del>$41.00 </del></p>
-                                        </div>
-                                        <div class="ps-product__content hover">
-                                            <a class="ps-product__title" href="#">Grand Slam Indoor Of Show Jumping Novel</a>
-                                            <p class="ps-product__price sale">$32.99 <del>$41.00 </del></p>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-xl-3 col-lg-3 col-md-4 col-sm-6 col-6 ">
-                                <div class="ps-product">
-                                    <div class="ps-product__thumbnail"><a href="#"><img src="{{ STATIC_PREFIX }}img/products/shop/6.jpg" alt=""></a>
-                                        <div class="ps-product__badge">-5%</div>
-                                    </div>
-                                    <div class="ps-product__container"><a class="ps-product__vendor" href="#">Youngshop</a>
-                                        <div class="ps-product__content"><a class="ps-product__title" href="#">Sound Intone I65 Earphone White Version</a>
-                                            <div class="ps-product__rating">
-                                                <select class="ps-rating" data-read-only="true">
-                                                    <option value="1">1</option>
-                                                    <option value="1">2</option>
-                                                    <option value="1">3</option>
-                                                    <option value="1">4</option>
-                                                    <option value="2">5</option>
-                                                </select><span>01</span>
-                                            </div>
-                                            <p class="ps-product__price sale">$100.99 <del>$106.00 </del></p>
-                                        </div>
-                                        <div class="ps-product__content hover">
-                                            <a class="ps-product__title" href="#">Sound Intone I65 Earphone White Version</a>
-                                            <p class="ps-product__price sale">$100.99 <del>$106.00 </del></p>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-xl-3 col-lg-3 col-md-4 col-sm-6 col-6 ">
-                                <div class="ps-product">
-                                    <div class="ps-product__thumbnail"><a href="#"><img src="{{ STATIC_PREFIX }}img/products/shop/7.jpg" alt=""></a>
-                                        <div class="ps-product__badge">-16%</div>
-                                    </div>
-                                    <div class="ps-product__container"><a class="ps-product__vendor" href="#">Youngshop</a>
-                                        <div class="ps-product__content"><a class="ps-product__title" href="#">Korea Long Sofa Fabric In Blue Navy Color</a>
-                                            <div class="ps-product__rating">
-                                                <select class="ps-rating" data-read-only="true">
-                                                    <option value="1">1</option>
-                                                    <option value="1">2</option>
-                                                    <option value="1">3</option>
-                                                    <option value="1">4</option>
-                                                    <option value="2">5</option>
-                                                </select><span>01</span>
-                                            </div>
-                                            <p class="ps-product__price sale">$567.89 <del>$670.20 </del></p>
-                                        </div>
-                                        <div class="ps-product__content hover"><a class="ps-product__title" href="#">Korea Long Sofa Fabric In Blue Navy Color</a>
-                                            <p class="ps-product__price sale">$567.89 <del>$670.20 </del></p>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-xl-3 col-lg-3 col-md-4 col-sm-6 col-6 ">
-                                <div class="ps-product">
-                                    <div class="ps-product__thumbnail"><a href="#"><img src="{{ STATIC_PREFIX }}img/products/shop/8.jpg" alt=""></a>
-                                        <div class="ps-product__badge">-16%</div>
-                                    </div>
-                                    <div class="ps-product__container"><a class="ps-product__vendor" href="#">Young shop</a>
-                                        <div class="ps-product__content"><a class="ps-product__title" href="#">Unero Military Classical Backpack</a>
-                                            <div class="ps-product__rating">
-                                                <select class="ps-rating" data-read-only="true">
-                                                    <option value="1">1</option>
-                                                    <option value="1">2</option>
-                                                    <option value="1">3</option>
-                                                    <option value="1">4</option>
-                                                    <option value="2">5</option>
-                                                </select><span>02</span>
-                                            </div>
-                                            <p class="ps-product__price sale">$35.89 <del>$42.20 </del></p>
-                                        </div>
-                                        <div class="ps-product__content hover"><a class="ps-product__title" href="#">Unero Military Classical Backpack</a>
-                                            <p class="ps-product__price sale">$35.89 <del>$42.20 </del></p>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-xl-3 col-lg-3 col-md-4 col-sm-6 col-6 ">
-                                <div class="ps-product">
-                                    <div class="ps-product__thumbnail"><a href="#"><img src="{{ STATIC_PREFIX }}img/products/shop/9.jpg" alt=""></a>
-                                    </div>
-                                    <div class="ps-product__container"><a class="ps-product__vendor" href="#">Young shop</a>
-                                        <div class="ps-product__content"><a class="ps-product__title" href="#">Rayban Rounded Sunglass Brown Color</a>
-                                            <div class="ps-product__rating">
-                                                <select class="ps-rating" data-read-only="true">
-                                                    <option value="1">1</option>
-                                                    <option value="1">2</option>
-                                                    <option value="1">3</option>
-                                                    <option value="1">4</option>
-                                                    <option value="2">5</option>
-                                                </select><span>02</span>
-                                            </div>
-                                            <p class="ps-product__price">$35.89</p>
-                                        </div>
-                                        <div class="ps-product__content hover"><a class="ps-product__title" href="#">Rayban Rounded Sunglass Brown Color</a>
-                                            <p class="ps-product__price">$35.89</p>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                {% if related_product %}
-                    <div class="ps-section--default">
-                        <div class="ps-section__header">
-                            <h3>Produits de la même catégories</h3>
-                        </div>
-                        <div class="ps-section__content">
-                            <div class="ps-carousel--nav owl-slider" data-owl-auto="true" data-owl-loop="true" data-owl-speed="10000" data-owl-gap="30" data-owl-nav="true" data-owl-dots="true" data-owl-item="6" data-owl-item-xs="2" data-owl-item-sm="2" data-owl-item-md="3" data-owl-item-lg="4" data-owl-item-xl="5" data-owl-duration="1000" data-owl-mousedrag="on">
-                                {% for object in related_product %}
-                                    {% include "catalogue/snippet/product_related.html" with instance=object %}
-                                {% endfor %}
-                            </div>
-                        </div>
-                    </div>
+                <!-- product recommended -->
+                {% if recommended_product %}
+                    {% product_list recommended_product 'Les clients ayant acheté cet article ont également acheté' %}
+                {% endif %}
+                <!-- product recently viewed -->
+                {% if recently_viewed %}
+                    {% product_list recently_viewed 'Produits récemment vus' %}
                 {% endif %}
             </div>
         </div>

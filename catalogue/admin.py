@@ -4,41 +4,43 @@ import admin_thumbnails
 from django.contrib import admin
 
 from category.models import Category
-from catalogue.models import Product, ProductImage
+from catalogue.forms import ProductAdminForm
+from catalogue.models import Product, Variation, ProductImage
 
 
 @admin_thumbnails.thumbnail('image')
 class ProductImageInline(admin.TabularInline):
     model = ProductImage
-    readonly_fields = ('id',)
-    extra = 1
-    max_num = 4
+    extra = 0
+    max_num = 3
 
 
-@admin_thumbnails.thumbnail('image')
-class ImagesAdmin(admin.ModelAdmin):
-    list_display = ['image', 'name', 'image_thumbnail']
+class VariationInline(admin.TabularInline):
+    model = Variation
+    extra = 0
+    max_num = 10
 
 
 @admin.register(Product)
 class ProductAdmin(admin.ModelAdmin):
+    form = ProductAdminForm
     date_hierarchy = 'created_at'
-    list_display_links = ('__str__',)
+    list_display_links = ('name',)
 
     list_display = [
-        '__str__',
-        'current_price',
+        'name',
+        'price',
+        'recomended_product',
         'show_image_tag',
         'is_stock',
         'is_active'
     ]
 
     list_filter = [
-        'price',
-        'old_price',
         'is_stock',
         'is_active',
-        'created_at'
+        'created_at',
+        'nb_view',
     ]
 
     list_editable = (
@@ -48,17 +50,11 @@ class ProductAdmin(admin.ModelAdmin):
     )
 
     list_per_page = 50
-    readonly_fields = ('show_image_tag', 'quantity')
-    inlines = [ProductImageInline]
-    ordering = ('created_at',)
+    inlines = [VariationInline, ProductImageInline]
+    ordering = ('-created_at',)
     prepopulated_fields = {'slug': ('name',)}
-    search_fields = ['category', 'name']
+    search_fields = ['category', 'name', 'keywords']
+    exclude = ('updated_at', 'created_at', 'timestamp')
 
     class Meta:
         model = Product
-        
-    def current_price(self, obj):
-        if obj.old_price > 0:
-            return obj.old_price
-        else:
-            return obj.price

@@ -6,24 +6,35 @@
     <div class="ps-panel__content">
         <ul class="menu--mobile">
             <li class="menu-item-has-children">
-                <a href="/">Accueil</a>
+                <a href="{% url "home" %}">Accueil</a>
             </li>
+            {% if request.user.is_authenticated  %}
+                {% if request.user.is_seller or request.user.is_superuser %}
+                    <li class="menu-item-has-children has-mega-menu">
+                        <a href="{% url "seller:profile" %}">Ma boutique</a>
+                    </li>
 
-            <li class="menu-item-has-children has-mega-menu">
-                <a href="{% url "account_login" %}">Se connecter</a>
-            </li>
+                    <li class="menu-item-has-children has-mega-menu">
+                        <a href="#">Mes commandes</a>
+                    </li>
+                {% elif request.user.is_buyer %}
+                    <li class="menu-item-has-children has-mega-menu">
+                        <a href="{% url "account_login" %}?next={{ request.path }}">Mon compte</a>
+                    </li>
 
-            <li class="menu-item-has-children has-mega-menu">
-                <a href="{% url "account_signup" %}">S'inscrire</a>
-            </li>
+                    <li class="menu-item-has-children has-mega-menu">
+                        <a href="#">Mes commandes</a>
+                    </li>
+                {% endif %}
+            {% else %}
+                <li class="menu-item-has-children has-mega-menu">
+                    <a href="{% url "account_login" %}?next={{ request.path }}">Se connecter</a>
+                </li>
 
-            <li class="menu-item-has-children has-mega-menu">
-                <a href="#">Ma boutique</a>
-            </li>
-
-            <li class="menu-item-has-children has-mega-menu">
-                <a href="#">Mes commandes</a>
-            </li>
+                <li class="menu-item-has-children has-mega-menu">
+                    <a href="{% url "account_signup" %}">S'inscrire</a>
+                </li>
+            {% endif %}
         </ul>
     </div>
 </div>

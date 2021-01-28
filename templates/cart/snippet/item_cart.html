@@ -1,0 +1,7 @@
+<!-- item in cart -->
+
+{% load catalogue_tags %}
+
+<a class="header__extra" href="{% url "cart:cart" %}">
+    <i class="icon-bag2"></i><span><i>{% cart_items request %}</i></span>
+</a>

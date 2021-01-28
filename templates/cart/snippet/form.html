@@ -1,0 +1,23 @@
+<!-- formulaire d'ajout -->
+{% load catalogue_tags %}
+
+<form method="post" action=".">
+    {% csrf_token %}
+    
+    <div class="ps-product__shopping extend">
+        {{ form.quantity }}
+        <input value="{{ product.slug }}" id="{{ form.slug.id_for_label }}" type="hidden" name="{{ form.slug.name }}">
+
+        <button class="ps-btn text-uppercase" type="submit" name="submit">
+            ajouter au panier
+        </button>
+        
+        <!--  {% if item_in_cart %}
+            <a href="{% url "cart:cart" %}" class="ps-btn text-uppercase">
+            voir dans le panier</a>
+        {% else %}
+            <button class="ps-btn text-uppercase" type="submit" name="submit">
+            ajouter au panier</button>
+        {% endif %} -->
+    </div>
+</form>
