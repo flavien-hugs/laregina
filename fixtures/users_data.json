@@ -4,7 +4,7 @@
     "pk": 1,
     "fields": {
         "password": "argon2$argon2i$v=19$m=512,t=2,p=2$SmJENE9aTmZQaWVu$Ghu1awvct4nB+1wb36syBg",
-        "store_id": "19012168921666",
+        "store_id": "21012156266789",
         "email": "flavienhgs@gmail.com",
         "civility": "Mr",
         "name": "AMANI FLAVIEN",
@@ -25,7 +25,7 @@
         "is_active": true,
         "is_buyer": false,
         "is_seller": true,
-        "last_login": "2021-01-21T08:52:01.574Z",
+        "last_login": "2021-01-26T09:15:41.211Z",
         "date_joined": "2021-01-17T08:51:42.303Z",
         "slug": "unsta-store",
         "groups": [],

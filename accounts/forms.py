@@ -7,7 +7,6 @@ from django.forms.utils import ValidationError
 from django.contrib.auth.decorators import permission_required
 from django.contrib.auth.forms import UserCreationForm, UserChangeForm
 
-
 from crispy_forms import bootstrap, layout
 from crispy_forms.helper import FormHelper
 from allauth.account.forms import SignupForm, LoginForm
@@ -78,21 +77,44 @@ class MarketSignupForm(UserCreationForm):
                 css_class='form-row'
             ),
 
-            bootstrap.PrependedText('email', '', placeholder='Entrez votre adresse email', css_class='form-group'),
-            bootstrap.PrependedText('store', '', placeholder='Entrez le nom du votre magasin', css_class='form-group'),
-            bootstrap.PrependedText('phone_number', '', css_class='form-group custom-select'),
+            bootstrap.PrependedText(
+                'email', '',
+                placeholder='Entrez votre adresse email',
+                css_class='form-group'
+            ),
+            
+            bootstrap.PrependedText(
+                'store', '', 
+                placeholder='Entrez le nom du votre magasin',
+                css_class='form-group'
+            ),
 
-            bootstrap.Field('password1', '', placeholder="Entrez votre mot de passe"),
-            bootstrap.Field('password2', '', placeholder="Confirmez le mot de passe"),
+            bootstrap.PrependedText(
+                'phone_number', '',
+                css_class='form-group custom-select'
+            ),
+
+            bootstrap.Field(
+                'password1', '',
+                placeholder="Entrez votre mot de passe"
+            ),
+
+            bootstrap.Field(
+                'password2', '',
+                placeholder="Confirmez le mot de passe"
+            ),
 
             bootstrap.FormActions(
-                layout.Submit('submit', 'Créer mon compte', css_class='mt-4 ps-btn btn-block text-uppercase border-0')
+                layout.Submit(
+                    'submit', 'Créer mon compte',
+                    css_class='mt-4 ps-btn btn-block text-uppercase border-0'
+                )
             ),
         )
 
     class Meta:
         model = User
-        fields = ('email', 'civility', 'name', 'store', 'phone_number')
+        fields = ['email', 'civility', 'name', 'store', 'phone_number']
 
     def save(self, commit=True):
         user = super().save(commit=False)
@@ -107,10 +129,19 @@ class CustomerSignUpForm(UserCreationForm):
         label="Civilité", choices=User.CIVILITY_CHOICES,
         initial = '1', coerce=str, required = True,
     )
+    
     name = forms.CharField(label='Nom & Prénoms', max_length=120,
-        widget=forms.TextInput(attrs={'placeholder': 'Entrez votre nom complet'}))
-    phone_number = PhoneNumberField(label='Numéro de téléphone', initial='+225',
-        widget=PhoneNumberPrefixWidget(attrs={'placeholder': '00 00 00 00', 'class': "form-control"}))
+        widget=forms.TextInput(
+            attrs={'placeholder': 'Entrez votre nom complet'}
+        )
+    )
+
+    phone_number = PhoneNumberField(
+        label='Numéro de téléphone', initial='+225',
+        widget=PhoneNumberPrefixWidget(
+            attrs={'placeholder': '00 00 00 00', 'class': "form-control"}
+        )
+    )
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -187,7 +218,11 @@ class StoreUpdateForm(forms.ModelForm):
             ),
 
             bootstrap.FormActions(
-                layout.Submit('submit', 'Mettre à jour', css_class='mt-4 ps-btn btn-block text-uppercase border-0'),
+                layout.Submit(
+                    'submit',
+                    'Mettre à jour',
+                    css_class='mt-4 ps-btn btn-block text-uppercase border-0'
+                ),
             ),
         )
 

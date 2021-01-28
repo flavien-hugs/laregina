@@ -1,5 +1,5 @@
 SHELL := /bin/bash
-MANAGE := ./manage.py
+MANAGE := python manage.py
 
 TEST_SETTINGS := test
 
@@ -14,6 +14,9 @@ help:
 
 deps:
 	pipenv install
+
+runserver:
+	$(MANAGE) runserver
 
 migrate:
 	$(MANAGE) makemigrations
