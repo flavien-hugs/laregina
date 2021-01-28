@@ -4,8 +4,8 @@ import dj_database_url
 from core.settings import *
 
 DEBUG = TEMPLATE_DEBUG = False
-BASE_URL = 'https://vendito.onrender.com'
-ALLOWED_HOSTS = ['vendito.onrender.com', '.onrender.com']
+BASE_URL = 'https://laregina.onrender.com'
+ALLOWED_HOSTS = ['laregina.onrender.com', '.onrender.com']
 
 # Parse database configuration from $DATABASE_URL
 # Change 'default' database configuration with
