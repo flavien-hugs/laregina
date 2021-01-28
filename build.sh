@@ -3,5 +3,5 @@
 set -o errexit
 
 make deps
-./manage.py collectstatic --no-input
+make collectstatic --no-input
 make migrate
