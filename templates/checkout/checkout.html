@@ -16,6 +16,7 @@
                                 <div class="ps-form__billing-info">
                                     <form action="." method="post">
                                         {% csrf_token %}
+                                        
                                         {% if not request.user.is_authenticated %}
                                             <div class="ps-block--payment-method">
                                                 <a class='p-2' href="{% url 'account_login' %}?next={{ request.path }}">
@@ -95,70 +96,38 @@
                                             {{ form.shipping_zip }}
                                         </div>
 
+                                        <div class="form-group">
+                                            <div class="ps-checkbox">
+                                                {{ form.emailing }}
+                                                <label for="{{ form.emailing.id_for_label }}">
+                                                    Me tenir au courant des actualités et des offres exclusives ?
+                                                </label>
+                                            </div>
+                                        </div>
+
                                         <h3 class="ps-form__heading">Mode de paiement</h3>
 
                                         <div class="ps-block--payment-method">
                                             <ul class="ps-tab-list">
                                                 <li class="active">
-                                                    <a class="ps-btn" href="#visa">
-                                                    {{ form.credit_card_type }}</a>
+                                                    <a class="ps-btn" href="#paymentnow">Payer maintenant</a>
                                                 </li>
                                                 <li>
-                                                    <a class="ps-btn" href="#paypal">
+                                                    <a class="ps-btn" href="#paymentdelivery">
                                                     Payer à la livraison</a>
                                                 </li>
                                             </ul>
 
                                             <div class="ps-tabs">
-                                                <div class="ps-tab active" id="visa">
-                                                    <div class="form-group">
-                                                        <label for='{{ form.credit_card_number }}'>
-                                                        Numéro de carte</label>
-                                                        {{ form.credit_card_number }}
-                                                    </div>
-                                                    
-                                                    <div class="row">
-                                                        <div class="col-8">
-                                                            <div class="form-group">
-                                                                <label>Date de l’expérience</label>
-                                                                <div class="row">
-                                                                    <div class="col-6">
-                                                                        <div class="form-group">
-                                                                            {{ form.credit_card_expire_month }}
-                                                                        </div>
-                                                                    </div>
-                                                                    <div class="col-6">
-                                                                        <div class="form-group">
-                                                                            {{ form.credit_card_expire_year }}
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-
-                                                        <div class="col-4">
-                                                            <div class="form-group">
-                                                                <label>CVV</label>
-                                                                {{ form.credit_card_cvv }}
-                                                            </div>
-                                                        </div>
-
-                                                        <div class="form-group submit">
-                                                            <input class="ps-btn ps-btn--fullwidth text-uppercase" type="submit" value="placer votre commande">
-                                                        </div>
-                                                    </div>
+                                                <div class="ps-tab active" id="paymentnow">
+                                                    {% include "includes/partials/_partials_payment.html" %}
                                                 </div>
 
-                                                <div class="ps-tab" id="paypal">
-                                                    <input class="ps-btn text-uppercase" type="submit" value="payer à la livraison.">
+                                                <div class="ps-tab" id="paymentdelivery">
+                                                    <button class="ps-btn text-uppercase" type="submit" name="submit">
+                                                        payer à la livraison.
+                                                    </button>
                                                 </div>
-                                            </div>
-                                        </div>
-
-                                        <div class="form-group">
-                                            <div class="ps-checkbox">
-                                                {{ form.emailing }}
-                                                <label for="{{ form.emailing.id_for_label}}">Me tenir au courant des actualités et des offres exclusives ?</label>
                                             </div>
                                         </div>
                                     </form>
@@ -183,8 +152,8 @@
                                             {% for object in cart_items %}
                                                 <a href="{{ object.get_absolute_url }}">
                                                     <strong>{{ object.name|truncatewords:"3" }}</strong>
-                                                    <span>x{{ object.quantity }}</span>
-                                                    <small>{{ object.price|currency }}</small>
+                                                    <span>{{ object.price }} x {{ object.quantity }}</span>
+                                                    <small>{{ object.total }}</small>
                                                 </a>
                                             {% endfor %}
                                         </figure>

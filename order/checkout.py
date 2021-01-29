@@ -4,19 +4,16 @@ import urllib
 from django.urls import reverse
 
 from cart import cart
-from core import settings
 from order.forms import CheckoutForm
 from order.models import Order, OrderItem
 from analytics.utils import get_client_ip
-from order import authnet, google_checkout
 
 
 def get_checkout_url(request):
+    
     """
     renvoie l'URL du module de paiement pour le panier
     """
-    # utilisez ceci pour l'API Google Checkout:
-    # return google_checkout.get_checkout_url(request)
     
     # l'utiliser pour notre propre vérification sur place
     return reverse('order:checkout')
@@ -40,21 +37,9 @@ def process(request):
     HELD_FOR_REVIEW = '4'
     
     postdata = request.POST.copy()
-    card_num = postdata.get('credit_card_number', '')
-    exp_month = postdata.get('credit_card_expire_month', '')
-    exp_year = postdata.get('credit_card_expire_year', '')
-    exp_date = exp_month + exp_year
-    cvv = postdata.get('credit_card_cvv', '')
     amount = cart.cart_subtotal(request)
     
     results = {}
-    
-    response = authnet.do_auth_capture(
-        amount=amount,
-        card_num=card_num,
-        exp_date=exp_date,
-        card_cvv=cvv
-    )
     
     if response[0] == APPROVED:
         transaction_id = response[0]
@@ -67,7 +52,7 @@ def process(request):
     return results
 
 
-def create_order(request, transaction_id):
+def create_order(request):
 
     """
     si la POST de la passerelle de paiement a réussi
@@ -81,7 +66,7 @@ def create_order(request, transaction_id):
     checkout_form = CheckoutForm(request.POST, instance=order)
     order = checkout_form.save(commit=False)
     
-    order.transaction_id = transaction_id
+    # order.transaction_id = transaction_id
     order.ip_address = get_client_ip(request)
     order.user = None
     
@@ -92,6 +77,7 @@ def create_order(request, transaction_id):
     order.save()
     
     if order.pk:
+        
         """ si la sauvegarde de la commande a réussi """
         cart_items = cart.get_cart_items(request)
         

@@ -1,11 +1,12 @@
 # order.views.py
 
 from django.urls import reverse
-from django.shortcuts import render
 from django.contrib import messages
 from django.http import HttpResponseRedirect
+from django.shortcuts import render, get_object_or_404
 
 from cart import cart
+from core import settings
 from order import checkout
 from accounts import profile
 from order.forms import CheckoutForm
@@ -25,14 +26,10 @@ def show_checkout(request, template='checkout/checkout.html'):
         postdata = request.POST.copy()
         form = CheckoutForm(postdata)
         if form.is_valid():
-            response = checkout.process(request)            
-            order_number = response.get('order_number', 0)
-            message = response.get('message', '')
-            if order_number:
-                request.session['order_number'] = order_number
-                return HttpResponseRedirect(reverse('order:checkout_receipt'))
+            checkout.create_order(request)
+            return HttpResponseRedirect(reverse('order:checkout_receipt'))
         else:
-            message = messages.info('Corrigez les erreurs ci-dessous')
+            message = messages.danger('Corrigez les erreurs ci-dessous')
     else:
         if request.user.is_authenticated:
             # user_profile = profile.retrieve(request)
@@ -41,10 +38,13 @@ def show_checkout(request, template='checkout/checkout.html'):
             form = CheckoutForm()
 
     context = {
-        'page_title': 'Checkout',
         'form': form,
+        'page_title': 'Checkout',
         'cart_items': cart.get_cart_items(request),
-        'cart_subtotal': cart.cart_subtotal(request)
+        'cart_subtotal': cart.cart_subtotal(request),
+        'APIKEY': settings.CINETPAY_API_KEY,
+        'SITEID': settings.CINETPAY_SITE_ID,
+        'TRANSID': settings.CINETPAY_TRANS_ID
     }
 
     # context.update(csrf_token)
@@ -58,18 +58,10 @@ def receipt(request, template='checkout/receipt.html'):
     à la commande après qu'une commande ait été passée avec succès
     """
 
-    order_number = request.session.get('order_number', '')
-    
-    if order_number:
-        order = Order.objects.filter(id=order_number)[0]
-        order_items = OrderItem.objects.filter(order=order)
-    else:
-        return HttpResponseRedirect(reverse('cart:cart'))
-    
+    orders = Order.objects.filter(user=request.user)
+
     context = {
-        'order': order,
-        'order_items': order_items,
-        'order_number': order_number
+        'orders': orders,
     }
 
     return render(request, template, context)

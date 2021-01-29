@@ -58,11 +58,7 @@
                                                 <form action="." method="post">
                                                     {% csrf_token %}
                                                     <div class="form-group--number">
-                                                        <!--  <button class="up">+</button>
-                                                        <button class="down">-</button>-->
-
-                                                        <input id="quantity" class="form-control" name="quantity" type="number" value="{{ object.quantity }}" maxlength="5" size="2">
-
+                                                        <input id="quantity" class="form-control" name="quantity" type="number" value="{{ object.quantity }}">
                                                         <input type='hidden' name='item_id' value='{{ object.id }}'>
                                                     </div>
 
@@ -164,15 +160,6 @@
                                     {% csrf_token %}
                                     <button class="ps-btn ps-btn--fullwidth text-uppercase" type="submit" name="submit" value="checkout">passer la commande</button>
                                 </form>
-
-                                <!-- form method="POST" action=".">
-                                    {% csrf_token %}
-                                    <input type="hidden" name="submit" value="checkout">
-                                    
-                                    <input class="ps-btn ps-btn--fullwidth text-uppercase" type="image" name="Google Checkout" alt="Paiement rapide par Google" src="http://sandbox.google.com/checkout/buttons/checkout.gif?merchant_id={{ merchant_id }}&amp;w=180&amp;h=46&amp;style=white&amp;variant=text&amp;loc=en_US" height="46" width="180">
-                                </form -->
-
-                                {{ google_checkout_xml }}
                             </div>
                         </div>
                     </div>

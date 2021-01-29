@@ -5,7 +5,7 @@ from core.settings import *
 
 DEBUG = TEMPLATE_DEBUG = False
 BASE_URL = 'https://laregina.onrender.com'
-ALLOWED_HOSTS = ['laregina.onrender.com', '.onrender.com']
+ALLOWED_HOSTS = ['*.onrender.com']
 
 # Parse database configuration from $DATABASE_URL
 # Change 'default' database configuration with
@@ -32,9 +32,7 @@ MIDDLEWARE += [
 ENABLE_SSL = True
 HOST_SCHEME = "https://"
 X_FRAME_OPTIONS = 'DENY'
-SECURE_FRAME_DENY = True
 CSRF_USE_SESSIONS = True
-CSRF_COOKIE_NAME = 'tokenize'
 CSRF_COOKIE_SECURE = True
 SECURE_SSL_REDIRECT = True
 SECURE_HSTS_PRELOAD = True
@@ -48,16 +46,9 @@ SECURE_SSL_HOST = BASE_URL
 SECURE_REFERRER_POLICY = 'origin-when-cross-origin'
 SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 
-# Gestion de cache
-CACHE_MIDDLEWARE_SECONDS = 800
-SESSION_COOKIE_SECURE = True
-
 # gestion interdomaine
-CSRF_COOKIE_DOMAIN = ".onrender.com"
+CSRF_COOKIE_DOMAIN = "laregina.onrender.com"
 
 # Simplified static file serving.
 # https://warehouse.python.org/project/whitenoise/
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
-
-# EMAIL SENDER
-EMAIL_SUBJECT_PREFIX = '[vendito]'

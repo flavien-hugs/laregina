@@ -12,17 +12,15 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/3.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = config('SECRET_KEY', default='_q@t!jz_mb@j_l64kk%_7!(+d3o4fa)qpc!fmgzem3z)4)l-&w')
+SECRET_KEY = config('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = TEMPLATE_DEBUG = config('DEBUG', default=True, cast=bool)
 DEFAULT_CHARSET = 'UTF-8'
 SITE_DESCRIPTION = ""
-INDEX_DESCRIPTION = "Vender sur LaRegina"
+INDEX_DESCRIPTION = "Vendez sur LaRegina"
 META_KEYWORDS = ''
 SITE_NAME = 'LaRegina Deals'
-USE_THOUSAND_SEPARATOR = True
-THOUSAND_SEPARATOR = ' '
 APPEND_SLASH = True
 
 ADMINS = (
@@ -55,7 +53,6 @@ INSTALLED_APPS = [
     'django.contrib.admin',
 
     'django.contrib.sitemaps',
-    'django.contrib.redirects',    
 ]
 
 OTHERS_APPS = [
@@ -162,18 +159,23 @@ CACHE_TIMEOUT = 60 * 60
 ENABLE_SSL = False
 
 MIDDLEWARE = [
-    'django.middleware.common.CommonMiddleware',
-    'django.contrib.sessions.middleware.SessionMiddleware',
-    'django.contrib.auth.middleware.AuthenticationMiddleware',
-    'django.middleware.csrf.CsrfViewMiddleware',
+    # 'django.middleware.cache.UpdateCacheMiddleware',
     'django.middleware.security.SecurityMiddleware',
-    'django.contrib.messages.middleware.MessageMiddleware',
+
+    'django.contrib.sessions.middleware.SessionMiddleware',
+    'django.middleware.csrf.CsrfViewMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    # 'core.SSLMiddleware.SSLRedirect',
-    'django.contrib.redirects.middleware.RedirectFallbackMiddleware',
+    'django.contrib.auth.middleware.AuthenticationMiddleware',
+    'django.contrib.messages.middleware.MessageMiddleware',
+
+    'django.middleware.locale.LocaleMiddleware',
+    'django.middleware.http.ConditionalGetMiddleware',
+    'django.middleware.common.CommonMiddleware',
 
     # Custom middleware
     # 'accounts.middleware.UserProfileMiddleware',
+
+    # 'django.middleware.cache.FetchFromCacheMiddleware',
 ]
 
 ROOT_URLCONF = 'core.urls'
@@ -367,25 +369,11 @@ DJANGO_REDIS_IGNORE_EXCEPTIONS = True
 PHONENUMBER_DEFAULT_REGION = "CI"
 PHONENUMBER_DB_FORMAT = "NATIONAL"
 
-# à utiliser avec l'URL Canonicalization Middleware:
-# c'est le nom d'hôte canonique à utiliser par l'application (obligatoire)
-CANON_URL_HOST = 'www.your-domain.com'
-
-# voici les noms d'hôtes qui seront redirigés vers le CANON_URL_HOSTNAME 
-# (facultatif; s'il n'est pas fourni, tout ce qui ne correspond pas sera redirigé)
-CANON_URLS_TO_REWRITE = ['your-domain.com', 'other-domain.com']
-
-# Google Checkout API credentials
-GOO_URL = config('GOO_URL')
-GOOGLE_CHECKOUT_MERCHANT_ID = config('GOOGLE_CHECKOUT_MERCHANT_ID')
-GOOGLE_CHECKOUT_MERCHANT_KEY = config('GOOGLE_CHECKOUT_MERCHANT_KEY')
-GOOGLE_CHECKOUT_URL = GOO_URL + GOOGLE_CHECKOUT_MERCHANT_ID
-
-# Authorize.Net API Credentials
-AUTHNET_POST_URL = 'test.authorize.net'
-AUTHNET_POST_PATH = '/gateway/transact.dll'
-AUTHNET_LOGIN = ''
-AUTHNET_KEY = ''
+# CINETPAY API KEY
+CINETPAY_API_KEY = config('CINETPAY_KEY')
+CINETPAY_SITE_ID = config('CINETPAY_SITE_ID')
+CINETPAY_TRANS_ID = config('CINETPAY_TRANS_ID')
+CINETPAY_POST_URL = 'secure.cinetpay.com'
 
 # Mailchimp Configuration
 MAILCHIMP_API_KEY = config('MAILCHIMP_API_KEY')

@@ -2,7 +2,9 @@
 
 import random
 import string
+import decimal
 import datetime
+from django.utils import timezone
 
 from django.db import models
 from django.contrib.auth import get_user_model
@@ -26,24 +28,47 @@ class BaseOrderInfo(models.Model):
         abstract = True
 
     # contact info
+    email = models.EmailField(
+        verbose_name='adresse email',
+        max_length=50
+    )
 
-    email = models.EmailField(verbose_name='adresse email', max_length=50)
     phone = PhoneNumberField('numéro de téléphone')
 
-    # shipping information
+    # shipping information delivery
+    shipping_first_name = models.CharField(
+        verbose_name='nom de famille',
+        max_length=50
+    )
 
-    shipping_first_name = models.CharField(verbose_name='nom de famille', max_length=50)
-    shipping_last_name = models.CharField(verbose_name='prénom', max_length=50)
+    shipping_last_name = models.CharField(
+        verbose_name='prénom',
+        max_length=50
+    )
+
     shipping_address = PhoneNumberField(
         verbose_name='numéro de téléphone WhatsApp',
-        blank=True,
-        help_text="+225xxxxxxxx"
+        blank=True
     )
-    shipping_city = models.CharField(verbose_name='ville', max_length=50)
-    shipping_country = CountryField(blank_label='Pays de résidence', verbose_name='pays')
-    shipping_zip = models.CharField(verbose_name='adresse postal (optionnel)', max_length=10, blank=True)
-    created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
+
+    shipping_city = models.CharField(
+        verbose_name='ville',
+        max_length=50
+    )
+
+    shipping_country = CountryField(
+        blank_label='Pays de résidence',
+        verbose_name='pays'
+    )
+
+    shipping_zip = models.CharField(
+        verbose_name='adresse postal (optionnel)',
+        max_length=10,
+        **NULL_AND_BLANK
+    )
+
+    created_at = models.DateTimeField(auto_now_add=timezone.now())
+    updated_at = models.DateTimeField(auto_now=timezone.now())
 
 
 class Order(BaseOrderInfo):
@@ -65,41 +90,54 @@ class Order(BaseOrderInfo):
     )
 
     # info order
-
-    date = models.DateTimeField(verbose_name='date de la commade', auto_now_add=True)
+    date = models.DateTimeField(
+        verbose_name='date de la commade',
+        auto_now_add=timezone.now()
+    )
+    
     status = models.IntegerField(
         verbose_name='status de le commande',
         choices=ORDER_STATUSES,
         default=SUBMITTED
     )
+
     last_updated = models.DateTimeField(
         verbose_name='derniere modification',
         auto_now=True
     )
+
     user = models.ForeignKey(
         User,
         models.SET_NULL,
-        null=True,
-        verbose_name='client'
+        verbose_name='client',
+        **NULL_AND_BLANK
     )
+
     transaction_id = models.CharField(
         verbose_name='id de la commande',
-        max_length=20
+        max_length=20,
+        **NULL_AND_BLANK
     )
+
     ip_address = models.CharField(
         verbose_name='adresse ip',
-        max_length=50
+        max_length=50,
+        **NULL_AND_BLANK
     )
-    emailing = models.BooleanField(verbose_name='activer les offres', default=False)
+
+    emailing = models.BooleanField(
+        verbose_name='activer les offres',
+        default=False
+    )
 
     class Meta:
         verbose_name_plural = 'commande'
     
     def __str__(self):
-        return ('Order #{ID}').format(ID=self.id)
+        return ('Commande #{ID}').format(ID=self.id)
 
     @property
-    def full_name(elf):
+    def full_name(self):
         return '{first_name} {last_name}'.format(
             first_name=self.shipping_first_name,
             last_name=self.shipping_last_name)
@@ -139,15 +177,18 @@ class OrderItem(models.Model):
         null=True,
         verbose_name='produit'
     )
+
     quantity = models.IntegerField(
         verbose_name='quantité',
         default=1
     )
+
     price = models.DecimalField(
         verbose_name='coût total',
-        max_digits=9,
-        decimal_places=2
+        max_digits=10,
+        decimal_places=0
     )
+
     order = models.ForeignKey(
         Order,
         models.CASCADE,
@@ -162,15 +203,15 @@ class OrderItem(models.Model):
             product_name=self.product.name,
             store=self.product.user.store
         )
-    
+
     @property
     def total(self):
         return self.quantity * self.price
-    
+
     @property
     def name(self):
         return self.product.name
-    
+
     @property
     def store(self):
         return self.product.user.store

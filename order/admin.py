@@ -7,7 +7,13 @@ from order.models import Order, OrderItem
 
 class OrderItemInline(admin.StackedInline):
     model = OrderItem
-    extra = 1
+    list_display = [
+        'store',
+        'name',
+        'quantity',
+        'total',
+    ]
+    extra = 0
 
 
 @admin.register(Order)
@@ -15,9 +21,9 @@ class OrderAdmin(admin.ModelAdmin):
     date_hierarchy = 'created_at'
 
     list_display = [
-        'user',
-        'transaction_id',
         '__str__',
+        'transaction_id',
+        'user',
         'date',
         'status',
         'emailing'

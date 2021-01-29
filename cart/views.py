@@ -34,15 +34,12 @@ def shopcart(request, template="cart/cart.html"):
             checkout_url = checkout.get_checkout_url(request)
             return HttpResponseRedirect(checkout_url)
 
-    # besoin d'un bouton Google Checkout
-    merchant_id = settings.GOOGLE_CHECKOUT_MERCHANT_ID
-
     context = {
         'page_title': 'Panier',
         'cart_items': cart.get_cart_items(request),
         'cart_subtotal': cart.cart_subtotal(request),
         'recently_viewed': get_recently_viewed(request),
-        'recommended_product': recommended_from_views(request)
+        'recommended_product': recommended_from_views(request),
     }
 
     return render(request, template, context)

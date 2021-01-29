@@ -139,7 +139,7 @@ def cart_subtotal(request):
     obtenir le sous-total pour un article dans le panier
     """
 
-    cart_total = Decimal('0.00')
+    cart_total = Decimal('0')
     cart_products = get_cart_items(request)
     for cart_item in cart_products:
         cart_total += cart_item.product.price * cart_item.quantity
@@ -175,7 +175,7 @@ def remove_old_cart_items():
     3. supprimer ces instances CartItem
     """
 
-    print("Removing old carts")
+    print("Enlever les anciennes commandes")
     remove_before = datetime.now() + timedelta(days=-settings.SESSION_COOKIE_DAYS)
     cart_ids = []
     old_items = CartItem.objects.values('cart_id').annotate(
@@ -185,4 +185,4 @@ def remove_old_cart_items():
         cart_ids.append(item['cart_id'])
     to_remove = CartItem.objects.filter(cart_id__in=cart_ids)
     to_remove.delete()
-    print(str(len(cart_ids)) + " carts were removed")
+    print(str(len(cart_ids)) + " les anciennes ont été retirés")
