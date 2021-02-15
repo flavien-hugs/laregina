@@ -1,14 +1,16 @@
 {% extends "base.html" %}
-{% load cache mptt_tags crispy_forms_tags catalogue_tags %}
+{% load static cache mptt_tags crispy_forms_tags catalogue_tags pages_tags %}
 
 {% block content %}
+    {% full_tree_for_model category.Category as category %}
+    
     {% cache 120 product_detail request.user.pk|default_if_none:"0" %}
         <div class="ps-breadcrumb">
             <div class="ps-container">
                 <ul class="breadcrumb">
                     <li><a href="{% url "home" %}">Accueil</a></li>
                     <li><a href="{{ object.category.get_absolute_url }}">
-                    {{ object.category }}</a></li>
+                    {{ object.category.get_ancestors|tree_path:" ∕ " }}</a></li>
                     <li>{{ object.name|striptags|safe }}</li>
                 </ul>
             </div>
@@ -50,7 +52,7 @@
                                     </div>
 
                                     <h4 class="ps-product__price">
-                                    {{ object.price|currency }}</h4>
+                                    {{ object.price }}</h4>
                                     
                                     <div class="ps-product__desc">
                                         {% if object.user.store %}
@@ -67,7 +69,7 @@
                                     {% include "cart/snippet/form.html" with product=object %}
 
                                     <div class="ps-product__specification">
-                                        <a class="report" href="#">Signaler un abus</a>
+                                        <a class="report" href="{% url 'pages:contact' %}">Signaler un abus</a>
 
                                         <p class="categories">
                                             <strong> Catégorie{{ category.count|pluralize }}:</strong>
@@ -94,18 +96,22 @@
                                 </ul>
 
                                 <div class="ps-tabs">
-                                    <div class="ps-tab" id="tab-1">
+                                    <div class="ps-tab active" id="tab-1">
                                         <div class="ps-document">
                                             {{ object.description }}
                                         </div>
                                     </div>
 
                                     <div class="ps-tab" id="tab-2">
-                                        <h4>{{ object.user.store|upper }}</h4>
-                                        <p>{{ object.user.store_description }}</p>
-                                        <a href="{{ object.user.get_absolute_url }}">
-                                            Voir le magasin de <strong>{{ object.user.store }}</strong>
-                                        </a>
+                                        {% if object.user.store %}
+                                            <h4>{{ object.user.store|upper }}</h4>
+                                            <p>{{ object.user.store_description }}</p>
+                                            <a href="{{ object.user.get_absolute_url }}">
+                                                Voir le magasin de <strong>{{ object.user.store }}</strong>
+                                            </a>
+                                        {% else %}
+                                            Produit vendu par l'entreprise.
+                                        {% endif %}
                                     </div>
 
                                     <div class="ps-tab" id="tab-3">
@@ -143,17 +149,13 @@
 
                         <!-- signup for vendor -->
                         <aside class="widget widget_sell-on-site">
-                            <p>
-                                <i class="icon-store"></i> Vendre sur {{ title }} ?
-                                <a href="{% url "account_signup" %}" target="_blank"> Inscrivez-vous maintenant</a>
-                            </p>
-                        </aside>
-
-                        <!-- promotion slider -->
-                        <aside class="widget widget_ads">
-                            <a href="#">
-                                <img src="{{ STATIC_PREFIX }}img/ads/product-ads.png" alt="">
-                            </a>
+                            {% if not request.user.is_authenticated and not request.user.is_superuser and not request.user.is_seller %}
+                                <p>
+                                    <i class="icon-store"></i> Vendre sur {{ title }} ?
+                                    <a href="{% url "account_signup" %}" target="_blank">
+                                    Inscrivez-vous maintenant</a>
+                                </p>
+                            {% endif %}
                         </aside>
                         
                         <!-- produit similaire -->
@@ -163,10 +165,11 @@
                     </div>
                 </div>
 
-                <!-- product recommended -->
+                <!-- product recommended Les clients ayant acheté cet article ont également acheté -->
                 {% if recommended_product %}
-                    {% product_list recommended_product 'Les clients ayant acheté cet article ont également acheté' %}
+                    {% product_list recommended_product 'Produits récommandés pour vous' %}
                 {% endif %}
+
                 <!-- product recently viewed -->
                 {% if recently_viewed %}
                     {% product_list recently_viewed 'Produits récemment vus' %}

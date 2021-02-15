@@ -2,11 +2,8 @@
 
 import locale
 from django import template
-from django.core.cache import cache
 
 from cart import cart
-from category.models import Category
-from core.settings import CACHE_TIMEOUT
 
 register = template.Library()
 
@@ -35,7 +32,7 @@ def items(request):
     return item_in_cart
 
 # lister les articles dans le panier
-@register.inclusion_tag('cart/snippet/cart_items.html')
+@register.inclusion_tag('cart/snippet/_snippet_cart_items.html')
 def shopcart_items(items, request):
     return {
         'items': cart.get_cart_items(request),

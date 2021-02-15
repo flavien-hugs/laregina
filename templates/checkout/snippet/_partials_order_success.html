@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <div class="ps-breadcrumb">
+        <div class="container">
+            <ul class="breadcrumb">
+                <li><a href="{% url 'home' %}">Accueil</a></li>
+                <li>Paiement réussi</li>
+            </ul>
+        </div>
+    </div>
+
+    <section class="ps-section--account">
+        <div class="container">
+            <div class="ps-block--payment-success">
+                <h3>Commande validée !</h3>
+                <p>Merci pour votre commande.
+                    Veuillez visiter <a href="{% url 'checkout:order_tracking' %}">ici</a>
+                pour vérifier l'état de votre commande.</p>
+            </div>
+        </div>
+    </section>
+{% endblock content %}

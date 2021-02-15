@@ -1,0 +1,264 @@
+<!-- includes/header.html -->
+
+{% load cache humanize mptt_tags search_tags catalogue_tags %}
+
+<!-- affficher sur la page detail de produit -->
+{% if request.resolver_match.url_name == 'product_detail' %}
+    <header class="header header--product" data-sticky="true">
+        <nav class="navigation">
+            <div class="container">
+                <article class="ps-product--header-sticky">
+                    <div class="ps-product__thumbnail">
+                        <img {% if object.get_image_url %}
+                        src="{{ object.get_image_url }}"{% else %} src="{{ STATIC_PREFIX }}img/empty_image.svg"{% endif %}
+                        alt="{{ object.name }}">
+                    </div>
+
+                    <div class="ps-product__wrapper">
+                        <div class="ps-product__content">
+                            <a class="ps-product__title" href="{{ object.get_absolute_url }}">{{ object.name }}</a>
+                            <ul class="ps-tab-list">
+                                <li class="active">
+                                    <a href="#tab-1">Description</a>
+                                </li>
+                                <li><a href="#tab-2">Vendeur</a></li>
+                                <li><a href="#tab-3">Avis client ({{ object.countreview }})</a></li>
+                            </ul>
+                        </div>
+
+                        <form method="post" action=".">
+                            {% csrf_token %}
+                            <div class="ps-product__shopping">
+                                <span class="ps-product__price">
+                                    <span>{{ object.price }}</span>
+                                    {% if old_price %}
+                                        <del>{{ object.old_price }}</del>
+                                    {% endif %}
+                                </span>
+
+                                {% if cart_items %}
+                                    <a href="{% url "cart:cart" %}" class="ps-btn text-uppercase">
+                                    voir le panier</a>
+                                {% else %}
+                                    
+                                {% endif %}
+                            </div>
+                        </form>
+                    </div>
+                </article>
+            </div>
+        </nav>
+    </header>
+{% endif %} <!-- ./end -->
+
+<!-- afficher sur la page de detail des categorie -->
+<header class="header header--1" data-sticky="{% if not request.resolver_match.url_name == 'product_detail' %}true{% endif %}">
+    <div class="header__top">
+        <div class="ps-container">
+            <div class="header__left">
+                <div class="navigation__left">
+                    <div class="menu--product-categories">
+                        <div class="menu__toggle">
+                            <i class="icon-menu"></i><span>Catégories</span>
+                        </div>
+                        <div class="menu__content">
+                            <ul class="menu--dropdown">
+                                {% include "includes/partials/_partials_menu_category.html" %}
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <a class="ps-logo" href="{% url "home" %}" title="{{ title }}">
+                    <img src="{{ STATIC_PREFIX }}img/logo.png" alt="{{ title }}">
+                </a>
+            </div>
+
+            <div class="header__center">
+                {% search_box request %}
+            </div>
+
+            <div class="header__right">
+                <div class="header__actions">
+                    {% if request.user.is_authenticated %}
+                        {% if request.user.is_buyer %}
+                            <a class="header__extra" href="{% url 'cart:cart' %}">
+                                <i class="icon-heart"></i><span><i>0</i></span>
+                            </a>
+                            <div class="ps-cart--mini">
+                                {% include "cart/snippet/item_cart.html" %}
+                            </div>
+                        {% elif request.user.is_seller or request.user.is_superuser %}
+                            <div class="ps-block--header-hotline">
+                                <div class="ps-block__right">
+                                    <p>Centre d'assistance <strong>{{ contact_one }}</strong></p>
+                                </div>
+                            </div>
+                        {% endif %}
+                    {% else %}
+                        <div class="ps-block--header-hotline">
+                            <div class="ps-block__right">
+                                <p>Centre d'assistance <strong>{{ contact_one }}</strong></p>
+                            </div>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <nav class="navigation">
+        <div class="ps-container">
+            <div class="navigation__left">
+                <div class="menu--product-categories">
+                    <div class="menu__toggle">
+                        <i class="icon-menu"></i><span>Catégories</span>
+                    </div>
+                    <div class="menu__content">
+                        <ul class="menu--dropdown">
+                            {% include "includes/partials/_partials_menu_category.html" %}
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="navigation__right">
+                <ul class="menu">
+                    {% full_tree_for_model category.Category as category %}
+
+                    {% for node in category|slice:'0:3' %}
+                        <li>
+                            <a href="{{ node.get_absolute_url }}">
+                            {{ node.name|safe }}</a>
+                        </li>
+                    {% endfor %}
+                </ul>
+
+                <ul class="navigation__extra">
+                    {% if request.user.is_authenticated %}
+                        {% if request.user.is_seller %}
+                            <li>
+                                <a href="{% url "seller:profile" %}" target="_blank">
+                                Ma boutique</a>
+                            </li>
+                            
+                            <li><a href="#">Ajouter une annonce</a></li>
+                        {% elif request.user.is_buyer %}
+                            <li><a href="{% url "account_signup" %}">
+                                Ouvrir ma boutique</a>
+                            </li>
+                            <li>
+                                <a href="{% url "account_login" %}?next={{ request.path }}">
+                                Se connecter</a>
+                            </li>
+                        {% endif %}
+                    {% else %}
+                        <li>
+                            <a href="{% url "account_login" %}?next={{ request.path }}">
+                                Se connecter
+                            </a>
+                        </li>
+                        <li><a href="{% url "account_signup" %}">Ouvrir ma boutique</a></li>
+                    {% endif %}
+                    </ul>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <header class="header header--mobile {% if request.resolver_match.url_name == 'category_list' %} header--mobile-categories {% elif request.resolver_match.url_name == 'product_detail' %} header--mobile-product {% endif %}" data-sticky="true">
+        <nav class="navigation--mobile">
+
+            {% if request.resolver_match.url_name == 'category_list' %}
+                <div class="navigation__left">
+                    <a class="header__back" href="#">
+                        <i class="icon-chevron-left"></i><strong>Shop</strong>
+                    </a>
+                </div>
+            {% elif request.resolver_match.url_name == 'product_list' %}
+                <div class="navigation__left">
+                    <a class="header__back" href="#">
+                        <i class="icon-chevron-left"></i><strong>Retour</strong>
+                    </a>
+                </div>
+            {% else %}
+                <div class="navigation__left">
+                    <a class="ps-logo" href="{% url "home" %}">
+                        <img src="{{ STATIC_PREFIX }}img/logo_light.png" alt="{{ title }}">
+                    </a>
+                </div>
+            {% endif %}
+
+            <div class="navigation__right">
+                <div class="header__actions">
+                    <div class="ps-cart--mini">
+                        {% include "cart/snippet/item_cart.html" %}
+                    </div>
+
+                    <div class="ps-block--user-header">
+                        <div class="ps-block__left"><i class="icon-user"></i></div>
+                        <div class="ps-block__right">
+                            {% if request.user.is_authenticated %}
+                                {% if request.user.is_seller %}
+                                    <a href="{% url "seller:profile" %}">
+                                    Ma Boutique</a>
+                                {% elif request.user.is_buyer %}
+                                    <a href="#">Mon Compte</a>
+                                {% endif %}
+                            {% else %}
+                                <a href="{% url "account_login" %}?next={{ request.path }}">Connexion</a>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </nav>
+
+        <div class="ps-search--mobile">
+            <form role='search' accept-charset="utf-8" class="ps-form--search-mobile" action="{% url 'search' %}" method="get">
+                <div class="form-group--nest">
+                    <input id='input-search' name='q' class="form-control" type="search"
+                    placeholder="Rechercher un produit, une catégorie, une marque ..."
+                    value="{{ request.GET.q }}">
+                    <button type="submit"><i class="icon-magnifier"></i></button>
+                </div>
+            </form>
+        </div>
+    </header>
+
+    <!-- contenu du panier -->
+    {% shopcart_items items request %}
+    <!-- .end contenu du panier -->
+
+    {% include "includes/partials/menu_category_mobile.html" %}
+
+    <!-- menu de navigation mobile -->
+    <div class="navigation--list">
+        <div class="navigation__content">
+            <a class="navigation__item ps-toggle--sidebar" href="#menu-mobile">
+                <i class="icon-menu"></i><span> Menu</span>
+            </a>
+
+            <a class="navigation__item ps-toggle--sidebar" href="#navigation-mobile">
+                <i class="icon-list4"></i><span> Catégories</span>
+            </a>
+
+            <a class="navigation__item ps-toggle--sidebar" href="#search-sidebar">
+                <i class="icon-magnifier"></i><span> Rechercher</span>
+            </a>
+
+            <a class="navigation__item ps-toggle--sidebar" href="#cart-mobile">
+                <i class="icon-bag2"></i><span> Panier</span>
+            </a>
+        </div>
+    </div>
+
+    <div class="ps-panel--sidebar" id="search-sidebar">
+        <div class="ps-panel__header">
+            {% search_box request %}
+        </div>
+        <div class="navigation__content"></div>
+    </div>
+    
+
+    {% include "includes/partials/menu_mobile.html" %}

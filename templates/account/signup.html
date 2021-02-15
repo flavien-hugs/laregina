@@ -4,14 +4,7 @@
 
 {% block content %}
     <div class="ps-page--my-account">
-        <div class="ps-breadcrumb text-center">
-            <div class="container">
-                <ul class="breadcrumb">
-                    <li><a href="{% url 'home' %}">Accueil</a></li>
-                    <li>Créer un compte</li>
-                </ul>
-            </div>
-        </div>
+        {% include "includes/partials/_partials_breadcrumb.html" %}
 
         <div class="">
             <div class="container">

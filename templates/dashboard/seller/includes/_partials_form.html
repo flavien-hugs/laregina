@@ -1,0 +1,91 @@
+<!-- product create form -->
+{% load mptt_tags %}
+
+<div class="ps-form__content">
+    <div class="row">
+        <div class="col-sm-12 col-12">
+            <figure class="ps-block--form-box">
+                <figcaption>Information sur le produit</figcaption>
+                <div class="ps-block__content">
+                    <div class="form-group">
+                        <div class="form-group form-group--select">
+                            <label>Choisir la catégorie du produit</label>
+                            <select id="{{ form.category.id_for_label }}" name="{{ form.category.name }}" class="form-control ps-select" title="Catégories">
+                                {% for node, structure in category|tree_info:"ancestors" %}
+                                    {% if node.is_child_node %}
+                                        <option value="{{ node.pk }}">
+                                            {{ structure.ancestors|tree_path }} :: {{ node }}
+                                        </option>
+                                    {% else %}
+                                        <option value="{{ node.pk }}">
+                                            {{ node }}
+                                        </option>
+                                    {% endif %}
+                                {% endfor %}
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="{{ form.name.id_for_label }}">Nom du produit<sup>*</sup></label>
+                        {{ form.name }}
+                    </div>
+
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label for="{{ form.old_price.id_for_label }}">Prix normal<sup>*</sup></label>
+                                {{ form.old_price }}
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label for="{{ form.price.id_for_label }}">Prix de vente<sup>*</sup></label>
+                                {{ form.price }}
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="{{ form.description.id_for_label }}">Description du produit<sup>*</sup></label>
+                        {{ form.description }}
+                        <!--  <textarea name="{{ form.description.name }} editordata" id="summernote" id="{{ form.description.name }}" 
+                            class="form-control" rows="6" placeholder="Entrez la description du produit...">
+                        </textarea> -->
+                    </div>
+
+                    <div class="form-group">
+                        <label>Vignette du produit</label>
+                        <div class="form-group--nest">
+                            <input class="form-control mb-1" multiple type="text" placeholder="Ajouter des images">
+                            <button class="ps-btn ps-btn--sm">Choisir</button>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <div class="ps-checkbox">
+                            {{ form.is_external }}
+                            <label for="{{ form.is_external.id_for_label }}">
+                                Ce produit peut-être livrer en dehors de votre pays ?
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <div class="ps-checkbox">
+                            {{ form.is_active }}
+                            <label for="{{ form.is_active.id_for_label }}">
+                                Ce produit est-il disponible ?
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="ps-form__bottom pt-2">
+                        <a href="{% url 'seller:product_list' %}" class="ps-btn ps-btn--gray">Annuler</a>
+                        <button class="ps-btn">Valider</button>
+                    </div>
+                </div>
+            </figure>
+        </div>
+    </div>
+</div>

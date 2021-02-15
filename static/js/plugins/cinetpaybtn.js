@@ -310,4 +310,4 @@ CINETPAY.apps = CINETPAY.apps || {},
             //On calcul la signature via Ajax
             postData(myUriConst);
         }
-    }(document), "object" == typeof module && "object" == typeof module.exports && (module.exports = CINETPAY);
+}(document), "object" == typeof module && "object" == typeof module.exports && (module.exports = CINETPAY);

@@ -1,0 +1,62 @@
+{% load humanize catalogue_tags %}
+
+<div class="ps-layout__left">
+    {% include "catalogue/partials/_partials_sidebar.html" %}
+</div>
+
+<div class="ps-layout__right">
+    <div class="ps-shopping ps-tab-root">
+        <div class="ps-shopping__header">
+            {% with count=object_list.count %}
+                <p>
+                    {% if request.resolver_match.url_name == 'search' %}
+                        {{ page_title }}
+                    {% elif request.resolver_match.url_name == 'category_detail' %}
+                        <strong>{{ count|intcomma }}</strong> Produit{{ count|pluralize:'s' }}
+                        trouvé{{ count|pluralize:', s' }} dans la catégorie <strong>"{{ object.name }}"</strong>
+                    {% elif request.resolver_match.url_name == 'product_list' %}
+                        <strong>{{ count|intcomma }}</strong> Produit{{ count|pluralize:' ,s' }}
+                        trouvé{{ count|pluralize:'s' }}
+                    {% endif %}
+                </p>
+            {% endwith %}
+
+            <div class="ps-shopping__actions">
+                <select class="ps-select" data-placeholder="Sort Items">
+                    <option>Trier par nouveauté</option>
+                    <option>Trier par popularité</option>
+                    <option>Trier par note moyenne</option>
+                    <option>Trier par prix: du plus bas au plus élevé</option>
+                    <option>Trier par prix: du plus élevé au plus bas</option>
+                </select>
+                <div class="ps-shopping__view">
+                    <ul class="ps-tab-list">
+                        <li class="active"><a href="#tab-1"><i class="icon-grid"></i></a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="ps-tabs">
+            <div class="ps-tab active" id="tab-1">
+                <div class="ps-shopping-product">
+                    <div class="row">
+                        {% if object_list %}
+                            {% for object in object_list %}
+                                {% if query or object %}
+                                    {% include "catalogue/snippet/_snippet_product.html" with instance=object %}
+                                {% else %}
+                                {% endif %}
+                            {% endfor %}
+                        {% else %}
+                            <div class="col-12">
+                                <p class="text-left">Il n'y aucun produit dans cette catégorie.</p>
+                            </div>
+                        {% endif %}
+                    </div>
+                    {% include "catalogue/partials/_partials_pagination.html" %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

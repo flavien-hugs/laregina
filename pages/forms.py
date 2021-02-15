@@ -15,26 +15,27 @@ OBJECT_TYPES = (
     ("J'ai d'autres demandes", "J'ai d'autres demandes"),
 )
 
+
 class ContactForm(forms.ModelForm):
     full_name = forms.CharField(
         max_length=150,
         required=True,
         widget=forms.TextInput(attrs={
-            "placeholder": "Nom & prénoms Ex: Flavien HUGS"
+            "placeholder": "Nom ex.: Flavien HUGS"
         }),
     )
     email = forms.EmailField(
         max_length=150,
         required=True,
         widget=forms.EmailInput(attrs={
-            "placeholder": "Email Ex: monmail@gmail.com"
+            "placeholder": "Mail, ex.: monmail@gmail.com"
         }),
     )
     phone = forms.CharField(
         max_length=150,
         required=True,
         widget=forms.TextInput(attrs={
-            "placeholder": "Téléphone Ex: +225 77 27 28 48",
+            "placeholder": "Tél. ex.: +225 77 27 28 48",
         }),
     )
 
@@ -46,6 +47,7 @@ class ContactForm(forms.ModelForm):
 
     company = forms.CharField(
         max_length=150,
+        required=False,
         widget=forms.TextInput(attrs={
             "placeholder": "Votre Magasin ou Entreprise (Optionnel)"
         }),
@@ -73,10 +75,13 @@ class ContactForm(forms.ModelForm):
         ]
 
     def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
+        super(ContactForm, self).__init__(*args, **kwargs)
 
         for field in self.fields:
-            self.fields[field].widget.attrs.update({'class': 'form-control'})
+            self.fields[field].widget.attrs['class'] = 'form-control'
+
+            if self.fields['subject']:
+                self.fields['subject'].widget.attrs.update({'class': 'form-control custom-select'})
 
     def clean_email(self):
         email = self.cleaned_data.get('email')

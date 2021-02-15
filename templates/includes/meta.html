@@ -4,42 +4,37 @@
 
 <meta charset="utf-8" >
 <meta http-equiv="Content-Type" content="text/html">
+<meta name="format-detection" content="telephone=yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
 <meta http-equiv="X-UA-Compatible" content="ie=edge,chrome=1">
-<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<meta name="format-detection" content="telephone=no">
-<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="viewport"content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<meta name="title" content="{% if page_title %} {{ page_title }} {% else %} {{ title }} {% endif %}">
+<meta name="description" content="{% if object.description %} {{ object.description }} {% else %} {{ description }} {% endif %}">
 
-<meta name="title" content="">
-<meta name="description" property="og:description" content="">
-<meta name="google" content="">
-<meta name="format-detection" content="telephone=no">
-
-<meta name="keywords" content="">
-<meta name="robots" content="index,follow,all">
-<meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="revisit-after" content="10 days">
 <meta name="distribution" content="Global">
+<meta name="revisit-after" content="10 days">
+<meta name="keywords" content="{{ keywords }}">
+<meta name="robots" content="index,nofollow,all">
+<meta name="apple-mobile-web-app-capable" content="yes">
 
 <!-- Twitter card -->
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:site" content="@publisher_handle">
 <meta name="twitter:creator" content="@flavien_hugs">
-<meta name="twitter:title" content="">
-<meta name="twitter:description" content="">
+<meta name="twitter:title" content="{% if page_title %} {{ page_title }} {% else %} {{ title }} {% endif %}">
+<meta name="twitter:description" content="{% if object.description %} {{ object.description }} {% else %} {{ description }} {% endif %}">
 <meta name="twitter:image" content="">
 <meta name="twitter:image:alt" content="">
 
 <!-- OpenGraph -->
-<meta property="og:site_name" content="">
-<meta property="og:title" content="">
-<meta property="og:description" content="">
+<meta property="og:site_name" content="{{ title }}">
+<meta property="og:title" content="{% if page_title %} {{ page_title }} {% else %} {{ title }} {% endif %}">
+<meta property="og:description" content="{% if object.description %} {{ object.description }} {% else %} {{ description }} {% endif %}">
 <meta property="og:type" content="article">
 <meta property="og:image" content="">
 <meta property="og:image:alt" content="image/png">
-<meta property="og:url" content="">
+<meta property="og:url" content="{{ request.get_host }}">
 <meta property="og:image:type" content="image/png">
-<meta property="og:image:width" content="1200">
-<meta property="og:image:height" content="630">
 <meta property="og:locale" content="fr_CI">
 <meta name="bingbot" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1">
 <!-- Do the same thing, but with a <meta> tag -->

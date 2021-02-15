@@ -18,19 +18,19 @@ deps:
 runserver:
 	$(MANAGE) runserver
 
-migrate:
+migratedb:
 	$(MANAGE) makemigrations
 	$(MANAGE) migrate
 
 dumpdata:
-	$(MANAGE) dumpdata --indent=4 accounts.user > fixtures/users_data.json
-	$(MANAGE) dumpdata --indent=4 category.category > fixtures/category_data.json
-	$(MANAGE) dumpdata --indent=4 catalogue.product > fixtures/product_data.json
+	$(MANAGE) dumpdata --format=json accounts.user > __backups__/users_data.json
+	$(MANAGE) dumpdata --format=json category.category > __backups__/category_data.json
+	$(MANAGE) dumpdata --format=json catalogue.product > __backups__/product_data.json
 
 loaddata:
-	$(MANAGE) loaddata fixtures/users_data.json
-	$(MANAGE) loaddata fixtures/category_data.json
-	$(MANAGE) loaddata fixtures/product_data.json
+	$(MANAGE) loaddata __backups__/users_data.json
+	$(MANAGE) loaddata __backups__/category_data.json
+	$(MANAGE) loaddata __backups__/product_data.json
 
 test:
 	$(MANAGE) test $(TEST_SETTINGS)

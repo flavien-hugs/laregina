@@ -22,7 +22,7 @@ class ProductReview(models.Model):
 
     user = models.ForeignKey(
         User,
-        verbose_name='user',
+        verbose_name='client',
         on_delete=models.SET_NULL, 
         null=True
     )
@@ -40,18 +40,23 @@ class ProductReview(models.Model):
         choices=RATINGS
     )
     content = models.TextField(verbose_name='avis client')
-    created_time_at = models.DateField(auto_now_add=timezone.now())
-    created_hour_at = models.TimeField(auto_now_add=timezone.now())
-    is_approved = models.BooleanField(verbose_name='approuvé ?', default=False)
+    created_time_at = models.DateField(auto_now_add=True)
+    created_hour_at = models.TimeField(auto_now_add=True)
+    is_approved = models.BooleanField(
+        verbose_name='approuvé ?',
+        default=False
+    )
 
     objects = models.Manager()
     approved = ActiveProductReviewManager()
 
     class Meta:
         db_table = 'reviews_db'
-        get_latest_by = ['-created_time_at', '-created_time_at', '-rating']
+        unique_together = ['product']
+        index_together = (('product',),)
         ordering = ['-rating', '-created_time_at', '-created_time_at']
-        verbose_name_plural = 'Avis des clients'
+        get_latest_by = ['-created_time_at', '-created_time_at', '-rating']
+        verbose_name_plural = 'avis des clients'
 
     def __str__(self):
         return f'{self.product.name}: {self.rating} - {self.created_time_at}'

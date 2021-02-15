@@ -1,0 +1,12 @@
+<tr>
+	<td>{{ forloop.counter }}</td>
+    <td><a class="font-weight-bold text-success" href="{{ object.order.get_absolute_url }}">#{{ object.order.transaction_id }}</a></td>
+    <td><strong>{{ object.order.date|timesince }}</strong></td>
+    <td><span class="ps-badge success">{{ object.order.status }}</span></td>
+    <td><strong>{{ object.order.total }}</strong></td>
+    <td>
+        <a href="{{ object.order.get_absolute_url }}" title="Voir les détails de la commande">
+            <i class="icon-eye"></i>
+        </a>
+    </td>
+</tr>

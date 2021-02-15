@@ -5,20 +5,15 @@ from django.contrib import admin
 
 from category.models import Category
 from catalogue.forms import ProductAdminForm
-from catalogue.models import Product, Variation, ProductImage
+from catalogue.models import Product, ProductImage
 
+from services.export_data_csv import export_to_csv
 
 @admin_thumbnails.thumbnail('image')
 class ProductImageInline(admin.TabularInline):
     model = ProductImage
-    extra = 0
+    extra = 1
     max_num = 3
-
-
-class VariationInline(admin.TabularInline):
-    model = Variation
-    extra = 0
-    max_num = 10
 
 
 @admin.register(Product)
@@ -30,31 +25,24 @@ class ProductAdmin(admin.ModelAdmin):
     list_display = [
         'name',
         'price',
-        'recomended_product',
         'show_image_tag',
-        'is_stock',
         'is_active'
     ]
 
     list_filter = [
-        'is_stock',
         'is_active',
         'created_at',
-        'nb_view',
     ]
 
     list_editable = (
         "is_active",
-        "is_stock",
         "is_active",
     )
 
     list_per_page = 50
-    inlines = [VariationInline, ProductImageInline]
+    inlines = [ProductImageInline]
     ordering = ('-created_at',)
-    prepopulated_fields = {'slug': ('name',)}
+    prepopulated_fields = {'slug': ('name',), 'keywords': ('name',)}
     search_fields = ['category', 'name', 'keywords']
     exclude = ('updated_at', 'created_at', 'timestamp')
-
-    class Meta:
-        model = Product
+    actions = [export_to_csv]

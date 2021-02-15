@@ -1,0 +1,56 @@
+{% load humanize %}
+
+<div class="ps-main__sidebar">
+    <div class="ps-sidebar">
+        <div class="ps-sidebar__top">
+            <div class="ps-block--user-wellcome">
+                <div class="ps-block__left">
+                    <!-- <img src="{{ STATIC_PREFIX }}img/users/admin.jpg" alt="{{ object.store }}"> -->
+                </div>
+                <div class="ps-block__right">
+                    <p>Bonjour, <a>
+                    {{ request.user.get_fullname|truncatewords:"5" }}</a></p>
+                </div>
+                <div class="ps-block__action">
+                    <a title="Deconnexion" href="{% url "account_logout" %}">
+                    <i class="icon-exit"></i></a>
+                </div>
+            </div>
+
+            <div class="ps-block--earning-count"><small>Revenus</small>
+                <h3>${{ total_sale }}</h3>
+            </div>
+        </div>
+
+        <div class="ps-sidebar__content">
+            <div class="ps-sidebar__center">
+                <ul class="menu">
+                    <li>
+                        <a class="{% if request.resolver_match.url_name == 'profile' %}
+                        active{% endif %}" href="{% url 'seller:profile' %}">
+                        <i class="icon-home"></i>Tableau de bord</a>
+                    </li>
+
+                    <li><a class="{% if request.resolver_match.url_name == 'product_list' or request.resolver_match.url_name == 'product_create' or request.resolver_match.url_name == 'product_update' %}
+                        active {% endif %}" href="{% url "seller:product_list" %}">
+                        <i class="icon-database"></i>Mes produits</a></li>
+
+                    <li><a class="{% if request.resolver_match.url_name == 'order_list' or request.resolver_match.url_name == 'order_detail' %}active{% endif %}"
+                        href="{% url "seller:order_list" %}"><i class="icon-bag2"></i>Mes commandes</a></li>
+
+                    <li><a class="{% if request.resolver_match.url_name == 'update' %}active{% endif %}"
+                        href="{{ request.user.get_update_url }}"><i class="icon-cog"></i>Réglages</a></li>
+
+                    <li><a target="_blank" href="{{ request.user.get_absolute_url }}">
+                        <i class="icon-exit-right"></i>Ma boutique</a></li>
+                </ul>
+
+                <div class="ps-sidebar__footer">
+                    <div class="ps-copyright">
+                        <p>&copy;2020 {{ title }} marketplace. <br/> All rights reversed.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,17 @@
+{% extends "dashboard/seller/base.html" %}
+{% load crispy_forms_tags %}
+
+{% block content %}
+    <div class="ps-main__wrapper">
+        <header class="header--dashboard mb-2">
+            <div class="header__left">
+                <h3>Réglages</h3>
+                <p>Paramètres du compte</p>
+            </div>
+        </header>
+
+        <section class="ps-dashboard ps-items-listing">
+            {% crispy form %}
+        </section>
+    </div>
+{% endblock content %}

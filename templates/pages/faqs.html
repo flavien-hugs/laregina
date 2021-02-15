@@ -1,62 +1,66 @@
 {% extends "base.html" %}
 
 {% block content %}
-    {% include "partials/breadcrumb.html" %}
-    
-    <div class="ps-faqs">
+    {% include "includes/partials/_partials_breadcrumb.html" %}
+
+    <div class="page-header text-center bg-light py-5">
         <div class="container">
             <div class="ps-section__header">
-                <h1>{{ page_description }}</h1>
+                <h1 style="color:#fcb800;">F.A.Q</h1>
+                <span>Comment pouvons-nous vous aider ?</span>
             </div>
-
+        </div><!-- End .container -->
+    </div><!-- End .page-header -->
+    
+    <div class="ps-faqs py-5">
+        <div class="container">
             <div class="ps-section__content">
                 <div class="table-responsive">
                     <table class="table ps-table--faqs">
                         <tbody>
                             <tr>
-                                <td class="heading" rowspan="3">
-                                    <h4 class="text-capitalize">livraison</h4>
+                                <td class="question">
+                                    Est-ce que je peux annuler ma commande ?
                                 </td>
-                                <td class="question"> Quelles sont les méthodes d'expédition disponibles ?</td>
-                                <td>Ex Portland Pitchfork irure mustache. Eutra fap before they sold out literally. Aliquip ugh bicycle rights actually mlkshk, seitan squid craft beer tempor.</td>
-                            </tr>
-                            <tr>
-                                <td class="question">Livrez-vous à l'international ?</td>
-                                <td>Hoodie tote bag mixtape tofu. Typewriter jean shorts wolf quinoa, messenger bag organic freegan cray.</td>
-                            </tr>
-                            <tr>
-                                <td class="question">Combien de temps faudra-t-il pour recevoir mon colis ?</td>
-                                <td>Swag slow-carb quinoa VHS typewriter pork belly brunch, paleo single-origin coffee Wes Anderson. Flexitarian Pitchfork forage, literally paleo fap pour-over. Wes Anderson Pinterest YOLO fanny pack meggings, deep v XOXO chambray sustainable slow-carb raw denim church-key fap chillwave Etsy. +1 typewriter kitsch, American Apparel tofu Banksy Vice.</td>
-                            </tr>
-                            <tr>
-                                <td class="heading" rowspan="2">
-                                    <h4 class="text-capitalize">paiement</h4>
+                                <td class="text-justify">
+                                    <p class="mt-0">Oui, vous pouvez annuler votre commande si
+                                    elle n'est toujours pas expédiée</p>
+                                    
+                                    <p>Les commandes déjà expédiées ne peuvent être annulées,
+                                    vous pourrez rejeter la livraison une fois que notre commis à
+                                    la livraison vous contactera.</p>
+
+                                    <p>Pour les commandes livrées, vous pouvez soumettre une demande de
+                                    retour de votre compte.</p>
                                 </td>
-                                <td class="question"> Quels modes de paiement sont acceptés ?</td>
-                                <td>Fashion axe DIY jean shorts, swag kale chips meh polaroid kogi butcher Wes Anderson chambray next level semiotics gentrify yr. Voluptate photo booth fugiat Vice. Austin sed Williamsburg, ea labore raw denim voluptate cred proident mixtape excepteur mustache. Twee chia photo booth readymade food truck, hoodie roof party swag keytar PBR DIY.</td>
                             </tr>
+
                             <tr>
-                                <td class="question">L'achat en ligne est-il sûr ?</td>
-                                <td>Art party authentic freegan semiotics jean shorts chia cred. Neutra Austin roof party Brooklyn, synth Thundercats swag 8-bit photo booth. Plaid letterpress leggings craft beer meh ethical Pinterest.</td>
-                            </tr>
-                            <tr>
-                                <td class="heading" rowspan="5">
-                                    <h4 class="text-capitalize">Commande &amp; retours</h4>
+                                <td class="question">
+                                    Ma commande est prépayée, comment serais-je remboursée ?
                                 </td>
-                                <td class="question">Comment puis-je passer une commande ?</td>
-                                <td>Keytar cray slow-carb, Godard banh mi salvia pour-over. Slow-carb Odd Future seitan normcore. Master cleanse American Apparel gentrify flexitarian beard slow-carb next level. Raw denim polaroid paleo farm-to-table, put a bird on it lo-fi tattooed Wes Anderson Pinterest letterpress. Fingerstache McSweeney’s pour-over, letterpress Schlitz photo booth master cleanse bespoke hashtag chillwave gentrify.</td>
+                                <td>
+                                    <p class="mt-0">Si votre commande est prépayée, nous procédons avec votre remboursement dans
+                                    les sept (7) jours suivant l’annulation et vous
+                                    aviserons par email une fois le remboursement effectué.</p>
+                                </td>
                             </tr>
+                            
                             <tr>
-                                <td class="question">Comment puis-je annuler ou modifier ma commande ?</td>
-                                <td>Plaid letterpress leggings craft beer meh ethical Pinterest. Art party authentic freegan semiotics jean shorts chia cred. Neutra Austin roof party Brooklyn, synth Thundercats swag 8-bit photo booth.</td>
+                                <td class="question">Ma commande est expédiée mais je souhaite tout de même l'annuler</td>
+                                <td>
+                                    <p class="mt-0">Si votre commande est expédiée, pas d'inquiétude, vous pourrez
+                                    rejeter la livraison une fois que notre commis à la livraison vous contactera. </p>
+                                </td>
                             </tr>
+
                             <tr>
-                                <td class="question">Ai-je besoin d'un compte pour passer une commande ?</td>
-                                <td>Thundercats swag 8-bit photo booth. Plaid letterpress leggings craft beer meh ethical Pinterest. Twee chia photo booth readymade food truck, hoodie roof party swag keytar PBR DIY. Cray ugh 3 wolf moon fap, fashion axe irony butcher cornhole typewriter chambray VHS banjo street art.</td>
-                            </tr>
-                            <tr>
-                                <td class="question">Comment suivre ma commande ?</td>
-                                <td>Kale chips Truffaut Williamsburg, hashtag fixie Pinterest raw denim c hambray drinking vinegar Carles street art Bushwick gastropub. Wolf Tumblr paleo church-key. Plaid food truck Echo Park YOLO bitters hella, direct trade Thundercats leggings quinoa before they sold out. You probably haven’t heard of them wayfarers authentic umami drinking vinegar Pinterest Cosby sweater, fingerstache fap High Life.</td>
+                                <td class="question">
+                                    Comment effectuer l’annulation de ma commande ?
+                                </td>
+                                <td>
+                                    <p class="mt-0">En cours de redaction. </p>
+                                </td>
                             </tr>
                         </tbody>
                     </table>

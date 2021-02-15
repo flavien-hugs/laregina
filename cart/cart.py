@@ -2,8 +2,8 @@
 
 import random
 from decimal import Decimal
-from django.conf import settings
 from django.db.models import Max
+from django.conf import settings
 from datetime import datetime, timedelta
 from django.http import HttpResponseRedirect
 from django.shortcuts import get_object_or_404
@@ -20,12 +20,12 @@ CART_ID_SESSION_KEY = 'cart_id'
 def _cart_id(request):
 
     """
-        obtenir l'identifiant du chariot de l'utilisateur actuel,
-        en définir un nouveau si vide;
-        Note: la syntaxe ci-dessous correspond au texte,
-        mais une autre façon, plus claire, de vérifier l'ID du panier serait la suivante:
+    obtenir l'identifiant du chariot de l'utilisateur actuel,
+    en définir un nouveau si vide;
+    Note: la syntaxe ci-dessous correspond au texte,
+    mais une autre façon, plus claire, de vérifier l'ID du panier serait la suivante:
     
-        if not CART_ID_SESSION_KEY in request.session:
+    if not CART_ID_SESSION_KEY in request.session:
     """
 
     if request.session.get(CART_ID_SESSION_KEY, '') == '':

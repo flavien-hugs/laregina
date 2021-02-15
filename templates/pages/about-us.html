@@ -1,18 +1,20 @@
 {% extends "base.html" %}
 
 {% block content %}
-    {% include "partials/breadcrumb.html" %}
+    {% include "includes/partials/_partials_breadcrumb.html" %}
 
-    <img src="{{ STATIC_PREFIX }}img/bg/about-us.jpg" alt="">
+    <img src="{{ STATIC_PREFIX }}img/bg/about-us.jpg" alt="photo-equipe-laregina">
 
     <div class="ps-about-intro py-5">
         <div class="container">
             <div class="ps-section__header">
                 <h4 class="mb-5">Bienvenue chez {{ title }}</h4>
 
-                <h3>Nous connectons des millions d'acheteurs et de vendeurs à travers le monde, responsabilisons les gens et créons des opportunités économiques pour tous.</h3>
+                <h3>Nous connectons des millions d'acheteurs et de vendeurs à travers le monde,
+                responsabilisons les gens et créons des opportunités économiques pour tous.</h3>
 
-                <p>Sur nos marchés, des millions de personnes dans le monde se connectent, en ligne et hors ligne, pour fabriquer, vendre et acheter des produits uniques. Nous proposons également une large gamme de services et d'outils pour les vendeurs qui aident les entrepreneurs créatifs à démarrer, gérer et développer leur entreprise. Notre mission est de réinventer le commerce de manière à créer un monde plus épanouissant et durable, et nous nous engageons à utiliser le pouvoir des entreprises pour renforcer les communautés et autonomiser les gens.</p>
+                <p>Sur nos marchés, des millions de personnes dans le monde se connectent,
+                en ligne et hors ligne, pour fabriquer, vendre et acheter des produits uniques. Nous proposons également une large gamme de services et d'outils pour les vendeurs qui aident les entrepreneurs créatifs à démarrer, gérer et développer leur entreprise. Notre mission est de réinventer le commerce de manière à créer un monde plus épanouissant et durable, et nous nous engageons à utiliser le pouvoir des entreprises pour renforcer les communautés et autonomiser les gens.</p>
             </div>
             <div class="ps-section__content">
                 <div class="row">
@@ -103,11 +105,187 @@
         </div>
     </div>
 
+    <div class="container">
+        <div class="row">
+            <div class="col-12">
+                <h2 class="title mb-2">{{ title }} est la branche e-commerce de
+                CGIC Group qui concilie au sein de ses services immobiliers et commerce.</h2>
+
+                <p class="lead text-justify">
+                    Notre mission est d’améliorer les conditions de vie des personnes
+                    issues de différentes classes en leur proposant des produits et
+                    services en ligne innovants. Il vise non seulement à permettre
+                    d’accéder aux produits de consommation de première nécessité à
+                    des coûts accessibles, mais aussi de saisir des opportunités
+                    d’investissement dans les domaines de l’immobilier et le foncier.
+                    Il vise également le développement des entreprises ayant recours
+                    à notre plateforme pour satisfaire leurs clients.
+                </p>
+
+                <p class="lead text-justify">
+                    Notre plateforme réunit une Marketplace, qui met en relation les
+                    vendeurs de différents produits et services et les acheteurs,
+                    un réseau logistique, qui permet la livraison de colis, et un service
+                    de paiement, qui facilite les transactions.
+                </p>
+
+                <p class="lead text-justify">
+                    Nouvellement installé sur le marché ivoirien, {{ title }}
+                    offre la possibilité à toute entreprise de travailler en partenariat avec
+                    lui, en vue de la satisfaction des consommateurs.
+                    Notre plateforme de vente offre des possibilités
+                    des auto-entrepreneurs souhaitant étendre leur réseau de distribution.
+                </p>
+            </div>
+        </div>
+
+            <hr class="mb-4 mt-md-1">
+
+            <style>
+                .icon-box-circle .icon-box-icon {
+                    background-color: #fcb941;
+                    width: 7rem;
+                    height: 7rem;
+                    border-radius: 50%;
+                    color: #fff;}
+                    .icon-box-icon{
+                        font-size: 4rem;
+                        display: inline-flex;
+                        align-items: center;
+                        justify-content: center;
+                        line-height: 1;
+                        margin-bottom: 2rem;}
+                    .icon-box-circle {
+                        color: #777;
+                        font-weight: 300;
+                        font-size: 1.6rem;
+                        line-height: 1.5;
+                        letter-spacing: -.01em;
+                        margin-bottom: 4rem;
+                    }
+            </style>
+
+            <div class="row justify-content-center">
+                <div class="col-lg-3 col-sm-6">
+                    <div class="icon-box-circle text-center">
+                        <span class="icon-box-icon">
+                            <i class="icon-certificate"></i>
+                        </span>
+
+                        <div class="icon-box-content">
+                            <h4 class="font-weight-bold">
+                            Garantie &amp; Sécurisé</h4>
+                        </div>
+                        <p>Nos articles sont garantis &amp; sécurisés</p>
+                    </div><!-- End .icon-box -->
+                </div><!-- End .col-lg-3 -->
+
+                <div class="col-lg-3 col-sm-6">
+                    <div class="icon-box-circle text-center">
+                        <span class="icon-box-icon">
+                            <i class="icon-check-circle-o"></i>
+                        </span>
+
+                        <div class="icon-box-content">
+                            <h4 class="font-weight-bold">
+                            Authentiques et Sûrs</h4>
+                        </div>
+                        <p>Nos articles sont 100% authentiques</p>
+                    </div><!-- End .icon-box -->
+                </div><!-- End .col-lg-3 -->
+
+                <div class="col-lg-3 col-sm-6">
+                    <div class="icon-box-circle text-center">
+                        <span class="icon-box-icon">
+                            <i class="icon-cart-plus"></i>
+                        </span>
+
+                        <div class="icon-box-content">
+                            <h4 class="font-weight-bold">
+                            Achat &amp; Livraison</h4>
+                        </div>
+                        <p>Plateforme d'achat plus pratique &amp; sécurisé</p>
+                    </div><!-- End .icon-box -->
+                </div><!-- End .col-lg-3- -->
+
+                <div class="col-lg-3 col-sm-6">
+                    <div class="icon-box-circle text-center">
+                        <span class="icon-box-icon">
+                            <i class="icon-c"></i>
+                        </span>
+
+                        <div class="icon-box-content">
+                            <h4 class="font-weight-bold">
+                            Support &amp; Service Client</h4>
+                        </div>
+                        <p>Meilleur assistance d'achat &amp; livraison</p>
+                    </div><!-- End .icon-box -->
+                </div><!-- End .col-lg-3 -->
+            </div><!-- End .row -->
+
+            <hr class="mb-4 mt-md-1">
+
+            <div class="row py-2 px-3">
+                <h3 class="title small">Profitez de votre supermarché qui vous propose tout ce dont vous avez besoin pour vivre quotidiennement à l’aise ! </h3>
+
+                <p class="mb-2">
+                   {{ title }} vous propose une variété de produits large choix de produits de haute qualité. Ce qui fait la force de {{ title }}, c’est d’abord l’excellent rapport qualité/prix de ses appareils mobiles : Téléphones &amp; Tablettes, Télévisions ainsi que les appareils électroménagers tels que les réfrigérateurs et congélateurs, des climatiseurs, et bien plus encore. Retrouvez la liste de nos meilleures marques et boutiques officielles en faisant un tour sur notre site de vêtements en ligne, des chaussures, des produits de beauté et l'univers des meilleurs maquillages femme à moindre coût prix pas cher.
+                </p><!-- End .text -->
+
+                <p class="mb-2">{{ title }}, c’est également le lieu de s’offrir les meilleures collections d'accessoires de mode pour homme, femme et enfants. Vous pourrez trouver des chaussures, tenues de soirées chic pour femmes. Des belles chemises, pantalons &amp; basket pour homme à bon prix. Les produits des beautés ne manquent pas aussi à l'appel. Achetez des parfums et autres accessoires de beautés de grandes marques.</p>
+
+                <h2 class="title small">Profitez au maximum des avantages des TIC à travers vos meilleurs des Smartphones, TV, PC portables, Electroménager et Mode... </h2>
+
+                <p class="mb-1">
+                    De plus en plus, on assiste à l’invention a commercialisation d'une multitude d'équipements. Les grandes marques de constructeur mondiales, régionales et locales ne cessent d'innover afin d’offrir le meilleur à leurs consommateurs. Ces objets font aujourd’hui partie intégrante du quotidien des consommateurs. Et pour leur commercialiser, ces grandes marques ont choisi {{ title }}, qui vient avec un nouveau visage du e-commerce en Afrique. Retrouvez notre site des téléphones de grandes marques comme Samsung, Apple, Huawei, Xiaomi, Tecno, Infinix, Binatone, Smart Technology aux performances exceptionnelles. Sur {{ title }} vous trouvez une large gamme de produits de dernière génération. C’est ce qui fait le point fort de notre boutique. Car peu importe l’article que vous cherchez, vous le trouverez sur notre plateforme. Que ce soit en matière de cuisine, de téléphonie ou bien d’autres domaines, {{ title }} CI reste à votre écoute.
+                </p><!-- End .card -->
+
+                <p class="mb-2">
+                    Que ce soit en matière de cuisine, de téléphonie ou bien d’autres domaines, {{ title }} CI reste à votre écoute. Profitez de nos promotions et de nos bonnes affaires. C’est ainsi que nous avons institué pour vous la Mobile Week : la plus grande promotion téléphonique de l’année. Grâce à votre boutique en ligne, retrouvez donc les meilleurs articles high-tech tels que les téléphones Samsung, des Macbook, des montres connectées, les ordinateurs portables HP ou encore les smartphones infinix smart 3 plus , une petite merveille technologique à petit prix. D'autres amoureux de smartphones haut de gamme opterons pour un Samsung S10, ou l' Apple iPhone X. Les deux modèles sont disponibles en trois versions.
+                </p>
+
+                <h2 class="title small">Profitez de nos accessoires de haute qualité pour l'aménagement intérieur &amp; la décoration.</h2>
+
+                <p class="mb-2">
+                    {{ title }} c'est aussi le lieu idéal pour trouver de bonnes idées pour l'aménagement de votre maison, bureau. Il est difficile de parcourir les rues de la ville ou passer toute une journée pour trouver les produits nécessaires pour redonner du confort ou un nouveau look à son environnement. Trouvez aujourd’hui sur {{ title }} Côte d'Ivoire une large gamme de produits d'aménagement meubles, des luminaires pour bureau &amp; salons, tapis de décoration de qualité aux meilleurs prix. Posséder des produits de qualités pour l'aménagement de votre maison ou bureau est essentielle pour votre confort quotidien. Et sur {{ title }}.ci, vous ne manquerez pas de trouver des produits adaptés à vos attentes. Vous pourrez trouver également une grande variété de petits et grands appareils ménagers, des matériaux de décoration intérieure de qualité. Profitez pleinement d'un confort de qualité à petit prix. 
+                </p>
+
+                <h2 class="title small">
+                    Mode homme, femme et enfant : changez de style à tout moment sur {{ title }}
+                </h2>
+
+                <p class="mb-2">
+                    En Côte d’Ivoire, la mode n’a qu’une seule adresse : {{ title }}. Dans nos rayons, nous mettons à la disposition de nos clients et prospects la plus vaste gamme dédiée au fashion. Optez pour un style qui soit le reflet de votre personnalité. Chez {{ title }}, nous savons ce qui compte pour vous. Trouvez des idées de mode et l'art de l'association de tenues. Comparez une variété de vêtements d'habits - des hauts et de jeans. Ne vous limitez dans vos choix, avec {{ title }} devenez plus créative pour rester toujours tendance. Sur notre plateforme, trouvez un large choix de chaussures, sac à main &amp; portefeuilles pour femme, chemises des jeans et plus. Commandez en ligne ainsi que tous vos accessoires de modes.
+                </p><!-- End .card -->
+
+                <h2 class="title samll">
+                    Pour chaque occasion, des promotions exceptionnelles
+                </h2>
+
+                <p class="mb-2">
+                    Achetez en ligne n'a jamais été aussi facile en Côte d'Ivoire avec {{ title }}. Notre boutique regorge d'offres alléchantes et de promotions exceptionnelles. Et bien d'autres promotions alléchantes vous attendent chaque semaine durant les ventes flash ou les offres du jour. Mais ce qui fait de {{ title }} une plateforme encore plus appréciée par les consommateurs est le plaisir de faire des achats durant les grands événements tels Le Club {{ title }}, Le Roi {{ title }}, Les 24H noires de {{ title }}, {{ title }} News. Avec nos services de livraison sont disponibles sur toute l'étendue du pays. Notre plateforme innovante rend le shopping en ligne un vrai jeu d'enfant.
+                </p>
+
+                <h2 class="title small">
+                    Un service de livraison disponible dans toutes les régions de la Côte d’Ivoire
+                </h2>
+
+                <p class="mb-1">
+                    Vos commandes sont livrées dans les plus brefs délais à Abidjan et partout en Côte d'Ivoire ! Pour plus de sécurité et d'efficacité vous avez la possibilité de payer à la livraison. Avec la newsletter {{ title }}, restez connecté pour découvrir en avant-première les nouvelles gammes de produits constamment mises à jour par nos équipes. Suivez-nous également sur les réseaux sociaux à travers notre page Facebook. En outre, nos conseillers clients sont à votre entière disposition pour des informations en temps réel Contactez-nous. En Côte d’Ivoire, le shopping en ligne n’a qu’une seule adresse : {{ title }}
+                </p>
+            </div>
+        </div>
+
+    <hr class="mb-4 mt-md-1">
+
     <div class="ps-about-awards">
         <div class="container">
             <div class="ps-section__header">
                 <h4>Prix ​​&amp; reconnaissance</h4>
-                <p>Les leaders du secteur et les influenceurs reconnaissent Overstock comme l'une des entreprises de vente au détail les plus dignes de confiance aux États-Unis, se classant en bonne place pour la satisfaction des clients et des employés.</p>
+                <p>Les leaders du secteur et les influenceurs reconnaissent
+                {{ title }} comme l'une des entreprises de vente au détail
+                les plus dignes de confiance aux États-Unis, se classant en
+                bonne place pour la satisfaction des clients et des employés.</p>
             </div>
             <div class="ps-section__content">
                 <div class="owl-slider" data-owl-auto="true" data-owl-loop="true" data-owl-speed="15000" data-owl-gap="0" data-owl-nav="false" data-owl-dots="false" data-owl-item="5" data-owl-item-xs="3" data-owl-item-sm="3" data-owl-item-md="3" data-owl-item-lg="4" data-owl-duration="1500" data-owl-mousedrag="off">

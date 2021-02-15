@@ -1,6 +1,7 @@
-.env
+.idea
 .git
 *.sqlite3
 logs/
 media/
+.env
 requirements.txt

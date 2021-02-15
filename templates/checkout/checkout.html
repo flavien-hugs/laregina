@@ -11,86 +11,91 @@
             <div class="ps-section__content">
                 <div class="ps-form--checkout">
                     <div class="ps-form__content">
-                        <div class="row">
-                            <div class="col-xl-8 col-lg-8 col-md-12 col-sm-12 col-12 ">
-                                <div class="ps-form__billing-info">
-                                    <form action="." method="post">
-                                        {% csrf_token %}
-                                        
+                        <p id="payment_result">
+                        <form id="info_paiement" action="." method="post">
+                            {% csrf_token %}
+                            <div class="row">
+                                <div class="col-xl-7 col-lg-7 col-md-12 col-sm-12 col-12 ">
+                                    <div class="ps-form__billing-info">
                                         {% if not request.user.is_authenticated %}
-                                            <div class="ps-block--payment-method">
+                                            <div class="ps-block--payment-method mb-5">
                                                 <a class='p-2' href="{% url 'account_login' %}?next={{ request.path }}">
                                                     <span class='font-weight-bold'>Vous avez un compte ? Connectez-vous maintenant !</span>
                                                 </a>
                                             </div>
                                         {% endif %}
 
-                                        <h3 class="ps-form__heading">Informations de livraison</h3>
+                                        <h3 class="ps-form__heading pb-3">Détails de facturation</h3>
 
-                                        <div class="form-group">
-                                            <label for="{{ form.email.id_for_label }}">
-                                            {{ form.email.label }}</label>
-                                            {{ form.email }}
-                                        </div>
-
-                                        <h3 class="ps-form__heading">Adresse de livraison</h3>
-                                        
                                         <div class="row">
                                             <div class="col-sm-6">
                                                 <div class="form-group">
-                                                    <label for="{{ form.shipping_last_name.id_for_label }}">
-                                                    {{ form.shipping_last_name.label }}</label>
+                                                    <label class="font-weight-bold" for="{{ form.shipping_last_name.id_for_label }}">
+                                                    {{ form.shipping_last_name.label }}*</label>
                                                     {{ form.shipping_last_name }}
                                                 </div>
                                             </div>
                                             <div class="col-sm-6">
                                                 <div class="form-group">
-                                                    <label for="{{ form.shipping_first_name.id_for_label }}">
-                                                    {{ form.shipping_first_name.label }}</label>
+                                                    <label class="font-weight-bold" for="{{ form.shipping_first_name.id_for_label }}">
+                                                    {{ form.shipping_first_name.label }}*</label>
                                                     {{ form.shipping_first_name }}
                                                 </div>
                                             </div>
                                         </div>
 
+                                        <div class="form-group">
+                                            <label class="font-weight-bold" for="{{ form.email.id_for_label }}">
+                                            {{ form.email.label }}*</label>
+                                            {{ form.email }}
+                                        </div>
+
                                         <div class="row">
                                             <div class="col-sm-6">
                                                 <div class="form-group">
-                                                    <label for="{{ form.shipping_country.id_for_label }}">
-                                                    {{ form.shipping_country.label }}</label>
+                                                    <label class="font-weight-bold" for="{{ form.shipping_country.id_for_label }}">
+                                                    {{ form.shipping_country.label }}*</label>
                                                     {{ form.shipping_country }}
                                                 </div>
                                             </div>
 
                                             <div class="col-sm-6">
                                                 <div class="form-group">
-                                                    <label for="{{ form.shipping_city.id_for_label }}">
-                                                    {{ form.shipping_city.label }}</label>
+                                                    <label class="font-weight-bold" for="{{ form.shipping_city.id_for_label }}">
+                                                    {{ form.shipping_city.label }}*</label>
                                                     {{ form.shipping_city }}
                                                 </div>
                                             </div>
                                         </div>
 
+                                        <div class="form-group">
+                                            <label class="font-weight-bold" for="{{ form.shipping_adress.id_for_label }}">
+                                                {{ form.shipping_adress.label }}*
+                                            </label>
+                                            {{ form.shipping_adress }}
+                                        </div>
+
                                         <div class="row">
                                             <div class="col-sm-6">
                                                 <div class="form-group">
-                                                    <label for="{{ form.phone.id_for_label }}">
-                                                        {{ form.phone.label }}
+                                                    <label class="font-weight-bold" for="{{ form.phone.id_for_label }}">
+                                                        {{ form.phone.label }}*
                                                     </label>
                                                     {{ form.phone }}
                                                 </div>
                                             </div>
                                             <div class="col-sm-6">
                                                 <div class="form-group">
-                                                    <label for="{{ form.shipping_address.id_for_label }}">
-                                                        {{ form.shipping_address.label }}
+                                                    <label for="{{ form.phone_two.id_for_label }}">
+                                                        N° de téléphone supplémentaire (facultatif)
                                                     </label>
-                                                    {{ form.shipping_address }}
+                                                    {{ form.phone_two }}
                                                 </div>
                                             </div>
                                         </div>
 
                                         <div class="form-group">
-                                            <label for="{{ form.shipping_zip.id_for_label }}">
+                                            <label class="font-weight-bold" for="{{ form.shipping_zip.id_for_label }}">
                                                 {{ form.shipping_zip.label }}
                                             </label>
                                             {{ form.shipping_zip }}
@@ -100,77 +105,115 @@
                                             <div class="ps-checkbox">
                                                 {{ form.emailing }}
                                                 <label for="{{ form.emailing.id_for_label }}">
-                                                    Me tenir au courant des actualités et des offres exclusives ?
+                                                    Me tenir au courant des actualités et
+                                                    des offres exclusives ?
                                                 </label>
                                             </div>
                                         </div>
 
-                                        <h3 class="ps-form__heading">Mode de paiement</h3>
+                                        <h3 class="ps-form__heading mt-40">
+                                            Informations complémentaires
+                                        </h3>
+
+                                        <div class="form-group">
+                                            <label for="{{ form.note.id_for_label }}">
+                                                {{ form.note.label }}
+                                            </label>
+                                            <div class="form-group__content">
+                                                {{ form.note }}
+                                            </div>
+                                        </div>                                        
+                                    </div>
+                                </div>
+
+                                <div class="col-xl-5 col-lg-5 col-md-12 col-sm-12 col-12">
+                                    <div class="ps-block--checkout-order p-5 bg-light">
+                                        <h4 class="ps-form__heading">
+                                            Votre commande ({% cart_items request %})
+                                        </h4>
+
+                                        <div class="ps-block__content pb-2">
+                                            <figure>
+                                                <figcaption>
+                                                    <strong>produit</strong>
+                                                    <strong>sous-total</strong>
+                                                </figcaption>
+                                            </figure>
+
+                                            <figure class="ps-block__items">
+                                                {% for object in cart_items %}
+                                                    <figcaption>
+                                                    <span>{{ object.name|truncatewords:"3" }}
+                                                        x {{ object.quantity }}</span>
+                                                    <span>{{ object.total }}</span>
+                                                    </figcaption>
+                                                {% endfor %}
+                                            </figure>
+
+                                            <figure>
+                                                <figcaption>
+                                                    <span>Sous-total</span>
+                                                    <span>{{ cart_subtotal }}</span>
+                                                </figcaption>
+                                            </figure>
+
+                                            <figure>
+                                                <figcaption>
+                                                    <span>Frais de livraison</span>
+                                                    <span>$250</span>
+                                                </figcaption>
+                                            </figure>
+
+                                            <figure class="border-0">
+                                                <figcaption>
+                                                    <h3><strong>Total</strong></h3>
+                                                    <strong>
+                                                        <h3><span class="font-weight-bold" style="color:#ff3300;">
+                                                            {{ cart_subtotal }}
+                                                        </span></h3>
+                                                    </strong>
+                                                </figcaption>
+                                            </figure>
+                                        </div>
 
                                         <div class="ps-block--payment-method">
-                                            <ul class="ps-tab-list">
-                                                <li class="active">
-                                                    <a class="ps-btn" href="#paymentnow">Payer maintenant</a>
-                                                </li>
-                                                <li>
-                                                    <a class="ps-btn" href="#paymentdelivery">
-                                                    Payer à la livraison</a>
-                                                </li>
-                                            </ul>
+                                            <div class="form-group">
+                                                <div class="ps-checkbox">
+                                                    <p class="text-justify">
+                                                        Vos données personnelles seront utilisées pour le
+                                                        traitement de votre commande, vous accompagner au cours
+                                                        de votre visite du site web, et pour d’autres raisons
+                                                        décrites dans notre politique de confidentialité
+                                                    </p>
 
-                                            <div class="ps-tabs">
-                                                <div class="ps-tab active" id="paymentnow">
-                                                    {% include "includes/partials/_partials_payment.html" %}
-                                                </div>
-
-                                                <div class="ps-tab" id="paymentdelivery">
-                                                    <button class="ps-btn text-uppercase" type="submit" name="submit">
-                                                        payer à la livraison.
-                                                    </button>
+                                                    <input checked id="ckeckobx" type="checkbox" name="privacy" class="form-check">
+                                                    <label for="ckeckobx">
+                                                        J’ai lu et j’accepte les
+                                                        <a href="{% url 'pages:cgu' %}">
+                                                            conditions générales
+                                                        </a> *
+                                                    </label>
                                                 </div>
                                             </div>
+
+                                            <div class="form-group">
+                                                <button class="ps-btn ps-btn--fullwidth text-uppercase"
+                                                type="submit" name="submit">
+                                                    payer à la livraison
+                                                </button>
+                                            </div>
+
+                                            <div class="form-group">
+                                                <span class="ps-btn ps-btn--fullwidth text-uppercase btn-info"
+                                                type="submit" name="submit">
+                                                    payer maintenant
+                                                </span>
+                                            </div>
                                         </div>
-                                    </form>
-                                </div>
-                            </div>
-
-                            <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 col-12">
-                                <div class="ps-block--checkout-order">
-                                    <h4 class="ps-form__heading">
-                                        Votre commande ({% cart_items request %})
-                                    </h4>
-
-                                    <div class="ps-block__content">
-                                        <figure>
-                                            <figcaption>
-                                                <strong>Produit</strong>
-                                                <strong>Total</strong>
-                                            </figcaption>
-                                        </figure>
-
-                                        <figure class="ps-block__items">
-                                            {% for object in cart_items %}
-                                                <a href="{{ object.get_absolute_url }}">
-                                                    <strong>{{ object.name|truncatewords:"3" }}</strong>
-                                                    <span>{{ object.price }} x {{ object.quantity }}</span>
-                                                    <small>{{ object.total }}</small>
-                                                </a>
-                                            {% endfor %}
-                                        </figure>
-                                        <figure>
-                                            <figcaption>
-                                                <h3><strong>Total</strong></h3>
-                                                <strong>
-                                                    <h3><span class="font-weight-bold" style="color:#ff3300;">
-                                                    {{ cart_subtotal|currency }}
-                                                    </span></h3>
-                                                </strong>
-                                            </figcaption>
-                                        </figure>
                                     </div>
                                 </div>
                             </div>
-                        </div>
+                        </form>
                     </div>
                 </div>
             </div>

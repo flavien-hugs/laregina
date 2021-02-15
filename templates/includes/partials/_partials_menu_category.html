@@ -1,0 +1,28 @@
+{% load cache mptt_tags %}
+
+{% recursetree category %}
+    <li {% if not node.is_leaf_instance %}class="menu-item-has-children has-mega-menu"{% endif %}>
+        <a href="{{ node.get_absolute_url }}">
+            {{ node.name|safe }}
+        </a>
+
+        {% if not node.is_leaf_node and node.children.all %}
+            <div class="mega-menu">
+                {% for children in node.children.all %}
+                    <div class="mega-menu__column">
+                        <h4>
+                            {{ children }}
+                            <span class="sub-toggle"></span>
+                        </h4>
+                        
+                        {% for obj in children.children.all %}
+                            <ul class="mega-menu__list">
+                                <li><a href="{{ obj.get_absolute_url }}">{{ obj.name }}</a></li>
+                            </ul>
+                        {% endfor %}
+                    </div>
+                {% endfor %} 
+            </div>
+        {% endif %}
+    </li>
+{% endrecursetree %}

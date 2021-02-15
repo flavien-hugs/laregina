@@ -4,26 +4,48 @@ from django import forms
 from django.forms.models import modelformset_factory
 
 from category.models import Category
-from catalogue.models import Product, Variation
+from catalogue.models import Product
 
 
 class ProductAdminForm(forms.ModelForm):
 
     class Meta:
-        model = Variation
-        exclude = ('updated_at', 'created_at', 'timestamp')
+        model = Product
+        exclude = ('user', 'quantity', 'slug', 'updated_at', 'created_at', 'timestamp')
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        for field in self.fields:
+            self.fields[field].widget.attrs['class'] = 'form-control'
+
+            if self.fields['price'] and self.fields['old_price']:
+                self.fields['price'].widget.attrs.update({'type': 'text'})
+                self.fields['old_price'].widget.attrs.update({'type': 'text'})
+
+        self.fields['is_external'].widget.attrs['type'] = 'checkbox'
+        self.fields['name'].widget.attrs['placeholder'] = 'Entrer le nom du produit'
+        self.fields['price'].widget.attrs['placeholder'] = 'Entrer le prix de vente du produit'
+        self.fields['old_price'].widget.attrs['placeholder'] = 'Entrer le prix normal du produit (facultatif)'
+        self.fields['keywords'].widget.attrs['placeholder'] = 'Ajouter quelques mots-clés (facultatif)'
+
         
     def clean_price(self):
-        if self.cleaned_data['price'] <= 0:
-            raise forms.ValidationError('Le prix fourni doit être supérieur à zéro.')
-        return self.cleaned_data['price']
+        price = self.fields['price']
+        price = self.cleaned_data['price']
+        if price <= 1.00:
+            raise forms.ValidationError(
+                'Le prix doit être supérieur à 1$'
+            )
+        return price
 
     def clean_product_name(self):
-        value = self.cleaned_data.get('name')
-        if len(value.strip()) < 5 :
+        name = self.fields['name']
+        name = self.cleaned_data['name']
+        if len(name.strip()) >= 4:
+            return name.strip()
+        else:
             raise ValidationError("Le nom du produit doit être long de 4 caractères....")
-        return value.strip()
-
+        
 
 class ProductAddToCartForm(forms.Form):
     """ 
@@ -51,7 +73,7 @@ class ProductAddToCartForm(forms.Form):
         nous puissions définir la demande
         """
         self.request = request
-        super(ProductAddToCartForm, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
     
     def clean(self):
         """ 
@@ -64,22 +86,13 @@ class ProductAddToCartForm(forms.Form):
         return self.cleaned_data
 
 
-class VariationInventoryForm(forms.ModelForm):
+class ProductInventoryForm(forms.ModelForm):
     class Meta:
-        model = Variation
+        model = Product
         fields = [
             "price",
-            "sale_price",
-            "inventory",
+            "old_price",
             "is_active",
         ]
 
-VariationInventoryFormSet = modelformset_factory(Variation, form=VariationInventoryForm, extra=0)
-
-
-# class ProductReviewForm(forms.ModelForm):
-#     Form class to submit a new ProductReview instance 
-#     class Meta:
-#         model = ProductReview
-#         exclude = ('user','product', 'is_approved')
-        
+ProductInventoryFormSet = modelformset_factory(Product, form=ProductInventoryForm, extra=0)

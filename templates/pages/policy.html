@@ -1,0 +1,680 @@
+{% extends "base.html" %}
+
+{% block content %}
+    {% include "includes/partials/_partials_breadcrumb.html" %}
+
+    <div class="page-header text-center bg-light py-5">
+        <div class="container">
+            <div class="ps-section__header">
+                <h1>{{ page_title }}</h1>
+            </div>
+        </div><!-- End .container -->
+    </div><!-- End .page-header -->
+
+    <section class="ps-about-intro text-justify py-5">
+        <article class="container">
+            <ul class="px-5">
+                <ol type="I">
+                    <li class="pb-3" style="font-weight:600;font-size:2.4rem;letter-spacing:-.03em;">Introduction</li>
+                    <ol class="pb-3" style="font-size:1.8rem;">
+                        <li class="pb-3">
+                            <a class="font-weight-bold" href="{% url 'home' %}">{{ title }}</a> exploite une plate-forme de commerce électronique via un site Web
+                            (ci-après désignée par le terme « Marketplace »), ainsi qu'une infrastructure
+                            de services logistiques et de paiement, pour la vente et l'achat de divers produits
+                            de consommation. Il permet également de saisir des opportunités d’investissement
+                            dans les domaines de l’immobilier et du foncier. 
+                        </li>
+
+                        <li class="pb-3">
+                            Ces Conditions Générales s'appliquent aux acheteurs et aux vendeurs sur la Marketplace
+                            et régissent leur utilisation de la Marketplace et de tous les services associés. 
+                        </li>
+
+                        <li class="pb-3">
+                            En utilisant notre Marketplace, vous acceptez ces
+                            <a class="font-weight-bold" href="{% url 'pages:cgu' %}">
+                            conditions générales</a> dans leur intégralité. Si vous n'êtes pas d'accord avec ces conditions
+                            générales ou une partie de ces conditions générales, dans ce cas,
+                            vous ne devez pas utiliser notre Marketplace. 
+                        </li>
+
+                        <li class="pb-3">
+                            Si vous utilisez notre Marketplace dans le cadre d'une entreprise ou d'un quelconque
+                            autre projet commercial, vous:
+
+                            <ol type="i">
+                                <li class="mb-2">confirmez que vous avez obtenu l'autorisation nécessaire pour
+                                    accepter les présentes <a class="font-weight-bold" href="{% url 'pages:cgu' %}">conditions générales</a>;
+                                </li>
+
+                                <li class="mb-2">vous engagez, ainsi que la personne, la société ou toutes autres entités
+                                juridique qui exploite cette entreprise ou ce projet commercial, à respecter
+                                les présentes <a class="font-weight-bold" href="{% url 'pages:cgu' %}">conditions générales</a>;</a>
+                                </li>
+                            </ol> 
+                        </li>
+                    </ol><!-- end introduction -->
+
+
+                    <li class="pb-3" style="font-weight:600;font-size:2.4rem;letter-spacing:-.03em;">
+                    Inscription &amp; Ouverture de compte</li>
+                    <ol class="pb-3" style="font-size:1.8rem;">
+                        <li class="pb-3">Vous ne pouvez pas vous inscrire sur notre Plateforme si vous avez moins de 18 ans
+                        (en utilisant notre Marketplace ou en acceptant les présentes conditions générales,
+                        vous nous garantissez et déclarez que vous avez au moins 18 ans).</li>
+
+                        <li class="pb-3">Vous pouvez vous inscrire à un compte sur notre Marketplace en remplissant et en
+                        soumettant le formulaire d’inscription disponible sur notre Marketplace.</li>
+                        
+                        <li class="pb-3">Vous déclarez et garantissez que toutes les informations fournies dans le formulaire
+                        d'inscription sont complètes et exactes.</li>
+
+                        <li class="pb-3">Si vous vous inscrivez pour la création d’un compte sur notre Marketplace, il vous sera
+                        demandé de fournir une adresse e-mail / ID (nom d’utilisateur) et mot de passe, et vous acceptez de:
+                            <ol type="i">
+                                <li class="mb-2">Garder votre mot de passe confidentiel;</li>
+                                
+                                <li class="mb-2">nous informer immédiatement par écrit au <strong>(+225) {{ contact_one }}</strong>
+                                ou par <strong>email ({{ email_info }})</strong>, si vous avez connaissance d'une divulgation de
+                                votre mot de passe; et</li>
+                                
+                                <li class="mb-2">être responsable de toute activité sur notre Marketplace résultant d'un manquement à la
+                                confidentialité de votre mot de passe, et que vous puissiez être tenu responsable de toute
+                                perte résultant d'un tel manquement.</li>
+                            </ol>
+                        </li>
+
+                        <li class="pb-3">Votre compte doit être utilisé exclusivement par vous et vous ne devez en aucun cas transférer
+                        votre compte à un tiers. Si vous autorisez un tiers à gérer votre compte en votre nom, cela se fera à vos propres
+                        risques et périls. </li>
+
+                        <li class="pb-3">Nous pouvons suspendre ou annuler votre compte, et/ou modifier les détails de votre compte,
+                        à tout moment, à notre seule discrétion et sans préavis ni explication, à condition que si nous annulons des
+                        produits ou des services que vous avez déjà payés/vendus mais que vous n’avez pas encore reçus, et qu’à condition
+                        que vous n’ayez pas enfreint les présentes <strong><a href="{% url 'pages:cgu' %}">conditions générales</a></strong>,
+                        nous nous engageons à vous rembourser le montant que vous avez payé.</li>
+
+                        <li class="pb-3">Vous pouvez, à tout moment, vous désinscrire et supprimer votre compte sur notre Marketplace, en nous
+                        contactant aux coordonnées indiquées à la section 23 ci-dessous.</li>
+                    </ol><!-- end inscription -->
+
+
+                    <li class="pb-3" style="font-weight:600;font-size:2.4rem;letter-spacing:-.03em;">
+                    Conditions Générales de Vente</li>
+                    <ol class="pb-3" style="font-size:1.8rem;">
+                        <li class="pb-3">Vous reconnaissez et acceptez que:
+                            <ol type="i">
+                                <li class="mb-2">Notre Marketplace offre un lieu de rencontre en ligne et de facilitation des
+                                transactions pour les vendeurs afin de lister et de vendre leurs produits sur notre Marketplace,
+                                et pour les acheteurs afin d’acheter les produits proposés par les vendeurs;</li>
+                                
+                                <li class="mb-2">Nous acceptons et faisons en sorte de faciliter les transactions et la finalisation des ventes
+                                sur notre Marketplace, pour le compte des vendeurs, toutefois, <a href="{% url 'home' %}" class="font-weight-bold">
+                                {{ title }}</a> prends partie à la transaction entre le vendeur et l'acheteur.
+                                Par conséquence, un contrat de vente est formé uniquement entre l’acheteur et <a href="{% url 'home' %}" class="font-weight-bold">
+                                {{ title }}</a> ainsi <a href="{% url 'home' %}" class="font-weight-bold">{{ title }}</a> assume toute responsabilité
+                                découlant de ce contrat de vente; et</li>
+                                
+                                <li class="mb-2">un contrat pour la vente et l'achat d'un ou de plusieurs produits entrera en vigueur
+                                entre l’acheteur et le vendeur, et en conséquence vous vous engagez à acheter ou vendre le ou les produits concernés,
+                                dès la confirmation d'achat par l'acheteur via notre Marketplace.</li>
+                            </ol>
+                        </li>
+
+                        <li class="pb-3">Sous réserve des présentes conditions générales, les conditions commerciales du vendeur régissent
+                            le contrat de vente et d'achat entre l'acheteur et le vendeur. Nonobstant ce qui précède, les dispositions suivantes
+                            seront incorporées dans le contrat de vente et d'achat entre l'acheteur et le vendeur: 
+                            
+                            <ol type="i">
+                                <li class="mb-2">le prix de tout produit sera celui indiqué dans la liste et le descriptif du produit concerné;</li>
+                                <li class="mb-2">le prix de tout produit doit inclure toutes les taxes et être conforme aux lois applicables en vigueur dans le Territoire;</li>
+                                <li class="mb-2">les frais de livraison, les frais d'emballage, les frais de manutention, les frais administratifs,
+                                les frais d'assurance, les autres frais et charges accessoires ne seront à la charge de l'acheteur que si
+                                cela est expressément et clairement indiqué dans la liste et le descriptif des produits concernés;</li>
+                                <li class="mb-2">les produits concernés doivent être de bonne qualité, adaptés et sûrs pour tout usage
+                                spécifié dans le descriptif des produits et conformes à tous les aspects matériels, ainsi que toute autre
+                                description des produits fournie ou mis à disposition de l'acheteur par le vendeur; et</li>
+                                <li class="mb-2">le vendeur garantit qu’il détient un titre de propriété et est le seul propriétaire
+                                légal et bénéficiaire des produits qu’il vend et ces produits ne sont soumis à aucun droit des tiers ou
+                                restriction ou prohibition, y compris en ce qui concerne les droits de propriété intellectuelle et/ou
+                                toute enquête ou procédure pénale, d'insolvabilité ou fiscale.</li>
+                            </ol>
+                        </li>
+                    </ol><!-- end condition de vente -->
+
+
+                    <li class="pb-3" style="font-weight:600;font-size:2.4rem;letter-spacing:-.03em;">
+                    Retours &amp; Remboursements</li>
+                    <ol class="pb-3" style="font-size:1.8rem;">
+                        <li class="pb-3">Les retours de produits par les acheteurs et l'acceptation des produits retournés par 
+                        es vendeurs seront gérés par nous conformément aux conditions définies à la « page des retours »
+                        disponible sur notre Marketplace, qui peut être modifiée de temps à autre. L'acceptation des retours
+                        sera à notre discrétion, sous réserve du respect des lois applicables dans le Territoire.</li>
+
+                        <li class="pb-3">Les remboursements concernant les produits retournés seront gérés conformément aux
+                        conditions définies à la « page des remboursements » disponible sur notre Marketplace,
+                        qui peut être modifiée de temps à autre. Nos règles sur les remboursements seront exercées à notre discrétion, sous
+                        réserve du respect des lois applicables dans le Territoire. Nous pouvons offrir des remboursements,
+                        à notre discrétion:
+                            <ol type="i">
+                                <li class="mb-2">en ce qui concerne le prix du produit concerné par le remboursement;</li>
+                                
+                                <li class="mb-2">les frais d'expédition locaux et/ou internationaux (comme indiqué sur
+                                la page des remboursements sur notre Marketplace); et</li>
+                                
+                                <li class="mb-2">au moyen de crédits en boutique, de remboursements de portefeuille, de bons d’achat (vouchers),
+                                d'un transfert d'argent via mobile, de virements bancaires ou de tout autre moyen que nous pouvons déterminer
+                                de temps à autre.</li>
+                            </ol>
+                        </li>
+
+                        <li class="pb-3">Les produits retournés seront acceptés et les remboursements seront effectués par
+                        <a class="font-weight-bold" href="{% url 'home' %}">{{ title }}</a>, pour et au nom du vendeur.</li>
+
+                        <li class="pb-3">Les modifications apportées à notre « page des retours » ou à la « page des remboursements »
+                        disponibles sur notre Marketplace, seront effectives et s'appliqueront à tous les achats effectués à partir
+                        de la date de publication de ladite modification sur notre site Web. </li>
+                    </ol><!-- end retour et remboursement -->
+
+
+                    <li class="pb-3" style="font-weight:600;font-size:2.4rem;letter-spacing:-.03em;">
+                    Paiements</li>
+                    <ol class="pb-3" style="font-size:1.8rem;">
+                        <li class="pb-3">Vous devez effectuer les paiements dus en vertu des présentes conditions générales conformément aux
+                        Informations et Directives sur les Paiements disponibles sur notre Marketplace.</li>
+                    </ol><!-- end paiement -->
+
+
+                    <li class="pb-3" style="font-weight:600;font-size:2.4rem;letter-spacing:-.03em;">
+                    Règles concernant votre contenu</li>
+                    <ol class="pb-3" style="font-size:1.8rem;">
+                        <li class="pb-3">Dans les présentes <a class="font-weight-bold" href="{% url 'pages:cgu' %}">
+                        conditions générales</a>, "votre contenu" signifie: 
+                            <ol type="i">
+                                <li class="mb-2">tous les éléments, travaux et matériaux (y compris, sans s'y limiter, les textes,
+                                les graphiques, les images, le matériel audio, le matériel vidéo, le matériel audiovisuel, les scripts,
+                                les logiciels et les fichiers) que vous nous soumettez à nous ou à notre Marketplace pour stockage
+                                ou publication, traitement ou transmission ultérieure ; et</li>
+                                    
+                                <li class="mb-2">toutes les communications sur notre Marketplace, y compris les avis sur les produits,
+                                les remarques et les commentaires.</li>
+                            </ol>
+                        </li>
+
+                        <li class="pb-3">Votre contenu et l'utilisation de votre contenu par nous,
+                        conformément aux présentes <a class="font-weight-bold" href="{% url 'pages:cgu' %}">
+                        conditions générales</a>, doit être exact, complet et authentique.</li>
+
+                        <li class="pb-3">Votre contenu doit être approprié, civil et de bon goût, et être conforme aux normes d'éthique
+                        et de comportement généralement acceptés sur Internet, et ne doit pas:  
+                            <ol type="i">
+                                <li class="mb-2">être offensant, obscène, indécent, pornographique, suggestif ou sexuellement explicite;</li>
+                                <li class="mb-2">dépeindre la violence de manière explicite, graphique ou gratuite; ou</li>
+                                <li class="mb-2">être blasphématoire, en violation de la législation sur la haine raciale ou religieuse ou 
+                                la discrimination;</li>
+                                <li class="mb-2">être trompeur, frauduleux, menaçant, abusif, harcelant, antisocial, haineux,
+                                discriminatoire ou incendiaire;</li>
+                                <li class="mb-2">causer de la gêne, des désagréments ou une anxiété inutile à quiconque; ou</li>
+                                <li class="mb-2">constitue un spam.</li>
+                            </ol>
+                        </li>
+
+                        <li class="pb-3">Votre contenu ne doit pas être illégal ou illicite, porter atteinte aux droits légaux de toute
+                        personne ou être susceptible de donner lieu à des poursuites judiciaires contre toute personne (dans chaque cas
+                        dans n'importe quelle juridiction et en vertu de toute loi applicable). Votre contenu ne doit pas enfreindre ni violer:   
+                            <ol type="i">
+                                <li class="mb-2">tout droit d'auteur, droit moral, droit de base de données, droit de marque, droit de conception de dessins
+                                et modèles, droit de substitution ou tout autre droit de propriété intellectuelle;</li>
+                                
+                                <li class="mb-2">tout droit de confidentialité, droit à la vie privée ou droit en vertu de
+                                la législation sur la protection des données;</li>
+                                
+                                <li class="mb-2">toute obligation contractuelle due à toute personne; ou</li>
+                                
+                                <li class="mb-2">toute ordonnance du tribunal et décision judiciaire.</li>
+                            </ol>
+                        </li>
+
+                        <li class="pb-3">Vous ne devez pas utiliser notre Marketplace pour créer un lien vers un site Web ou une page
+                        Web consistant en ou contenant un élément ou contenu qui, s'il était affiché sur notre Marketplace,
+                        violerait les dispositions des présentes conditions générales.</li>
+
+                        <li class="pb-3">Vous ne devez pas soumettre à notre Marketplace tout matériel ou contenu qui fait ou a déjà
+                        fait l'objet de menaces ou de réelles poursuites judiciaires ou de toute autre plainte similaire.</li>
+
+                        <li class="pb-3">La fonction qui permet aux utilisateurs sur notre Marketplace de donner leur avis et commentaires
+                        peut être utilisée pour faciliter les évaluations des acheteurs sur les produits. Vous ne devez pas utiliser ladite
+                        fonction ou toute autre forme de communication pour fournir des critiques et/ou des avis inexacts, inauthentiques
+                        ou faux. </li>
+
+                        <li class="pb-3">Vous ne devez pas interférer avec une transaction en:
+                            <ol type="i">
+                                <li class="mb-3">contactant un autre utilisateur pour acheter ou vendre un
+                                article listé sur notre Marketplace en dehors de notre Marketplace; ou</li>
+                                
+                                <li class="mb-3">communiquer avec un utilisateur impliqué dans une transaction
+                                active ou terminée pour l'avertir d’éviter un acheteur, un vendeur ou un article
+                                particulier; ou</li>
+
+                                <li class="mb-3"> contacter un autre utilisateur avec l'intention de collecter des paiements.</li>
+                            </ol>
+                        </li>
+
+                        <li class="pb-3">Vous reconnaissez que tous les utilisateurs de notre Marketplace sont seuls responsables des
+                        interactions avec les autres utilisateurs et vous devez faire preuve de prudence et de bon jugement dans votre
+                        communication avec les utilisateurs. Vous ne devez pas leur envoyer des informations personnelles,
+                        y compris les détails de votre carte de crédit et tout moyen de paiement.</li>
+
+                        <li class="pb-3">Nous pouvons examiner périodiquement votre contenu et nous nous réservons le droit de supprimer
+                        tout contenu à notre discrétion pour quelque raison que ce soit. </li>
+
+                        <li class="pb-3">Si vous avez connaissance de tout élément, contenu ou activité illégale et illicite sur notre Marketplace,
+                        ou de tout élément, contenu ou activité qui enfreint les présentes conditions générales,
+                        vous pouvez nous en informer en nous contactant aux coordonnées définies à la section 23 ci-dessous.</li>
+                    </ol><!-- end reglement -->
+
+
+                    <li class="pb-3" style="font-weight:600;font-size:2.4rem;letter-spacing:-.03em;">
+                    Nos droits d’utilisation de votre contenu</li>
+                    <ol class="pb-3" style="font-size:1.8rem;">
+                        <li class="pb-3">Vous nous accordez une licence mondiale, irrévocable, non exclusive et
+                        libre des redevances des droits d'utilisation, de reproduction, de stockage, d'adaptation, de publication,
+                        de traduction et de distribution de votre contenu sur nos canaux de commercialisation et marketing
+                        et tout autre support existant ou futur.</li>
+
+                        <li class="pb-3">Vous nous accordez le droit de sous-licencier les droits concédés en vertu de
+                        l'article 7.1.</li>
+
+                        <li class="pb-3">Vous nous accordez le droit d'intenter une action pour violation des droits concédés
+                        en vertu de l'article 7.1.</li>
+
+                        <li class="pb-3">Vous renoncez par la présente à tous vos droits moraux sur votre contenu dans la
+                        limite autorisée par la loi applicable; et vous garantissez et déclarez que tous les autres droits
+                        moraux sur votre contenu ont fait l’objet d’une renonciation dans la mesure maximale autorisée par
+                        la loi applicable.</li>
+
+                        <li class="pb-3">Sans préjudice de nos autres droits en vertu des présentes conditions générales,
+                        si vous enfreignez nos règles sur le contenu de quelque manière que ce soit, ou si nous soupçonnons
+                        raisonnablement que vous avez enfreint nos règles sur le contenu, nous pouvons supprimer,
+                        annuler la publication ou modifier tout ou partie de votre contenu.</li>
+                    </ol><!-- end droit contenu -->
+
+
+                    <li class="pb-3" style="font-weight:600;font-size:2.4rem;letter-spacing:-.03em;">
+                    Utilisation du site Web et des applications mobiles</li>
+                    <ol class="pb-3" style="font-size:1.8rem;">
+                        <li class="pb-3">Dans cette section 8, les mots «Marketplace» et «site Web» doivent être utilisés de
+                        manière interchangeable pour désigner les sites Web et les applications mobiles de LaRegina.</li>
+
+                        <li class="pb-3">Vous pouvez:
+                            <ol type="i">
+                                <li class="pb-3">afficher les pages de notre site Web dans un navigateur Web;</li>
+
+                                <li class="pb-3">télécharger des pages de notre site Web pour la mise en cache dans
+                                un navigateur Web;</li>
+
+                                <li class="pb-3">imprimer des pages de notre site Web pour votre usage personnel
+                                et non commercial, à condition que cette impression ne soit pas systématique ou excessive;</li>
+
+                                <li class="pb-3">diffuser des fichiers audio et vidéo à partir de notre site Web à l'aide du
+                                lecteur multimédia de notre site Web; et</li>
+
+                                <li class="pb-3">utiliser nos services de Marketplace au moyen d’un navigateur Web,
+                                sous réserve du respect des autres dispositions des présentes <a href="{% url 'pages:cgu' %}">
+                                conditions générales</a></li>
+                            </ol>
+                        </li>
+
+                        <li class="pb-3">Sauf dans les cas expressément autorisés par la section 8.2 ou les autres dispositions des
+                        présentes conditions générales, vous ne devez télécharger aucun élément de notre site Web
+                        ni enregistrer un tel élément sur votre ordinateur.</li>
+
+                        <li class="pb-3">Vous ne pouvez utiliser notre site Web qu'à des fins personnelles et professionnelles
+                        pour vendre ou acheter des produits sur notre Marketplace.</li>
+
+                        <li class="pb-3">Sauf dans les cas expressément autorisés par les présentes conditions générales,
+                        vous ne devez pas éditer ou modifier, de quelque manière que ce soit, tout élément ou contenu sur notre site Web.</li>
+
+                        <li class="pb-3">À moins que vous ne possédiez ou ne contrôliez des droits réels et pertinents sur
+                        le matériel ou le contenu en question, vous ne devez pas: 
+                            <ol type="i">
+                                <li class="pb-3"> republier le contenu ou le matériel de notre site Web
+                                (y compris la republication sur un autre site Web);</li>
+
+                                <li class="pb-3">vendre, louer ou concéder en sous-licence du contenu ou du matériel de notre site Web;</li>
+
+                                <li class="pb-3">montrer tout matériel ou contenu de notre site Web en public;</li>
+
+                                <li class="pb-3"> exploiter le matériel ou contenu de notre site Web à des fins commerciales; ou</li>
+
+                                <li class="pb-3">redistribuer le matériel ou le contenu de notre site Web.</li>
+                            </ol>
+                        </li>
+
+                        <li class="pb-3">En dehors de la section 8.6, vous pouvez transmettre des liens vers des produits
+                        sur notre site Web et redistribuer notre bulletin d'information (newsletter) et notre matériel
+                        promotionnel sous forme imprimée et électronique à toute personne. </li>
+
+                        <li class="pb-3">Nous nous réservons le droit de suspendre ou de restreindre l'accès à notre site Web,
+                        à certaines parties de notre site Web et / ou aux fonctionnalités de notre site Web. Nous pouvons,
+                        par exemple, suspendre l'accès au site Web pendant la maintenance du serveur ou lorsque nous metton
+                        à jour le site Web. Vous ne devez pas contourner, ou tenter de contourner, toute mesure de restriction
+                        d'accès sur le site Web.</li>
+                    
+                        <li class="pb-3">Vous ne devez pas:
+                            <ol type="i">
+                                <li class="pb-3">utiliser notre site Web de quelque manière que ce soit ou prendre
+                                des mesures qui causent ou peuvent causer des dommages au site Web ou une altération
+                                des performances, de la disponibilité, de l'accessibilité, de l'intégrité ou de la
+                                sécurité du site Web;</li>
+
+                                <li class="pb-3">utiliser notre site Web d'une manière contraire à l'éthique, illégale,
+                                illicite, frauduleuse ou nuisible, ou en relation avec un but ou une activité illégale,
+                                illicite, frauduleuse ou nuisible;</li>
+
+                                <li class="pb-3">pirater ou altérer par tout autre moyen notre site Web;</li>
+
+                                <li class="pb-3">sonder, scanner ou tester la vulnérabilité de notre site Web sans
+                                notre permission;</li>
+
+                                <li class="pb-3">contourner tout système ou processus d'authentification ou de sécurité
+                                sur notre site Web ou en relation avec ce dernier;</li>
+
+                                <li class="pb-3">utiliser notre site Web pour copier, stocker, héberger, transmettre, envoyer,
+                                utiliser, publier ou distribuer tout matériel ou contenu constitué de (ou lié à) tout logiciel
+                                espion, virus informatique, cheval de Troie, ver, enregistreur de frappe, rootkit ou tout autre
+                                logiciel informatique malveillant ;</li>
+
+                                <li class="pb-3">imposer une charge déraisonnablement élevée sur les ressources de notre site
+                                Web (y compris la bande passante, la capacité de stockage et la capacité de traitement);</li>
+
+                                <li class="pb-3">déchiffrer ou décrypter toute communication envoyée par ou vers notre site
+                                Web sans notre permission;</li>
+
+                                <li class="pb-3">mener des activités de collecte de données systématiques ou automatisées
+                                (y compris, sans limitation, le grattage, l'exploration de données, l'extraction de données
+                                et la collecte de données) sur ou en relation avec notre site Web sans notre consentement
+                                écrit exprès;</li>
+
+                                <li class="pb-3">accéder à notre site Web ou interagir autrement avec lui à l'aide de tout robot,
+                                araignée ou tout autre moyen automatisé, sauf à des fins d'indexation des moteurs de recherche;</li>
+
+                                <li class="pb-3">utiliser notre site Web sauf au moyen de nos interfaces publiques;</li>
+
+                                <li class="pb-3">enfreindre les directives énoncées dans le fichier robots.txt de notre site
+                                Web;</li>
+
+                                <li class="pb-3">utiliser les données collectées sur notre site Web pour toute activité de
+                                marketing direct (y compris, sans limitation, le marketing par courrier électronique,
+                                le marketing par SMS, le télémarketing et le publipostage); ou</li>
+
+                                <li class="pb-3">faire tout ce qui interfère avec l'utilisation normale de notre site Web.</li>
+                            </ol>
+                        </li>
+                    </ol><!-- end droit contenu -->
+
+                    <li class="pb-3" style="font-weight:600;font-size:2.4rem;letter-spacing:-.03em;">
+                    Propriété intellectuelle (Copyright) et marques déposées</li>
+                    <ol class="pb-3" style="font-size:1.8rem;">
+                        <li class="pb-3">Sous réserve des dispositions expresses des présentes conditions générales:
+                            <ol type="i">
+                                <li class="pb-3">nous, avec nos concédants de licence, détenons et contrôlons tous les droits d'auteur et autres
+                                droits de propriété intellectuelle sur notre site Web ainsi que sur le matériel et tout contenu sur
+                                notre site Web; et</li>
+
+                                <li class="pb-3">tous les droits d'auteur et autres droits de propriété intellectuelle sur notre site Web ainsi que
+                                le matériel et contenu sur notre site Web sont réservés.</li>
+                            </ol>
+                        </li>
+
+                        <li class="pb-3">Les logos de <a href="{% url 'home' %}" class="font-weight-bold">{{ title }}</a> et nos autres marques déposées et
+                        non déposées sont des marques qui nous appartiennent ; nous n'accordons aucune
+                        autorisation pour l'utilisation de ces marques, et une telle utilisation peut
+                        constituer une violation de nos droits.</li>
+
+                        <li class="pb-3">Les marques commerciales ou marques de service enregistrées et non enregistrées
+                        par des tiers sur notre site Web appartiennent à leurs propriétaires respectifs et nous
+                        n'endossons pas et nous ne sommes affiliés à aucun
+                        des titulaires de ces droits et, en tant que tels, nous ne pouvons accorder aucune licence
+                        pour exercer de tels droits.</li>
+                    </ol><!-- copyright -->
+
+
+                    <li class="pb-3" style="font-weight:600;font-size:2.4rem;letter-spacing:-.03em;">
+                    Protection des données</li>
+                    <ol class="pb-3" style="font-size:1.8rem;">
+
+                        <li class="pb-3">Les acheteurs acceptent le traitement de leurs données personnelles conformément aux conditions
+                        de <a class="font-weight-bold font-italic" href="{% url 'pages:policy' %}">la politique de confidentialité et
+                        de protection des données</a>, et de la notification relative aux cookies
+                        de <a href="{% url 'home' %}" class="font-weight-bold">{{ title }}</a>, accessibles sur notre Marketplace.</li>
+
+                        <li class="pb-3"><a href="{% url 'home' %}" class="font-weight-bold">{{ title }}</a> traitera toutes les données personnelles obtenues via la Marketplace et les services associés conformément aux termes
+                        de notre <a class="font-weight-bold font-italic" href="{% url 'pages:policy' %}">la politique de confidentialité et
+                        de protection des données</a> et de la notification relative aux Cookies. 
+                        n'endossons pas et nous ne sommes affiliés à aucun des titulaires de ces droits et, en tant que tels, nous ne pouvons accorder aucune licence
+                        pour exercer de tels droits.</li>
+
+                        <li class="pb-3"><a href="{% url 'home' %}" class="font-weight-bold">{{ title }}</a> est directement responsable
+                        envers les acheteurs de toute utilisation abusive de leurs données personnelles et <strong>les Vendeurs</strong>
+                        n'assume aucune responsabilité envers les acheteurs en ce qui concerne toute
+                        utilisation abusive de leurs données personnelles par ceux-ci.</li>
+                    </ol><!-- data privacy -->
+
+
+                    <li class="pb-3" style="font-weight:600;font-size:2.4rem;letter-spacing:-.03em;">
+                    Contrôle raisonnable et droits d'audit</li>
+                    <ol class="pb-3" style="font-size:1.8rem;">
+
+                        <li class="pb-3">Nous avons mis en place un programme de conformité de lutte contre le blanchiment d'argent et nous nous
+                        réservons le droit d'effectuer des vérifications de diligence raisonnable sur tous les utilisateurs de notre Marketplace.</li>
+
+                        <li class="pb-3">Vous vous engagez à nous fournir toutes les informations,
+                        documents et accès à vos locaux commerciaux dont nous pouvons avoir besoin:
+                            <ol type="i">
+                                <li class="pb-3">afin de vérifier votre adhésion et l'exécution de vos obligations en vertu du présent Accord;</li>
+                                <li class="pb-3">aux fins de divulgation, en vertu d’une ordonnance valide d'un tribunal ou d'un autre organisme
+                                gouvernemental; ou</li>
+                                <li class="pb-3">dans la mesure où la loi ou la réglementation applicable l’exige.</li>
+                            </ol>
+                        </li>
+                    </ol><!-- data privacy -->
+
+
+                    <li class="pb-3" style="font-weight:600;font-size:2.4rem;letter-spacing:-.03em;">
+                    Le rôle de <a href="{% url 'home' %}" class="font-weight-bold">{{ title }}</a> en tant que Marketplace</li>
+                    <ol class="pb-3" style="font-size:1.8rem;">
+                        <ol type="1">
+                            <li class="pb-3">Vous reconnaissez que:
+                                <ol type="i">
+                                    <li class="pb-3">1. nous ne confirmons pas l'identité de tous les utilisateurs de notre
+                                    Marketplace, nous ne vérifions pas leur solvabilité ou leur bonne foi, et dans tous les cas,
+                                    nous ne les contrôlons pas;</li>
+
+                                    <li class="pb-3">2. nous ne vérifions pas, nous n’auditons pas et nous ne contrôlons pas toutes
+                                    les informations contenues dans les listes et les descriptifs des produits vendus sur notre
+                                    Marketplace;</li>
+
+                                    <li class="pb-3">3. nous ne sommes parties à aucun contrat de vente ou d'achat de produits listés
+                                    sur la Marketplace, dans la mesure où notre rôle est de faciliter les transactions réalisées entre les 
+                                    acheteurs et les vendeurs. Par conséquent, nous n’assumons aucune responsabilité ayant pour origine
+                                    un tel contrat de vente et nous ne sommes ni l’agent ni le mandataire des vendeurs et ces derniers
+                                    sont responsables des ventes des produits et des réclamations ou tout autre problème survenant ou
+                                    lié au contrat de vente entre eux et les acheteurs;</li>
+
+                                    <li class="pb-3">4. nous ne sommes impliqués dans aucune transaction entre un acheteur et un vendeur
+                                    de quelque manière que ce soit, sauf que nous facilitons les transactions sur la Marketplace pour les
+                                    acheteurs et les vendeurs et traitons les paiements et le cas échéant la  livraison au nom des vendeurs;</li>
+
+                                    <li class="pb-3">5. nous ne sommes pas les agents ou mandataires des acheteurs ou des vendeurs, et en
+                                    conséquence, nous ne serons pas responsables envers quiconque en ce qui concerne l'offre de vente,
+                                    la vente ou l'achat de tout produit annoncé et listé sur notre Marketplace; en outre, nous ne sommes pas
+                                    responsables de l'exécution des obligations contractuelles découlant d'un contrat de vente ou d'achat de
+                                    tout produit et nous n'aurons aucune</li>
+                                </ol>
+                            </li>
+                                
+
+                            <li class="pb-3">Nous ne garantissons ni ne représentons:
+                                <ol type="i">
+                                    <li class="pb-3">l'exhaustivité ou l'exactitude des informations publiées sur notre Marketplace;</li>
+
+                                    <li class="pb-3">que toute information, élément ou contenu publié sur notre Marketplace est à jour;</li>
+
+                                    <li class="pb-3">que notre Marketplace fonctionnera sans faute ou erreur en tout temps; ou</li>
+
+                                    <li class="pb-3">que notre Marketplace ou tout service sur notre Marketplace restera disponible
+                                    en tout temps.</li>
+                                </ol>
+                            </li>
+
+                            <li class="pb-3">Nous nous réservons le droit d'interrompre, de discontinuer ou de modifier tout ou partie
+                            de nos services disponibles sur notre Marketplace, et de cesser de publier sur notre Marketplace, à tout moment
+                            à notre seule discrétion, sans préavis ni explication; et vous n'aurez droit à aucune compensation ou autre paiement
+                            en cas d'interruption, de discontinuité, de modification ou d’altération des services sur la Marketplace,
+                            ou si nous cessons de publier la Marketplace.</li>
+
+                            <li class="pb-3">Nous ne garantissons aucun résultat commercial concernant l'utilisation de notre Marketplace.</li>
+                            
+                            <li class="pb-3">Dans la mesure maximale autorisée par la loi applicable et sous réserve de la section 13.1 ci-dessous,
+                            nous excluons toutes les déclarations et garanties
+                            relatives à l'objet des présentes conditions générales, de notre Marketplace et de l'utilisation de notre Marketplace.</li>
+                        </ol>
+                    </ol><!-- role -->
+
+
+                    <li class="pb-3" style="font-weight:600;font-size:2.4rem;letter-spacing:-.03em;">
+                    Limitations et exclusions de responsabilité</li>
+                    <ol class="pb-3" style="font-size:1.8rem;">
+                        <li class="pb-3">Rien dans les présentes conditions générales ne viendra:
+                            <ol type="i">
+                                <li class="pb-3">limiter toute responsabilité d'une manière non autorisée par
+                                la loi applicable; ou</li>
+
+                                <li class="pb-3">exclure toute responsabilité ou tout droit légal qui ne peut
+                                être exclu en vertu de la loi applicable.</li>
+                            </ol>
+                        </li>
+
+                        <li class="ml-lg-5 pb-1">Les limitations et exclusions de responsabilité énoncées dans
+                        la présente section 13 et ailleurs dans les présentes conditions générales:
+                            <ol type="i">
+                                <li class="pb-3">sont soumises aux dispositions de la section 13.1; et</li>
+
+                                <li class="pb-3">régissent toutes les responsabilités découlant des présentes
+                                conditions générales ou liées à l'objet des présentes conditions générales, y
+                                compris les responsabilités contractuelles, responsabilité délictuelle (y compris
+                                la négligence) et pour manquement à une obligation légale, sauf dans la mesure où
+                                les présentes conditions générales en disposent expressément autrement.</li>
+                            </ol>
+                        </li>
+
+                        <li class="pb-3">
+                            En ce qui concerne les services qui vous sont offerts gratuitement, nous ne serons pas
+                            responsables envers vous de toute perte ou dommage de quelque nature que ce soit.
+                        </li>
+
+                        <li class="pb-3">
+                            Notre responsabilité globale envers vous en ce qui concerne tout contrat visant à vous
+                            fournir des services en vertu des présentes conditions générales, ne doit pas dépasse
+                            le montant total payé et payable à nous en vertu dudit contrat. Chaque transaction
+                            distincte sur notre Marketplace constitue un contrat distinct aux fins de la présente
+                            section 13.4.
+                        </li>
+
+                        <li class="pb-3">
+                            Nonobstant la section 13.4 ci-dessus, nous ne serons pas responsables envers
+                            vous de toute perte ou dommage de quelque nature que ce soit, y compris en ce qui concerne:
+
+                            <ol type="i">
+                                <li class="pb-3">toute perte occasionnée par une interruption ou un dysfonctionnement du
+                                site Web;</li>
+
+                                <li class="pb-3">toute perte découlant d'un événement ou de plusieurs événements
+                                hors de notre contrôle raisonnable;</li>
+
+                                <li class="pb-3">toute perte commerciale, y compris (sans limitation) la perte des
+                                bénéfices ou dommages sur les profits, des revenus, des recettes de l'utilisation, de
+                                la production, des économies anticipées, des affaires,des contrats, des opportunités
+                                commerciales ou des fonds de commerce;</li>
+
+                                <li class="pb-3">toute perte ou corruption de toute donnée, base de données
+                                ou logiciel; ou</li>
+
+                                <li class="pb-3">toute perte ou dommage spécial, indirect ou consécutif.</li>
+                            </ol>
+                        </li>
+
+                        <li class="pb-3">
+                            Nous acceptons que nous avons un intérêt à limiter la responsabilité personnelle de
+                            nos dirigeants et employés et, eu égard à cet intérêt, vous reconnaissez que nous sommes
+                            une entité à responsabilité limitée; vous acceptez de ne pas porter plainte personnellement
+                            contre nos dirigeants ou employés pour toute perte que vous subissez en rapport avec
+                            l’utilisation de notre Marketplace ou les présentes conditions générales (cela ne
+                            limitera ni n'exclura la responsabilité de l’entité à responsabilité limitée elle-même pour
+                            l’acte et omission de nos dirigeants et employés).
+                        </li>
+
+                        <li class="pb-3">
+                            7. Notre Marketplace comprend des liens hypertextes vers d'autres sites Web détenus et
+                            exploités par des tiers; ces liens hypertextes ne sont pas des recommandations.
+                            Nous n'avons aucun contrôle sur les sites Web tiers et leur contenu, et nous déclinons
+                            toute responsabilité à leur égard ou pour toute perte ou dommage pouvant résulter de leur
+                            utilisation.
+                        </li>
+                    </ol><!-- limitations -->
+
+                    <li class="pb-3" style="font-weight:600;font-size:2.4rem;letter-spacing:-.03em;">Indemnisation</li>
+                    <ol class="pb-3" style="font-size:1.8rem;">
+                        <li class="pb-3">Par la présente, vous nous indemnisez et vous vous engagez à nous tenir indemnisés
+                        contre:
+                            <ol type="i">
+                                <li class="pb-3">toutes les pertes, dommages, coûts, responsabilités et dépenses (y compris,
+                                sans limitation, les frais de justice et tous les montants payés par nous à un tiers en
+                                règlement d'une réclamation ou d'un litige) encourus ou subis par nous et résultant directement
+                                ou indirectement de votre utilisation de notre Marketplace ou de toute violation par vous de
+                                toute disposition des présentes conditions générales ou des codes, politiques ou directives
+                                de {{ title }}; et</li>
+
+                                <li class="pb-3">toute responsabilité en matière de TVA ou autre responsabilité en matière
+                                fiscale que nous pourrions encourir en relation avec toute vente, fourniture ou achat effectué
+                                via notre Marketplace, lorsque cette responsabilité découle de votre défaut de paiement,
+                                de retenue, de déclaration ou d'enregistrement pour le paiement de toute TVA ou autre taxe
+                                dûment due dans une quelconque juridiction.</li>
+                            </ol>
+                        </li>
+                    </ol><!-- indemnisations -->
+
+
+                    <li class="pb-3" style="font-weight:600;font-size:2.4rem;letter-spacing:-.03em;">
+                    Violation des présentes conditions générales</li>
+
+
+                    <li class="pb-3" style="font-weight:600;font-size:2.4rem;letter-spacing:-.03em;">
+                    Intégralité de l’accord</li>
+
+                    <li class="pb-3" style="font-weight:600;font-size:2.4rem;letter-spacing:-.03em;">
+                    Hiérarchie</li>
+
+                    <li class="pb-3" style="font-weight:600;font-size:2.4rem;letter-spacing:-.03em;">
+                    Modification</li>
+
+                    <li class="pb-3" style="font-weight:600;font-size:2.4rem;letter-spacing:-.03em;">
+                    Divisibilité</li>
+
+                    <li class="pb-3" style="font-weight:600;font-size:2.4rem;letter-spacing:-.03em;">
+                    Cession</li>
+
+                    <li class="pb-3" style="font-weight:600;font-size:2.4rem;letter-spacing:-.03em;">
+                    Droits des tiers</li>
+
+                    <li class="pb-3" style="font-weight:600;font-size:2.4rem;letter-spacing:-.03em;">
+                    Loi applicable et juridiction</li>
+
+                    <li class="pb-3" style="font-weight:600;font-size:2.4rem;letter-spacing:-.03em;">
+                    Les Coordonnées de notre société</li>
+                </ol>
+            </ul>
+        </article>
+    </section>
+{% endblock content %}

@@ -1,9 +1,9 @@
 <script src="{{ STATIC_PREFIX }}js/plugins/cinetpaybtn.js?apikey={{ APIKEY }}"
       data-button="paynow"
       data-site_id="{{ SITEID }}"
-      data-designation="{{ object.name }}"
+      {% for obj in cart_items %}data-designation="{{ obj.name }}"{% endfor %}
       data-amount="{{ cart_subtotal }}"
-      data-trans_id="{{ TRANSID }}"
+      data-trans_id="908642597"
       data-payment_config="SINGLE"
       data-page_action="PAYMENT"
       data-version="V2"
@@ -14,4 +14,5 @@
       data-callback="{% url 'cart:cart' %}"
       data-return_page="{% url 'cart:cart' %}"
       data-cancel_page="{% url 'cart:cart' %}"
-      async></script>
+      async>
+</script>

@@ -1,0 +1,142 @@
+{% extends "dashboard/seller/base.html" %}
+
+{% block content %}
+    <div class="ps-main__wrapper">
+        <header class="header--dashboard">
+            <div class="header__left">
+                <h3>#{{ object.transaction_id }}</h3>
+                <p>Détail de la commande #{{ object.transaction_id }}</p>
+            </div>
+        </header>
+
+        <section class="ps-dashboard">
+            <div class="ps-section__left">
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="ps-card ps-card--order-information ps-card--small">
+                            <div class="ps-card__header">
+                                <h4>Informations sur la livraison</h4>
+                            </div>
+                            <div class="ps-card__content">
+                                <h5>{{ object.short_name }}</h5>
+                                <p>
+                                    <strong>Adresse: </strong>
+                                    {{ object.shipping_delivery }}
+                                </p>
+                                <p><strong>Téléphone: </strong>
+                                    {{ object.phone }} {% if object.phone_two %}
+                                    / {{ object.phone_two }}
+                                {% endif %}</p>
+                                <p>
+                                    <strong>Email:</strong>
+                                    {{ object.email }}
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6">
+                        <div class="ps-card ps-card--order-information ps-card--small">
+                            <div class="ps-card__header">
+                                <h4>Détail de la facturation</h4>
+                            </div>
+                            <div class="ps-card__content">
+                                <p><strong>Méthode de paiment: </strong> Visa</p>
+                                <p><strong>Provider:</strong> **** **** **** *2121</p>
+                                <p><strong>Valid Date:</strong> 02-2025</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="ps-card ps-card--track-order">
+                    <div class="ps-card__header">
+                        <h4>#{{ object.transaction_id }}</h4>
+                    </div>
+                    <div class="ps-card__content">
+                        <div class="table-responsive">
+                            <table class="table ps-table">
+                                <thead>
+                                    <tr>
+                                        <th>Produit</th>
+                                        <th>Quantité</th>
+                                        <th>Prix</th>
+                                        <th>Total</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for object in object_list %}
+                                        <tr>
+                                            <td>
+                                                <a href="{{ object.get_absolute_url }}">
+                                                {{ object.product.name }}</a>
+                                            </td>
+                                            <td>{{ object.quantity }}</td>
+                                            <td>${{ object.product.price }}</td>
+                                            <td>${{ object.total }}</td>
+                                        </tr>
+                                    {% endfor %}
+                                    <tr>
+                                        <td colspan="3"><strong>Sous-total:</strong></td>
+                                        <td><strong>${{ object.total }}</strong></td>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="3"><strong>Frais de livraison:</strong></td>
+                                        <td><strong>$250</strong></td>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="3"><strong>Total:</strong></td>
+                                        <td><strong>${{ object.total }}</strong></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="ps-section__right">
+                <div class="ps-card ps-card--track-order">
+                    <div class="ps-card__header">
+                        <h4>Suivi de la commande</h4>
+                    </div>
+                    <div class="ps-card__content">
+                        <div class="ps-block--track-order">
+                            <div class="ps-block__header">
+                                <div class="row">
+                                    <div class="col-12">
+                                        <figure>
+                                            <figcaption>Numéro de suivi:</figcaption>
+                                            <p>#{{ object.transaction_id }}</p>
+                                        </figure>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="ps-block__content">
+                                <div class="ps-block__timeline">
+                                    <figure class="active">
+                                        <figcaption>Commande passée</figcaption>
+                                        <p>{{ object.date }}</p>
+                                    </figure>
+                                    <figure class="active">
+                                        <figcaption>Emballé</figcaption>
+                                        <p>Sep 19, 2020 <small>10:00am</small></p>
+                                    </figure>
+                                    <figure class="active">
+                                        <figcaption>Expédié</figcaption>
+                                        <p>Sep 19, 2020 <small>4:00pm</small></p>
+                                    </figure>
+                                    <figure>
+                                        <figcaption>Livré</figcaption>
+                                        <p>Livraison estimée sous 03 jours</p>
+                                    </figure>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+{% endblock content %}
+

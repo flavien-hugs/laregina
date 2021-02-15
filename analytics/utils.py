@@ -166,7 +166,7 @@ def get_recently_viewed(request):
     t_id = tracking_id(request)
     from analytics.models import ProductView
     views = ProductView.objects.filter(
-        tracking_id=t_id).values('product_id').order_by('-date_viewed_at')
+        tracking_id=t_id).values('product_id').order_by('-date_viewed')
     
     product_ids = [v['product_id'] for v in views]
     return Product.objects.filter(id__in=product_ids)[:50]

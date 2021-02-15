@@ -28,6 +28,7 @@ babel = "*"
 pillow = "*"
 django-admin-thumbnails = "*"
 mailchimp = "*"
+mysqlclient = "*"
 
 [requires]
 python_version = "3.8"

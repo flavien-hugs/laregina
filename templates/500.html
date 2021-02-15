@@ -9,7 +9,7 @@
                     <img src="{{ STATIC_PREFIX }}img/404.jpg" alt="{{ page_title }}">
                     <h3>Ooops ! - {{ page_title  }}</h3>
                     <p>Il semble quelques choses à mal fonctionner.
-                        retour à la <a href="{{ request.META.HTTP_REFERER }}"> page précédente.</a>
+                        Aller à la <a href="{% url 'home' %}"> page d'acueil.</a>
                     </p>
                 </div>
             </div>

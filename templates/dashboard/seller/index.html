@@ -1,77 +1,128 @@
 <!-- seller_dasboard/base.html -->
 
 {% extends "dashboard/seller/base.html" %}
+{% load humanize %}
 
 {% block content %}
     <div class="ps-main__wrapper">
-        <header class="header--dashboard">
+        <div class="row justify-content-end">
+            {% if messages %}
+                {% for message in messages %}
+                    <div class="alert alert-block {{ message.tags }} alert-dismissible font-weight-bold" role="alert">
+                        {{ message|safe }}
+                        <button class="close" type="button" data-dismiss="alert" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                {% endfor %}
+            {% endif %}
+        </div>
+
+        <header class="header--dashboard mb-5">
             <div class="header__left">
                 <h3>Tableau de bord</h3>
-            </div>
-
-            <div class="header__center">
-                <form class="ps-form--search-bar" action="#" method="get">
-                    <input class="form-control" type="text" placeholder="Rechercher...">
-                    <button><i class="icon-magnifier"></i></button>
-                </form>
-            </div>
-
-            <div class="header__right">
-                <a class="header__site-link" href="{{ object.get_absolute_url }}" target="_blank">
-                    <span>Consulter votre boutique</span>
-                    <i class="icon-exit-right"></i>
-                </a>
             </div>
         </header>
 
         <section class="ps-dashboard">
             <div class="ps-section__left">
                 <div class="ps-card">
-                    <div class="ps-card__header">
-                        <h4>Dernières commandes</h4>
-                    </div>
-                    <div class="ps-card__content">
-                        <div class="table-responsive">
-                            <table class="table ps-table">
-                                <thead>
-                                    <tr>
-                                        <th>ID</th>
-                                        <th>Date</th>
-                                        <th>Produit</th>
-                                        <th>Paiement</th>
-                                        <th>Status</th>
-                                        <th>Total</th>
-                                        <th></th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr>
-                                        <td>#A580</td>
-                                        <td><strong> Aug, 15, 2020</strong></td>
-                                        <td><a href="#"><strong>Unero Black Military</strong></a></td>
-                                        <td><span class="ps-badge success">Payé</span></td>
-                                        <td><span class="ps-fullfillment success">Livré</span></td>
-                                        <td><strong>$56.00</strong></td>
-                                        <td>
-                                            <div class="dropdown">
-                                                <a id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="icon-ellipsis"></i></a>
-
-                                                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                                                    <a class="dropdown-item" href="#">Modifier</a>
-                                                    <a class="dropdown-item" href="#">Supprimer</a>
-                                                </div>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                </tbody>
-                            </table>
+                    {% if order_list %}
+                        <div class="ps-card__header">
+                            <h4>Vos dernières commandes</h4>
                         </div>
-                    </div>
-                    <div class="ps-card__footer">
-                        <a class="ps-card__morelink" href="#">
-                            Afficher toutes les commandes <i class="icon icon-chevron-right"></i>
-                        </a>
-                    </div>
+                        
+                        <div class="ps-card__content">
+                            <div class="table-responsive">
+                                <table class="table ps-table">
+                                    <thead>
+                                        <tr>
+                                            <th>#</th>
+                                            <th>N° Commande</th>
+                                            <th>Date</th>
+                                            <th>Status</th>
+                                            <th>Total</th>
+                                            <th></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {% for object in order_list|slice:'0:5' %}
+                                            {% include "dashboard/seller/includes/_snippet_order_table.html" %}
+                                        {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+
+                        <div class="ps-card__footer">
+                            <a class="ps-card__morelink" href="{% url 'seller:order_list' %}">
+                                Afficher toutes les commandes
+                                <i class="icon icon-chevron-right"></i>
+                            </a>
+                        </div>
+                    {% else %}
+                        <div class="ps-section__content">
+                            <div class="text-center py-2">
+                                <span class="d-flex justify-content-center">
+                                    <img class="img-fluid" height="160px" width="160px"
+                                    srcset="{{ STATIC_PREFIX }}img/emptycart.png"
+                                    src="{{ STATIC_PREFIX }}img/emptycart.png" alt="empty-cart-{{ page_title }}">
+                                </span>
+
+                                <p class="font-weight-bold">Vous n'avez aucune commande pour l'instant.</p>
+                            </div>
+                        </div>
+                    {% endif %}
+                </div>
+
+
+                <div class="ps-card">
+                    {% if product_list %}
+                        <div class="ps-card__header">
+                            <h4>Vos produits en vente</h4>
+                        </div>
+                        
+                        <div class="ps-card__content">
+                            <div class="table-responsive">
+                                <table class="table ps-table">
+                                    <thead>
+                                        <tr>
+                                            <th>#</th>
+                                            <th>Nom</th>
+                                            <th>Prix</th>
+                                            <th>Catégories</th>
+                                            <th>Date de mise en ligne</th>
+                                            <th></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {% for object in product_list|slice:'0:5' %}
+                                            {% include "dashboard/seller/includes/_snippet_product_table.html" %}
+                                        {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+
+                        <div class="ps-card__footer">
+                            <a class="ps-card__morelink" href="{% url 'seller:product_list' %}">
+                                Afficher tous vos produits
+                                <i class="icon icon-chevron-right"></i>
+                            </a>
+                        </div>
+                    {% else %}
+                        <div class="ps-section__content">
+                            <div class="text-center py-2">
+                                <span class="d-flex justify-content-center">
+                                    <img class="img-fluid" height="160px" width="160px"
+                                    srcset="{{ STATIC_PREFIX }}img/emptycart.png"
+                                    src="{{ STATIC_PREFIX }}img/emptycart.png" alt="empty-cart-{{ page_title }}">
+                                </span>
+
+                                <p class="font-weight-bold">Vous n'avez aucun produit en vente pour l'instant.</p>
+                            </div>
+                        </div>
+                    {% endif %}
                 </div>
             </div>
             <div class="ps-section__right">
@@ -81,39 +132,21 @@
                     </div>
                     <div class="ps-card__content">
                         <div class="ps-block--stat yellow">
-                            <div class="ps-block__left"><span><i class="icon-cart"></i></span></div>
+                            <div class="ps-block__left"><span><i class="icon-bag2"></i></span></div>
                             <div class="ps-block__content">
-                                <p>Commandes</p>
-                                <h4>254<small class="asc">
-                                    <i class="icon-arrow-up"></i>
-                                    <span>12,5%</span></small>
-                                </h4>
+                                {% with count=order_list.count %}
+                                    <p>Commande{{ count|pluralize:',s' }}</p>
+                                    <h4>{{ count }}</h4>
+                                {% endwith %}
                             </div>
                         </div>
                         <div class="ps-block--stat pink">
-                            <div class="ps-block__left"><span><i class="icon-cart"></i></span></div>
+                            <div class="ps-block__left"><span><i class="icon-database"></i></span></div>
                             <div class="ps-block__content">
-                                <p>Revenue</p>
-                                <h4>
-                                    $6,260
-                                    <small class="asc">
-                                        <i class="icon-arrow-up"></i>
-                                        <span>7.1%</span>
-                                    </small>
-                                </h4>
-                            </div>
-                        </div>
-                        <div class="ps-block--stat green">
-                            <div class="ps-block__left"><span><i class="icon-cart"></i></span></div>
-                            <div class="ps-block__content">
-                                <p>Revenue</p>
-                                <h4>
-                                    $2,567
-                                    <small class="desc">
-                                        <i class="icon-arrow-down"></i>
-                                        <span>0.32%</span>
-                                    </small>
-                                </h4>
+                                {% with count=product_list.count %}
+                                    <p>Produit{{ count|pluralize:',s' }}</p>
+                                    <h4>{{ count }}</h4>
+                                {% endwith %}
                             </div>
                         </div>
                     </div>

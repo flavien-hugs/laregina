@@ -2,7 +2,7 @@
 
 from django.contrib import admin
 from search.models import SearchTerm
-from cart.services.cart_csv import export_to_csv
+from services.export_data_csv import export_to_csv
 
 
 @admin.register(SearchTerm)

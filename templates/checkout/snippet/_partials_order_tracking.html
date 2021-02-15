@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+
+{% block content %}
+    {% include "includes/partials/_partials_breadcrumb.html" %}
+
+    <div class="ps-order-tracking">
+        <div class="container">
+            <div class="ps-section__header">
+                <h3>Suivre l'état de votre commande</h3>
+                <p>Pour suivre votre commande, veuillez entrer votre ID de commande dans la case ci-dessous et appuyez sur le bouton «Suivre». Cela vous a été remis sur votre reçu et dans l'e-mail de confirmation que vous auriez dû recevoir.</p>
+            </div>
+            <div class="ps-section__content">
+                <form class="ps-form--order-tracking" action="#" method="get">
+                    <div class="form-group">
+                        <label>N° de la commande</label>
+                        <input class="form-control" type="text" placeholder="Entrer le N° de la commande qui vous a été fourni">
+                    </div>
+                    <div class="form-group">
+                        <label>Numéro de téléphone</label>
+                        <input class="form-control" type="text" placeholder="Veuillez entrer le Numéro avec lequel vous avez passé la commande">
+                    </div>
+                    <div class="form-group">
+                        <button class="ps-btn ps-btn--fullwidth">Vérifiez l'état de votre commande</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+{% endblock content %}

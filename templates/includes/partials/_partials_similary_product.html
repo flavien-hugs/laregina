@@ -6,7 +6,7 @@
     <aside class="widget widget_same-brand">
         <h3>De la même catégorie</h3>
         <div class="widget__content">
-            {% for instance in related_product|slice:':2' %}
+            {% for instance in related_product|slice:'0:2' %}
                 <div class="ps-product">
                     <div class="ps-product__thumbnail">
                         <a href="{{ instance.get_absolute_url }}">
@@ -28,8 +28,8 @@
                                 <span>{{ instance.countreview }} avis clients</span>
                             </div>
                             <p class="ps-product__price sale">
-                                {{ instance.price|currency }}
-                                {% if instance.old_price %}<del>{{ instance.old_price|currency }}</del>
+                                {{ instance.price }}
+                                {% if instance.old_price %}<del>{{ instance.old_price }}</del>
                                 {% endif %}
                             </p>
                         </div>
@@ -37,7 +37,8 @@
                         <div class="ps-product__content hover">
                             <a class="ps-product__title" href="{{ instance.get_absolute_url }}">{{ instance.name|truncatewords:"10"|safe }}</a>
 
-                            <p class="ps-product__price sale">{{ instance.price|currency }} {% if instance.old_price %}<del>{{ instance.old_price|currency }} </del>{% endif %}</p>
+                            <p class="ps-product__price sale">{{ instance.price }}
+                                {% if instance.old_price %}<del>{{ instance.old_price }} </del>{% endif %}</p>
                         </div>
                     </div>
                 </div>

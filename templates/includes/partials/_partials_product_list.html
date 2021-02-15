@@ -1,18 +1,17 @@
 <!-- includes/partials/_partials_product_list -->
 
 {% load cache catalogue_tags %}
-
 {% cache 60 product_list request.user.id %}
-    <div class="ps-section--default mb-3">
+    <div class="ps-section--default my-3">
         <div class="ps-section__header mb-3 pb-3">
             <h3>{{ header_text }}</h3>
         </div>
 
         <div class="ps-section__content">
-            <div class="ps-shopping-product" style="min-height:60vh !important;">
+            <div class="ps-shopping-product" style="min-height:50vh!important;">
                 <div class="row">
                     {% for instance in object_list %}
-                        {% include "catalogue/snippet/product.html" %}
+                        {% include "catalogue/snippet/_snippet_product.html" with instance=instance %}
                     {% endfor %}
                 </div>
             </div>

@@ -6,4 +6,4 @@ from django.apps import AppConfig
 class CatalogueConfig(AppConfig):
     label = 'catalogue'
     name = 'catalogue'
-    verbose_name = 'catalogue de produits'
+    verbose_name = 'catalogue'

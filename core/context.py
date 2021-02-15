@@ -10,9 +10,10 @@ def context(request):
         'desc': settings.INDEX_DESCRIPTION,
         'description': settings.SITE_DESCRIPTION,
         'keywords': settings.META_KEYWORDS,
-        'contact_one': '30 63 04 19',
-        'contact_two': '47 47 36 27',
-        'email_info': 'infos@laregina-ci.com',
+        'contact_one': '+225 07 7872 2639',
+        'contact_two': '07 4747 3627',
+        'contact_three': '07 7872 2639',
+        'email_info': 'infos@laregina.deals',
         'facebook': 'https://www.facebook.com/laregina.ci/',
         'twitter': 'https://twitter.com/CoteLaregina',
         'request': request

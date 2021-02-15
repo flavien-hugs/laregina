@@ -1,0 +1,240 @@
+{% extends "base.html" %}
+
+
+{% block content %}
+    {% include "includes/partials/_partials_breadcrumb.html" %}
+
+    <div class="page-header text-center bg-light py-5">
+        <div class="container">
+            <div class="ps-section__header">
+                <h1>{{ page_title }}</h1>
+            </div>
+        </div><!-- End .container -->
+    </div><!-- End .page-header -->
+
+    <div class="page-content py-5">
+        <div class="container">
+            <div class="ps-section__content">
+                <div class="table-responsive">
+                    <table class="table ps-table--faqs">
+                        <tbody>
+                            <tr>
+                                <td class="heading" rowspan="6">
+                                    <h4>Politique de retour</h4>
+                                </td>
+                                
+                                <td class="question">
+                                    Comment retourner un produit ?
+                                </td>
+                                
+                                <td class="text-justify">
+                                    <p class="mt-0">&mdash; Se connecter sur son compte client et choisir la 
+                                    commande contenant l(es) article(s) à retourner puis
+                                    cliquer sur "Demander le retour".</p>
+
+                                    <p>&mdash; Choisir le nombre d'article à retourner et la raison
+                                    du retour puis ajouter un complément d'information afin
+                                    de faciliter la procédure.</p>
+
+                                    <p>&mdash; Choisir l’option de remboursement.</p>
+
+                                    <p>&mdash; Choisir le point relais de dépôt de votre choix.</p>
+
+                                    <p>&mdash; Vérifier les détails de votre demande de retour puis
+                                    soumettez-la.</p>
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <td class="question">Retour sous une semaine.</td>
+                                <td>
+                                    <p class="mt-0">Vous disposez d’une semaine à compter de la date de
+                                    livraison pour effectuer le retour de votre article si celui-ci
+                                    rempli les conditions de retour. </p>
+                                </td>
+                            </tr>
+                            
+                            <tr>
+                                <td class="question">Conditions et procédures de retour d’un produit.</td>
+                                <td>
+                                    <p class="mt-0">Lorsque vous faites des achats sur {{ title }},
+                                    vous pouvez être assuré que vous pouvez retourner
+                                    votre produit dans la plupart des cas dans les sept 07
+                                    jours ouvrables à compter de la date de réception de votre colis.</p>
+                                    
+                                    <p>Pour en savoir plus sur notre politique, nos conditions et sur
+                                    les modalités de retour, cliquez ici. (À relier aux conditions).</p>
+
+                                    <p><b>Nota bene:</b> <br>
+                                    &mdash; Lorsque vous retournez un article, assurez-vous que tous les scellés,
+                                    étiquettes et accessoires sont laissés intacts et que l'article se trouve dans
+                                    son emballage d'origine. Si vous avez créé un mot de passe sur
+                                    l'appareil que vous souhaitez le retourner, veuillez vous assurer
+                                    qu'il ait été retiré et remis dans son état d'origine,
+                                    sinon votre retour sera rejeté.</p>
+
+                                    <p>&mdash; En cas de retour pour raison de changement d'avis,
+                                    l'article doit être éligible pour cette raison et être scellé,
+                                    inutilisé et dans son emballage d'origine de marque, sinon,
+                                    votre retour sera rejeté.</p>
+
+                                    <p>Besoin d'aide ? <a class="font-weight-bold" href="{% url "pages:contact" %}">
+                                    Contactez-nous</a></p>
+
+                                    Notre service clientèle reste disponible de
+                                    <strong>08h00 à 17h00min du Lundi au vendredi, Samedi de 08h00 à 14h00.</strong>
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <td class="question">
+                                    Est-il possible d’effectuer un échange de produit ?
+                                </td>
+                                <td>
+                                    <p class="mt-0">
+                                        Il n'est pas possible d'effectuer un échange de produit. Tout article
+                                        retourné est sujet à un remboursement si le retour a été validé par
+                                        le service après-vente. 
+                                    </p>
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <td class="question">
+                                    Suivi de l’avancement de mon retour et de mon remboursement.
+                                </td>
+                                <td>
+                                    <p class="mt-0">
+                                        La procédure de retour commence à partir de la vérification de
+                                        votre produit en agence.
+                                        Les remboursements pour les articles retournés sont effectifs
+                                        dans un délai allant de 5 à 12 jours. 
+                                    </p>
+
+                                    <p>Pour plus d'informations sur nos délais de remboursement cliquez
+                                    ici  (à relier au délai de remboursement). Les remboursements se font
+                                    exclusivement par bon d'achat, Money ou MTN Mobile Money.
+                                    Si le remboursement n'est pas effectué dans un délai de 12 jours,
+                                    nous vous invitons à contacter le service client via le formulaire de
+                                    contact en suivant le lien de  08h00 à 17h00 du Lundi au vendredi,
+                                    Samedi de 08h00 à 14h00.</p>
+
+                                    <p>Vous pouvez suivre le statut de votre retour à tout moment,
+                                    il vous suffit de suivre les étapes simples ci-dessous:</p>
+                                    <p>Connectez-vous à votre compte {{ title }}.</p>
+
+                                    <p>&mdash; Cliquez sur "Mon compte" dans le coin supérieur
+                                    droit de la page d'accueil de {{ title }}
+                                    (Votre nom apparaîtra ici si vous êtes connecté).</p>
+
+                                    <p>&mdash; Puis cliquez sur "Vos commandes" dans le menu à
+                                    gauche.</p>
+
+                                    <p>&mdash; Enfin, cliquez sur "Détails" à droite de
+                                    l'élément.</p>
+                                    
+                                    <p>
+                                        Besoin d'aide ?
+                                        <a href="{% url 'pages:contact' %}" class="font-weight-bold">
+                                        Contactez-nous.</a>
+                                    </p>
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <td class="question">
+                                    Mon produit est-il sous garantie ?
+                                </td>
+                                <td>
+                                    <p class="mt-0">
+                                        Pour de vérifier si un article est couvert par une garantie,
+                                        nous vous invitons à consulter sa fiche produit sur le site,
+                                        le compte client ayant été utilisé lors de la passation de
+                                        la commande ou sur le bordereau d'achat que vous avez reçu
+                                        à la réception du produit. 
+                                    </p>
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <td class="heading" rowspan="6">
+                                    <h4>Commande &amp; Retour</h4>
+                                </td>
+                                
+                                <td class="question">
+                                    Articles éligibles au retour
+                                </td>
+                                
+                                <td class="text-justify">
+                                    <p class="mt-0">Tous les produits peuvent être retournés pour
+                                    changement d'avis sous 7 jours après leur réception,
+                                    à l'exception des catégories de produits cités ci-dessous: </p>
+                                    <p>&mdash; Sous vêtement - maillot de bain</p>
+                                    <p>&mdash; Produit de beauté et d'hygiène</p>
+                                    <p>&mdash; Meuble large, Matelas</p>
+                                    <p>&mdash; Réfrigérateur et Congélateur</p>
+                                    <p>&mdash; Gros Electroménager, Gazinière</p>
+                                    <p>&mdash; Splits / climatiseurs</p>
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <td class="question">
+                                    Que faire en cas de refus de ma demande de retour ?
+                                </td>
+                                
+                                <td class="text-justify">
+                                    <p class="mt-0">Si la demande de retour d'un article est refusée,
+                                    c'est qu'une ou plusieurs des conditions requises
+                                    n'a pas été respectée.</p>
+                                    
+                                    <p>Un article refusé par le service après-vente,
+                                    reste disponible au retrait durant <strong>100 jours</strong>.
+                                    Passé ce délai, l'article partira automatiquement à la destruction.</p>
+
+                                    <p>Le cas échéant, le service après-vente
+                                    vous contactera par e-mail, SMS ou téléphone afin
+                                    d'apporter plus d'information au refus du retour.</p>
+
+                                    <p>Il sera alors proposé une liste d'agences proches
+                                    du domicile du client pour que ce dernier puisse récupérer
+                                    le produit en question.</p>
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <td class="question">Retour rapide et facile</td>
+                                
+                                <td class="text-justify">
+                                    <p class="mt-0">AUCUN frais à payer pour effectuer un retour d'article.</p>
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <td class="question">Remboursement Complet</td>
+                                
+                                <td class="text-justify">
+                                    <p class="mt-0">
+                                        Vous recevez 100% de la valeur de votre achat incluant les frais de livraison en bon d'achat,
+                                        si vous avez reçu un article défectueux, non conforme ou si vous changez d'avis. 
+                                    </p>
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <td class="question">Authenticité Garantie</td>
+                                <td>
+                                    <p class="mt-0">
+                                    Nous nous engageons à offrir à nos clients 100% de produits
+                                    authentiques et originaux. 
+                                    </p>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div><!-- End .container -->
+    </div><!-- End .page-content -->
+    
+{% endblock content %}

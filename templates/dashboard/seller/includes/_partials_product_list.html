@@ -1,0 +1,66 @@
+{% extends "dashboard/seller/base.html" %}
+{% load  humanize %}
+
+{% block content %}
+    <div class="ps-main__wrapper">
+        <header class="header--dashboard mb-2">
+            <div class="header__left">
+                <h3>Produits</h3>
+                <p>Listes de vos produits en vente dans votre boutique.</p>
+            </div>
+        </header>
+
+        <section class="ps-items-listing">
+            {% include "dashboard/seller/includes/_partials_message.html" %}
+            <div class="ps-section__header simple">
+                <div class="ps-section__filter">
+                    <form class="ps-form--filter" action="#" method="get">
+                        <div class="ps-form__left">
+                            <div class="form-group">
+                                <input class="form-control" type="text" placeholder="Rechercher un produit...">
+                            </div>
+                        </div>
+                        <div class="ps-form__right">
+                            <button class="ps-btn ps-btn--gray">
+                                Chercher
+                            </button>
+                        </div>
+                    </form>
+                </div>
+
+                <div class="ps-section__actions">
+                    <a class="ps-btn success" href="{% url "seller:product_create" %}">
+                    <i class="icon icon-plus mr-2"></i>Ajouter un nouveau produit</a>
+                </div>
+            </div>
+
+            
+                <div class="ps-section__content">
+                    {% if object_list %}
+                        <div class="table-responsive">
+                            <table class="table ps-table">
+                                <thead>
+                                    <tr>
+                                        <th>#</th>
+                                        <th>Nom</th>
+                                        <th>Prix</th>
+                                        <th>Catégories</th>
+                                        <th>Date de mise en ligne</th>
+                                        <th></th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for object in object_list %}
+                                        {% include "dashboard/seller/includes/_snippet_product_table.html" %}
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                        {% include "dashboard/seller/includes/_partials_pagination.html" %}
+                    {% else %}
+                        {% include "dashboard/seller/includes/_partials_store_empty.html" %}
+                    {% endif %}
+                </div>
+        </section>
+    </div>
+{% endblock content %}

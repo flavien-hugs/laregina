@@ -17,7 +17,6 @@ class CustomerSignUpView(CreateView):
     model = User
     form_class = CustomerSignUpForm
     template_name = 'account/signup.html'
-
     extra_context = {'user_type': 'buyer'}
 
     def dispatch(self, request, *args, **kwargs):

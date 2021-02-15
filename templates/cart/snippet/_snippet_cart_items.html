@@ -1,0 +1,58 @@
+<!-- mobile cartitem list -->
+{% load static catalogue_tags %}{% get_static_prefix as STATIC_PREFIX %}
+
+<div class="ps-panel--sidebar" id="cart-mobile">
+    <div class="ps-panel__header">
+        <h3>Panier</h3>
+    </div>
+
+    <div class="navigation__content">
+        <div class="ps-cart--mobile">
+            {% if items %}
+                <div class="ps-cart__content">
+                    {% for obj in items %}
+                        <article class="ps-product--cart-mobile">
+                            <div class="ps-product__thumbnail">
+                                <a href="{{ obj.get_absolute_url }}">
+                                    <img src="{{ obj.product.get_image_url }}" alt="{{ obj.name }}">
+                                </a>
+                            </div>
+                            <div class="ps-product__content">
+                                <a href="{{ obj.get_absolute_url }}">
+                                    {{ obj.name }}
+                                </a>
+                                <p>
+                                    <strong>Vendu par:</strong> {{ obj.product.user.store }}
+                                </p>
+                                <small>{{ obj.quantity }} x {{ obj.price }}</small>
+                            </div>
+                        </article>
+                    {% endfor %}
+                </div>
+                <div class="ps-cart__footer">
+                    <h3 class="text-uppercase">
+                        sous-total:
+                        <strong>{{ cart_subtotal }}</strong>
+                    </h3>
+                    <figure>
+                        <a class="ps-btn text-uppercase" href="{% url "cart:cart" %}">
+                        voir le panier</a>
+                        <form method="POST" action=".">
+                            <input type="hidden" name="submit" value="checkout">
+                            <input class="ps-btn text-uppercase" type="submit" name="submit" value="checkout">
+                        </form>
+                    </figure>
+                </div>
+            {% else %}
+                <div class="text-center py-5">
+                    <span class="d-flex justify-content-center">
+                        <img class="img-fluid" height="160px" width="160px"
+                        srcset="{{ STATIC_PREFIX }}img/emptycart.png"
+                        src="{{ STATIC_PREFIX }}img/emptycart.png" alt="empty-cart-{{ page_title }}">
+                    </span>
+                    <h3 class="font-weight-bold">Votre panier est vide !</h3>
+                </div>      
+            {% endif %}
+        </div>
+    </div>
+</div>

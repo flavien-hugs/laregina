@@ -1826,7 +1826,7 @@ textarea.form-control {
   justify-content: space-between;
   align-items: center;
   padding: 30px;
-  border-radius: 20px;
+  /*border-radius: 20px;*/
   max-width: 300px;
 }
 
@@ -3309,7 +3309,7 @@ textarea.form-control {
 }
 
 .ps-main .ps-main__sidebar {
-  max-width: 375px;
+  max-width: 300px;
   padding: 60px 0 60px 60px;
   background-color: #f1f2f6;
 }

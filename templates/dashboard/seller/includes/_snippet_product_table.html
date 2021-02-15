@@ -1,0 +1,32 @@
+<tr>
+    <td>{{ forloop.counter }}</td>
+    <td>
+        <a href="{{ object.get_absolute_url }}">
+            <strong>
+                {{ object.name|truncatewords:"1" }}
+            </strong>
+        </a>
+    </td>
+    <td>{{ object.price }}</td>
+    <td>
+        <p class="ps-item-categories">
+            <a href="{{ object.category.get_absolute_url }}">
+            {{ object.category.name }}</a>
+        </p>
+    </td>
+    <td>{{ object.created_at|timesince }}</td>
+    <td>
+        <div class="dropdown">
+            <a id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                <i class="icon-ellipsis"></i>
+            </a>
+            
+            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                <a class="dropdown-item" href="{{ object.get_update_url }}">
+                Modifier</a>
+                <a class="dropdown-item" href="{{ object.get_delete_url }}">
+                Supprimer</a>
+            </div>
+        </div>
+    </td>
+</tr>

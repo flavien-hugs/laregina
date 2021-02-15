@@ -5,17 +5,31 @@
 
     <div class="ps-panel__content">
         <ul class="menu--mobile">
-            <li class="menu-item-has-children">
-                <a href="{% url "home" %}">Accueil</a>
-            </li>
             {% if request.user.is_authenticated  %}
                 {% if request.user.is_seller or request.user.is_superuser %}
                     <li class="menu-item-has-children has-mega-menu">
-                        <a href="{% url "seller:profile" %}">Ma boutique</a>
+                        <a href="{% url "seller:profile" %}">
+                            <i class="icon-home mr-2"></i>Tableau de bord</a>
                     </li>
 
                     <li class="menu-item-has-children has-mega-menu">
-                        <a href="#">Mes commandes</a>
+                        <a href="{% url "seller:order_list" %}">
+                        <i class="icon-bag2 mr-2"></i>Mes Commandes</a>
+                    </li>
+
+                    <li class="menu-item-has-children has-mega-menu">
+                        <a href="{% url "seller:product_list" %}">
+                        <i class="icon-database mr-2"></i>Mes Articles</a>
+                    </li>
+
+                    <li class="menu-item-has-children has-mega-menu">
+                        <a href="{{ request.user.get_update_url }}">
+                        <i class="icon-cog mr-2"></i>Réglages</a>
+                    </li>
+
+                    <li class="menu-item-has-children has-mega-menu">
+                        <a href="{{ request.user.get_absolute_url }}">
+                        <i class="icon-exit-right mr-2"></i>Mon Magasin</a>
                     </li>
                 {% elif request.user.is_buyer %}
                     <li class="menu-item-has-children has-mega-menu">

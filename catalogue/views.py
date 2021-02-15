@@ -1,6 +1,5 @@
 # catalogue.views.py
 
-import json
 import random
 from django.db.models import Q
 from django.urls import reverse
@@ -10,7 +9,6 @@ from django.core.cache import cache
 from django.views.generic import ListView
 from django.utils.safestring import mark_safe
 from django.shortcuts import render, get_object_or_404
-from django.core.exceptions import ImproperlyConfigured
 from django.http import HttpResponseRedirect, HttpResponse
 
 from cart import cart
@@ -21,55 +19,34 @@ from catalogue.forms import ProductAddToCartForm
 from catalogue.models import Product, ProductImage
 
 from reviews.models import ProductReview
+from catalogue.filters import FilterMixin
 from reviews.forms import ProductReviewForm
-
-
-class FilterMixin(object):
-    filter_class = None
-    search_ordering_param = "ordering"
-
-    def get_queryset(self, *args, **kwargs):
-        try:
-            qs = super(FilterMixin, self).get_queryset(*args, **kwargs)
-            return qs
-        except:
-            raise ImproperlyConfigured("Vous devez disposer d'un queryset pour pouvoir utiliser le FilterMixin")
-
-    def get_context_data(self, *args, **kwargs):
-        qs = self.get_queryset()
-        ordering = self.request.GET.get(self.search_ordering_param)
-        if ordering:
-            qs = qs.order_by(ordering)
-        filter_class = self.filter_class
-        if filter_class:
-            f = filter_class(self.request.GET, queryset=qs)
-            kwargs["object_list"] = f
-        return super(FilterMixin, self).get_context_data(*args, **kwargs)
 
 
 # PRODUCT LIST VIEW
 class ProductListView(FilterMixin, ListView):
-    paginate_by = 50
     model = Product
-    queryset = Product.objects.all()
+    paginate_by = 80
     extra_context = {'page_title': 'Tous les produits'}
     template_name = "catalogue/product_list.html"
 
     def get_context_data(self, *args, **kwargs):
-        kwargs["now"] = timezone.now()
         kwargs["query"] = self.request.GET.get("q", None)
-        return super(ProductListView, self).get_context_data(*args, **kwargs)
+        return super().get_context_data(*args, **kwargs)
 
     def get_queryset(self, *args, **kwargs):
-        qs = super(ProductListView, self).get_queryset(*args, **kwargs)
+        qs = super().get_queryset(*args, **kwargs)
         query = self.request.GET.get("q")
         if query:
-            qs = self.model.objects.filter(
-                Q(name__icontains=query) | Q(description__icontains=query)
+            query_one = self.model.objects.filter(
+                Q(name__icontains=query)
+                | Q(description__icontains=query)
+                | Q(price__icontains=query)
+                | Q(keywords__icontains=query)
             )
             try:
-                qs2 = self.model.objects.filter(Q(price=query))
-                qs = (qs | qs2).distinct()
+                query_two = self.model.objects.filter(Q(price=query))
+                qs = (query_one | query_two).distinct()
             except:
                 pass
         return qs
@@ -81,11 +58,6 @@ def show_product(request, slug, template="catalogue/product_detail.html"):
     vue pour chaque page de produit
     """
     p = get_object_or_404(Product, slug=slug)
-
-    # renvoie du nombre de fois le produit est visité
-    nb_view = int(p.nb_view)
-    nb_view += 1
-
     product_cache_key = request.path
     
     # essayer de récupérer le produit à partir du cache
@@ -111,10 +83,7 @@ def show_product(request, slug, template="catalogue/product_detail.html"):
             # vers la page du panier
             cart.add_to_cart(request)
             
-            msg = """
-            Vous avez ajouté l'article "{product}" à votre panier.
-            """.format(product=p.name)
-            
+            msg = """ '{product}' a été ajouté à votre panier.""".format(product=p.name)
             messages.success(request, mark_safe(msg))
 
             # si le cookie de test a fonctionné,
@@ -126,13 +95,13 @@ def show_product(request, slug, template="catalogue/product_detail.html"):
         # créer le formulaire non lié. Remarquez la requête
         # comme un argument de mot-clé
         form = ProductAddToCartForm(request=request, label_suffix=':')
-    
-    # attribuer à l'entrée cachée le slug du produit
-    # form.fields['slug'].widget.attrs['value'] = slug
 
     # affiche les produits similaires
-    similar_product = sorted(Product.objects.get_related(
+    related_product = sorted(Product.objects.get_related(
         instance=p)[:15], key=lambda x: random.random())
+
+    # affiche les produits recommendés
+    recommended_product = Product.objects.recomended_product(instance=p)
     
     # définir le cookie de test pour s'assurer
     # que les cookies sont activés
@@ -152,12 +121,11 @@ def show_product(request, slug, template="catalogue/product_detail.html"):
         
         'form': form,
         'review_form': ProductReviewForm(),
-        # 'product_review': product_review,
 
+        'related_product': related_product,
+        'recommended_product': recommended_product,
         'cart_items': cart.get_cart_items(request),
-        'related_product': similar_product,
         'recently_viewed': utils.get_recently_viewed(request),
-        'recommended_product': utils.recommended_from_views(request)
     }
 
     return render(request, template, context)
@@ -181,7 +149,7 @@ def addRreview(request, slug):
     if request.method == 'POST':
         form = ProductReviewForm(request.POST or None)
         if form.is_valid():
-            # Assign the current product to the review
+            # Affecter le produit actuel au commentaire
             rating = form.cleaned_data['rating']
             email = form.cleaned_data['email']
             content = form.cleaned_data['content']
@@ -196,35 +164,7 @@ def addRreview(request, slug):
                 created_time_at=timezone.now(),
                 created_hour_at=timezone.now(),
             )
+
             messages.success(request, "Votre avis à été ajouté avec succes. Merci pour votre intérêt.")
             return HttpResponseRedirect(product.get_absolute_url())
     return HttpResponseRedirect(product.get_absolute_url())
-
-
-
-def addProductRreview(request):
-
-    form = ProductReviewForm(request.POST or None)
-    
-    # review posted
-    if form.is_valid():
-        # Assign the current product to the review
-        review = form.save(commit=False)
-        slug = request.POST.get('slug')
-        product = Product.objects.get(slug=slug)
-        review.user = request.user
-        review.product = product
-        review.save()
-        messages.success(request, "Votre avis à été ajouté avec succes. Merci pour votre intérêt.")    
-        
-        template = 'includes/partials/_partials_product_review.html'
-        ctx = {'review': review}
-        html = render_to_string(template, ctx)
-        response = json.dumps({'succes': 'True', 'html': html})
-    else:
-        html = form.errors.as_ul()
-        response = json.dumps({'success': 'False', 'html': html})        
-    return HttpResponse(
-        response,
-        content_type='application/javascript; charset=utf-8'
-    )

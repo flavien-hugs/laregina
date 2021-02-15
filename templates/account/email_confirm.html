@@ -6,7 +6,7 @@
 
 {% block content %}
     <div class="ps-page--my-account">
-        {% include "partials/breadcrumb.html" %}
+        {% include "includes/partials/_partials_breadcrumb.html" %}
 
         <div class="ps-my-account">
             <div class="container">
@@ -21,7 +21,7 @@
                                     <p class="h2 pb-4">
                                         {% with confirmation.email_address.email as email %}
                                             S'il vous plaît confirmer que <a href="mailto:{{ email }}" class="font-weight-bold text-primary">{{ email }}</a>
-                                            est une adresse email pour l'activation du compte du Magasin <b>{{ user_display }}</b>.
+                                            est une adresse email pour l'activation de votre compte.
                                         {% endwith %}
                                     </p>
 

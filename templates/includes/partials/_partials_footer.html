@@ -1,0 +1,84 @@
+<!-- includes/footer.html -->
+{% load mptt_tags %}
+    
+    <!-- subscribe form -->
+
+    <footer class="ps-footer pt-5 flex-shrink-0 border">
+        <div class="ps-container">
+            <div class="ps-footer__widgets pb-0">
+                <aside class="widget widget_footer widget_contact-us">
+                    <h4 class="widget-title">Contactez-nous</h4>
+                    <div class="widget_content">
+                        <p>Appelez-nous 24/7</p>
+                        <h3>{{ contact_one }}</h3>
+                        <p>{{ address }}</p>
+                    </div>
+                </aside>
+
+                <aside class="widget widget_footer">
+                    <h4 class="widget-title">Liens rapides</h4>
+                    <ul class="ps-list--link">
+                        <li><a href="{% url "pages:faqs" %}">FAQs</a></li>
+                        <li><a href="{% url "pages:return" %}">Politique de retour</a></li>
+                        <li><a href="{% url "pages:policy" %}">Politique de Confidentialité</a></li>
+                        <li><a href="{% url "pages:cgu" %}">Conditions Générales d'Utilisation</a></li>
+                    </ul>
+                </aside>
+
+                <aside class="widget widget_footer">
+                    <h4 class="widget-title">Entreprise</h4>
+                    <ul class="ps-list--link">
+                        <li><a href="{% url "pages:contact" %}">Contactez-nous</a></li>
+                        <li><a href="{% url "pages:about-us" %}">À propos de nous</a></li>
+                        <li><a href="#">Mode de livraison</a></li>
+                    </ul>
+                </aside>
+
+                {% if not request.resolver_match.url_name == 'account_signup' or not request.resolver_match.url_name == 'account_login' or not request.resolver_match.url_name == 'customer_signup' %}
+                    <aside class="widget widget_footer">
+                        <h4 class="widget-title">Mon compte</h4>
+                        <ul class="ps-list--link">
+                            <li><a href="{% url "seller:product_list" %}">Mes articles</a></li>
+                            <li><a href="{% url "seller:order_list" %}">Mes commandes</a></li>
+                            <li><a href="{% url "checkout:order_tracking" %}">Suivre ma commande</a></li>
+                            <li><a href="#">Mode de paiement</a></li>
+                        </ul>
+                    </aside>
+                {% else %}
+                    <aside class="widget widget_footer">
+                        <h4 class="widget-title">Aide(FAQ)</h4>
+                        <ul class="ps-list--link">
+                            <li><a href="#">Poliques de Vente</a></li>
+                            <li><a href="#">Conseils pour son magasin</a></li>
+                            <li><a href="#">Conseils pour son produit</a></li>
+                        </ul>
+                    </aside>
+                {% endif %}
+            </div>
+
+            <div class="ps-footer__links py-3">
+                {% recursetree category %}
+                    <p><strong>{{ node.name|safe }}:</strong>
+                        {% if not node.is_leaf_node and node.children.all %}
+                            {% for children in node.children.all %}
+                                <a href="{{ children.get_absolute_url }}">{{ children }}</a>
+                                {% for obj in children.children.all %}
+                                    <a href="{{ obj.get_absolute_url }}">{{ obj.name|safe }}</a>
+                                {% endfor %}
+                            {% endfor %}
+                        {% endif %}
+                    </p>
+                {% endrecursetree %}
+            </div>
+
+            <div class="ps-footer__copyright py-3">
+                <p>&copy; <script>document.write(new Date().getFullYear());</script> {{ title }}.</p>
+
+                {% include "includes/partials/_partials_social_link.html" %}
+            </div>
+        </div>
+    </footer>
+
+    <div id="back2top"><i class="icon icon-arrow-up"></i></div>
+
+    <div class="ps-site-overlay"></div>

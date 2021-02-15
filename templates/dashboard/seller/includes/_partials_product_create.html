@@ -1,0 +1,26 @@
+{% extends "dashboard/seller/base.html" %}
+
+{% block content %}
+    {% include "dashboard/seller/includes/_partials_message.html" %}
+    <div class="ps-main__wrapper">
+        <header class="header--dashboard mb-2">
+            <div class="header__left">
+                {% if request.resolver_match.url_name == 'product_update' %}
+                    <h3>Mise à jour</h3>
+                    <p></p>
+                {% else %}
+                    <h3>Nouveau produit</h3>
+                    <p>Ajouter un nouveau produit</p>
+                {% endif %}
+            </div>
+        </header>
+
+        <section class="ps-new-item">
+            <form class="ps-form ps-form--new-product" action="." method="post">
+                {% csrf_token %}
+                {% include "dashboard/seller/includes/_partials_form.html" %}
+            </form>
+        </section>
+    </div>
+{% endblock content %}
+

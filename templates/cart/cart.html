@@ -3,7 +3,7 @@
 {% block css %}{% endblock css %}
 
 {% block content %}
-    {% include "partials/breadcrumb.html" %}
+    {% include "includes/partials/_partials_breadcrumb.html" %}
 
     <section class="container">
         <div class="ps-page__container">
@@ -15,7 +15,6 @@
                     <div class="ps-section__content">
                         <div class="table-responsive">
                             <table summary="Votre panier d'achat" class="table ps-table--shopping-cart ps-table--responsive">
-                                <caption>Votre panier d'achat.</caption>
                                 <thead>
                                     <tr>
                                         <th scope="col">Produit</th>
@@ -38,20 +37,21 @@
                                                     </div>
                                                     <div class="ps-product__content">
                                                         <a href="{{ object.get_absolute_url }}">
-                                                            {{ object.name }}
+                                                            {{ object.name|safe }}
                                                         </a>
-                                                        <p>
-                                                            Vendu par: <strong>
+                                                        {% if object.product.user.store %}   
+                                                            <p>Vendu par: <strong>
                                                                 <a href="{{ object.product.user.get_absolute_url }}">
-                                                            {{ object.product.user.store }}</a>
-                                                            </strong>
-                                                        </p>
+                                                                {{ object.product.user.store }}</a>
+                                                                </strong>
+                                                            </p>
+                                                        {% endif %}
                                                     </div>
                                                 </div>
                                             </td>
 
                                             <td class="price" data-label="Prix">
-                                                {{ object.price|currency }}
+                                                {{ object.price }}
                                             </td>
 
                                             <td data-label="Quantité">
@@ -62,37 +62,52 @@
                                                         <input type='hidden' name='item_id' value='{{ object.id }}'>
                                                     </div>
 
-                                                    <button class="ps-btn font-weight-bold" type="submit" name="submit" value="update" required><i class="icon-sync"></i>
+                                                    <button class="ps-btn font-weight-bold" type="submit" name="submit" value="update" required>
+                                                        <i class="icon-sync"></i>
                                                     </button>
                                                 </form>
                                             </td>
 
-                                            <td data-label="Sous-total">{{ object.total|currency }}</td>
+                                            <td data-label="Sous-total">{{ object.total }}</td>
 
                                             <td data-label="Supprimer">
                                                 <form method="post" action=".">
                                                     {% csrf_token %}
                                                     <input type="hidden" name="item_id" value="{{ object.id }}">
-                                                    <button class="ps-btn" type="submit" name="submit" value="remove"><i class="icon-cross"></i>
+                                                    <button class="ps-btn" type="submit" name="submit" value="remove">
+                                                        <i class="icon-cross"></i>
                                                     </button>
                                                 </form> 
                                             </td>
                                         </tr>
                                     {% endfor %}
+
+                                    <tr class="bg-light">
+                                        <td class="font-weight-bold" colspan="4"><h3>Total</h3></td>
+                                        <td data-label='Sous-total'>
+                                        <h3><span class="font-weight-bold" style="color:#f30">
+                                        {{ cart_subtotal }}</span></h3></td>
+                                    </tr>
                                 </tbody>
                             </table>
                         </div>
 
                         <div class="ps-section__cart-actions">
-                            <a href="{{ request.META.HTTP_REFERER }}" class="ps-btn ps-btn--outline"><i class="icon-arrow-left"></i> Retour</a>
-
                             <!-- poursuivre ces commandes : liste des produits -->
-                            <a href="{% url "catalogue:product_list" %}" class="ps-btn ps-btn--outline">Poursuivre mes commandes <i class="icon-arrow-right"></i>
+                            <a href="{% url "catalogue:product_list" %}" class="ps-btn ps-btn--outline text-uppercase">
+                                Poursuivre vos achats <i class="icon-arrow-right"></i>
                             </a>
+
+                            <!-- bouton de validation -->
+                            <form method="POST" action=".">
+                                {% csrf_token %}
+                                <button class="ps-btn ps-btn--fullwidth text-uppercase" type="submit" name="submit" value="checkout">
+                                passer à la commande</button>
+                            </form>
                         </div>
                     </div>
 
-                    <div class="ps-section__footer">
+                    <!--  <div class="ps-section__footer">
                         <div class="row">
                             <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 col-12 ">
                                 <figure>
@@ -108,7 +123,7 @@
                             </div>
 
                             <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 col-12 ">
-                                <!-- <figure>
+                                <figure>
                                     <figcaption>Calculer Frais de livraison</figcaption>
                                     <div class="form-group">
                                         <select class="ps-select">
@@ -129,13 +144,13 @@
                                     <div class="form-group">
                                         <button class="ps-btn ps-btn--outline">Mettre à jour</button>
                                     </div>
-                                </figure>-->
+                                </figure>
                             </div>
 
                             <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 col-12 ">
                                 <div class="ps-block--shopping-total">
                                     <div class="ps-block__header">
-                                        <p>Sous-total <span> {{ cart_subtotal|currency }}</span></p>
+                                        <p>Sous-total <span> {{ cart_subtotal }}</span></p>
                                     </div>
                                     
                                     <div class="ps-block__content">
@@ -152,27 +167,28 @@
                                                 </li>
                                             {% endfor %}
                                         </ul>
-                                        <h3>Total <span>{{ cart_subtotal|currency }}</span></h3>
+                                        <h3>Total <span>{{ cart_subtotal }}</span></h3>
                                     </div>
                                 </div>
 
                                 <form method="POST" action=".">
                                     {% csrf_token %}
-                                    <button class="ps-btn ps-btn--fullwidth text-uppercase" type="submit" name="submit" value="checkout">passer la commande</button>
+                                    <button class="ps-btn ps-btn--fullwidth text-uppercase" type="submit" name="submit" value="checkout">
+                                    passer à la commande</button>
                                 </form>
                             </div>
                         </div>
-                    </div>
+                    </div>-->
                 {% else %}
                     {% include "cart/empty_cart.html" %}
                 {% endif %}
             </div>
         </div>
 
-        <!-- afficher liste des articles recommandés -->
-        {% if recommended_product and not cart_items  %}
+        <!-- afficher liste des articles recommandés
+        {% if recommended_product and not cart_items %}
             {% product_list recommended_product 'Les clients ayant acheté cet article ont également acheté' %}
-        {% endif %}
+        {% endif %} -->
         {% if recently_viewed and not cart_items %}
             {% product_list recently_viewed 'Produits récemment vus' %}
         {% endif %}

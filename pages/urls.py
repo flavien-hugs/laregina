@@ -35,10 +35,17 @@ urlpatterns  = [
             'page_description': "Conditions Générales d'Utilisation"
         }, template_name='pages/cgu.html')), name='cgu'),
     
-    path('politique-confidentialite/',
+    path('politique-de-confidentialite/',
         cache_page(CACHE_TTL)(TemplateView.as_view(
             extra_context={
             'page_title': "Politique de Confidentialité",
             'page_description': "Politique de Confidentialité"
-        }, template_name='pages/terms.html')), name='terms'),
+        }, template_name='pages/policy.html')), name='policy'),
+
+    path('politique-de-retour/',
+        cache_page(CACHE_TTL)(TemplateView.as_view(
+            extra_context={
+            'page_title': "Politique de retour",
+            'page_description': "Politique de retour"
+        }, template_name='pages/return.html')), name='return'),
 ]

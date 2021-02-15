@@ -10,7 +10,7 @@
                     <img src="{{ STATIC_PREFIX }}img/404.jpg" alt="{{ page_title }}">
                     <h3>ohh! Page non trouvée - {{ page_title  }}</h3>
                     <p>Il semble que nous ne trouvons pas ce que vous cherchez.
-                        Retounez à <a href="{{ request.META.HTTP_REFERER }}"> la page précédente.</a>
+                        Aller à la <a href="{% url 'home' %}"> page d'acueil.</a>
                     </p>
                 </div>
             </div>

@@ -5,6 +5,7 @@ from pathlib import Path
 from decouple import config
 from django.contrib.messages import constants as messages
 
+
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -19,9 +20,15 @@ DEBUG = TEMPLATE_DEBUG = config('DEBUG', default=True, cast=bool)
 DEFAULT_CHARSET = 'UTF-8'
 SITE_DESCRIPTION = ""
 INDEX_DESCRIPTION = "Vendez sur LaRegina"
-META_KEYWORDS = ''
+META_KEYWORDS = 'vente, achat, '
 SITE_NAME = 'LaRegina Deals'
 APPEND_SLASH = True
+
+# Custom Django auth settings
+AUTH_USER_MODEL = 'accounts.User'
+
+# site ID for allauth
+SITE_ID = 1
 
 ADMINS = (
     #(, )
@@ -31,7 +38,7 @@ MANAGERS = ADMINS
 
 # DJANGO-ADMIN CONFIGURATION
 # Location of root django.contrib.admin URL
-ADMIN_URL = 'admin/'
+ADMIN_URL = 'lrg-admin/'
 
 # See: https://docs.djangoproject.com/en/1.11/ref/settings/#allowed-hosts
 ALLOWED_HOSTS = []
@@ -39,8 +46,7 @@ ALLOWED_HOSTS = []
 
 # See: https://docs.djangoproject.com/en/1.11/ref/settings/#installed-apps
 INSTALLED_APPS = [
-    # for authorization and registration
-    
+
     'django.contrib.auth',
     'django.contrib.sites',
 
@@ -70,13 +76,14 @@ OTHERS_APPS = [
 ]
 
 LOCAL_APPS = [
+
+    'search.apps.SearchConfig',
     'accounts.apps.AccountsConfig',
     'category.apps.CategoryConfig',
     'catalogue.apps.CatalogueConfig',
     'reviews.apps.ReviewsConfig',
     'cart.apps.CartConfig',
-    'order.apps.OrderConfig',
-    'search.apps.SearchConfig',
+    'checkout.apps.CheckoutConfig',
     'analytics.apps.AnalyticsConfig',
     'pages.apps.PagesConfig',
     'caching',
@@ -84,23 +91,16 @@ LOCAL_APPS = [
 
 INSTALLED_APPS += OTHERS_APPS + LOCAL_APPS
 
-# Custom Django auth settings
-AUTH_USER_MODEL = 'accounts.User'
-
-# Site ID for allauth
-SITE_ID = 1
-# SITE_ID = config('SITE_ID', cast=int)
-
 # AUTHENTICATION CONFIGURATION
 AUTHENTICATION_BACKENDS = [
     # 'django.contrib.auth.backends.ModelBackend',
     'allauth.account.auth_backends.AuthenticationBackend',
 ]
 
-# Les utilisateurs connectés sont redirigés ici s'ils consultent les pages de connexion/inscription
+# Les utilisateurs connectés sont redirigés ici s'ils
+# consultent les pages de connexion/inscription
 LOGIN_URL = 'account_login'
 LOGIN_REDIRECT_URL = 'seller:profile'
-    
 
 # Ne pas afficher la confirmation de déconnexion
 ACCOUNT_LOGOUT_ON_GET = True
@@ -128,7 +128,7 @@ ACCOUNT_FORMS = {
 }
 
 # La valeur d'affichage de l'utilisateur est le nom du profil associé
-ACCOUNT_USER_DISPLAY = lambda user: user.name
+ACCOUNT_USER_DISPLAY = lambda user: user.shipping_first_name
 
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
@@ -145,7 +145,7 @@ EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 # Let's Encrypt ssl/tls https
 SECURE_FRAME_DENY = True
 CSRF_COOKIE_SECURE = True
-SESSION_COOKIE_NAME = 'cookies'
+SESSION_COOKIE_NAME = '__cks__'
 SESSION_COOKIE_DAYS = 90
 SESSION_COOKIE_AGE = 60 * 60 * 24 * SESSION_COOKIE_DAYS 
 SESSION_EXPIRE_AT_BROWSER_CLOSE = False
@@ -208,6 +208,8 @@ TEMPLATES = [
         },
     },
 ]
+
+
 # See: http://django-crispy-forms.readthedocs.io/en/latest/install.html#template-packs
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
 
@@ -223,8 +225,12 @@ PRODUCT_PER_ROW = 4
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': config('DATABASE_NAME'),
+        'USER': config('DATABASE_USER'),
+        'PASSWORD': config('DATABASE_PASSWORD'),
+        'HOST': config('DATABASE_HOST', cast=str),
+        'PORT': config('DATABASE_PORT', cast=int),
         'ATOMIC_REQUESTS': True
     }
 }
@@ -373,7 +379,6 @@ PHONENUMBER_DB_FORMAT = "NATIONAL"
 CINETPAY_API_KEY = config('CINETPAY_KEY')
 CINETPAY_SITE_ID = config('CINETPAY_SITE_ID')
 CINETPAY_TRANS_ID = config('CINETPAY_TRANS_ID')
-CINETPAY_POST_URL = 'secure.cinetpay.com'
 
 # Mailchimp Configuration
 MAILCHIMP_API_KEY = config('MAILCHIMP_API_KEY')

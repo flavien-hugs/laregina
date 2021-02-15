@@ -1,5 +1,6 @@
 # catalogue.managers.py
 
+import random
 from django.db import models
 from django.db.models import Q
 from django.utils import timezone
@@ -8,7 +9,7 @@ from django.utils import timezone
 # STRUCTURE PRODUCT MODEL QUERYSET
 class CatalogueQuerySet(models.query.QuerySet):
     def active(self):
-        return self.filter(is_active=True, is_stock=True)
+        return self.filter(is_active=True)
 
     def product_recent_add(self):
         return self.filter(created_at__lte=timezone.now()).active()
@@ -44,3 +45,9 @@ class CatalogueManager(models.Manager):
     def get_related(self, instance):
         product = self.get_queryset().filter(category=instance.category)
         return (product).exclude(id=instance.id).distinct()
+
+    def recomended_product(self, instance):
+        product = self.get_queryset().filter(user=instance.user).exclude(id=instance.id)
+        product_list = list(product)
+        random.shuffle(product_list)
+        return product_list[:30]

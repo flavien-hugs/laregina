@@ -1,17 +1,238 @@
 {% extends "base.html" %}
 
 {% block content %}
-    {% include "partials/breadcrumb.html" %}
+    {% include "includes/partials/_partials_breadcrumb.html" %}
+    <!-- end breadcround -->
 
-    <div class="ps-about-intro py-5">
+    <section class="ps-about-intro py-5">
         <div class="container">
             <div class="ps-section__header">
                 <h4 class="mb-5 text-center">{{ page_title }}</h4>
+                <h3>
+                    Cette notification de confidentialité et de cookies fournit des informations sur la
+                    façon dont <strong class="font-weight-bold"><ins>
+                        <a class="font-weight-bold" href="{% url 'home' %}">{{ title }}</ins></a>
+                    </strong> collecte et traite vos données personnelles lorsque vous visitez
+                    notre site Web ou nos applications mobiles.
+                </h3>
 
-                <h3>Nous connectons des millions d'acheteurs et de vendeurs à travers le monde, responsabilisons les gens et créons des opportunités économiques pour tous.</h3>
 
-                <p>Sur nos marchés, des millions de personnes dans le monde se connectent, en ligne et hors ligne, pour fabriquer, vendre et acheter des produits uniques. Nous proposons également une large gamme de services et d'outils pour les vendeurs qui aident les entrepreneurs créatifs à démarrer, gérer et développer leur entreprise. Notre mission est de réinventer le commerce de manière à créer un monde plus épanouissant et durable, et nous nous engageons à utiliser le pouvoir des entreprises pour renforcer les communautés et autonomiser les gens.</p>
+                <article>
+                    <div class="mb-3">
+                        <h3 class="mb-1">Les données que nous collectons</h3>
+                        <p>
+                            Nous collectons vos données personnelles afin de fournir et
+                            d’améliorer continuellement nos produits et services.
+                            Nous pouvons collecter, utiliser, stocker et transférer les différents
+                            types de données personnelles suivantes vous concernant:
+                        </p>
+
+                        <ul>
+                            <li>
+                                Informations que vous nous fournissez: nous recevons et stockons les
+                                informations que vous nous fournissez, y compris vos données d'identité,
+                                vos coordonnées, votre adresse de livraison et vos données financières.
+                            </li>
+                            <li>
+                                Informations sur votre utilisation de notre site Web et/ou de nos applications
+                                mobiles: nous collectons et stockons automatiquement certains types d'informations
+                                concernant votre utilisation du site {{ title }} (marketplace), y compris des
+                                informations sur vos recherches, vues, téléchargements et achats.
+                            </li>
+                            <li>
+                                Informations provenant de tiers et de sources accessibles au public: nous pouvons
+                                recevoir des informations vous concernant de tiers, y compris nos transporteurs;
+                                prestataires de services de paiement; marchands/marques; et prestataires de services
+                                publicitaires.
+                            </li>
+                        </ul>
+                    </div>
+
+                    <div class="mb-3">
+                        <h3 class="mb-1">Les cookies et comment nous les utilisons</h3>
+
+                        <p>
+                            Un cookie est un petit fichier de lettres et de chiffres que nous mettons sur
+                            votre ordinateur si vous y consentez.
+                            Les cookies nous permettent de vous distinguer des autres utilisateurs de notre
+                            site Web et de nos applications mobiles, ce qui nous aide à vous offrir une expérience
+                            de navigation améliorée. Par exemple, nous utilisons des cookies aux fins suivantes:
+                        </p>
+
+                        <ul>
+                            <li>
+                                Reconnaître et compter le nombre de visiteurs et voir comment les visiteurs se
+                                déplacent sur le site lorsqu’ils l'utilisent (cela nous aide à améliorer le
+                                fonctionnement de notre site Web, par exemple en nous assurant que les utilisateurs
+                                peuvent trouver ce qu'ils recherchent).
+                            </li>
+                            <li>
+                                Identifier vos préférences et abonnements, par ex. Paramètres de langue, articles
+                                enregistrés, articles stockés dans votre panier et abonnement Prime; et
+                            </li>
+                            <li>
+                                Envoi de newsletters et de messages commerciaux/publicitaires adaptés à vos intérêts.
+                            </li>
+                        </ul>
+
+                        <p>
+                            Nos tiers agréés peuvent également définir des cookies lorsque vous utilisez notre
+                            site web (marketplace). Les tiers incluent les moteurs de recherche, les fournisseurs
+                            de services de mesure et d'analyse, les réseaux sociaux et les sociétés de publicité.
+                        </p>
+                    </div>
+
+                    <div class="mb-3">
+                        <h3 class="mb-1">Comment nous utilisons vos données personnelles</h3>
+
+                        <p>
+                            Nous utilisons vos données personnelles pour exploiter, fournir, développer et
+                            améliorer les produits et services que nous proposons, notamment les suivants:
+                        </p>
+                        <ul>
+                            <li>
+                                Vous inscrire en tant que nouveau client.
+                            </li>
+                            <li>
+                                Traitement et livraison de vos commandes.
+                            </li>
+                            <li>
+                                Gérer votre relation avec nous.
+                            </li>
+                            <li>
+                                Vous permettre de participer à des promotions, des concours et des sondages.
+                            </li>
+                            <li>
+                                Amélioration de notre site Web, de nos applications, produits et services.
+                            </li>
+                            <li>
+                                Recommander/annoncer des produits ou services susceptibles de vous intéresser.
+                            </li>
+                            <li>
+                                Respecter nos obligations légales, y compris vérifier votre identité si nécessaire.
+                            </li>
+                            <li>
+                                Détecter les fraudes.
+                            </li>
+                        </ul>
+                    </div>
+
+                    <div class="mb-3">
+                        <h3 class="mb-1">Comment nous partageons vos données personnelles</h3>
+
+                        <p>
+                            Nous pouvons être amenés à partager vos données personnelles avec des tiers aux fins suivantes:
+                        </p>
+                        <ul>
+                            <li>
+                                Vente de produits et services: afin de livrer vos produits et services achetés sur notre
+                                site web (marketplace) à des tiers, nous pouvons être amenés à fournir vos données
+                                personnelles à ces tiers.
+                            </li>
+                            <li>
+                                Travailler avec des prestataires de services tiers: nous engageons des tiers pour
+                                exécuter certaines fonctions en notre nom. Les exemples incluent l'exécution des
+                                commandes de produits ou de services, la livraison de packages, l'analyse des données,
+                                la fourniture d'une assistance marketing, le traitement des paiements,
+                                la transmission de contenu, l'évaluation et la gestion du risque de crédit et la
+                                fourniture d'un service client. 
+                            </li>
+                            <li>
+                                Transferts d’entreprises : à mesure que nous poursuivons le développement de nos
+                                activités, nous pouvons vendre ou acheter d’autres entreprises ou services.
+                                Dans de telles transactions, les informations client peuvent être transférées
+                                avec d'autres actifs commerciaux.
+                            </li>
+                            <li>
+                                Détection des fraudes et des abus: Nous communiquons des comptes et autres
+                                données personnelles à d'autres sociétés et organisations pour la protection
+                                contre la fraude et la réduction des risques de crédit, et pour nous conformer à la loi.
+                            </li>
+                        </ul>
+
+                        <p>
+                            Lorsque nous partageons vos données personnelles avec des tiers, nous:
+                        </p>
+                        <ul>
+                            <li>
+                                leur demandons  d’accepter d'utiliser vos données conformément aux termes
+                                de la présente notification de confidentialité et de cookies, à notre politique
+                                de confidentialité et de protection des données et à la loi en vigueur; et
+                            </li>
+                            <li>
+                                leur permettons uniquement de traiter vos données personnelles à des
+                                fins spécifiées et conformément à nos instructions. Nous n'autorisons
+                                pas nos prestataires de services tiers/partenaires à utiliser vos données
+                                personnelles à leurs propres fins.
+                            </li>
+                        </ul>
+                    </div>
+
+                    <div class="mb-3">
+                        <h3 class="mb-1">Transferts internationaux</h3>
+
+                        <p>
+                            Nous pouvons transférer vos données personnelles vers des emplacements dans
+                            un autre pays, si cela est autorisé conformément aux lois applicables dans votre
+                            emplacement. Il existe des risques inhérents à ces transferts.
+                            En cas de transfert international de vos données personnelles, nous mettrons
+                            en place les mesures nécessaires pour protéger vos données, et nous continuerons à
+                            respecter vos droits légaux conformément aux termes de la présente politique de
+                            confidentialité et de cookies et aux lois applicables dans votre pays. 
+                        </p>
+                    </div>
+
+                    <div class="mb-3">
+                        <h2 class="mb-1">Sécurité des données</h2>
+
+                        <p>
+                            Nous avons mis en place des mesures de sécurité appropriées pour éviter
+                            que vos données personnelles ne soient accidentellement perdues, utilisées
+                            ou consultées de manière non autorisée, modifiées ou divulguées.
+                            En outre, nous limitons l'accès à vos données personnelles aux employés, agents,
+                            sous-traitants et autres tiers qui ont besoin de les connaître pour exécuter leurs obligations.
+                            Ils ne traiteront vos données personnelles que sur nos instructions et sont soumis à un devoir
+                            de confidentialité.
+                            Nous avons mis en place des procédures pour faire face à toute violation présumée de
+                            données personnelles et vous informerons ainsi que tout organisme de réglementation compétent,
+                            de toute violation lorsque nous sommes légalement tenus de le faire.
+                        </p>
+                    </div>
+
+                    <div class="mb-3">
+                        <h3 class="mb-1">Vos droits légaux</h3>
+
+                        <p>
+                            Il est important que les données personnelles que nous détenons à votre sujet
+                            soient exactes et à jour. Veuillez nous tenir informés si vos données personnelles
+                            changent pendant votre relation avec nous.
+                            Dans certaines circonstances, vous avez des droits en vertu des lois sur la protection des
+                            données en ce qui concerne vos données personnelles, y compris le droit d'accéder, de corriger
+                            ou de supprimer vos données personnelles et le droit de vous opposer ou de restreindre
+                            le traitement de vos données personnelles.
+                        </p>
+                    </div>
+
+                    <div class="mb-3">
+                        <h3 class="mb-1">Détails complémentaires</h3>
+
+                        <p>
+                            Si vous recherchez plus d'informations sur la façon dont nous traitons vos données
+                            personnelles, ou si vous souhaitez exercer vos droits légaux à l'égard de vos données
+                            personnelles, veuillez contacter :
+                        </p>
+                        <p class="font-weight-bold">
+                            <span>
+                                Contact: (+225) {{ contact_one }} / {{ contact_two }} / {{ contact_three }}
+                            </span> &smid;
+
+                            <span>Email: {{ email_info }}</span> &smid;
+
+                            <span>WhatsApp: (+225) {{ contact_two }} / {{ contact_three }} </span>
+                        </p>
+                    </div>
+                </article><!-- End .page-content -->
             </div>
         </div>
-    </div>
+    </section>
 {% endblock content %}

@@ -6,9 +6,9 @@ from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
 from accounts.models import User
 from accounts.forms import MarketSignupForm, MarketChangeForm
 
-admin.site.site_header = "CGIC MARKET"
-admin.site.site_title = "CGIC MARKET Admin"
-admin.site.index_title = "Espace d'Administration CGIC MARKET"
+admin.site.site_header = "Laregina"
+admin.site.site_title = "Laregina"
+admin.site.index_title = "Espace d'Administration Laregina"
 
 @admin.register(User)
 class UserAdmin(BaseUserAdmin):
@@ -20,19 +20,17 @@ class UserAdmin(BaseUserAdmin):
         (None, {'fields':
             (   
                 "store_id",
-                "name",
+                "shipping_first_name",
+                "shipping_last_name",
                 "email",
                 "store",
                 "slug",
-                "phone_number",
-                "whatsapp_number",
-                "country",
-                "city",
+                "phone",
+                "phone_two",
+                "shipping_country",
+                "shipping_city",
                 "store_description",
-                "address",
-                "facebook",
-                "linkedin",
-                "instagramm",
+                "shipping_adress",
                 "password",
             )}
         ),
@@ -58,16 +56,7 @@ class UserAdmin(BaseUserAdmin):
     list_display = (
         "store_id",
         "email",
-        "name",
         "store",
-        "phone_number",
-        "whatsapp_number",
-        "country",
-        "city",
-        "address",
-        "facebook",
-        "linkedin",
-        "instagramm",
         "is_buyer",
         "is_seller",
         "is_active",
@@ -78,6 +67,7 @@ class UserAdmin(BaseUserAdmin):
         "is_buyer",
         "is_seller",
         "is_active",
+        ('is_staff', admin.BooleanFieldListFilter),
         "last_login",
         "groups",
     )
@@ -93,3 +83,4 @@ class UserAdmin(BaseUserAdmin):
     search_fields = ('email', 'user', 'store',)
     ordering = ('date_joined',)
     filter_horizontal = ('groups', 'user_permissions',)
+
