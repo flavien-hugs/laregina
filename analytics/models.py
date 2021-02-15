@@ -18,7 +18,7 @@ class ObjectViewed(models.Model):
     ip_address = models.CharField(verbose_name='adresse ip', max_length=225)
     tracking_id = models.CharField(max_length=50, default='', db_index=True)
     date_viewed = models.DateField(verbose_name='date de visite', auto_now=True)
-    time_viewed = models.TimeField(verbose_name='date de visite', auto_now=True)
+    time_viewed = models.TimeField(verbose_name='heure de visite', auto_now=True)
 
     class Meta:
         abstract = True

@@ -6,6 +6,7 @@
             <div class="header__left">
                 <h3>#{{ object.transaction_id }}</h3>
                 <p>Détail de la commande #{{ object.transaction_id }}</p>
+                <p>Status de la commande: <strong>{{ object.status }}</strong></p>
             </div>
         </header>
 
@@ -60,33 +61,33 @@
                                     <tr>
                                         <th>Produit</th>
                                         <th>Quantité</th>
-                                        <th>Prix</th>
+                                        <th>Prix Unitaire</th>
                                         <th>Total</th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    {% for object in object_list %}
+                                    {% for object in object.order_items %}
                                         <tr>
                                             <td>
                                                 <a href="{{ object.get_absolute_url }}">
                                                 {{ object.product.name }}</a>
                                             </td>
                                             <td>{{ object.quantity }}</td>
-                                            <td>${{ object.product.price }}</td>
-                                            <td>${{ object.total }}</td>
+                                            <td>{{ object.product.price }}Fr</td>
+                                            <td>{{ object.total }}Fr</td>
                                         </tr>
                                     {% endfor %}
                                     <tr>
-                                        <td colspan="3"><strong>Sous-total:</strong></td>
-                                        <td><strong>${{ object.total }}</strong></td>
+                                        <td colspan="3"><strong>Frais de livraison:</strong></td>
+                                        <td><strong>1 500Fr</strong></td>
                                     </tr>
                                     <tr>
-                                        <td colspan="3"><strong>Frais de livraison:</strong></td>
-                                        <td><strong>$250</strong></td>
+                                        <td colspan="3"><strong>Sous-total:</strong></td>
+                                        <td><strong>{{ object.total }}Fr</strong></td>
                                     </tr>
                                     <tr>
                                         <td colspan="3"><strong>Total:</strong></td>
-                                        <td><strong>${{ object.total }}</strong></td>
+                                        <td><strong>{{ object.total|safe }}Fr</strong></td>
                                     </tr>
                                 </tbody>
                             </table>

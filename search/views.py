@@ -13,7 +13,7 @@ class SearchView(ListView):
     template_name = 'catalogue/product_list.html'
     success_url = reverse_lazy('search')
     paginate_by = 50
-
+    
     def get_context_data(self, *args, **kwargs):
         query = self.request.GET.get('q', None)
         kwargs['page_title'] = 'Résultat de recherche pour : "{}"'.format(query)

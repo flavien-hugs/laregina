@@ -141,9 +141,10 @@ def cart_subtotal(request):
 
     cart_total = Decimal('0')
     cart_products = get_cart_items(request)
+    delivery_fee = int('1500')
     for cart_item in cart_products:
         cart_total += cart_item.product.price * cart_item.quantity
-    return cart_total
+    return int(cart_total) + delivery_fee
 
 
 def cart_distinct_item_count(request):

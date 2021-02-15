@@ -26,11 +26,7 @@ class SearchTerm(models.Model):
     )
     ip_address = models.CharField(
         verbose_name='adresse IP',
-        max_length=225
-    )
-    tracking_id = models.CharField(
-        verbose_name='tracking id',
-        max_length=50, default=''
+        max_length=225,
     )
     date_search_at = models.DateField(
         verbose_name='date de recherche',
@@ -43,8 +39,6 @@ class SearchTerm(models.Model):
 
     class Meta:
         db_table = 'search_db'
-        index_together = ['ip_address', 'tracking_id']
-        unique_together = ['ip_address', 'tracking_id']
         ordering = ['-date_search_at', '-time_search_at']
         get_latest_by = ['-date_search_at', '-time_search_at']
         verbose_name_plural = 'recherche'

@@ -23,7 +23,7 @@ def store(request, q):
     if len(q) > 4:
         term = SearchTerm()
         term.q = q
-        term.ip_address = request.META.get('REMOTE_ADDR')
+        term.ip_address = request.META.get('HTTP_X_FORWARDED_FOR') or request.META.get('REMOTE_ADDR')
         term.user = None
         if request.user.is_authenticated:
             term.user = request.user

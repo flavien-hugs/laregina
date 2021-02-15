@@ -12,9 +12,10 @@ from django.views.generic import (
 )
 from django.contrib.auth.mixins import PermissionRequiredMixin
 
+from cart import cart
 from ..models import User
-from checkout.models import Order
 from catalogue.models import Product
+from checkout.models import Order, OrderItem
 
 from ..forms import MarketSignupForm, StoreUpdateForm
 from ..mixins import UserAccountMixin, SellerRequiredMixin, ProductEditMixin
@@ -107,8 +108,8 @@ class OrderDetailView(SellerRequiredMixin, DetailView):
     def get_context_data(self, **kwargs):
         kwargs['page_title'] = 'Commande N°: {transaction_id}'.format(
             transaction_id=self.object.transaction_id)
-        kwargs['object_list'] = self.get_order()
         kwargs['total_sale'] = self.get_total_sale()
+        kwargs['cart_subtotal']= cart.cart_subtotal(self.request),
         return super().get_context_data(**kwargs)
 
 
@@ -139,6 +140,10 @@ class ProductCreateView(ProductPermView, CreateView):
         self.object.user = self.request.user
         self.object.save()
         return HttpResponseRedirect(self.get_success_url())
+
+    def get_context_data(self, **kwargs):
+        kwargs['total_sale'] = self.get_total_sale()
+        return super().get_context_data(**kwargs)
 
 
 class ProductUpdateView(ProductPermView, UpdateView):

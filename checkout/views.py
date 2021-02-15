@@ -8,6 +8,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.generic import TemplateView, ListView, DetailView
 
 from cart import cart
+from core import settings
 from checkout import checkout
 from checkout.models import Order
 from checkout.forms import CheckoutForm
@@ -41,6 +42,8 @@ def show_checkout(request, template='checkout/checkout.html'):
         'page_title': 'Paiement',
         'cart_items': cart.get_cart_items(request),
         'cart_subtotal': cart.cart_subtotal(request),
+        'APIKEY': settings.CINETPAY_API_KEY,
+        'SITEID': settings.CINETPAY_SITE_ID,
     }
 
     # context.update(csrf_token)

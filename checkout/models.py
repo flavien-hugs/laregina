@@ -78,10 +78,10 @@ class Order(BaseOrderInfo):
 
     # status de chaque commande
 
-    SUBMITTED = 1
-    PROCESSED = 2
-    SHIPPED = 3
-    CANCELLED = 4
+    SUBMITTED = 'Soumis'
+    PROCESSED = 'Traitée'
+    SHIPPED = 'Expédié'
+    CANCELLED = 'Annulé'
 
     # ensemble de statuts d'ordre possibles
 
@@ -92,8 +92,9 @@ class Order(BaseOrderInfo):
         (CANCELLED, 'Annulé'),
     )
 
-    status = models.IntegerField(
+    status = models.CharField(
         verbose_name='status de le commande',
+        max_length=7,
         choices=ORDER_STATUSES,
         default=SUBMITTED
     )
@@ -171,7 +172,10 @@ class Order(BaseOrderInfo):
         order_items = OrderItem.objects.filter(order=self)
         for item in order_items:
             total += item.total
-        return total
+        return total + 1500
+
+    def order_items(self):
+        return OrderItem.objects.filter(order=self)
 
     def store(self):
         return self.user.store

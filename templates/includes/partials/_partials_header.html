@@ -166,7 +166,7 @@
         </nav>
     </header>
 
-    <header class="header header--mobile {% if request.resolver_match.url_name == 'category_list' %} header--mobile-categories {% elif request.resolver_match.url_name == 'product_detail' %} header--mobile-product {% endif %}" data-sticky="true">
+    <header class="header header--mobile header--mobile-categories header--mobile-product" data-sticky="true">
         <nav class="navigation--mobile">
 
             {% if request.resolver_match.url_name == 'category_list' %}

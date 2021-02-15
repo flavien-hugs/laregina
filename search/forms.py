@@ -25,12 +25,4 @@ class SearchForm(forms.ModelForm):
     class Meta:
         model = SearchTerm
         include = ('q',)
-        exclude = ['ip_address', 'tracking_id', 'date_search_at', 'time_search_at']
-        
-    # def __init__(self, *args, **kwargs):
-    #     super(SearchForm, self).__init__(*args, **kwargs)
-    #     default_text = 'Rechercher un produit, une catégorie, un magasin, une marque...'
-    #     self.fields['q'].widget.attrs['placeholder'] = default_text
-    #     self.fields['q'].widget.attrs['class'] = 'form-control'
-    #     self.fields['q'].widget.attrs['id'] = 'input-search'
-    #     self.fields['q'].widget.attrs['type'] = 'search'
+        exclude = ['ip_address', 'date_search_at', 'time_search_at']

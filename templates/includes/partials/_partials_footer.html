@@ -31,6 +31,7 @@
                         <li><a href="{% url "pages:contact" %}">Contactez-nous</a></li>
                         <li><a href="{% url "pages:about-us" %}">À propos de nous</a></li>
                         <li><a href="#">Mode de livraison</a></li>
+                        <li><a href="#">Mode de paiement</a></li>
                     </ul>
                 </aside>
 
@@ -41,7 +42,6 @@
                             <li><a href="{% url "seller:product_list" %}">Mes articles</a></li>
                             <li><a href="{% url "seller:order_list" %}">Mes commandes</a></li>
                             <li><a href="{% url "checkout:order_tracking" %}">Suivre ma commande</a></li>
-                            <li><a href="#">Mode de paiement</a></li>
                         </ul>
                     </aside>
                 {% else %}
@@ -56,20 +56,22 @@
                 {% endif %}
             </div>
 
-            <div class="ps-footer__links py-3">
-                {% recursetree category %}
-                    <p><strong>{{ node.name|safe }}:</strong>
-                        {% if not node.is_leaf_node and node.children.all %}
-                            {% for children in node.children.all %}
-                                <a href="{{ children.get_absolute_url }}">{{ children }}</a>
-                                {% for obj in children.children.all %}
-                                    <a href="{{ obj.get_absolute_url }}">{{ obj.name|safe }}</a>
+            {% if not request.resolver_match.url_name == 'account_signup' and not request.resolver_match.url_name == 'account_login' %}  
+                <div class="ps-footer__links py-3">
+                    {% recursetree category %}
+                        <p><strong>{{ node.name|safe }}:</strong>
+                            {% if not node.is_leaf_node and node.children.all %}
+                                {% for children in node.children.all %}
+                                    <a href="{{ children.get_absolute_url }}">{{ children }}</a>
+                                    {% for obj in children.children.all %}
+                                        <a href="{{ obj.get_absolute_url }}">{{ obj.name|safe }}</a>
+                                    {% endfor %}
                                 {% endfor %}
-                            {% endfor %}
-                        {% endif %}
-                    </p>
-                {% endrecursetree %}
-            </div>
+                            {% endif %}
+                        </p>
+                    {% endrecursetree %}
+                </div>
+            {% endif %}
 
             <div class="ps-footer__copyright py-3">
                 <p>&copy; <script>document.write(new Date().getFullYear());</script> {{ title }}.</p>

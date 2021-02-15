@@ -94,9 +94,4 @@ def create_order(request):
         
         # tout est prêt, videz le chariot
         cart.empty_cart(request)
-        
-        # sauvegarder les informations sur le profil pour les commandes futures
-        # if request.user.is_authenticated:
-        #     from accounts import profile
-        #     profile.set(request)
     return order

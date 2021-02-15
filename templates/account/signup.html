@@ -4,27 +4,24 @@
 
 {% block content %}
     <div class="ps-page--my-account">
-        {% include "includes/partials/_partials_breadcrumb.html" %}
+        <div class="container">
+            <div class="row justify-content-center mt-5">
+                <div class="col-md-7 col-sm-10">
+                    <div class="pb-5">
+                        <div class="col bg-white p-5">
+                            <h3 class="font-weight-bold text-center">
+                            Créer un compte</h3>
+                            <p class="text-center font-weight-normal pb-4">
+                            Inscrivez-vous et commencez à vendre dès aujourd'hui - créez votre propre compte vendeur.</p>
 
-        <div class="">
-            <div class="container">
-                <div class="row justify-content-center">
-                    <div class="col-md-7 col-sm-10">
-                        <div class="pb-5">
-                            <div class="col bg-white p-5">
-                                <h3 class="font-weight-bold text-center">
-                                Créer un compte</h3>
-                                <p class="text-center font-weight-normal pb-4">Inscrivez-vous et commencez à vendre dès aujourd'hui - créez votre propre compte vendeur.</p>
+                            {% crispy form %}
 
-                                {% crispy form %}
-
-                                <!-- connexion url -->
-                                <div class="text-center w-100 pt-2 pb-3">
-                                    Vous avez déjà un compte ?
-                                    <a href="{% url "account_login" %}">
-                                        <span class="font-weight-bold"><u>Connectez-vous</u>
-                                    </a>
-                                </div>
+                            <!-- connexion url -->
+                            <div class="text-center w-100 pt-2 pb-3">
+                                Vous avez déjà un compte ?
+                                <a href="{% url "account_login" %}">
+                                    <span class="font-weight-bold"><u>Connectez-vous</u>
+                                </a>
                             </div>
                         </div>
                     </div>

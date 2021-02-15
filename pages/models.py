@@ -76,7 +76,7 @@ class Promotion(Annonce):
             if img.height > 399 and img.width > 1650: 
                 output_size = (399, 1650) 
                 img.thumbnail(output_size)
-                img.convert('RVB') 
+                img.convert('RGB') 
                 img.save(self.image.path)
 
     def get_image_url(self):

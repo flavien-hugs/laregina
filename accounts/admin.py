@@ -4,6 +4,7 @@ from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
 
 from accounts.models import User
+from services.export_data_csv import export_to_csv
 from accounts.forms import MarketSignupForm, MarketChangeForm
 
 admin.site.site_header = "Laregina"
@@ -83,4 +84,4 @@ class UserAdmin(BaseUserAdmin):
     search_fields = ('email', 'user', 'store',)
     ordering = ('date_joined',)
     filter_horizontal = ('groups', 'user_permissions',)
-
+    actions = [export_to_csv]

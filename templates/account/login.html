@@ -1,46 +1,41 @@
 <!-- accounts/login.html templates -->
 
 {% extends "base.html" %}
-{% load crispy_forms_tags %}
+{% load static crispy_forms_tags %}{% get_static_prefix as STATIC_PREFIX %}
 
 {% block title %}Connexion{% endblock title %}
 
 {% block content %}
     <div class="ps-page--my-account">
-        
-        {% include "includes/partials/_partials_breadcrumb.html" %}
+        <div class="container">
+            <div class="row justify-content-center mt-5">
+                <div class="col-md-7 col-sm-10">
+                    <div class="pb-5 align-middle">
+                        <div class="col bg-white p-5">
+                            <h3 class="font-weight-bold text-center">Connexion</h3>
 
-        <div class="">
-            <div class="container">
-                <div class="row justify-content-center mt-5">
-                    <div class="col-md-7 col-sm-10">
-                        <div class="pb-5 align-middle">
-                            <div class="col bg-white p-5">
-                                <h3 class="font-weight-bold text-center">Connexion</h3>
+                            <p class="text-center font-weight-normal pb-4">
+                                Veuillez saisir votre adresse email et mot de passe pour vous connecter.
+                            </p>
 
-                                <p class="text-center font-weight-normal pb-4">
-                                    Veuillez saisir votre adresse email et mot de passe pour vous connecter.
-                                </p>
+                            {% crispy form %}
 
-                                {% crispy form %}
+                            <!-- connexion url -->
+                            <div class="text-center w-100 pt-5 pb-3">
+                                Vous êtes un nouvel utilisateur ?
+                                <span class="font-weight-bold">
+                                    <a href="{% url 'account_signup' %}">
+                                        <span><u>Créer votre compte</u></span>
+                                    </a> &smid;
 
-                                <!-- connexion url -->
-                                <div class="text-center w-100 pt-5 pb-3">
-                                    Vous êtes un nouvel utilisateur ?
-                                    <span class="font-weight-bold">
-                                        <a href="{% url 'account_signup' %}">
-                                            <span><u>Créer votre compte</u></span>
-                                        </a> &smid;
-
-                                        <a href="{% url 'account_reset_password' %}">
-                                            <span><u>Mot de passe oublié ?</u></span>
-                                        </a>
-                                    </span>
-                                </div>
+                                    <a href="{% url 'account_reset_password' %}">
+                                        <span><u>Mot de passe oublié ?</u></span>
+                                    </a>
+                                </span>
                             </div>
                         </div>
-                    </div>      
-                </div>
+                    </div>
+                </div>      
             </div>
         </div>
     </div>

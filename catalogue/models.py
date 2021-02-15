@@ -62,6 +62,7 @@ class Product(models.Model):
     old_price = models.DecimalField(
         verbose_name='prix normal',
         blank=True,
+        null=True,
         **DECIMAFIELD_OPTION
     )
     description = models.TextField(

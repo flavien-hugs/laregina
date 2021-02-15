@@ -5,14 +5,14 @@ from django.urls import reverse_lazy
 from django.db.models import Sum, Avg
 from django.contrib.auth.mixins import(
     LoginRequiredMixin,
-    UserPassesTestMixin
+    UserPassesTestMixin,
+    PermissionRequiredMixin
 )
 
 from core import settings
 from catalogue.models import Product
 from catalogue.forms import ProductAdminForm
 from checkout.models import Order, OrderItem
-
 
 User = settings.AUTH_USER_MODEL
 
@@ -50,7 +50,7 @@ class UserAccountMixin(LoginRequiredMixin, object):
     account = None
 
     def get_account(self):
-        return self.request.user
+        return self.request.user.is_seller
 
     def get_product(self):
         object_list = Product.objects.filter(user=self.get_account())
@@ -58,16 +58,19 @@ class UserAccountMixin(LoginRequiredMixin, object):
         return object_list
 
     def get_order(self):
+        return Order.objects.all()
+
+    def get_order_items(self):
         return OrderItem.objects.filter(product__in=self.get_product())
 
     def get_order_today(self):
         today = datetime.date.today()
         today_min = datetime.datetime.combine(today, datetime.time.min)
         today_max = datetime.datetime.combine(today, datetime.time.max)
-        return self.get_order().filter(date_created__range=(today_min, today_max))
+        return self.get_order_items().filter(date_created__range=(today_min, today_max))
 
     def get_total_sale(self):
-        total_order_sale = self.get_order().aggregate(Sum('price'))
+        total_order_sale = self.get_order_items().aggregate(Sum('price'))
         total_order_price = total_order_sale["price__sum"]
         return total_order_price
 

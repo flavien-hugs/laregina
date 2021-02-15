@@ -76,7 +76,6 @@ OTHERS_APPS = [
 ]
 
 LOCAL_APPS = [
-
     'search.apps.SearchConfig',
     'accounts.apps.AccountsConfig',
     'category.apps.CategoryConfig',
@@ -216,10 +215,6 @@ CRISPY_TEMPLATE_PACK = 'bootstrap4'
 # See: https://docs.djangoproject.com/en/1.11/ref/settings/#wsgi-application
 WSGI_APPLICATION = 'core.wsgi.application'
 
-ANALYTICS_TRACKING_ID = ''
-PRODUCT_PER_PAGE = 1
-PRODUCT_PER_ROW = 4
-
 # Database
 # https://docs.djangoproject.com/en/3.1/ref/settings/#databases
 
@@ -336,47 +331,47 @@ CACHES = {
 CACHE_TTL = 60 * 15
 DJANGO_REDIS_IGNORE_EXCEPTIONS = True
 
-# LOGGING = {
-#     'version': 1,
-#     'disable_existing_loggers': False,
-#     "handlers": {
-#         "file": {
-#             "level": "INFO",
-#             "class": "logging.handlers.TimedRotatingFileHandler",
-#             "filename": BASE_DIR / "logs/debug.log",
-#             "when": "D",
-#             "interval": 1,
-#             "backupCount": 100,
-#         }
-#     },
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    "handlers": {
+        "file": {
+            "level": "INFO",
+            "class": "logging.handlers.TimedRotatingFileHandler",
+            "filename": BASE_DIR / "logs/debug.log",
+            "when": "D",
+            "interval": 1,
+            "backupCount": 100,
+        }
+    },
 
-#     'loggers': {
-#         "django": {
-#             "handlers": ["file"],
-#             "level": "INFO",
-#             "propagate": True
-#         },
+    'loggers': {
+        "django": {
+            "handlers": ["file"],
+            "level": "INFO",
+            "propagate": True
+        },
 
-#         "project": {
-#             "handlers": ["file"],
-#             "level": "INFO",
-#             "propagate": True
-#         },
+        "project": {
+            "handlers": ["file"],
+            "level": "INFO",
+            "propagate": True
+        },
 
-#         "": {
-#             "handlers": ["file"],
-#             "level": "INFO",
-#             "propagate": True
-#         },
-#     },
-# }
+        "": {
+            "handlers": ["file"],
+            "level": "INFO",
+            "propagate": True
+        },
+    },
+}
 
 # phonenumber config
 PHONENUMBER_DEFAULT_REGION = "CI"
 PHONENUMBER_DB_FORMAT = "NATIONAL"
 
 # CINETPAY API KEY
-CINETPAY_API_KEY = config('CINETPAY_KEY')
+CINETPAY_API_KEY = config('CINETPAY_API_KEY')
 CINETPAY_SITE_ID = config('CINETPAY_SITE_ID')
 CINETPAY_TRANS_ID = config('CINETPAY_TRANS_ID')
 

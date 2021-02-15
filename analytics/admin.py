@@ -3,6 +3,7 @@
 from django.contrib import admin
 
 from analytics.models import ProductView 
+from services.export_data_csv import export_to_csv
 
 
 @admin.register(ProductView)
@@ -18,7 +19,6 @@ class AnalyticsAdmin(admin.ModelAdmin):
     ]
 
     readonly_fields = [
-        'tracking_id',
         'ip_address',
         'product',
         'date_viewed',
@@ -31,3 +31,4 @@ class AnalyticsAdmin(admin.ModelAdmin):
         'date_viewed',
         'time_viewed'
     ]
+    actions = [export_to_csv]
