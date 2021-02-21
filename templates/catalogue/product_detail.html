@@ -1,10 +1,9 @@
 {% extends "base.html" %}
-{% load static cache mptt_tags crispy_forms_tags catalogue_tags pages_tags %}
+{% load static cache humanize mptt_tags crispy_forms_tags catalogue_tags pages_tags %}
 
 {% block content %}
     {% full_tree_for_model category.Category as category %}
     
-    {% cache 120 product_detail request.user.pk|default_if_none:"0" %}
         <div class="ps-breadcrumb">
             <div class="ps-container">
                 <ul class="breadcrumb">
@@ -38,7 +37,7 @@
                                 <div class="ps-product__info">
                                     <h1>{{ object.name }}</h1>
                                     <div class="ps-product__meta">
-                                        <p>Marque: <a href="#">Sony</a></p>
+                                        <!-- <p>Marque: <a href="#">Sony</a></p>  -->
                                         <div class="ps-product__rating">
                                             <select class="ps-rating" data-read-only="true">
                                                 <option value="1">1</option>
@@ -52,7 +51,7 @@
                                     </div>
 
                                     <h4 class="ps-product__price">
-                                    {{ object.price }}</h4>
+                                    {{ object.price|intcomma }} Fr</h4>
                                     
                                     <div class="ps-product__desc">
                                         {% if object.user.store %}
@@ -69,7 +68,8 @@
                                     {% include "cart/snippet/form.html" with product=object %}
 
                                     <div class="ps-product__specification">
-                                        <a class="report" href="{% url 'pages:contact' %}">Signaler un abus</a>
+                                        {% url 'pages:contact' as contact %}
+                                        <a class="report" href="{{ contact }}">Signaler un abus</a>
 
                                         <p class="categories">
                                             <strong> Catégorie{{ category.count|pluralize }}:</strong>
@@ -149,19 +149,14 @@
 
                         <!-- signup for vendor -->
                         <aside class="widget widget_sell-on-site">
-                            {% if not request.user.is_authenticated and not request.user.is_superuser and not request.user.is_seller %}
-                                <p>
+                            {% if request.user.is_authenticated and request.user.is_buyer or not request.user.is_authenticated and not request.user.is_superuser and not request.user.is_seller %}
+                                <p>{% url "account_signup" as account_signup %}
                                     <i class="icon-store"></i> Vendre sur {{ title }} ?
-                                    <a href="{% url "account_signup" %}" target="_blank">
+                                    <a href="{{ account_signup }}" target="_blank">
                                     Inscrivez-vous maintenant</a>
                                 </p>
                             {% endif %}
                         </aside>
-                        
-                        <!-- produit similaire -->
-                        {% if related_product %}
-                            {% include "includes/partials/_partials_similary_product.html" %}
-                        {% endif %}
                     </div>
                 </div>
 
@@ -170,11 +165,15 @@
                     {% product_list recommended_product 'Produits récommandés pour vous' %}
                 {% endif %}
 
+                <!-- produit similaire  -->
+                {% if related_product %}
+                    {% product_list related_product 'Produits de la même catégorie' %}
+                {% endif %}
+
                 <!-- product recently viewed -->
                 {% if recently_viewed %}
                     {% product_list recently_viewed 'Produits récemment vus' %}
                 {% endif %}
             </div>
         </div>
-    {% endcache %}
 {% endblock content %}

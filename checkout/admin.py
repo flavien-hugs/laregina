@@ -5,6 +5,11 @@ from django.contrib import admin
 from checkout.models import Order, OrderItem
 from services.export_data_csv import export_to_csv
 
+
+def make_refund_accepted(modeladmin, request, queryset):
+    queryset.update(refund_requested=False, refund_granted=True)
+make_refund_accepted.short_description = 'Update orders to refund granted'
+
 class OrderItemInline(admin.StackedInline):
     model = OrderItem
     list_display = [
@@ -20,8 +25,8 @@ class OrderAdmin(admin.ModelAdmin):
     date_hierarchy = 'created_at'
 
     list_display = [
-        '__str__',
         'store',
+        '__str__',
         'total',
         'date',
         'status',

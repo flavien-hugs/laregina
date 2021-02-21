@@ -52,8 +52,9 @@ class BaseOrderInfo(models.Model):
         max_length=50
     )
     shipping_country = CountryField(
-        blank_label='Sélection un pays/région',
-        verbose_name='pays/région'
+        blank_label='Sélection un pays',
+        verbose_name='pays/région',
+        multiple=False
     )
     shipping_adress = models.CharField(
         verbose_name='votre situation géographique',
@@ -79,28 +80,28 @@ class Order(BaseOrderInfo):
     # status de chaque commande
 
     SUBMITTED = 'Soumis'
-    PROCESSED = 'Traitée'
-    SHIPPED = 'Expédié'
-    CANCELLED = 'Annulé'
+    PROCESSED = 'En cours de livraison'
+    SHIPPED = 'Commande reçue'
+    CANCELLED = 'Commande annulée'
 
     # ensemble de statuts d'ordre possibles
 
     ORDER_STATUSES = (
         (SUBMITTED, 'Soumis'),
-        (PROCESSED, 'Traitée'),
-        (SHIPPED, 'Expédié'),
-        (CANCELLED, 'Annulé'),
+        (PROCESSED, 'Commande en cours de livraison'),
+        (SHIPPED, 'Commande reçue'),
+        (CANCELLED, 'Commande annulée'),
     )
 
     status = models.CharField(
-        verbose_name='status de le commande',
-        max_length=7,
+        verbose_name='status',
+        max_length=26,
         choices=ORDER_STATUSES,
         default=SUBMITTED
     )
     user = models.ForeignKey(
         User,
-        models.SET_NULL,
+        models.CASCADE,
         verbose_name='client',
         **NULL_AND_BLANK
     )
@@ -136,21 +137,18 @@ class Order(BaseOrderInfo):
             transaction_id=self.transaction_id)
 
     def short_name(self):
-        return '{civility} {first_name}'.format(
-            civility=self.user.civility,
+        return '{first_name}'.format(
             first_name=self.shipping_first_name
         )
 
     def full_name(self):
-        return '{civility} {first_name} {last_name}'.format(
-            civility=self.user.civility,
-            first_name=self.shipping_first_name,
+        return '{short_name} {last_name}'.format(
+            short_name=self.short_name(),
             last_name=self.shipping_last_name
         )
 
     def shipping_delivery(self):
-        return '{shipping_country}, {shipping_city},\
-        {shipping_adress}'.format(
+        return '{shipping_city}, {shipping_adress}'.format(
             shipping_country=self.shipping_country.name,
             shipping_city=self.shipping_city,
             shipping_adress=self.shipping_adress
@@ -164,7 +162,7 @@ class Order(BaseOrderInfo):
         today = datetime.date.today().strftime('%d%m%y')
         carac = string.digits
         random_carac = [random.choice(carac) for _ in range(nb_carac)]
-        self.transaction_id = 'LRG-{}'.format(today + ''.join(random_carac))
+        self.transaction_id = 'LC-{}'.format(today + ''.join(random_carac))
 
     @property
     def total(self):
@@ -174,11 +172,28 @@ class Order(BaseOrderInfo):
             total += item.total
         return total + 1500
 
+    def total_seller_order(self):
+        total = decimal.Decimal('0')
+        order_items = OrderItem.objects.filter(order=self)
+        for item in order_items:
+            total += item.total
+        return total
+
+    def total_order(self):
+        total = decimal.Decimal('0')
+        order_items = OrderItem.objects.filter(order=self)
+        for item in order_items:
+            total += item.total
+        commission = total * decimal.Decimal(0.05) 
+        return int(total - commission)
+
+
     def order_items(self):
         return OrderItem.objects.filter(order=self)
 
     def store(self):
         return self.user.store
+    store.short_description='magasin'
     
     def get_absolute_url(self):
         return reverse('seller:order_detail', kwargs={'pk': int(self.id)})
@@ -200,11 +215,6 @@ class OrderItem(models.Model):
     quantity = models.IntegerField(
         verbose_name='quantité',
         default=1
-    )
-    price = models.DecimalField(
-        verbose_name='coût total',
-        max_digits=10,
-        decimal_places=0
     )
     order = models.ForeignKey(
         Order,
@@ -234,7 +244,7 @@ class OrderItem(models.Model):
 
     @property
     def total(self):
-        return self.quantity * self.price
+        return self.quantity * self.product.price
 
     def name(self):
         return self.product.name

@@ -14,9 +14,24 @@
         <div class="container">
             <div class="ps-block--payment-success">
                 <h3>Commande validée !</h3>
-                <p>Merci pour votre commande.
-                    Veuillez visiter <a href="{% url 'checkout:order_tracking' %}">ici</a>
-                pour vérifier l'état de votre commande.</p>
+                
+                <div class="ps-section__header">
+                    {% for object in object_list|slice:'0:1' %}
+                        <div class="ps-block--payment-method py-3">
+                            <span class='font-weight-bold'>
+                                N° commande #{{ object.transaction_id }} <br>
+                                NB: Veuillez garder ce numéro ({{ object.transaction_id }})
+                                pour le retrait de votre commande.
+                            </span>
+                        </div>
+                    {% endfor %}
+                    <p>Votre commande vous sera livrée dans 07 jours maximum.</p>
+                    <p class="text-uppercase">Merci pour votre commande. Veuillez visiter
+                        <a href="{% url 'checkout:order_tracking' %}">ici</a>
+                    pour vérifier l'état de votre commande.</p>
+                </div>
+
+                
             </div>
         </div>
     </section>

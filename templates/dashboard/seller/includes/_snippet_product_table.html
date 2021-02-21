@@ -1,3 +1,5 @@
+{% load humanize %}
+
 <tr>
     <td>{{ forloop.counter }}</td>
     <td>
@@ -7,14 +9,8 @@
             </strong>
         </a>
     </td>
-    <td>{{ object.price }}Fr</td>
-    <td>
-        <p class="ps-item-categories">
-            <a href="{{ object.category.get_absolute_url }}">
-            {{ object.category.name }}</a>
-        </p>
-    </td>
-    <td>{{ object.created_at|timesince }}</td>
+    <td>{{ object.price|intcomma }} Fr</td>
+    <td>{{ object.created_at|date }}</td>
     <td>
         <div class="dropdown">
             <a id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">

@@ -1,18 +1,15 @@
 {% extends "base.html" %}
-{% load cache %}
 
 {% block content %}
-    {% cache 120 error500 %}
-        <div class="ps-page--404">
-            <div class="container">
-                <div class="ps-section__content">
-                    <img src="{{ STATIC_PREFIX }}img/404.jpg" alt="{{ page_title }}">
-                    <h3>Ooops ! - {{ page_title  }}</h3>
-                    <p>Il semble quelques choses à mal fonctionner.
-                        Aller à la <a href="{% url 'home' %}"> page d'acueil.</a>
-                    </p>
-                </div>
-            </div>
+<div class="ps-page--404">
+    <div class="container">
+        <div class="ps-section__content">
+            <img src="{{ STATIC_PREFIX }}img/404.jpg" alt="{{ page_title }}">
+            <h3>Ooops ! - {{ page_title  }}</h3>
+            <p>Il semble quelques choses à mal fonctionner.
+                Aller à la <a href="{% url 'home' %}"> page d'acueil.</a>
+            </p>
         </div>
-    {% endcache %}
+    </div>
+</div>
 {% endblock content %}

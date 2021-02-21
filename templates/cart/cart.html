@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% load catalogue_tags %}
+{% load humanize catalogue_tags %}
 {% block css %}{% endblock css %}
 
 {% block content %}
@@ -18,9 +18,9 @@
                                 <thead>
                                     <tr>
                                         <th scope="col">Produit</th>
-                                        <th scope="col">Prix</th>
+                                        <th scope="col">Prix Unitaire</th>
                                         <th scope="col">Quantité</th>
-                                        <th scope="col">Total</th>
+                                        <th scope="col">Sous-Total</th>
                                         <th></th>
                                     </tr>
                                 </thead>
@@ -50,8 +50,8 @@
                                                 </div>
                                             </td>
 
-                                            <td class="price" data-label="Prix">
-                                                {{ object.price }}
+                                            <td class="price text-center" data-label="Prix Unitaire">
+                                                {{ object.price|intcomma }} Fr
                                             </td>
 
                                             <td data-label="Quantité">
@@ -68,7 +68,7 @@
                                                 </form>
                                             </td>
 
-                                            <td data-label="Sous-total">{{ object.total }}</td>
+                                            <td class="text-center" data-label="Sous-total">{{ object.total|intcomma }} Fr</td>
 
                                             <td data-label="Supprimer">
                                                 <form method="post" action=".">
@@ -87,7 +87,7 @@
                                         <h3>Total</h3><small>(+ Frais de livraison 1500 Fr)</small></td>
                                         <td data-label='Sous-total'>
                                         <h3><span class="font-weight-bold" style="color:#f30">
-                                        {{ cart_subtotal }}</span></h3></td>
+                                        {{ cart_subtotal|intcomma }} Fr</span></h3></td>
                                     </tr>
                                 </tbody>
                             </table>

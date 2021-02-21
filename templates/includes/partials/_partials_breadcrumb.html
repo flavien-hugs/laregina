@@ -1,8 +1,7 @@
 <!-- partials/breacrumb.html -->
 
 <div class="ps-breadcrumb {% if request.resolver_match.url_name == 'account_login' or request.resolver_match.url_name == 'customer_signup' %}
-    text-center
-{% endif %}">
+text-center {% endif %}">
     <div class="container">
         <ul class="breadcrumb">
             <li><a href="{% url "home" %}">Accueil</a></li>

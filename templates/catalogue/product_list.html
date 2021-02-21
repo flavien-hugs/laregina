@@ -1,8 +1,7 @@
 {% extends "base.html" %}
 {% load mptt_tags pages_tags %}
 
-{% block content %}
-    
+{% block content %}    
     {% if request.resolver_match.url_name == 'product_list' %}
         {% include "includes/partials/_partials_breadcrumb.html" %}
     {% elif request.resolver_match.url_name == 'category_detail' %}

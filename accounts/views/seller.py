@@ -1,14 +1,14 @@
 # accounts.views.seller.py
 
+from django.db import transaction
 from django.contrib import messages
 from django.http import HttpResponseRedirect
 from django.urls import reverse, reverse_lazy
-from django.forms import inlineformset_factory
-from django.shortcuts import get_object_or_404, redirect, render
+from django.shortcuts import get_object_or_404
 from django.views.generic import (
-    FormView, CreateView, DeleteView,
-    DetailView, RedirectView, ListView,
-    UpdateView
+    CreateView, DeleteView,
+    DetailView, RedirectView,
+    ListView, UpdateView
 )
 from django.contrib.auth.mixins import PermissionRequiredMixin
 
@@ -16,6 +16,7 @@ from cart import cart
 from ..models import User
 from catalogue.models import Product
 from checkout.models import Order, OrderItem
+from catalogue.forms import ProductAdminForm, ProductCreateFormSet
 
 from ..forms import MarketSignupForm, StoreUpdateForm
 from ..mixins import UserAccountMixin, SellerRequiredMixin, ProductEditMixin
@@ -32,18 +33,10 @@ class ProfileDetailView(SellerRequiredMixin, DetailView):
     def get_context_data(self, *args, **kwargs):
         kwargs['page_title'] = self.object.store
         kwargs['order_list_today'] = self.get_order_today()
-        kwargs['order_list'] = self.get_order()
+        kwargs['order_list'] = self.get_order().order_by('-date')
         kwargs['product_list'] = self.get_product()
         kwargs['total_sale'] = self.get_total_sale()
         return super().get_context_data(*args, **kwargs)
-
-    def dispatch(self, request, *args, **kwargs):
-        if request.user.is_authenticated:
-            if request.user.is_buyer:
-                return redirect('customer:customer_dashboard')
-            elif request.user.is_anonymous:
-                return redirect('/')
-        return super().dispatch(self.request, *args, **kwargs)
 
     def get_queryset(self):
         return self.get_order()
@@ -119,52 +112,58 @@ class ProductListView(SellerRequiredMixin, ListView):
     permission_required = 'product.product_list'
 
     def get_queryset(self):
-        return self.get_product()
+        return self.get_product().order_by('-created_at')
 
     def get_context_data(self, **kwargs):
         kwargs['total_sale'] = self.get_total_sale()
         return super().get_context_data(**kwargs)
 
 
-class ProductPermView(PermissionRequiredMixin, ProductEditMixin):
-    pass
+class ProductCreateView(ProductEditMixin, CreateView):
 
+    def get_context_data(self, **kwargs):
+        kwargs['total_sale'] = self.get_total_sale()
+        if self.request.POST:
+            kwargs['image_formset'] = ProductCreateFormSet(self.request.POST, self.request.FILES)
+        else:
+            kwargs['image_formset'] = ProductCreateFormSet()
+        return super().get_context_data(**kwargs)
 
-class ProductCreateView(ProductPermView, CreateView):
-    permission_required = 'product.product_create'
+    def form_valid(self, form, **kwargs):
+        context = self.get_context_data(form=form)
+        formset = context['image_formset']
 
-    def form_valid(self, form):
+        with transaction.atomic():
+            form.instance.user = self.request.user
+            self.object = form.save()
+
+            if formset.is_valid():
+                formset.instance = self.object
+                formset.save()
+
         message = """Votre nouveau produit a été ajouté  avec succes !"""
         messages.success(self.request, message)
-        self.object = form.save(commit=False)
-        self.object.user = self.request.user
-        self.object.save()
         return HttpResponseRedirect(self.get_success_url())
 
-    def get_context_data(self, **kwargs):
-        kwargs['total_sale'] = self.get_total_sale()
-        return super().get_context_data(**kwargs)
 
-
-class ProductUpdateView(ProductPermView, UpdateView):
-    permission_required = 'product.update_product'
+class ProductUpdateView(ProductEditMixin, UpdateView):
 
     def get_context_data(self, **kwargs):
         kwargs['page_title'] = 'Mise à jour du produit: {}'.format(self.object.name)
         kwargs['total_sale'] = self.get_total_sale()
+        kwargs['form_image'] = ProductImageForm()
         return super().get_context_data(**kwargs)
 
     def form_valid(self, form):
-        message = """Votre produit a été mise à jour avec succes !"""
-        messages.success(self.request, message)
         self.object = form.save(commit=False)
         self.object.user = self.request.user
         self.object.save()
+        message = """Votre produit a été mise à jour avec succes !"""
+        messages.success(self.request, message)
         return HttpResponseRedirect(self.get_success_url())
 
 
-class ProductDeleteView(ProductPermView, DeleteView):
-    permission_required = 'product.product_delete'
+class ProductDeleteView(ProductEditMixin, DeleteView):
 
     def get_context_data(self, **kwargs):
         kwargs['page_title'] = 'Supprimer ce produit: {}'.format(

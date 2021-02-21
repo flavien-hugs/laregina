@@ -10,10 +10,11 @@ from crispy_forms.helper import FormHelper
 from allauth.account.forms import SignupForm, LoginForm
 
 from django_countries.fields import CountryField
+from django_countries.widgets import CountrySelectWidget
+
 from phonenumber_field.formfields import PhoneNumberField
 from phonenumber_field.widgets import PhoneNumberPrefixWidget
 
-# User Manager
 User = get_user_model()
 
 
@@ -48,9 +49,10 @@ class LoginForm(LoginForm):
 
     def form_valid(self, form):
         user = form.save()
-        if user.is_buyer:
-            login(self.request, user)
-            return redirect('list')
+        if self.request.user.is_authenticated:
+            if self.request.user.is_buyer:
+                login(self.request, user)
+            return redirect('catalogue:product_list')
 
 
 class MarketSignupForm(UserCreationForm):
@@ -134,6 +136,7 @@ class MarketSignupForm(UserCreationForm):
         domain, extension = provider.split('.')
         return email
 
+    @transaction.atomic
     def save(self, commit=True):
         user = super().save(commit=False)
         user.is_seller = True
@@ -145,7 +148,7 @@ class MarketSignupForm(UserCreationForm):
 class CustomerSignUpForm(UserCreationForm):
     civility = forms.TypedChoiceField(
         label="Civilité", choices=User.CIVILITY_CHOICES,
-        initial = '1', coerce=str, required = True,
+        initial = '1', coerce=str, required=True,
     )
     
     shipping_first_name = forms.CharField(label='Nom', max_length=120,
@@ -161,7 +164,7 @@ class CustomerSignUpForm(UserCreationForm):
     )
 
     phone = PhoneNumberField(
-        label='Numéro de téléphone', initial='+39',
+        label='Numéro de téléphone', initial='+225',
         widget=PhoneNumberPrefixWidget(
             attrs={'placeholder': '000 000 0000', 'class': "form-control"}
         )
@@ -222,6 +225,11 @@ class MarketChangeForm(UserChangeForm):
 
 
 class StoreUpdateForm(forms.ModelForm):
+    
+    shipping_country = CountryField(blank_label='(Sélection un pays)').formfield(
+        widget=CountrySelectWidget(attrs={
+        'class': 'form-control custom-select'
+    }))
 
     logo = forms.FileField(
         label="Logo du Magasin",

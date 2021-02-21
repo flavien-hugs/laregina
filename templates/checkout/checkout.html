@@ -1,7 +1,7 @@
 <!-- checkout/checkout.html : template -->
 
 {% extends "base.html" %}
-{% load catalogue_tags checkout_tags %}
+{% load catalogue_tags humanize checkout_tags %}
 
 {% block content %}
     {% include "includes/partials/_partials_breadcrumb.html" %}
@@ -54,7 +54,7 @@
                                             <div class="col-sm-6">
                                                 <div class="form-group">
                                                     <label class="font-weight-bold" for="{{ form.shipping_country.id_for_label }}">
-                                                    {{ form.shipping_country.label }}*</label>
+                                                    Pays de résidence*</label>
                                                     {{ form.shipping_country }}
                                                 </div>
                                             </div>
@@ -145,7 +145,7 @@
                                                     <figcaption>
                                                     <span>{{ object.name|truncatewords:"3" }}
                                                         x {{ object.quantity }}</span>
-                                                    <span>{{ object.total }}</span>
+                                                    <span>{{ object.total|intcomma }} Fr</span>
                                                     </figcaption>
                                                 {% endfor %}
                                             </figure>
@@ -157,19 +157,12 @@
                                                 </figcaption>
                                             </figure>
 
-                                            <figure>
-                                                <figcaption>
-                                                    <span>Sous-total</span>
-                                                    <span>{{ cart_subtotal }}</span>
-                                                </figcaption>
-                                            </figure>
-
                                             <figure class="border-0">
                                                 <figcaption>
                                                     <h3><strong>Total</strong></h3>
                                                     <strong>
                                                         <h3><span class="font-weight-bold" style="color:#ff3300;">
-                                                            {{ cart_subtotal }}
+                                                            {{ cart_subtotal|intcomma }} Fr
                                                         </span></h3>
                                                     </strong>
                                                 </figcaption>

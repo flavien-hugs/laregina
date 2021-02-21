@@ -12,6 +12,9 @@ help:
 	@echo "  make deploy - pull and deploy the update"
 	@echo "  make test - run automated tests"
 
+install-deps:
+	pip install -r requirements.txt
+
 deps:
 	pipenv install
 
@@ -34,3 +37,9 @@ loaddata:
 
 test:
 	$(MANAGE) test $(TEST_SETTINGS)
+
+install-project:
+	pip install -r requirements.txt
+	$(MANAGE) makemigrations
+	$(MANAGE) migrate
+	$(MANAGE) loaddata __backups__/users_data.json

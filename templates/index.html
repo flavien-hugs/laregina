@@ -4,7 +4,7 @@
 
 {% block content %}
     {% url "account_signup" as signup %}
-    {% url "contact" as contact %}
+    {% url "pages:contact" as contact %}
     
     {% cache 120 home request.user.id %}
         <div class="ps-vendor-banner bg--cover" data-background="{{ STATIC_PREFIX }}img/bg/vendor.jpg">
@@ -143,7 +143,7 @@
                     </div>
                     <div class="ps-section__highlight"><img src="{{ STATIC_PREFIX }}img/icons/vendor-4.png" alt="">
                         <figure>
-                            <p>Nous traitons les paiements avec Carte VISA, une plateforme de paiement externe qui vous permet de traiter les transactions avec une variété de méthodes de paiement. Les fonds provenant des ventes sur {{ title }} seront déposés sur votre compte.</p>
+                            <p>Nous traitons les paiements avec Le service de paiement mobile CINETPAY, une plateforme de paiement externe qui vous permet de traiter les transactions avec une variété de méthodes de paiement. Les fonds provenant des ventes sur {{ title }} seront déposés sur votre compte.</p>
                         </figure>
                     </div>
                     <div class="ps-section__footer">
@@ -177,7 +177,9 @@
                             </div>
                         </div>
                         <div class="ps-block--testimonial">
-                            <div class="ps-block__header"><img src="{{ STATIC_PREFIX }}img/users/3.jpg" alt=""></div>
+                            <div class="ps-block__header">
+                                <img src="{{ STATIC_PREFIX }}img/users/3.jpg" alt="">
+                            </div>
                             <div class="ps-block__content"><i class="icon-quote-close"></i>
                                 <h4>William Roles<span>Head Chef at BBQ Restaurant</span></h4>
                                 <p>Sed elit quam, iaculis sed semper sit amet udin vitae nibh. at magna akal semperFusce commodo molestie luctus.Lorem ipsum Dolor tusima olatiup.</p>

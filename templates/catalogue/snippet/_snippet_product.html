@@ -1,6 +1,5 @@
-{% load static cache catalogue_tags %}{% get_static_prefix as STATIC_PREFIX %}
+{% load static humanize catalogue_tags %}{% get_static_prefix as STATIC_PREFIX %}
 
-{% cache 60 product request.user.id %}
     <div class="col-xl-2 col-lg-3 col-md-4 col-sm-6 col-6">
         <div class="ps-product">
             <div class="ps-product__thumbnail">
@@ -25,18 +24,16 @@
                         <span>{{ instance.countreview }} avis clients</span>
                     </div>
 
-                    <p class="ps-product__price sale">{{ instance.price }} {% if instance.old_price %}<del>
-                    {{ instance.old_price }} </del>{% endif %}</p>
+                    <p class="ps-product__price sale">{{ instance.price|intcomma }} Fr</p>
                 </div>
 
                 <div class="ps-product__content hover">
                     <a class="ps-product__title" href="{{ instance.get_absolute_url }}">
                         {{ instance.name|truncatewords:"10"|safe }}
                     </a>
-                    <p class="ps-product__price sale">{{ instance.price }} {% if instance.old_price %}<del>{{ instance.old_price }} </del>{% endif %}</p>
+                    <p class="ps-product__price sale">{{ instance.price|intcomma }} Fr</p>
                 </div>
             </div>
         </div>
     </div>
-{% endcache %}
 

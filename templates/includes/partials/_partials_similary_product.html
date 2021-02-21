@@ -1,8 +1,7 @@
 <!-- includes/partials/_partials_similary_product.html -->
 
-{% load cache catalogue_tags %}
+{% load catalogue_tags %}
 
-{% cache 60 product_list request.user.id %}
     <aside class="widget widget_same-brand">
         <h3>De la même catégorie</h3>
         <div class="widget__content">
@@ -45,4 +44,3 @@
             {% endfor %}
         </div>
     </aside>
-{% endcache %}

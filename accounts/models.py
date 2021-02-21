@@ -14,7 +14,6 @@ from category.models import Category
 from checkout.models import BaseOrderInfo
 from accounts.managers import UserManager
 
-from tagulous.models import SingleTagField
 from django_countries.fields import CountryField
 from phonenumber_field.modelfields import PhoneNumberField
 from core.utils import upload_image_path

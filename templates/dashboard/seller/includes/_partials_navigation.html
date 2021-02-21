@@ -11,10 +11,6 @@
                     <p>Bonjour, <a>
                     {{ request.user.get_fullname|truncatewords:"5" }}</a></p>
                 </div>
-                <div class="ps-block__action">
-                    <a title="Deconnexion" href="{% url "account_logout" %}">
-                    <i class="icon-exit"></i></a>
-                </div>
             </div>
 
             <div class="ps-block--earning-count"><small>Revenus</small>
@@ -43,6 +39,11 @@
 
                     <li><a target="_blank" href="{{ request.user.get_absolute_url }}">
                         <i class="icon-exit-right"></i>Ma boutique</a></li>
+
+                    <hr class="pt-2 pb-2 mx-2">
+
+                    <li><a href="{% url "account_logout" %}">
+                        <i class="icon-exit"></i>Deconnexion</a></li>
                 </ul>
 
                 <div class="ps-sidebar__footer">

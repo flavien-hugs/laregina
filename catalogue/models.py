@@ -9,7 +9,6 @@ from django.db.models import Avg, Count, Q
 from django.utils.safestring import mark_safe
 
 from core import settings
-from tagulous.models import TagField
 from category.models import Category
 from catalogue.managers import CatalogueManager
 from caching.caching import cache_update, cache_evict
@@ -58,12 +57,6 @@ class Product(models.Model):
         verbose_name='prix de vente',
         help_text="Le prix du produit",
         **DECIMAFIELD_OPTION,
-    )
-    old_price = models.DecimalField(
-        verbose_name='prix normal',
-        blank=True,
-        null=True,
-        **DECIMAFIELD_OPTION
     )
     description = models.TextField(
         verbose_name='description du produit',
@@ -119,10 +112,7 @@ class Product(models.Model):
 
     @property
     def get_sale_price(self):
-        if self.old_price > self.price:
-            return self.price
-        else:
-            return self.price
+        return self.price
 
     def save(self, *args, **kwargs):
         if not self.slug:
@@ -253,10 +243,24 @@ class Product(models.Model):
 
 
 class ProductImage(models.Model):
-    product = models.ForeignKey(Product, on_delete=models.CASCADE, verbose_name='image produit')
-    image = models.ImageField(verbose_name='image du produit', upload_to=upload_image_path)
-    timestamp = models.DateTimeField(auto_now_add=True, auto_now=False)
-    updated = models.DateTimeField(auto_now_add=False, auto_now=True)
+    product = models.ForeignKey(
+        Product,
+        on_delete=models.CASCADE,
+        verbose_name='image produit'
+    )
+    image = models.ImageField(
+        verbose_name='image du produit',
+        upload_to=upload_image_path,
+        help_text="Taille: 300x300px"
+    )
+    timestamp = models.DateTimeField(
+        auto_now_add=True,
+        auto_now=False
+    )
+    updated = models.DateTimeField(
+        auto_now_add=True,
+        auto_now=False
+    )
 
     class Meta:
         db_table = 'product_image_db'
@@ -296,7 +300,3 @@ class ProductImage(models.Model):
 def product_pre_save_receiver(sender, instance, *args, **kwargs):
     if not instance.slug:
         instance.slug = unique_slug_generator(instance.name)
-
-@receiver([models.signals.post_delete], sender=ProductImage)
-def delete_image_file(sender, instance, **kwargs):
-    instance.image.delete()

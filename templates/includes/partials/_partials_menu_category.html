@@ -1,4 +1,4 @@
-{% load cache mptt_tags %}
+{% load mptt_tags %}
 
 {% recursetree category %}
     <li {% if not node.is_leaf_instance %}class="menu-item-has-children has-mega-menu"{% endif %}>

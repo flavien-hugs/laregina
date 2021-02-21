@@ -5,7 +5,7 @@ from pathlib import Path
 from decouple import config
 from django.contrib.messages import constants as messages
 
-
+BASE_URL = 'https://test.laregina.deals'
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -16,7 +16,8 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = config('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = TEMPLATE_DEBUG = config('DEBUG', default=True, cast=bool)
+DEBUG = config('DEBUG')
+TEMPLATE_DEBUG = DEBUG
 DEFAULT_CHARSET = 'UTF-8'
 SITE_DESCRIPTION = ""
 INDEX_DESCRIPTION = "Vendez sur LaRegina"
@@ -41,7 +42,7 @@ MANAGERS = ADMINS
 ADMIN_URL = 'lrg-admin/'
 
 # See: https://docs.djangoproject.com/en/1.11/ref/settings/#allowed-hosts
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['test.laregina.deals', 'laregina.deals', '*.laregina.deals']
 
 
 # See: https://docs.djangoproject.com/en/1.11/ref/settings/#installed-apps
@@ -67,9 +68,11 @@ OTHERS_APPS = [
     'allauth',
     'allauth.account',
 
+    'django_filters',
     'django_countries',
     'phonenumber_field',
     'phonenumbers',
+    'tagulous',
     'mptt',
 ]
 
@@ -99,7 +102,6 @@ AUTHENTICATION_BACKENDS = [
 LOGIN_URL = 'account_login'
 ACCOUNT_LOGOUT_REDIRECT_URL = 'home'
 LOGIN_REDIRECT_URL = 'seller:profile'
-SIGNUP_CUSTOMER_URL = 'customer_signup'
 
 # Ne pas afficher la confirmation de déconnexion
 ACCOUNT_LOGOUT_ON_GET = True
@@ -140,26 +142,6 @@ SENDGRID_API_KEY = config('SENDGRID_API_KEY', default='')
 # Pour le développement, envoyer tous les courriers électroniques
 # à la console au lieu de les envoyer
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-
-# https://docs.djangoproject.com/fr/3.0/ref/settings/
-# Let's Encrypt ssl/tls https
-SECURE_FRAME_DENY = True
-CSRF_COOKIE_SECURE = True
-
-SESSION_COOKIE_DAYS = 90
-SESSION_COOKIE_SECURE = True
-SESSION_COOKIE_NAME = '__cks__'
-SESSION_EXPIRE_AT_BROWSER_CLOSE = False
-SESSION_COOKIE_AGE = 60 * 60 * 24 * SESSION_COOKIE_DAYS 
-SESSION_ENGINE = "django.contrib.sessions.backends.cache"
-
-CACHE_MIDDLEWARE_ALIAS = 'default'
-CACHE_MIDDLEWARE_SECONDS = 600
-CACHE_MIDDLEWARE_KEY_PREFIX = ''
-CACHE_TIMEOUT = 60 * 60
-
-# Upon deployment, change to True
-ENABLE_SSL = False
 
 MIDDLEWARE = [
     # 'django.middleware.cache.UpdateCacheMiddleware',
@@ -203,8 +185,6 @@ TEMPLATES = [
                 'accounts.context.profile',
                 'accounts.context.customization',
             ],
-
-            'debug': DEBUG,
         },
     },
 ]
@@ -217,7 +197,7 @@ CRISPY_TEMPLATE_PACK = 'bootstrap4'
 WSGI_APPLICATION = 'core.wsgi.application'
 
 # Database
-# https://docs.djangoproject.com/en/3.1/ref/settings/#databases
+# https://docs.djangoproject.com/en/3.1/ref/settings/#databasesBASE_DIR
 
 DATABASES = {
     'default': {
@@ -227,7 +207,10 @@ DATABASES = {
         'PASSWORD': config('DATABASE_PASSWORD'),
         'HOST': config('DATABASE_HOST', cast=str),
         'PORT': config('DATABASE_PORT', cast=int),
-        'ATOMIC_REQUESTS': True
+        'ATOMIC_REQUESTS': True,
+        'OPTIONS': {
+            'sql_mode': 'STRICT_TRANS_TABLES',
+        },
     }
 }
 
@@ -260,7 +243,6 @@ PASSWORD_HASHERS = [
 # https://docs.djangoproject.com/fr/3.1/ref/settings/
 DEFAULT_HASHING_ALGORITHM = 'sha1'
 
-
 # Internationalization
 # https://docs.djangoproject.com/en/3.1/topics/i18n/
 
@@ -275,9 +257,9 @@ USE_I18N = USE_L10N = USE_TZ = True
 
 MEDIA_URL = '/media/'
 STATIC_URL = '/static/'
-MEDIA_ROOT = BASE_DIR / 'media'
-STATIC_ROOT = BASE_DIR / 'staticfiles'
-STATICFILES_DIRS = [BASE_DIR / 'static']
+MEDIA_ROOT = '/home/c1581337c/public_html/media'
+STATIC_ROOT = '/home/c1581337c/public_html/static'
+STATICFILES_DIRS = [BASE_DIR / 'assets']
 
 # staticfiles finders
 # See: https://docs.djangoproject.com/en/1.11/ref/contrib/staticfiles/#staticfiles-finders
@@ -328,44 +310,76 @@ MPTT_ADMIN_LEVEL_INDENT = 20
 #     }
 # }
 
-# Cache time to live is 15 minutes.
+# https://docs.djangoproject.com/fr/3.0/ref/settings/
+# Let's Encrypt ssl/tls https
+SECURE_FRAME_DENY = True
+CSRF_COOKIE_SECURE = True
+SESSION_COOKIE_NAME = 'cookies'
+SESSION_COOKIE_DAYS = 90
+SESSION_COOKIE_AGE = 60 * 60 * 24 * SESSION_COOKIE_DAYS 
+SESSION_EXPIRE_AT_BROWSER_CLOSE = False
+SESSION_COOKIE_SECURE = True
+CACHE_MIDDLEWARE_ALIAS = 'default'
+CACHE_MIDDLEWARE_SECONDS = 600
+CACHE_MIDDLEWARE_KEY_PREFIX = ''
+
+ENABLE_SSL = True
+HOST_SCHEME = "https://"
+X_FRAME_OPTIONS = 'DENY'
+CSRF_USE_SESSIONS = True
+CSRF_COOKIE_SECURE = True
+CSRF_COOKIE_HTTONLY = True
+# CSRF_FAILURE_VIEW = ''
+SECURE_SSL_REDIRECT = True
+SECURE_HSTS_PRELOAD = True
+USE_X_FORWARDED_HOST = True
+SECURE_HSTS_SECONDS = 15768000
+SECURE_BROWSER_XSS_FILTER = True
+CORS_REPLACE_HTTPS_REFERER = True
+SECURE_CONTENT_TYPE_NOSNIFF = True
+SECURE_HSTS_INCLUDE_SUBDOMAINS = True
+SECURE_REFERRER_POLICY = 'origin-when-cross-origin'
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+SESSION_ENGINE = "django.contrib.sessions.backends.cache"
+# gestion interdomaine
 CACHE_TTL = 60 * 15
-DJANGO_REDIS_IGNORE_EXCEPTIONS = True
+CACHE_TIMEOUT = 60 * 60
+CSRF_COOKIE_DOMAIN = BASE_URL
 
-# LOGGING = {
-#     'version': 1,
-#     'disable_existing_loggers': False,
-#     "handlers": {
-#         "file": {
-#             "level": "INFO",
-#             "class": "logging.handlers.TimedRotatingFileHandler",
-#             "filename": BASE_DIR / "logs/debug.log",
-#             "when": "D",
-#             "interval": 1,
-#             "backupCount": 100,
-#         }
-#     },
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    "handlers": {
+        "file": {
+            "level": "INFO",
+            "class": "logging.handlers.TimedRotatingFileHandler",
+            "filename": BASE_DIR / "logs/debug.log",
+            "when": "D",
+            "interval": 1,
+            "backupCount": 100,
+        }
+    },
 
-#     'loggers': {
-#         "django": {
-#             "handlers": ["file"],
-#             "level": "INFO",
-#             "propagate": True
-#         },
+    'loggers': {
+        "django": {
+            "handlers": ["file"],
+            "level": "INFO",
+            "propagate": True
+        },
 
-#         "project": {
-#             "handlers": ["file"],
-#             "level": "INFO",
-#             "propagate": True
-#         },
+        "project": {
+            "handlers": ["file"],
+            "level": "INFO",
+            "propagate": True
+        },
 
-#         "": {
-#             "handlers": ["file"],
-#             "level": "INFO",
-#             "propagate": True
-#         },
-#     },
-# }
+        "": {
+            "handlers": ["file"],
+            "level": "INFO",
+            "propagate": True
+        },
+    },
+}
 
 # phonenumber config
 PHONENUMBER_DEFAULT_REGION = "CI"
@@ -379,6 +393,8 @@ CINETPAY_TRANS_ID = config('CINETPAY_TRANS_ID')
 # Mailchimp Configuration
 MAILCHIMP_API_KEY = config('MAILCHIMP_API_KEY')
 MAILCHIMP_SUBSCRIBE_LIST_ID = config('MAILCHIMP_SUBSCRIBE_LIST_ID')
+
+INSTALLED_APPS += ['whitenoise.runserver_nostatic']
 
 # Django est passé à la sérialisation JSON pour des raisons de sécurité, mais il ne
 # sérialise pas les modèles. Nous devrions résoudre ce problème en étendant la

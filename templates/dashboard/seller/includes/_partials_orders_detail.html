@@ -1,4 +1,5 @@
 {% extends "dashboard/seller/base.html" %}
+{% load humanize %}
 
 {% block content %}
     <div class="ps-main__wrapper">
@@ -24,27 +25,6 @@
                                     <strong>Adresse: </strong>
                                     {{ object.shipping_delivery }}
                                 </p>
-                                <p><strong>Téléphone: </strong>
-                                    {{ object.phone }} {% if object.phone_two %}
-                                    / {{ object.phone_two }}
-                                {% endif %}</p>
-                                <p>
-                                    <strong>Email:</strong>
-                                    {{ object.email }}
-                                </p>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="col-md-6">
-                        <div class="ps-card ps-card--order-information ps-card--small">
-                            <div class="ps-card__header">
-                                <h4>Détail de la facturation</h4>
-                            </div>
-                            <div class="ps-card__content">
-                                <p><strong>Méthode de paiment: </strong> Visa</p>
-                                <p><strong>Provider:</strong> **** **** **** *2121</p>
-                                <p><strong>Valid Date:</strong> 02-2025</p>
                             </div>
                         </div>
                     </div>
@@ -74,20 +54,16 @@
                                             </td>
                                             <td>{{ object.quantity }}</td>
                                             <td>{{ object.product.price }}Fr</td>
-                                            <td>{{ object.total }}Fr</td>
+                                            <td>{{ object.total_seller_order }}Fr</td>
                                         </tr>
                                     {% endfor %}
                                     <tr>
-                                        <td colspan="3"><strong>Frais de livraison:</strong></td>
-                                        <td><strong>1 500Fr</strong></td>
-                                    </tr>
-                                    <tr>
-                                        <td colspan="3"><strong>Sous-total:</strong></td>
-                                        <td><strong>{{ object.total }}Fr</strong></td>
+                                        <td colspan="3"><strong>Commission {{ title }}:</strong></td>
+                                        <td><strong>5%</strong></td>
                                     </tr>
                                     <tr>
                                         <td colspan="3"><strong>Total:</strong></td>
-                                        <td><strong>{{ object.total|safe }}Fr</strong></td>
+                                        <td><strong>{{ object.total_order|intcomma }} Fr</strong></td>
                                     </tr>
                                 </tbody>
                             </table>

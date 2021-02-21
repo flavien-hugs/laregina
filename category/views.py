@@ -1,12 +1,7 @@
 # category.views.py
 
-from django.http import Http404
 from django.db import connection
-from django.shortcuts import render, get_object_or_404, redirect
-from django.views.generic import ListView, DetailView, TemplateView
-
-from catalogue.forms import ProductInventoryForm
-from django_filters import FilterSet, CharFilter, NumberFilter
+from django.views.generic import DetailView
 
 from category.models import Category
 from catalogue.models import Product
@@ -29,34 +24,3 @@ class CategoryDetailView(DetailView):
         from django.db import connection
         queries = connection.queries
         return Category.objects.all()
-
-
-class VariationListView(ListView):
-    model = Product
-    queryset = Product.objects.all()
-
-    def get_context_data(self, *args, **kwargs):
-        context["formset"] = VariationInventoryFormSet(queryset=self.get_queryset())
-        return super().get_context_data(*args, **kwargs)
-
-    def get_queryset(self, *args, **kwargs):
-        product_pk = self.kwargs.get("pk")
-        if product_pk:
-            product = get_object_or_404(Product, pk=product_pk)
-            queryset = Product.objects.filter(product=product)
-        return queryset
-
-    def post(self, request, *args, **kwargs):
-        formset = VariationInventoryFormSet(request.POST, request.FILES)
-        if formset.is_valid():
-            formset.save(commit=False)
-            for form in formset:
-                new_item = form.save(commit=False)
-                product_pk = self.kwargs.get("pk")
-                product = get_object_or_404(Product, pk=product_pk)
-                new_item.product = product
-                new_item.save()
-                
-            messages.success(request, "Votre inventaire et votre tarification ont été mis à jour.")
-            return redirect("/")
-        raise Http404

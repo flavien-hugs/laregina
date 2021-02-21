@@ -1,10 +1,11 @@
+{% load humanize %}
 <tr>
 	<td>{{ forloop.counter }}</td>
     <td><a class="font-weight-bold text-success" href="{{ object.get_absolute_url }}">
     #{{ object.transaction_id }}</a></td>
-    <td><strong>{{ object.date|timesince }}</strong></td>
+    <td><strong>{{ object.date|date }}</strong></td>
     <td><span class="ps-badge success">{{ object.status }}</span></td>
-    <td><strong>{{ object.total }}Fr</strong></td>
+    <td><strong>{{ object.total_order|intcomma }}Fr</strong></td>
     <td>
         <a href="{{ object.get_absolute_url }}" title="Voir les détails de la commande">
             <i class="icon-eye"></i>

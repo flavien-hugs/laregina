@@ -2,7 +2,8 @@
 
 from django import forms
 from checkout.models import Order
-
+from django_countries.fields import CountryField
+from django_countries.widgets import CountrySelectWidget
 
 class CheckoutForm(forms.ModelForm):
     
@@ -11,6 +12,11 @@ class CheckoutForm(forms.ModelForm):
     pour recueillir les informations d'expédition
     de l'utilisateur pour passer une commande
     """
+
+    shipping_country = CountryField(blank_label='(Sélection un pays)').formfield(
+        widget=CountrySelectWidget(attrs={
+        'class': 'form-control custom-select'
+    }))
 
     def __init__(self, *args, **kwargs):
         super(CheckoutForm, self).__init__(*args, **kwargs)

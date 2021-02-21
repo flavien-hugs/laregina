@@ -1,18 +1,19 @@
 # accounts.mixins.py
 
+import decimal
 import datetime
 from django.urls import reverse_lazy
 from django.db.models import Sum, Avg
 from django.contrib.auth.mixins import(
     LoginRequiredMixin,
-    UserPassesTestMixin,
-    PermissionRequiredMixin
+    UserPassesTestMixin
 )
 
 from core import settings
 from catalogue.models import Product
-from catalogue.forms import ProductAdminForm
 from checkout.models import Order, OrderItem
+
+from catalogue.forms import ProductAdminForm, ProductCreateFormSet
 
 User = settings.AUTH_USER_MODEL
 
@@ -35,10 +36,6 @@ class CustomerRequiredMixin(LoginRequiredMixin, UserPassesTestMixin):
     Limite l'accès à cette vue à l'utilisateur qui est
     le propriétaire de cet objet (dans une vue d'objet unique).
     """
-
-    # TODO: Augmenter de 404 au lieu de 503
-    raise_exception = True
-
     def test_func(self):
         # Suppose que ceci a un attribut get_object
         # ourrait être testé avec hasattr() ?
@@ -50,7 +47,10 @@ class UserAccountMixin(LoginRequiredMixin, object):
     account = None
 
     def get_account(self):
-        return self.request.user.is_seller
+        return self.request.user
+
+    def get_store(self):
+        return self.request.user.store
 
     def get_product(self):
         object_list = Product.objects.filter(user=self.get_account())
@@ -58,7 +58,8 @@ class UserAccountMixin(LoginRequiredMixin, object):
         return object_list
 
     def get_order(self):
-        return Order.objects.all()
+        order_list = Order.objects.exclude(user=self.get_account())
+        return (order_list).filter(user__store__in=self.get_store())
 
     def get_order_items(self):
         return OrderItem.objects.filter(product__in=self.get_product())
@@ -70,9 +71,10 @@ class UserAccountMixin(LoginRequiredMixin, object):
         return self.get_order_items().filter(date_created__range=(today_min, today_max))
 
     def get_total_sale(self):
-        total_order_sale = self.get_order_items().aggregate(Sum('price'))
-        total_order_price = total_order_sale["price__sum"]
-        return total_order_price
+        total = 0
+        for item in self.get_order():
+            total += item.total_order()
+        return total
 
     def get_today_sale(self):
         payment = self.get_order_today().aggregate(Sum("price"), Avg("price"))
@@ -84,8 +86,6 @@ class SellerRequiredMixin(UserAccountMixin, UserPassesTestMixin):
     """
     Limite l'accès de cette vue aux utilisateurs du groupe Vendeur.
     """
-    raise_exception = True
-
     def test_func(self):
         return self.request.user.is_seller
 
@@ -102,15 +102,10 @@ class UserMixin(SellerRequiredMixin, object):
         return queryset.filter(user=self.get_object())
 
 
-class EditeMixin(SellerRequiredMixin, object):
-    pass
-
-
-class ProductMixin(EditeMixin):
+class ProductMixin(SellerRequiredMixin, object):
     model = Product
-
-
-class ProductEditMixin(ProductMixin):
     form_class = ProductAdminForm
+
+class ProductEditMixin(ProductMixin, object):
     success_url = reverse_lazy('seller:product_list')
     template_name = 'dashboard/seller/includes/_partials_product_create.html'

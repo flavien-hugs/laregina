@@ -22,13 +22,20 @@
 
                             <!-- connexion url -->
                             <div class="text-center w-100 pt-5 pb-3">
-                                Vous êtes un nouvel utilisateur ?
+                                <p>Vous êtes un nouvel utilisateur ? </p>
                                 <span class="font-weight-bold">
-                                    <a href="{% url 'account_signup' %}">
-                                        <span><u>Créer votre compte</u></span>
+                                    {% url 'customer_signup' as buyer_signup %}
+                                    {% url 'account_signup' as seller_signup %}
+                                    {% url 'account_reset_password' as reset_password %}
+                                    <a href="{{ buyer_signup }}">
+                                        <span><u>Créer un compte acheteur</u></span>
                                     </a> &smid;
 
-                                    <a href="{% url 'account_reset_password' %}">
+                                    <a href="{{ seller_signup }}">
+                                        <span><u>Créer un compte Vendeur</u></span>
+                                    </a> &smid;
+
+                                    <a href="{{ reset_password }}">
                                         <span><u>Mot de passe oublié ?</u></span>
                                     </a>
                                 </span>

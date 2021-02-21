@@ -1,111 +1,31 @@
 <!-- sidebar categories -->
 
-{% load cache mptt_tags crispy_forms_tags %}
+{% load mptt_tags crispy_forms_tags %}
 
-{% cache 500 category request.user.id %}
-    <aside class="widget widget_shop">
-        <h4 class="widget-title">Catégories</h4>
+<aside class="widget widget_shop">
+    <h4 class="widget-title">Catégories</h4>
 
-        <form role='search' class="ps-form--widget-search" action="{% url "search" %}" method="GET">
-            <input class="form-control" type="search" name='q' value='{{ request.GET.q }}' placeholder="Rechercher ...">
-            <button><i class="icon-magnifier"></i></button>
-        </form>
+    <form role='search' class="ps-form--widget-search" action="{% url "search" %}" method="GET">
+        <input class="form-control" type="search" name='q' value='{{ request.GET.q }}' placeholder="Rechercher ...">
+        <button><i class="icon-magnifier"></i></button>
+    </form>
 
-        <ul class="ps-list--categories">
-            {% recursetree category %}
-                <li {% if not node.is_leaf_instance %}class="menu-item-has-children"{% endif %}>
-                    <a href="{{ node.get_absolute_url }}">{{ node.name|safe }}</a>
+    <ul class="ps-list--categories">
+        {% recursetree category %}
+        <li {% if not node.is_leaf_instance %}class="menu-item-has-children"{% endif %}>
+            <a href="{{ node.get_absolute_url }}">{{ node.name|safe }}</a>
 
-                    {% if not node.is_leaf_node and node.children.all %}
-                        <span class="sub-toggle"><i class="fa fa-angle-down"></i></span>
-                        
-                        <ul class="sub-menu">
-                            {% for children in node.children.all %}
-                                <li><a href="{{ children.get_absolute_url }}">
-                                {{ children.name }}</a></li>
-                            {% endfor %} 
-                        </ul>
-                    {% endif %}
-                </li>
-            {% endrecursetree %}
-        </ul>
-    </aside>
-
-    <!-- <aside class="widget widget_shop">
-
-        <figure class="ps-custom-scrollbar" data-height="250">
-            <h4 class="widget-title">par marques</h4>
-
-            <div class="ps-checkbox">
-                <input class="form-control" type="checkbox" id="brand-1" name="brand">
-                <label for="brand-1">Adidas (3)</label>
-            </div>
-            <div class="ps-checkbox">
-                <input class="form-control" type="checkbox" id="brand-2" name="brand">
-                <label for="brand-2">Amcrest (1)</label>
-            </div>
-            <div class="ps-checkbox">
-                <input class="form-control" type="checkbox" id="brand-3" name="brand">
-                <label for="brand-3">Apple (2)</label>
-            </div>
-            <div class="ps-checkbox">
-                <input class="form-control" type="checkbox" id="brand-4" name="brand">
-                <label for="brand-4">Asus (19)</label>
-            </div>
-            <div class="ps-checkbox">
-                <input class="form-control" type="checkbox" id="brand-5" name="brand">
-                <label for="brand-5">Baxtex (20)</label>
-            </div>
-            <div class="ps-checkbox">
-                <input class="form-control" type="checkbox" id="brand-6" name="brand">
-                <label for="brand-6">Adidas (11)</label>
-            </div>
-            <div class="ps-checkbox">
-                <input class="form-control" type="checkbox" id="brand-7" name="brand">
-                <label for="brand-7">Casio (9)</label>
-            </div>
-            <div class="ps-checkbox">
-                <input class="form-control" type="checkbox" id="brand-8" name="brand">
-                <label for="brand-8">Electrolux (0)</label>
-            </div>
-            <div class="ps-checkbox">
-                <input class="form-control" type="checkbox" id="brand-9" name="brand">
-                <label for="brand-9">Gallaxy (0)</label>
-            </div>
-            <div class="ps-checkbox">
-                <input class="form-control" type="checkbox" id="brand-10" name="brand">
-                <label for="brand-10">Samsung (0)</label>
-            </div>
-            <div class="ps-checkbox">
-                <input class="form-control" type="checkbox" id="brand-11" name="brand">
-                <label for="brand-11">Sony (0)</label>
-            </div>
-        </figure>
-
-        <figure>
-            <h4 class="widget-title">Par avis des clients</h4>
+            {% if not node.is_leaf_node and node.children.all %}
+            <span class="sub-toggle"><i class="fa fa-angle-down"></i></span>
             
-            <div class="ps-checkbox">
-                <input class="form-control" type="checkbox" id="review-1" name="review">
-                <label for="review-1"><span><i class="fa fa-star rate"></i><i class="fa fa-star rate"></i><i class="fa fa-star rate"></i><i class="fa fa-star rate"></i><i class="fa fa-star rate"></i></span><small>(13)</small></label>
-            </div>
-            <div class="ps-checkbox">
-                <input class="form-control" type="checkbox" id="review-2" name="review">
-                <label for="review-2"><span><i class="fa fa-star rate"></i><i class="fa fa-star rate"></i><i class="fa fa-star rate"></i><i class="fa fa-star rate"></i><i class="fa fa-star"></i></span><small>(13)</small></label>
-            </div>
-            <div class="ps-checkbox">
-                <input class="form-control" type="checkbox" id="review-3" name="review">
-                <label for="review-3"><span><i class="fa fa-star rate"></i><i class="fa fa-star rate"></i><i class="fa fa-star rate"></i><i class="fa fa-star"></i><i class="fa fa-star"></i></span><small>(5)</small></label>
-            </div>
-            <div class="ps-checkbox">
-                <input class="form-control" type="checkbox" id="review-4" name="review">
-                <label for="review-4"><span><i class="fa fa-star rate"></i><i class="fa fa-star rate"></i><i class="fa fa-star"></i><i class="fa fa-star"></i><i class="fa fa-star"></i></span><small>(5)</small></label>
-            </div>
-            <div class="ps-checkbox">
-                <input class="form-control" type="checkbox" id="review-5" name="review">
-                <label for="review-5"><span><i class="fa fa-star rate"></i><i class="fa fa-star"></i><i class="fa fa-star"></i><i class="fa fa-star"></i><i class="fa fa-star"></i></span><small>(1)</small></label>
-            </div>
-        </figure>
-    </aside>
-    -->
-{% endcache %}
+            <ul class="sub-menu">
+                {% for children in node.children.all %}
+                <li><a href="{{ children.get_absolute_url }}">
+                {{ children.name }}</a></li>
+                {% endfor %} 
+            </ul>
+            {% endif %}
+        </li>
+        {% endrecursetree %}
+    </ul>
+</aside>

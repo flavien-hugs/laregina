@@ -33,5 +33,11 @@ def export_to_csv(modeladmin, request, queryset):
         writer.writerow(data_row)
 
     return response
-
 export_to_csv.short_description = "Exporter les données"
+
+
+def copy_orders_items(modeladmin, request, queryset):
+    for object in queryset:
+        object.id = None
+        object.save()
+copy_orders_items.short_description = 'Dupliquer les éléments'

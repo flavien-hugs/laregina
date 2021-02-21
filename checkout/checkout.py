@@ -88,7 +88,6 @@ def create_order(request):
             order_item = OrderItem()
             order_item.order = order
             order_item.quantity = cart_item.quantity
-            order_item.price = cart_item.price
             order_item.product = cart_item.product
             order_item.save()
         

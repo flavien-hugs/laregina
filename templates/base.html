@@ -2,7 +2,7 @@
     <!DOCTYPE html>
     <html lang="fr">
         <head>
-            {% load static cache %}{% get_static_prefix as STATIC_PREFIX %}
+            {% load static %}{% get_static_prefix as STATIC_PREFIX %}
 
             {% include "includes/meta.html" %}
 
@@ -26,7 +26,7 @@
                     <!-- mise en cache du header pendant 120ms -->
                     {% if request.resolver_match.url_name == 'account_signup' or request.resolver_match.url_name == 'account_login' or request.resolver_match.url_name == 'customer_signup' %} 
                     {% else %}
-                        {% cache 120 header %}{% include "includes/partials/_partials_header.html" %}{% endcache %}
+                        {% include "includes/partials/_partials_header.html" %}
                     {% endif %}
 
                     {% block content %}
@@ -34,7 +34,7 @@
                 </main>
 
                 <!-- mise en cache du header pendant 120ms -->
-                {% cache 500 footer %}{% include "includes/partials/_partials_footer.html" %}{% endcache %}
+                {% include "includes/partials/_partials_footer.html" %}
             </div>
 
             {% include "includes/assets/javascript.html" %}

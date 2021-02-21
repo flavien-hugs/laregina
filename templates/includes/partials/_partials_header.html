@@ -1,6 +1,7 @@
 <!-- includes/header.html -->
 
-{% load cache humanize mptt_tags search_tags catalogue_tags %}
+{% load humanize mptt_tags search_tags catalogue_tags %}
+{% url "cart:cart" as cart %}
 
 <!-- affficher sur la page detail de produit -->
 {% if request.resolver_match.url_name == 'product_detail' %}
@@ -30,18 +31,11 @@
                             {% csrf_token %}
                             <div class="ps-product__shopping">
                                 <span class="ps-product__price">
-                                    <span>{{ object.price }}</span>
-                                    {% if old_price %}
-                                        <del>{{ object.old_price }}</del>
-                                    {% endif %}
+                                    <span>{{ object.price|intcomma }} Fr</span>
                                 </span>
 
-                                {% if cart_items %}
-                                    <a href="{% url "cart:cart" %}" class="ps-btn text-uppercase">
-                                    voir le panier</a>
-                                {% else %}
-                                    
-                                {% endif %}
+                                <a href="{{ cart }}" class="ps-btn text-uppercase">
+                                voir le panier</a>
                             </div>
                         </form>
                     </div>
@@ -135,6 +129,9 @@
                 </ul>
 
                 <ul class="navigation__extra">
+                    {% url "account_signup"  as signup %}
+                    {% url "account_login" as login %}
+
                     {% if request.user.is_authenticated %}
                         {% if request.user.is_seller %}
                             <li>
@@ -144,21 +141,12 @@
                             
                             <li><a href="#">Ajouter une annonce</a></li>
                         {% elif request.user.is_buyer %}
-                            <li><a href="{% url "account_signup" %}">
-                                Ouvrir ma boutique</a>
-                            </li>
-                            <li>
-                                <a href="{% url "account_login" %}?next={{ request.path }}">
-                                Se connecter</a>
-                            </li>
+                            <li><a class="font-weight-bold text-uppercase" href="{{ signup }}">
+                            ouvrir ma boutique</a></li>
                         {% endif %}
                     {% else %}
-                        <li>
-                            <a href="{% url "account_login" %}?next={{ request.path }}">
-                                Se connecter
-                            </a>
-                        </li>
-                        <li><a href="{% url "account_signup" %}">Ouvrir ma boutique</a></li>
+                        <li><a href="{{ login }}">Se connecter</a></li>
+                        <li><a href="{{ signup }}">Ouvrir ma boutique</a></li>
                     {% endif %}
                     </ul>
                 </div>
@@ -206,7 +194,7 @@
                                     <a href="#">Mon Compte</a>
                                 {% endif %}
                             {% else %}
-                                <a href="{% url "account_login" %}?next={{ request.path }}">Connexion</a>
+                                <a href="{% url "account_login" %}">Connexion</a>
                             {% endif %}
                         </div>
                     </div>

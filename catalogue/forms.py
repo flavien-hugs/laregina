@@ -1,10 +1,10 @@
 # catalogue.forms.py
 
 from django import forms
-from django.forms.models import modelformset_factory
+from django.forms.models import inlineformset_factory
 
 from category.models import Category
-from catalogue.models import Product
+from catalogue.models import Product, ProductImage
 
 
 class ProductAdminForm(forms.ModelForm):
@@ -18,34 +18,59 @@ class ProductAdminForm(forms.ModelForm):
         for field in self.fields:
             self.fields[field].widget.attrs['class'] = 'form-control'
 
-            if self.fields['price'] and self.fields['old_price']:
+            if self.fields['price']:
                 self.fields['price'].widget.attrs.update({'type': 'text'})
-                self.fields['old_price'].widget.attrs.update({'type': 'text'})
 
         self.fields['is_external'].widget.attrs['type'] = 'checkbox'
         self.fields['name'].widget.attrs['placeholder'] = 'Entrer le nom du produit'
         self.fields['price'].widget.attrs['placeholder'] = 'Entrer le prix de vente du produit'
-        self.fields['old_price'].widget.attrs['placeholder'] = 'Entrer le prix normal du produit (facultatif)'
         self.fields['keywords'].widget.attrs['placeholder'] = 'Ajouter quelques mots-clés (facultatif)'
 
         
-    def clean_price(self):
-        price = self.fields['price']
-        price = self.cleaned_data['price']
-        if price <= 1.00:
-            raise forms.ValidationError(
-                'Le prix doit être supérieur à 1$'
-            )
-        return price
+    def clean(self):
+        cleaned_data = super().clean()
+        price = cleaned_data.get('price')
+        name = cleaned_data.get('name')
 
-    def clean_product_name(self):
-        name = self.fields['name']
-        name = self.cleaned_data['name']
-        if len(name.strip()) >= 4:
-            return name.strip()
-        else:
-            raise ValidationError("Le nom du produit doit être long de 4 caractères....")
-        
+        if price <= 100:
+            msg = "Le prix doit être supérieur à 100 !"
+            self._errors['price'] = self.error_class([msg])
+
+        return cleaned_data
+
+
+class ProductImageForm(forms.ModelForm):
+
+    image = forms.ImageField(
+        label="Ajouter des images",
+        widget=forms.ClearableFileInput(
+            {
+                "class": "custom-file",
+                "accept": "image/*",
+                "multiple": True
+            }
+        ), required=True,
+    )
+
+    class Meta:
+        model = ProductImage
+        fields = ['image']
+        exclude = ('product',)
+
+
+ProductCreateFormSet = inlineformset_factory(
+    Product, ProductImage,
+    fields=[
+        'product',
+        'image'
+    ],
+    exclude=[
+        'timestamp',
+        'updated',
+    ],
+    can_delete=True,
+    extra=1
+)
 
 class ProductAddToCartForm(forms.Form):
     """ 
@@ -84,15 +109,3 @@ class ProductAddToCartForm(forms.Form):
             if not self.request.session.test_cookie_worked():
                 raise forms.ValidationError("Les cookies doivent être activés.")
         return self.cleaned_data
-
-
-class ProductInventoryForm(forms.ModelForm):
-    class Meta:
-        model = Product
-        fields = [
-            "price",
-            "old_price",
-            "is_active",
-        ]
-
-ProductInventoryFormSet = modelformset_factory(Product, form=ProductInventoryForm, extra=0)

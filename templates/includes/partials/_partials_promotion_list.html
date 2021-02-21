@@ -1,11 +1,9 @@
 <!-- includes/partials/_partials_promotion_list -->
 
-{% load cache pages_tags %}
+{% load pages_tags %}
 
-{% cache 60 promotion_list request.user.id %}
-	{% for object in object_list %}
-	    <a href="{{ object.category.get_absolute_url }}">
-	    	<img class="img-fluid" src="{{ object.get_image_url }}" alt="{{ object.title }}">
-	  	</a>
-	 {% endfor %}
-{% endcache %}
+{% for object in object_list %}
+	<a href="{{ object.category.get_absolute_url }}">
+		<img class="img-fluid" src="{{ object.get_image_url }}" alt="{{ object.title }}">
+	</a>
+{% endfor %}

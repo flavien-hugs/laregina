@@ -18,10 +18,9 @@ class ProductImageInline(admin.TabularInline):
 
 @admin.register(Product)
 class ProductAdmin(admin.ModelAdmin):
-    form = ProductAdminForm
     date_hierarchy = 'created_at'
     list_display_links = ('name',)
-
+    form = ProductAdminForm
     list_display = [
         'name',
         'price',
@@ -39,7 +38,7 @@ class ProductAdmin(admin.ModelAdmin):
         "is_active",
     )
 
-    list_per_page = 50
+    list_per_page = 5
     inlines = [ProductImageInline]
     ordering = ('-created_at',)
     prepopulated_fields = {'slug': ('name',), 'keywords': ('name',)}

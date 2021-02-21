@@ -5,7 +5,6 @@ from django.db import models
 from django.db.models import Q
 from django.urls import reverse
 
-from tagulous.models import TagField
 from core.utils import unique_slug_generator
 from mptt.models import MPTTModel, TreeForeignKey
 
@@ -27,10 +26,6 @@ class Category(MPTTModel):
         max_length=120,
         db_index=True,
         verbose_name='sous-catégorie',
-    )
-    keywords = TagField(
-        verbose_name='mot clés',
-        blank=True,
     )
     slug = models.SlugField(
         verbose_name='lien',

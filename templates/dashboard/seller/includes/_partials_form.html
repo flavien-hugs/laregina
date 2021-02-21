@@ -26,16 +26,11 @@
                         </div>
                     </div>
 
-                    <div class="form-group">
-                        <label for="{{ form.name.id_for_label }}">Nom du produit<sup>*</sup></label>
-                        {{ form.name }}
-                    </div>
-
                     <div class="row">
                         <div class="col-sm-6">
                             <div class="form-group">
-                                <label for="{{ form.old_price.id_for_label }}">Prix normal<sup>*</sup></label>
-                                {{ form.old_price }}
+                                <label for="{{ form.name.id_for_label }}">Nom du produit<sup>*</sup></label>
+                                {{ form.name }}
                             </div>
                         </div>
                         <div class="col-sm-6">
@@ -49,16 +44,11 @@
                     <div class="form-group">
                         <label for="{{ form.description.id_for_label }}">Description du produit<sup>*</sup></label>
                         {{ form.description }}
-                        <!--  <textarea name="{{ form.description.name }} editordata" id="summernote" id="{{ form.description.name }}" 
-                            class="form-control" rows="6" placeholder="Entrez la description du produit...">
-                        </textarea> -->
                     </div>
 
                     <div class="form-group">
-                        <label>Vignette du produit</label>
-                        <div class="form-group--nest">
-                            <input class="form-control mb-1" multiple type="text" placeholder="Ajouter des images">
-                            <button class="ps-btn ps-btn--sm">Choisir</button>
+                        <div class="custom-file">
+                            {{ image_formset }}
                         </div>
                     </div>
 

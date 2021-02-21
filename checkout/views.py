@@ -4,9 +4,10 @@ from django.urls import reverse
 from django.contrib import messages
 from django.shortcuts import render
 from django.http import HttpResponseRedirect
-from django.contrib.auth.mixins import LoginRequiredMixin
-from django.views.generic import TemplateView, ListView, DetailView
+from django.views.generic import TemplateView
+from django.contrib.auth.decorators import login_required
 
+from core import settings
 from cart import cart
 from core import settings
 from checkout import checkout
@@ -14,6 +15,7 @@ from checkout.models import Order
 from checkout.forms import CheckoutForm
 
 
+@login_required
 def show_checkout(request, template='checkout/checkout.html'):
     
     """
@@ -50,17 +52,16 @@ def show_checkout(request, template='checkout/checkout.html'):
     return render(request, template, context)
 
 
-class OrderResumeDetailView(DetailView):
+class OrderResumeDetailView(TemplateView):
     """ 
     page affichée avec les informations relatives
     à la commande après qu'une commande ait été passée avec succès
     """
-    model = Order
-    template_name = 'checkout/receipt.html'
+    template_name = 'checkout/snippet/_partials_order_success.html'
     extra_context = {'page_title': 'Résumé de votre commande'}
 
     def get_context_data(self, **kwargs):
         kwargs['object_list'] = Order.objects.filter(user=self.request.user)
-        kwargs['page_title'] = 'Commande N°: {transaction_id}'.format(
-            transaction_id=self.object.transaction_id)
+        # kwargs['transaction_id'] = Order.objects.get(transaction_id=self.kwargs.transaction_id)
+        print(kwargs['object_list'])
         return super().get_context_data(**kwargs)
