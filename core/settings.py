@@ -332,40 +332,40 @@ MPTT_ADMIN_LEVEL_INDENT = 20
 CACHE_TTL = 60 * 15
 DJANGO_REDIS_IGNORE_EXCEPTIONS = True
 
-# LOGGING = {
-#     'version': 1,
-#     'disable_existing_loggers': False,
-#     "handlers": {
-#         "file": {
-#             "level": "INFO",
-#             "class": "logging.handlers.TimedRotatingFileHandler",
-#             "filename": BASE_DIR / "logs/debug.log",
-#             "when": "D",
-#             "interval": 1,
-#             "backupCount": 100,
-#         }
-#     },
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    "handlers": {
+        "file": {
+            "level": "INFO",
+            "class": "logging.handlers.TimedRotatingFileHandler",
+            "filename": BASE_DIR / "logs/debug.log",
+            "when": "D",
+            "interval": 1,
+            "backupCount": 100,
+        }
+    },
 
-#     'loggers': {
-#         "django": {
-#             "handlers": ["file"],
-#             "level": "INFO",
-#             "propagate": True
-#         },
+    'loggers': {
+        "django": {
+            "handlers": ["file"],
+            "level": "INFO",
+            "propagate": True
+        },
 
-#         "project": {
-#             "handlers": ["file"],
-#             "level": "INFO",
-#             "propagate": True
-#         },
+        "project": {
+            "handlers": ["file"],
+            "level": "INFO",
+            "propagate": True
+        },
 
-#         "": {
-#             "handlers": ["file"],
-#             "level": "INFO",
-#             "propagate": True
-#         },
-#     },
-# }
+        "": {
+            "handlers": ["file"],
+            "level": "INFO",
+            "propagate": True
+        },
+    },
+}
 
 # phonenumber config
 PHONENUMBER_DEFAULT_REGION = "CI"
