@@ -110,14 +110,13 @@ class Product(models.Model):
     def __repr__(self):
        return self.__str__()
 
-    @property
-    def get_sale_price(self):
-        return self.price
-
     def save(self, *args, **kwargs):
         if not self.slug:
             self.slug = slugify(self.name)
         super().save(*args, **kwargs)
+
+    def get_product_price(self):
+        return self.price
 
     def get_image_url(self):
         try:
@@ -195,7 +194,6 @@ class Product(models.Model):
         orders = Order.objects.filter(orderitem__product=self)
         order_items = OrderItem.objects.filter(order__in=orders).exclude(product=self)
         object_list = Product.objects.filter(orderitem__in=order_items).distinct()
-        print(object_list)
         return object_list
 
     
@@ -218,7 +216,6 @@ class Product(models.Model):
         users = User.objects.filter(order__orderitem__product=self)
         items = OrderItem.objects.filter(order__user__in=users).exclude(product=self)
         object_list = Product.objects.filter(orderitem__in=items).distinct()
-        print(products)
         return object_list
     
     def cross_sells_hybrid(self):
@@ -238,7 +235,6 @@ class Product(models.Model):
             Q(order__in=orders) | Q(order__user__in=users)
             ).exclude(product=self)
         object_list = Product.objects.filter(orderitem__in=items).distinct()
-        print(object_list)
         return object_list
 
 

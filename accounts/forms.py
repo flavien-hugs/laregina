@@ -2,8 +2,11 @@
 
 from django import forms
 from django.db import transaction
+from django.contrib.auth.models import Group
 from django.contrib.auth import get_user_model
 from django.contrib.auth.forms import UserCreationForm, UserChangeForm
+
+from accounts.models import Customer
 
 from crispy_forms import bootstrap, layout
 from crispy_forms.helper import FormHelper
@@ -58,18 +61,12 @@ class LoginForm(LoginForm):
 class MarketSignupForm(UserCreationForm):
     civility = forms.TypedChoiceField(
         label="Civilité", choices=User.CIVILITY_CHOICES,
-        initial = '1', coerce=str, required = True,
+        initial='1', coerce=str, required=True,
     )
     shipping_first_name = forms.CharField(label='Nom', max_length=120,
         widget=forms.TextInput(attrs={'placeholder': 'Entrez votre nom'}))
     shipping_last_name = forms.CharField(label='Prénom', max_length=120,
         widget=forms.TextInput(attrs={'placeholder': 'Entrez votre prénom'}))
-    phone = PhoneNumberField(label='Numéro de téléphone', region='IT', initial='+39',
-        widget=PhoneNumberPrefixWidget(
-            attrs={'placeholder': 'ex.: 015 157 139 6000',
-            'class': "form-control"}
-        )
-    )
     store = forms.CharField(label='Nom de votre Magasin', max_length=254, required=True)
 
     def __init__(self, *args, **kwargs):
@@ -87,20 +84,22 @@ class MarketSignupForm(UserCreationForm):
                 css_class='form-row'
             ),
 
-            bootstrap.PrependedText(
-                'email', '',
-                placeholder='Entrez votre adresse email',
-                css_class='form-group'
-            ),
-            
-            bootstrap.PrependedText(
-                'store', '', 
-                placeholder='Entrez le nom du votre magasin',
-                css_class='form-group'
-            ),
+            layout.Row(
+                layout.Column(
+                    bootstrap.PrependedText(
+                        'email', '',
+                        placeholder='Entrez votre adresse email',
+                    ),
+                    css_class='form-group col-md-6 mb-0'
+                ),
 
-            bootstrap.PrependedText(
-                'phone', '', css_class='form-group custom-select'
+                layout.Column(
+                    bootstrap.PrependedText(
+                        'store', '', 
+                        placeholder='Entrez le nom du votre magasin',
+                    ),
+                    css_class='form-group col-md-6 mb-0'
+                ),
             ),
 
             bootstrap.Field(
@@ -127,14 +126,15 @@ class MarketSignupForm(UserCreationForm):
             'email', 'civility',
             'shipping_first_name', 
             'shipping_last_name',
-            'store', 'phone'
+            'store',
         ]
 
-    def clean_email(self):
-        email = self.cleaned_data.get('email')
+    def clean(self):
+        cleaned_data = super().clean()
+        email = cleaned_data.get('email')
         email_base, provider = email.split("@")
         domain, extension = provider.split('.')
-        return email
+        return cleaned_data
 
     @transaction.atomic
     def save(self, commit=True):
@@ -145,47 +145,15 @@ class MarketSignupForm(UserCreationForm):
         return user
 
 
-class CustomerSignUpForm(UserCreationForm):
-    civility = forms.TypedChoiceField(
-        label="Civilité", choices=User.CIVILITY_CHOICES,
-        initial = '1', coerce=str, required=True,
-    )
-    
-    shipping_first_name = forms.CharField(label='Nom', max_length=120,
-        widget=forms.TextInput(
-            attrs={'placeholder': 'Entrez votre nom'}
-        )
-    )
+class CustomerSignUpForm(forms.ModelForm):
 
-    shipping_last_name = forms.CharField(label='Prénoms', max_length=120,
-        widget=forms.TextInput(
-            attrs={'placeholder': 'Entrez votre prénom'}
-        )
-    )
-
-    phone = PhoneNumberField(
-        label='Numéro de téléphone', initial='+225',
-        widget=PhoneNumberPrefixWidget(
-            attrs={'placeholder': '000 000 0000', 'class': "form-control"}
-        )
-    )
-
-    def __init__(self, *args, **kwargs):
+    def __init__(self, request, *args, **kwargs):
+        self.request = request
         super().__init__(*args, **kwargs)
         self.helper = FormHelper(self)
 
         self.helper.layout = layout.Layout(
-            layout.Row(
-                layout.Column('civility', css_class='form-group col-md-2 mb-0'),
-                layout.Column('shipping_first_name', css_class='form-group col-md-5 mb-0'),
-                layout.Column('shipping_last_name', css_class='form-group col-md-5 mb-0'),
-                css_class='form-row'
-            ),
             bootstrap.PrependedText('email', '', placeholder="Entrez votre adresse email"),
-            bootstrap.PrependedText('phone', '', css_class='custom-select'),
-            bootstrap.PrependedText('password1', '', placeholder="Entrez votre mot de passe"),
-            bootstrap.PrependedText('password2', '', placeholder="Confirmez le mot de passe"),
-
             bootstrap.FormActions(
                 layout.Submit(
                     'submit', 'Créer mon compte',
@@ -195,38 +163,39 @@ class CustomerSignUpForm(UserCreationForm):
         )
 
     class Meta:
-        model = User
-        fields = (
-            'email', 'civility',
-            'shipping_first_name', 'shipping_last_name',
-            'phone'
-        )
+        model = Customer
+        fields = ['email',]
 
-    def clean_email(self):
-        email = self.cleaned_data.get('email')
+    def clean(self):
+        cleaned_data = super().clean()
+        email = cleaned_data.get('email')
         email_base, provider = email.split("@")
         domain, extension = provider.split('.')
-        return email
+        return cleaned_data
 
     @transaction.atomic
     def save(self, commit=True):
         user = super().save(commit=False)
-        user.is_buyer = True
         if commit:
             user.save()
+            self.request.session['customer_email_id'] = user.id
         return user
 
 
 class MarketChangeForm(UserChangeForm):
     class Meta:
         model = User
-        fields = ("email", "logo")
-
+        fields = [
+            'civility',
+            'shipping_first_name', 
+            'shipping_last_name',
+            'store', 'phone'
+        ]
 
 
 class StoreUpdateForm(forms.ModelForm):
     
-    shipping_country = CountryField(blank_label='(Sélection un pays)').formfield(
+    shipping_country = CountryField(blank_label='Sélection un pays').formfield(
         widget=CountrySelectWidget(attrs={
         'class': 'form-control custom-select'
     }))
@@ -254,14 +223,9 @@ class StoreUpdateForm(forms.ModelForm):
             ),
 
             layout.Row(
-                layout.Column('phone', css_class='form-group col-md-6 mb-0'),
-                layout.Column('phone_two', css_class='form-group col-md-6 mb-0'),
-                css_class='form-row'
-            ),
-
-            layout.Row(
-                layout.Column('store', css_class='form-group col-md-6 mb-0'),
-                layout.Column('logo', css_class='form-group col-md-6 mb-0'),
+                layout.Column('store',  css_class='form-group col-md-4 mb-0'),
+                layout.Column('phone', css_class='form-group col-md-4 mb-0'),
+                layout.Column('phone_two', css_class='form-group col-md-4 mb-0'),
                 css_class='form-row'
             ),
 
@@ -274,6 +238,18 @@ class StoreUpdateForm(forms.ModelForm):
 
             layout.Row(
                 layout.Column('store_description', css_class='form-group col-md-12 mb-0'),
+            ),
+
+            layout.Row(
+                layout.Column('facebook', css_class='form-group col-md-6 mb-0'),
+                layout.Column('instagramm', css_class='form-group col-md-6 mb-0'),
+                css_class='form-row'
+            ),
+
+            layout.Row(
+                layout.Column('twitter', css_class='form-group col-md-6 mb-0'),
+                layout.Column('linkedin', css_class='form-group col-md-6 mb-0'),
+                css_class='form-row'
             ),
 
             bootstrap.FormActions(
@@ -292,11 +268,14 @@ class StoreUpdateForm(forms.ModelForm):
             "shipping_first_name",
             "shipping_last_name",
             "store",
-            "logo",
             "phone",
             "phone_two",
             "shipping_country",
             "shipping_city",
             "store_description",
             "shipping_adress",
+            "facebook",
+            "twitter",
+            "linkedin",
+            "instagramm"
         ]

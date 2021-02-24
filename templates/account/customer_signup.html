@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+{% load crispy_forms_tags %}
+{% block title %}Créer un compte{% endblock title %}
+
+{% block content %}
+    <div class="ps-page--my-account">
+        <div class="container">
+            <div class="row justify-content-center mt-5">
+                <div class="col-md-7 col-sm-10">
+                    <div class="pb-5">
+                        <div class="col bg-white p-5">
+                            <h3 class="font-weight-bold text-center">
+                            Créer un compte</h3>
+                            <p class="text-center font-weight-normal pb-4">
+                                {% if request.resolver_match.url_name == 'customer_signup' %}
+                                    Inscrivez-vous maintenant.
+                                {% else %}
+                                    Inscrivez-vous et commencez à vendre dès aujourd'hui - créez votre propre compte vendeur.
+                                {% endif %}
+                            </p>
+
+                            <form method="post" action='{% url 'checkout:checkout' %}'>
+                                {% csrf_token %}
+                              
+                                {{ form|crispy }}
+
+                                <div class="form-group">
+                                    <button class="ps-btn ps-btn--fullwidth text-uppercase"
+                                    type="submit" name="submit">continuer</button>
+                                </div>
+                            </form>
+
+                            <!-- connexion url -->
+                            <div class="text-center w-100 pt-2 pb-3">
+                                Vous avez déjà un compte ?
+                                <a href="{% url "account_login" %}">
+                                    <span class="font-weight-bold"><u>Connectez-vous</u>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock content %}

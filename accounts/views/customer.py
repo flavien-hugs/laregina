@@ -1,26 +1,26 @@
 # accounts.views.customer.py
 
-from django.contrib.auth import login
+from django.urls import reverse_lazy
 from django.shortcuts import redirect
 from django.views.generic import CreateView
+from django.contrib.auth.models import Group
 
-from ..models import User
 from ..forms import CustomerSignUpForm
+from ..mixins import NextUrlMixin, RequestFormAttachMixin
 
 
-class CustomerSignUpView(CreateView):
-    model = User
+class CustomerSignUpView(NextUrlMixin, RequestFormAttachMixin, CreateView):
     form_class = CustomerSignUpForm
-    template_name = 'account/signup.html'
-    extra_context = {'user_type': 'buyer'}
+    template_name = 'account/customer_signup.html'
+    default_next = reverse_lazy('customer_signup')
 
-    def dispatch(self, request, *args, **kwargs):
-        if self.request.user.is_authenticated:
-            if self.request.user.is_buyer:
-                return redirect('catalogue:product_list')
-        return super().dispatch(self.request, *args, **kwargs)
+    def get_success_url(self):
+        return self.get_next_url()
 
     def form_valid(self, form):
         user = form.save()
         login(self.request, user)
-        return redirect('catalogue:product_list')
+        return redirect(self.get_success_url())
+
+    def form_invalid(self, form):
+        return redirect(self.default_next)

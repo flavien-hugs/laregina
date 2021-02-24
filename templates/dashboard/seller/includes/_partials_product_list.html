@@ -11,7 +11,6 @@
         </header>
 
         <section class="ps-items-listing">
-            {% include "dashboard/seller/includes/_partials_message.html" %}
             <div class="ps-section__header simple">
                 <div class="ps-section__filter">
                     <form class="ps-form--filter" action="#" method="get">
@@ -35,31 +34,33 @@
             </div>
 
             
-                <div class="ps-section__content">
-                    {% if object_list %}
-                        <div class="table-responsive">
-                            <table class="table ps-table">
-                                <thead>
-                                    <tr>
-                                        <th>#</th>
-                                        <th>Nom</th>
-                                        <th>Prix</th>
-                                        <th>Date</th>
-                                        <th></th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    {% for object in object_list %}
-                                        {% include "dashboard/seller/includes/_snippet_product_table.html" %}
-                                    {% endfor %}
-                                </tbody>
-                            </table>
-                        </div>
+            <div class="ps-section__content">
+                {% if object_list %}
+                    <div class="table-responsive">
+                        <table class="table ps-table">
+                            <thead>
+                                <tr>
+                                    <th>#</th>
+                                    <th>Nom</th>
+                                    <th>Prix</th>
+                                    <th>Date</th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for object in object_list %}
+                                    {% include "dashboard/seller/includes/_snippet_product_table.html" %}
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                    {% if object_list.count >= 10 %}
                         {% include "dashboard/seller/includes/_partials_pagination.html" %}
-                    {% else %}
-                        {% include "dashboard/seller/includes/_partials_store_empty.html" %}
                     {% endif %}
-                </div>
+                {% else %}
+                    {% include "dashboard/seller/includes/_partials_store_empty.html" %}
+                {% endif %}
+            </div>
         </section>
     </div>
 {% endblock content %}

@@ -46,10 +46,12 @@ class CartItem(models.Model):
         return self.product.price
 
     def get_shop_name(self):
-        return str(self.product.user.store)
+        return '{}'.format(self.product.user.store)
+    get_shop_name.short_description='magasin'
 
-    def name(self):
-        return str(self.product.name)
+    def get_product_name(self):
+        return '{}'.format(str(self.product.name))
+    get_product_name.short_description='nom du produit'
 
     def get_absolute_url(self):
         return self.product.get_absolute_url()

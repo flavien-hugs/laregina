@@ -201,7 +201,6 @@ TEMPLATES = [
                 'core.context.category',
                 'core.context.cart_items',
                 'accounts.context.profile',
-                'accounts.context.customization',
             ],
 
             'debug': DEBUG,
@@ -227,7 +226,10 @@ DATABASES = {
         'PASSWORD': config('DATABASE_PASSWORD'),
         'HOST': config('DATABASE_HOST', cast=str),
         'PORT': config('DATABASE_PORT', cast=int),
-        'ATOMIC_REQUESTS': True
+        'ATOMIC_REQUESTS': True,
+        'OPTIONS': {
+            "init_command": "SET sql_mode='STRICT_TRANS_TABLES'",
+        }
     }
 }
 
@@ -332,40 +334,40 @@ MPTT_ADMIN_LEVEL_INDENT = 20
 CACHE_TTL = 60 * 15
 DJANGO_REDIS_IGNORE_EXCEPTIONS = True
 
-LOGGING = {
-    'version': 1,
-    'disable_existing_loggers': False,
-    "handlers": {
-        "file": {
-            "level": "INFO",
-            "class": "logging.handlers.TimedRotatingFileHandler",
-            "filename": BASE_DIR / "logs/debug.log",
-            "when": "D",
-            "interval": 1,
-            "backupCount": 100,
-        }
-    },
+# LOGGING = {
+#     'version': 1,
+#     'disable_existing_loggers': False,
+#     "handlers": {
+#         "file": {
+#             "level": "INFO",
+#             "class": "logging.handlers.TimedRotatingFileHandler",
+#             "filename": BASE_DIR / "logs/debug.log",
+#             "when": "D",
+#             "interval": 1,
+#             "backupCount": 100,
+#         }
+#     },
 
-    'loggers': {
-        "django": {
-            "handlers": ["file"],
-            "level": "INFO",
-            "propagate": True
-        },
+#     'loggers': {
+#         "django": {
+#             "handlers": ["file"],
+#             "level": "INFO",
+#             "propagate": True
+#         },
 
-        "project": {
-            "handlers": ["file"],
-            "level": "INFO",
-            "propagate": True
-        },
+#         "project": {
+#             "handlers": ["file"],
+#             "level": "INFO",
+#             "propagate": True
+#         },
 
-        "": {
-            "handlers": ["file"],
-            "level": "INFO",
-            "propagate": True
-        },
-    },
-}
+#         "": {
+#             "handlers": ["file"],
+#             "level": "INFO",
+#             "propagate": True
+#         },
+#     },
+# }
 
 # phonenumber config
 PHONENUMBER_DEFAULT_REGION = "CI"

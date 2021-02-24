@@ -35,7 +35,6 @@ class ProductAdmin(admin.ModelAdmin):
 
     list_editable = (
         "is_active",
-        "is_active",
     )
 
     list_per_page = 5

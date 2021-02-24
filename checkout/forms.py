@@ -5,6 +5,7 @@ from checkout.models import Order
 from django_countries.fields import CountryField
 from django_countries.widgets import CountrySelectWidget
 
+
 class CheckoutForm(forms.ModelForm):
     
     """
@@ -13,7 +14,7 @@ class CheckoutForm(forms.ModelForm):
     de l'utilisateur pour passer une commande
     """
 
-    shipping_country = CountryField(blank_label='(Sélection un pays)').formfield(
+    shipping_country = CountryField(blank_label='Sélection un pays').formfield(
         widget=CountrySelectWidget(attrs={
         'class': 'form-control custom-select'
     }))
@@ -47,7 +48,6 @@ class CheckoutForm(forms.ModelForm):
         model = Order
         fields = '__all__'
         exclude = [
-            'user',
             'status',
             'transaction_id',
             'ip_address',

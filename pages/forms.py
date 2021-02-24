@@ -83,14 +83,9 @@ class ContactForm(forms.ModelForm):
             if self.fields['subject']:
                 self.fields['subject'].widget.attrs.update({'class': 'form-control custom-select'})
 
-    def clean_email(self):
-        email = self.cleaned_data.get('email')
+    def clean(self):
+        cleaned_data = super().clean()
+        email = cleaned_data.get('email')
         email_base, provider = email.split("@")
         domain, extension = provider.split('.')
-        return email
-
-    def clean_full_name(self):
-        value = self.cleaned_data.get('full_name')
-        if len(value.strip()) < 4:
-            raise ValidationError("Le Nom et prénoms doivent être supérieur à 4 lettre....")
-        return value.strip()
+        return cleaned_data

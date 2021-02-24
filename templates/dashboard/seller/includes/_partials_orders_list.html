@@ -1,4 +1,5 @@
 {% extends "dashboard/seller/base.html" %}
+
 {% load humanize %}
 
 {% block content %}
@@ -30,16 +31,18 @@
             </div>
 
             <div class="ps-section__content">
-                <div class="table-responsive">
-                    {% if object_list %}
+                {% if object_list %}
+                    <div class="table-responsive">
                         <table class="table ps-table">
                             <thead>
                                 <tr>
                                     <th>#</th>
-                                    <th>N° Commande</th>
+                                    <th>Produit</th>
+                                    <th>Qté</th>
+                                    <th>Prix</th>
+                                    <th>Total</th>
                                     <th>Date</th>
                                     <th>Status</th>
-                                    <th>Total</th>
                                     <th></th>
                                 </tr>
                             </thead>
@@ -49,24 +52,22 @@
                                 {% endfor %}
                             </tbody>
                         </table>
-                    {% else %}
-                        <div class="ps-section__content">
-                            <div class="text-center py-2">
-                                <span class="d-flex justify-content-center">
-                                    <img class="img-fluid" height="160px" width="160px"
-                                    srcset="{{ STATIC_PREFIX }}img/emptycart.png"
-                                    src="{{ STATIC_PREFIX }}img/emptycart.png" alt="empty-cart-{{ page_title }}">
-                                </span>
-
-                                <p class="font-weight-bold">Vous n'avez aucune commande pour l'instant.</p>
-                            </div>
-                        </div>
+                    </div>
+                    {% if object_list.count >= 10 %}
+                        {% include "dashboard/seller/includes/_partials_pagination.html" %}
                     {% endif %}
-                </div>
+                {% else %}
+                    <div class="text-center py-2">
+                        <span class="d-flex justify-content-center">
+                            <img class="img-fluid" height="160px" width="160px"
+                            srcset="{{ STATIC_PREFIX }}img/emptycart.png"
+                            src="{{ STATIC_PREFIX }}img/emptycart.png" alt="empty-cart-{{ page_title }}">
+                        </span>
+
+                        <p class="font-weight-bold">Vous n'avez aucune commande pour l'instant.</p>
+                    </div>
+                {% endif %}
             </div>
-            {% if object_list %}
-                {% include "dashboard/seller/includes/_partials_pagination.html" %}
-            {% endif %}
         </section>
     </div>
 {% endblock content %}

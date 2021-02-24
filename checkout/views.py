@@ -1,13 +1,11 @@
 # checkout.views.py
 
 from django.urls import reverse
-from django.contrib import messages
-from django.shortcuts import render
+from django.shortcuts import redirect, render
 from django.http import HttpResponseRedirect
 from django.views.generic import TemplateView
 from django.contrib.auth.decorators import login_required
 
-from core import settings
 from cart import cart
 from core import settings
 from checkout import checkout
@@ -15,7 +13,6 @@ from checkout.models import Order
 from checkout.forms import CheckoutForm
 
 
-@login_required
 def show_checkout(request, template='checkout/checkout.html'):
     
     """
@@ -31,13 +28,11 @@ def show_checkout(request, template='checkout/checkout.html'):
         if form.is_valid():
             checkout.create_order(request)
             return HttpResponseRedirect(reverse('checkout:order_success'))
-        else:
-           messages.errors('Corrigez les erreurs ci-dessous')
     else:
         if request.user.is_authenticated:
             form = CheckoutForm(instance=request.user)
         else:
-            form = CheckoutForm()
+            return redirect('account_login')
 
     context = {
         'form': form,
@@ -61,7 +56,7 @@ class OrderResumeDetailView(TemplateView):
     extra_context = {'page_title': 'Résumé de votre commande'}
 
     def get_context_data(self, **kwargs):
-        kwargs['object_list'] = Order.objects.filter(user=self.request.user)
+        # kwargs['object_list'] = Order.objects.filter(user__email=self.request.user)
         # kwargs['transaction_id'] = Order.objects.get(transaction_id=self.kwargs.transaction_id)
-        print(kwargs['object_list'])
+        # print(kwargs['object_list'])
         return super().get_context_data(**kwargs)

@@ -1,0 +1,45 @@
+{% extends "dashboard/seller/base.html" %}
+
+{% load humanize %}
+
+{% block content %}
+    <div class="ps-main__wrapper">
+        <header class="header--dashboard mb-2">
+            <div class="header__left">
+                <h3>Suppression du produit</h3>
+                <p>{{ object.name }}</p>
+            </div>
+        </header>
+
+        <section class="ps-items-listing">
+            <div class="ps-section__content">
+                <div class="ps-section__content">
+                    <div class="text-center py-2">
+                        <span class="d-flex justify-content-center">
+                            <img class="img-fluid" height="160px" width="160px"
+                            srcset="{{ object.get_image_url }}"
+                            src="{{ object.get_image_url }}"
+                            alt="{{ object.name }}">
+                        </span>
+
+                        <p class="font-weight-bold">Nom du produit: {{ object.name }}</p>
+                        <p class="font-weight-bold">Catégorie: {{ object.category }}</p>
+                        <p class="font-weight-bold">Prix: {{ object.price }}</p>
+
+                        <p class="pt-4">
+                            <form action="." method="post">
+                                {% csrf_token %}
+                                <button class="ps-btn">
+                                    <span class="text-uppercase font-weight-bold py-2">
+                                        <i class="icon icon-trash mr-2"></i>
+                                        Supprimer ce produit
+                                    </span>
+                                </button>
+                            </form>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+{% endblock content %}

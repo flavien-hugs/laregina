@@ -27,7 +27,6 @@ DATABASES = {
         'HOST': config('DATABASE_HOST', cast=str),
         'PORT': config('DATABASE_PORT', cast=int),
         'ATOMIC_REQUESTS': True,
-        'OPTIONS': {'sslmode': 'require'},
         'OPTIONS': {
             "init_command": "SET sql_mode='STRICT_TRANS_TABLES'",
         }

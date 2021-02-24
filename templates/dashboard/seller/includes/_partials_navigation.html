@@ -13,7 +13,8 @@
                 </div>
             </div>
 
-            <div class="ps-block--earning-count"><small>Revenus</small>
+            <div class="ps-block--earning-count">
+                <small>Cash</small>
                 <h3>{{ total_sale|intcomma }} Fr</h3>
             </div>
         </div>
@@ -27,13 +28,15 @@
                         <i class="icon-home"></i>Tableau de bord</a>
                     </li>
 
-                    <li><a class="{% if request.resolver_match.url_name == 'product_list' or request.resolver_match.url_name == 'product_create' or request.resolver_match.url_name == 'product_update' %}
+                    <li><a class="{% if request.resolver_match.url_name == 'product_list' or request.resolver_match.url_name == 'product_create' or request.resolver_match.url_name == 'product_update' or request.resolver_match.url_name == 'product_delete' %}
                         active {% endif %}" href="{% url "seller:product_list" %}">
                         <i class="icon-database"></i>Mes produits</a></li>
 
                     <li><a class="{% if request.resolver_match.url_name == 'order_list' or request.resolver_match.url_name == 'order_detail' %}active{% endif %}"
                         href="{% url "seller:order_list" %}"><i class="icon-bag2"></i>Mes commandes</a></li>
 
+                    <hr class="pt-2 pb-2 mx-2">
+                    
                     <li><a class="{% if request.resolver_match.url_name == 'update' %}active{% endif %}"
                         href="{{ request.user.get_update_url }}"><i class="icon-cog"></i>Réglages</a></li>
 
@@ -43,7 +46,8 @@
                     <hr class="pt-2 pb-2 mx-2">
 
                     <li><a href="{% url "account_logout" %}">
-                        <i class="icon-exit"></i>Deconnexion</a></li>
+                        <i class="icon-exit"></i>Deconnexion</a>
+                    </li>
                 </ul>
 
                 <div class="ps-sidebar__footer">

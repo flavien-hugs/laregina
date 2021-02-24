@@ -10,7 +10,7 @@ class UserManager(BaseUserManager):
 
     # use_in_migrations = True
 
-    def _create_user(self, email, password, is_buyer, is_seller, **extra_fields):
+    def _create_user(self, email, password, is_buyer, **extra_fields):
         
         """Créer et enregistrer un utilisateur avec l'adresse électronique et le mot de passe donnés"""
 
@@ -22,7 +22,6 @@ class UserManager(BaseUserManager):
         user = self.model(
             email=email,
             is_buyer=is_buyer,
-            is_seller=is_seller,
             is_active=True,
             last_login=now,
             date_joined=now,

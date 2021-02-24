@@ -8,30 +8,42 @@ from services.export_data_csv import export_to_csv
 
 def make_refund_accepted(modeladmin, request, queryset):
     queryset.update(refund_requested=False, refund_granted=True)
-make_refund_accepted.short_description = 'Update orders to refund granted'
+make_refund_accepted.short_description = 'Mise à jour des ordres de remboursement accordés'
 
-class OrderItemInline(admin.StackedInline):
+
+class OrderItemStackedInline(admin.StackedInline):
     model = OrderItem
     list_display = [
-        'store',
-        'name',
-        ('quantity', 'total'),
+        'get_store_product',
+        'get_product_name',
+        ('get_product_price', 'quantity',),
+        'total',
     ]
+    readonly_fields = [
+        'get_store_product',
+        'get_product_name',
+        'get_product_price',
+        'quantity',
+        'total'
+    ]
+    exclude = ['product']
     extra = 0
 
 
 @admin.register(Order)
 class OrderAdmin(admin.ModelAdmin):
     date_hierarchy = 'created_at'
+    fk_name = "product"
 
     list_display = [
-        'store',
         '__str__',
         'total',
         'date',
         'status',
     ]
-
+    list_editable = (
+        "status",
+    )
     list_filter = [
         'status',
         'date',
@@ -60,7 +72,6 @@ class OrderAdmin(admin.ModelAdmin):
         ('Information sur la livraison',
             {
                 'fields': (
-                    'user',
                     ('shipping_country', 'shipping_city'),
                     ('shipping_adress', 'shipping_zip'),
                     ('phone', 'phone_two'),
@@ -70,7 +81,6 @@ class OrderAdmin(admin.ModelAdmin):
             }
         )
     )
-
-    inlines = [OrderItemInline,]
+    inlines = [OrderItemStackedInline,]
     actions = [export_to_csv]
     search_fields = ['created_at', 'transaction_id']

@@ -13,13 +13,13 @@ from django.views.generic import (
 from django.contrib.auth.mixins import PermissionRequiredMixin
 
 from cart import cart
-from ..models import User
 from catalogue.models import Product
 from checkout.models import Order, OrderItem
 from catalogue.forms import ProductAdminForm, ProductCreateFormSet
 
+from ..models import User
 from ..forms import MarketSignupForm, StoreUpdateForm
-from ..mixins import UserAccountMixin, SellerRequiredMixin, ProductEditMixin
+from ..mixins import SellerRequiredMixin, ProductEditMixin
 
 
 class ProfileDetailView(SellerRequiredMixin, DetailView):
@@ -33,23 +33,24 @@ class ProfileDetailView(SellerRequiredMixin, DetailView):
     def get_context_data(self, *args, **kwargs):
         kwargs['page_title'] = self.object.store
         kwargs['order_list_today'] = self.get_order_today()
-        kwargs['order_list'] = self.get_order().order_by('-date')
+        kwargs['order_list'] = self.get_order_items()
         kwargs['product_list'] = self.get_product()
         kwargs['total_sale'] = self.get_total_sale()
         return super().get_context_data(*args, **kwargs)
 
     def get_queryset(self):
-        return self.get_order()
+        queryset = super().get_queryset()
+        return queryset.filter(user=self.get_object())
 
 
 # même chose que ci-dessus, mais pour voir un autre vendeur.
-class StoreDetailView(DetailView):
+class StoreDetailView(SellerRequiredMixin, DetailView):
     model = User
     template_name='dashboard/seller/includes/_partials_vendor_store.html'
 
     def get_context_data(self, *args, **kwargs):
         kwargs['page_title'] = 'Magasin : {store_name}'.format(store_name=self.object.store)
-        kwargs['object_list'] = Product.objects.filter(user=self.object.id)
+        kwargs['object_list'] = self.get_product()
         return super().get_context_data(*args, **kwargs)
 
 
@@ -82,16 +83,15 @@ class UserProductDetailRedirectView(RedirectView):
         obj = get_object_or_404(Product, slug=kwargs['slug'])
         return obj.get_absolute_url()
 
+
 class OrderListView(SellerRequiredMixin, ListView):
-    paginate_by = 50
+    model = OrderItem
+    paginate_by = 10
     template_name = 'dashboard/seller/includes/_partials_orders_list.html'
 
     def get_context_data(self, **kwargs):
         kwargs['total_sale'] = self.get_total_sale()
         return super().get_context_data(**kwargs)
-
-    def get_queryset(self):
-        return self.get_order()
 
 
 class OrderDetailView(SellerRequiredMixin, DetailView):
@@ -107,16 +107,16 @@ class OrderDetailView(SellerRequiredMixin, DetailView):
 
 
 class ProductListView(SellerRequiredMixin, ListView):
-    paginate_by = 50
+    paginate_by = 10
     template_name = 'dashboard/seller/includes/_partials_product_list.html'
     permission_required = 'product.product_list'
-
-    def get_queryset(self):
-        return self.get_product().order_by('-created_at')
 
     def get_context_data(self, **kwargs):
         kwargs['total_sale'] = self.get_total_sale()
         return super().get_context_data(**kwargs)
+
+    def get_queryset(self):
+        return self.get_product().order_by('-created_at')
 
 
 class ProductCreateView(ProductEditMixin, CreateView):
@@ -151,7 +151,6 @@ class ProductUpdateView(ProductEditMixin, UpdateView):
     def get_context_data(self, **kwargs):
         kwargs['page_title'] = 'Mise à jour du produit: {}'.format(self.object.name)
         kwargs['total_sale'] = self.get_total_sale()
-        kwargs['form_image'] = ProductImageForm()
         return super().get_context_data(**kwargs)
 
     def form_valid(self, form):
@@ -164,9 +163,16 @@ class ProductUpdateView(ProductEditMixin, UpdateView):
 
 
 class ProductDeleteView(ProductEditMixin, DeleteView):
+    permission_required = 'product.product_delete'
+    template_name = 'dashboard/seller/includes/_partials_product_delete.html'
 
     def get_context_data(self, **kwargs):
         kwargs['page_title'] = 'Supprimer ce produit: {}'.format(
             str(self.object.name))
         kwargs['total_sale'] = self.get_total_sale()
         return super().get_context_data(**kwargs)
+
+    def form_valid(self, form):
+        message = """Le produit a été retiré de votre magasin avec succes !"""
+        messages.success(self.request, message)
+        return HttpResponseRedirect(self.get_success_url())

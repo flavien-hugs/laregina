@@ -5,31 +5,19 @@
 
 {% block content %}
     <div class="ps-main__wrapper">
-        <div class="row justify-content-end">
-            {% if messages %}
-                {% for message in messages %}
-                    <div class="alert alert-block {{ message.tags }} alert-dismissible font-weight-bold" role="alert">
-                        {{ message|safe }}
-                        <button class="close" type="button" data-dismiss="alert" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
-                    </div>
-                {% endfor %}
-            {% endif %}
-        </div>
-
         <header class="header--dashboard mb-5">
             <div class="header__left">
-                <h3>Tableau de bord</h3>
+                <span>Tableau de bord: </span>
+                <h3>{{ page_title }}</h3>
             </div>
         </header>
 
         <section class="ps-dashboard">
             <div class="ps-section__left">
                 <div class="ps-card">
-                    {% if order_list %}
+                    {% if order_list_today %}
                         <div class="ps-card__header">
-                            <h4>Vos dernières commandes</h4>
+                            <h4>Vos produits commandés aujourd'hui</h4>
                         </div>
                         
                         <div class="ps-card__content">
@@ -38,16 +26,66 @@
                                     <thead>
                                         <tr>
                                             <th>#</th>
-                                            <th>N° Commande</th>
-                                            <th>Date</th>
-                                            <th>Status</th>
+                                            <th>Produit(s)</th>
+                                            <th>Quantité</th>
                                             <th>Total</th>
                                             <th></th>
                                         </tr>
                                     </thead>
                                     <tbody>
+                                        {% for object in order_list_today|slice:'0:5' %}
+                                            <tr>
+                                                <td>{{ forloop.counter }}</td>
+                                                <td><a class="font-weight-bold text-success" href="{{ object.order.get_absolute_url }}">
+                                                {{ object.get_product_name|truncatewords:'4' }}</a></td>
+                                                <td><strong>{{ object.quantity|intcomma }}</strong></td>
+                                                <td><strong>{{ object.total|intcomma }}Fr</strong></td>
+                                            </tr>
+                                        {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    {% else %}
+                        <div class="ps-section__content">
+                            <div class="text-center py-2">
+                                <span class="d-flex justify-content-center">
+                                    <img class="img-fluid" height="160px" width="160px"
+                                    srcset="{{ STATIC_PREFIX }}img/emptycart.png"
+                                    src="{{ STATIC_PREFIX }}img/emptycart.png" alt="empty-cart-{{ page_title }}">
+                                </span>
+
+                                <p class="font-weight-bold">Vous n'avez aucun produit commandé pour aujourd'hui.</p>
+                            </div>
+                        </div>
+                    {% endif %}
+
+                    {% if order_list %}
+                        <div class="ps-card__header">
+                            <h4>Vos produits commandés</h4>
+                        </div>
+                        <div class="ps-card__content">
+                            <div class="table-responsive">
+                                <table class="table ps-table">
+                                    <thead>
+                                        <tr>
+                                            <th>#</th>
+                                            <th>Produit(s)</th>
+                                            <th>Quantité</th>
+                                            <th>Total</th>
+                                            <th>Date</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
                                         {% for object in order_list|slice:'0:5' %}
-                                            {% include "dashboard/seller/includes/_snippet_order_table.html" %}
+                                            <tr>
+                                                <td>{{ forloop.counter }}</td>
+                                                <td><a class="font-weight-bold text-success" href="{{ object.order.get_absolute_url }}">
+                                                {{ object.get_product_name|truncatewords:'4' }}</a></td>
+                                                <td><strong>{{ object.quantity|intcomma }}</strong></td>
+                                                <td><strong>{{ object.total|intcomma }} Fr</strong></td>
+                                                <td><strong>{{ object.date_created|date }}</strong></td>
+                                            </tr>
                                         {% endfor %}
                                     </tbody>
                                 </table>
@@ -56,8 +94,7 @@
 
                         <div class="ps-card__footer">
                             <a class="ps-card__morelink" href="{% url 'seller:order_list' %}">
-                                Afficher toutes les commandes
-                                <i class="icon icon-chevron-right"></i>
+                                Afficher tous les produits commandés <i class="icon icon-chevron-right"></i>
                             </a>
                         </div>
                     {% else %}
@@ -69,7 +106,7 @@
                                     src="{{ STATIC_PREFIX }}img/emptycart.png" alt="empty-cart-{{ page_title }}">
                                 </span>
 
-                                <p class="font-weight-bold">Vous n'avez aucune commande pour l'instant.</p>
+                                <p class="font-weight-bold">Vous n'avez aucun produit commandé pour l'instant.</p>
                             </div>
                         </div>
                     {% endif %}
@@ -129,26 +166,7 @@
                     <div class="ps-card__header">
                         <h4>Statistiques</h4>
                     </div>
-                    <div class="ps-card__content">
-                        <div class="ps-block--stat yellow">
-                            <div class="ps-block__left"><span><i class="icon-bag2"></i></span></div>
-                            <div class="ps-block__content">
-                                {% with count=order_list.count %}
-                                    <p>Commande{{ count|pluralize:',s' }}</p>
-                                    <h4>{{ count }}</h4>
-                                {% endwith %}
-                            </div>
-                        </div>
-                        <div class="ps-block--stat pink">
-                            <div class="ps-block__left"><span><i class="icon-database"></i></span></div>
-                            <div class="ps-block__content">
-                                {% with count=product_list.count %}
-                                    <p>Produit{{ count|pluralize:',s' }}</p>
-                                    <h4>{{ count }}</h4>
-                                {% endwith %}
-                            </div>
-                        </div>
-                    </div>
+                    {% include "dashboard/seller/includes/_partials_statistics.html" with object=object %}
                 </section>
             </div>
         </section>

@@ -1,6 +1,5 @@
-# accounts/models.py
+# accounts.models.py
 
-import math
 import random
 import string
 import datetime
@@ -14,23 +13,17 @@ from category.models import Category
 from checkout.models import BaseOrderInfo
 from accounts.managers import UserManager
 
+from core.utils import upload_image_path
+
 from django_countries.fields import CountryField
 from phonenumber_field.modelfields import PhoneNumberField
-from core.utils import upload_image_path
 
 
 NULL_AND_BLANK = {'null': True, 'blank': True}
 UNIQUE_AND_DB_INDEX = {'null': False, 'unique': True, 'db_index': True}
 
-class User(BaseOrderInfo, AbstractBaseUser, PermissionsMixin):
 
-    """ 
-    Un modèle d'utilisateur complet avec des autorisations
-    compatibles avec l'administrateur qui utilise un champ
-    de courrier électronique complet comme nom d'utilisateur.
-    Email et mot de passe sont requis.
-    Les autres champs sont facultatifs. 
-    """
+class User(BaseOrderInfo, AbstractBaseUser, PermissionsMixin):
 
     CIVILITY_CHOICES = (
         ('M.', 'M.'),
@@ -61,16 +54,14 @@ class User(BaseOrderInfo, AbstractBaseUser, PermissionsMixin):
     store = models.CharField(
         max_length=80,
         verbose_name='boutique',
-        **NULL_AND_BLANK
+        unique=True,
+        error_messages={
+            'unique': "Un magasin disposant de ce nom existe déjà."
+        },
     )
     store_description = models.TextField(
         max_length=254,
         verbose_name='description de la boutique',
-        **NULL_AND_BLANK
-    )
-    logo = models.ImageField(
-        upload_to=upload_image_path,
-        verbose_name='logo',
         **NULL_AND_BLANK
     )
     facebook = models.URLField(
@@ -89,7 +80,7 @@ class User(BaseOrderInfo, AbstractBaseUser, PermissionsMixin):
         **NULL_AND_BLANK
     )
     instagramm = models.URLField(
-        verbose_name='lien instagramm',
+        verbose_name='compte instagramm',
         max_length=250,
         **NULL_AND_BLANK
     )
@@ -104,10 +95,6 @@ class User(BaseOrderInfo, AbstractBaseUser, PermissionsMixin):
     is_active = models.BooleanField(
         verbose_name='active',
         default=True
-    )
-    is_buyer = models.BooleanField(
-        default=False,
-        verbose_name='statut acheteur',
     )
     is_seller = models.BooleanField(
         default=False,
@@ -134,18 +121,19 @@ class User(BaseOrderInfo, AbstractBaseUser, PermissionsMixin):
     objects = UserManager()
 
     class Meta:
+        app_label = 'accounts'
         db_table = 'accounts_db'
         index_together = (('email',),)
         ordering = ('-date_joined', '-last_login')
         get_latest_by = ('-date_joined', '-last_login')
-        verbose_name_plural = 'utilisateurs'
+        verbose_name_plural = 'vendeur(s)'
 
     def __str__(self):
         return f'{self.shipping_first_name.upper()} {self.shipping_last_name.capitalize()}'
 
     def save(self, *args, **kwargs):
         if self.is_seller:
-            self.generate(8)
+            self.generate(6)
 
         if not self.slug:
             self.slug = slugify(self.store)
@@ -155,15 +143,15 @@ class User(BaseOrderInfo, AbstractBaseUser, PermissionsMixin):
         today = datetime.date.today().strftime('%d%m%y')
         carac = string.digits
         random_carac = [random.choice(carac) for _ in range(nb_carac)]
-        self.store_id = 'LRG-{}'.format(today + ''.join(random_carac))
+        self.store_id = 'KRB-{}'.format(today + ''.join(random_carac))
 
     def get_fullname(self):
         if self.civility and self.shipping_first_name:
-            fullname = '{civility} {shipping_first_name}'.format(
+            full_name = '{civility} {shipping_first_name}'.format(
                 civility=self.civility,
                 shipping_first_name=self.shipping_first_name
             )
-            return fullname.strip()
+            return full_name.strip()
         return self.email
 
     def has_perm(self, perm, obj=None):
@@ -179,3 +167,36 @@ class User(BaseOrderInfo, AbstractBaseUser, PermissionsMixin):
 
     def get_absolute_url(self):
         return reverse('store_detail_view', kwargs={'slug': self.slug})
+
+
+class Customer(BaseOrderInfo):
+    email = models.EmailField(
+        unique=True,
+        max_length=254,
+        verbose_name='email',
+        error_messages={
+            'unique': "Un utilisateur disposant de ce courriel existe déjà."
+        }
+    )
+    active = models.BooleanField(default=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        app_label = 'accounts'
+        db_table = 'accounts_buyer_db'
+        index_together = (('email',),)
+        ordering = ('-created_at', '-active')
+        get_latest_by = ('-created_at', '-active')
+        verbose_name_plural = 'acheteur(s)'
+
+    def __str__(self):
+        return self.email
+
+    def get_fullname(self):
+        if self.shipping_first_name and self.shipping_last_name:
+            full_name = '{shipping_last_name} {shipping_first_name}'.format(
+                shipping_last_name=self.shipping_last_name,
+                shipping_first_name=self.shipping_first_name
+            )
+            return full_name.strip()
+        return self.email

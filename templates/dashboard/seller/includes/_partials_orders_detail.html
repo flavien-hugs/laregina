@@ -20,10 +20,10 @@
                                 <h4>Informations sur la livraison</h4>
                             </div>
                             <div class="ps-card__content">
-                                <h5>{{ object.short_name }}</h5>
+                                <h5>{{ object.get_full_name }}</h5>
                                 <p>
                                     <strong>Adresse: </strong>
-                                    {{ object.shipping_delivery }}
+                                    {{ object.get_shipping_delivery }}
                                 </p>
                             </div>
                         </div>
@@ -41,7 +41,7 @@
                                     <tr>
                                         <th>Produit</th>
                                         <th>Quantité</th>
-                                        <th>Prix Unitaire</th>
+                                        <th>Prix</th>
                                         <th>Total</th>
                                     </tr>
                                 </thead>
@@ -54,12 +54,12 @@
                                             </td>
                                             <td>{{ object.quantity }}</td>
                                             <td>{{ object.product.price }}Fr</td>
-                                            <td>{{ object.total_seller_order }}Fr</td>
+                                            <td>{{ object.total }}Fr</td>
                                         </tr>
                                     {% endfor %}
                                     <tr>
                                         <td colspan="3"><strong>Commission {{ title }}:</strong></td>
-                                        <td><strong>5%</strong></td>
+                                        <td><strong>5% (- {{ object.get_cost }} Fr)</strong></td>
                                     </tr>
                                     <tr>
                                         <td colspan="3"><strong>Total:</strong></td>
@@ -116,4 +116,3 @@
         </section>
     </div>
 {% endblock content %}
-

@@ -92,18 +92,11 @@ class Order(BaseOrderInfo):
         (SHIPPED, 'Commande reçue'),
         (CANCELLED, 'Commande annulée'),
     )
-
     status = models.CharField(
         verbose_name='status',
         max_length=26,
         choices=ORDER_STATUSES,
         default=SUBMITTED
-    )
-    user = models.ForeignKey(
-        User,
-        models.CASCADE,
-        verbose_name='client',
-        **NULL_AND_BLANK
     )
     transaction_id = models.CharField(
         verbose_name='id de la commande',
@@ -136,18 +129,18 @@ class Order(BaseOrderInfo):
         return '#{transaction_id}'.format(
             transaction_id=self.transaction_id)
 
-    def short_name(self):
+    def get_short_name(self):
         return '{first_name}'.format(
             first_name=self.shipping_first_name
         )
 
-    def full_name(self):
+    def get_full_name(self):
         return '{short_name} {last_name}'.format(
-            short_name=self.short_name(),
+            short_name=self.get_short_name(),
             last_name=self.shipping_last_name
         )
 
-    def shipping_delivery(self):
+    def get_shipping_delivery(self):
         return '{shipping_city}, {shipping_adress}'.format(
             shipping_country=self.shipping_country.name,
             shipping_city=self.shipping_city,
@@ -164,36 +157,41 @@ class Order(BaseOrderInfo):
         random_carac = [random.choice(carac) for _ in range(nb_carac)]
         self.transaction_id = 'LC-{}'.format(today + ''.join(random_carac))
 
+    def order_items(self):
+        order_items = OrderItem.objects.filter(order=self)
+        return order_items
+
     @property
     def total(self):
         total = decimal.Decimal('0')
-        order_items = OrderItem.objects.filter(order=self)
-        for item in order_items:
+        for item in self.order_items():
             total += item.total
         return total + 1500
 
+    # cout de la commande pour le vendeur
+    # sans les frais
     def total_seller_order(self):
-        total = decimal.Decimal('0')
-        order_items = OrderItem.objects.filter(order=self)
-        for item in order_items:
-            total += item.total
+        fee =  1500
+        total = self.total - fee
         return total
 
+    # calcul de la commission
+    def get_cost(self):
+        percent = decimal.Decimal('0.05')
+        cost = self.total_seller_order() * percent
+        return cost
+
+    # cout total apres commission
     def total_order(self):
-        total = decimal.Decimal('0')
-        order_items = OrderItem.objects.filter(order=self)
-        for item in order_items:
-            total += item.total
-        commission = total * decimal.Decimal(0.05) 
-        return int(total - commission)
+        total = self.total_seller_order() - self.get_cost()
+        return total
 
-
-    def order_items(self):
-        return OrderItem.objects.filter(order=self)
-
-    def store(self):
-        return self.user.store
-    store.short_description='magasin'
+    def get_total_sales(self):
+        total = decimal.Decimal(0)
+        orders = self.order_items()
+        for item in orders:
+            total += item.total_order()
+        return total
     
     def get_absolute_url(self):
         return reverse('seller:order_detail', kwargs={'pk': int(self.id)})
@@ -206,20 +204,19 @@ class OrderItem(models.Model):
     de produit commander dans chaque commande
     """
 
+    order = models.ForeignKey(
+        Order,
+        models.CASCADE,
+        verbose_name='commande'
+    )
     product = models.ForeignKey(
         Product,
-        models.SET_NULL,
-        null=True,
+        models.CASCADE,
         verbose_name='produit'
     )
     quantity = models.IntegerField(
         verbose_name='quantité',
         default=1
-    )
-    order = models.ForeignKey(
-        Order,
-        models.CASCADE,
-        verbose_name='commande'
     )
     date_updated = models.DateTimeField(
         verbose_name='derniere modification',
@@ -237,23 +234,33 @@ class OrderItem(models.Model):
         verbose_name_plural = 'panier'
 
     def __str__(self):
-        return '{product_name} | {store}'.format(
-            product_name=self.product.name,
-            store=self.product.user.store
+        return '{product_name}'.format(
+            product_name=self.product.name
         )
 
     @property
     def total(self):
         return self.quantity * self.product.price
 
-    def name(self):
-        return self.product.name
+    def get_product_price(self):
+        return '{product_price}'.format(product_price=self.product.price)
+    get_product_price.short_description='prix unitaire'
 
-    def store(self):
-        return self.product.user.store
+    def get_product_name(self):
+        return '{product_name}'.format(product_name=self.product.name)
+    get_product_name.short_description='produit'
+
+    def get_store_product(self):
+        return '{product_store}'.format(product_store=self.product.user.store)
+    get_store_product.short_description='magasin'
     
     def get_absolute_url(self):
         return self.product.get_absolute_url()
+
+    # cout total apres commission
+    def total_order(self):
+        total = self.order.total_seller_order() - self.order.get_cost()
+        return total
 
 
 from django.dispatch import receiver
