@@ -150,13 +150,7 @@
 
     <header class="header header--mobile header--mobile-categories header--mobile-product" data-sticky="true">
         <nav class="navigation--mobile">
-            {% if request.resolver_match.url_name == 'category_list' %}
-                <div class="navigation__left">
-                    <a class="header__back" href="#">
-                        <i class="icon-chevron-left"></i><strong>Shop</strong>
-                    </a>
-                </div>
-            {% elif request.resolver_match.url_name == 'product_list' %}
+            {% if request.resolver_match.url_name == 'product_list' %}
                 <div class="navigation__left">
                     <a class="header__back" href="#">
                         <i class="icon-chevron-left"></i><strong>Retour</strong>

@@ -1,0 +1,91 @@
+<style>
+
+	/* Timeline holder */
+	ul.timeline {
+		list-style-type: none;
+		position: relative;
+		padding-left: 1.5rem;
+	}
+
+	/* Timeline vertical line */
+	ul.timeline:before {
+		content: ' ';
+		background: #fff;
+		display: inline-block;
+		position: absolute;
+		left: 16px;
+		width: 4px;
+		height: 100%;
+		z-index: 400;
+		border-radius: 1rem;
+	}
+
+	li.timeline-item {
+		margin: 20px 0;
+	}
+
+	/* Timeline item arrow */
+	.timeline-arrow {
+		border-top: 0.5rem solid transparent;
+		border-right: 0.5rem solid #fff;
+		border-bottom: 0.5rem solid transparent;
+		display: block;
+		position: absolute;
+		left: 2rem;
+	}
+
+	/* Timeline item circle marker */
+	li.timeline-item::before {
+		content: ' ';
+		background: #ddd;
+		display: inline-block;
+		position: absolute;
+		border-radius: 50%;
+		border: 3px solid #fff;
+		left: 11px;
+		width: 14px;
+		height: 14px;
+		z-index: 400;
+		box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
+	}
+</style>
+
+{% url "order_tracking" as order_tracking_id %}
+{% url "catalogue:product_list" as product_list %}
+
+<div class="ps-section__content">
+	<h3>Statut de la commande</h3>
+	<div class="card shadow-sm">
+		<div class="card-body p-5">
+			{% if object_list %}
+				{% for object in object_list %}
+					<p class="text-center bg-light py-4 my-3">
+						Numéro de commande: <strong class="card-title">{{ object }}</strong>
+					</p>
+
+					<ul class="timeline">
+						<li class="timeline-item bg-white rounded ml-3 p-4 shadow">
+							<div class="timeline-arrow"></div>
+							<h2 class="h5 mb-0">{{ object.status|upper }}</h2>
+						</li>
+					</ul>
+				{% endfor %}
+			{% else %}
+				<p class="text-center bg-light py-4 my-3">
+					Ce numéro de commande n'existe pas.
+				</p>
+			{% endif %}
+		</div>
+
+		<div class="card-footer text-muted text-center bg-transparent p-4">
+			<a href="#" class="ps-btn btn btn-md float-left">
+		    <span>Annuler ma commande</span></a>
+
+		    <a href="{{ order_tracking_id }}" class="ps-btn btn btn-md">
+		    <span>Suivre une autre commande</span></a>
+
+		    <a href="{{ product_list }}" class="ps-btn btn btn-md float-right">
+		    <span>Continuer vos achats</span></a>
+		</div>
+	</div>
+</div>
