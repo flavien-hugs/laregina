@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% load cache mptt_tags %}
+{% load cache mptt_tags pages_tags %}
 
 
 {% block content %}
@@ -18,7 +18,8 @@
             <div class="container">
                 <div class="ps-section__header">
                     <p class="text-uppercase">pourquoi vendre sur {{ title }}</p>
-                    <h4>Rejoignez un marché où près de 50 millions d'acheteurs <br> du monde entier achètent des articles uniques</h4>
+                    <h4>Rejoignez un marché où près de 50 millions d'acheteurs <br>
+                    du monde entier achètent des articles uniques</h4>
                 </div>
                 <div class="ps-section__content">
                     <div class="row">
@@ -28,8 +29,9 @@
                                 <div class="ps-block__content">
                                     <h4>Frais bas</h4>
                                     <div class="ps-block__desc" data-mh="about-desc">
-                                        <p>Il ne faut pas grand-chose pour lister vos articles et une fois que vous faites une vente, les frais de transaction de {{ title }} ne sont que de 2,5%.</p>
-                                    </div><a href="#">Apprendre encore plus</a>
+                                        <p>Il ne faut pas grand-chose pour lister vos articles et une fois que vous faites une vente,
+                                        les frais de transaction de {{ title }} ne sont que de 5%.</p>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -39,8 +41,9 @@
                                 <div class="ps-block__content">
                                     <h4>Des outils puissants</h4>
                                     <div class="ps-block__desc" data-mh="about-desc">
-                                        <p>Nos outils et services facilitent la gestion, la promotion et la croissance de votre entreprise.</p>
-                                    </div><a href="#">Apprendre encore plus</a>
+                                        <p>Nos outils et services facilitent la gestion,\
+                                        la promotion et la croissance de votre entreprise.</p>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -50,8 +53,9 @@
                                 <div class="ps-block__content">
                                     <h4>Assistance 24/7</h4>
                                     <div class="ps-block__desc" data-mh="about-desc">
-                                        <p>Nos outils et services facilitent la gestion, la promotion et la croissance de votre entreprise.</p>
-                                    </div><a href="#">Apprendre encore plus</a>
+                                        <p>Nos outils et services facilitent la gestion,\
+                                        la promotion et la croissance de votre entreprise.</p>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -64,7 +68,8 @@
             <div class="container">
                 <div class="ps-section__header">
                     <p class="text-uppercase">comment ça fonctionne</p>
-                    <h4>Facile de commencer à vendre en ligne sur {{ title }} en seulement 4 étapes simples</h4>
+                    <h4>Facile de commencer à vendre en ligne sur {{ title }} en\
+                    seulement 4 étapes simples</h4>
                 </div>
                 <div class="ps-section__content">
                     <div class="ps-block--vendor-milestone">
@@ -154,41 +159,7 @@
         </div>
 
         <!-- user testimonial -->
-        <div class="ps-section--vendor ps-vendor-testimonials">
-            <div class="container">
-                <div class="ps-section__header">
-                    <p class="text-uppercase">histoires de vendeurs</p>
-                    <h4>Voir le partage du vendeur sur son succès sur {{ title }}</h4>
-                </div>
-                <div class="ps-section__content">
-                    <div class="ps-carousel--nav owl-slider" data-owl-auto="true" data-owl-loop="true" data-owl-speed="10000" data-owl-gap="30" data-owl-nav="true" data-owl-dots="true" data-owl-item="2" data-owl-item-xs="1" data-owl-item-sm="1" data-owl-item-md="1" data-owl-item-lg="2" data-owl-duration="1000" data-owl-mousedrag="on">
-                        <div class="ps-block--testimonial">
-                            <div class="ps-block__header"><img src="{{ STATIC_PREFIX }}img/users/1.jpg" alt=""></div>
-                            <div class="ps-block__content"><i class="icon-quote-close"></i>
-                                <h4>Kanye West<span>Head Chef at BBQ Restaurant</span></h4>
-                                <p>Sed elit quam, iaculis sed semper sit amet udin vitae nibh. at magna akal semperFusce commodo molestie luctus.Lorem ipsum Dolor tusima olatiup.</p>
-                            </div>
-                        </div>
-                        <div class="ps-block--testimonial">
-                            <div class="ps-block__header"><img src="{{ STATIC_PREFIX }}img/users/2.png" alt=""></div>
-                            <div class="ps-block__content"><i class="icon-quote-close"></i>
-                                <h4>Anabella Kleva<span>Boss at TocoToco</span></h4>
-                                <p>Sed elit quam, iaculis sed semper sit amet udin vitae nibh. at magna akal semperFusce commodo molestie luctus.Lorem ipsum Dolor tusima olatiup.</p>
-                            </div>
-                        </div>
-                        <div class="ps-block--testimonial">
-                            <div class="ps-block__header">
-                                <img src="{{ STATIC_PREFIX }}img/users/3.jpg" alt="">
-                            </div>
-                            <div class="ps-block__content"><i class="icon-quote-close"></i>
-                                <h4>William Roles<span>Head Chef at BBQ Restaurant</span></h4>
-                                <p>Sed elit quam, iaculis sed semper sit amet udin vitae nibh. at magna akal semperFusce commodo molestie luctus.Lorem ipsum Dolor tusima olatiup.</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
+        {% testimonial_list 5 %}
 
         <!-- faq -->
         <div class="ps-section--vendor ps-vendor-faqs">

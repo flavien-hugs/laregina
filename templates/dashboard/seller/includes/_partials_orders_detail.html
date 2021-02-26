@@ -31,9 +31,6 @@
                 </div>
 
                 <div class="ps-card ps-card--track-order">
-                    <div class="ps-card__header">
-                        <h4>#{{ object.transaction_id }}</h4>
-                    </div>
                     <div class="ps-card__content">
                         <div class="table-responsive">
                             <table class="table ps-table">
@@ -46,24 +43,21 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    {% for object in object.order_items %}
+                                    {% for object in order_items_list %}
                                         <tr>
-                                            <td>
-                                                <a href="{{ object.get_absolute_url }}">
-                                                {{ object.product.name }}</a>
-                                            </td>
+                                            <td>{{ object.get_product_name }}</td>
                                             <td>{{ object.quantity }}</td>
-                                            <td>{{ object.product.price }}Fr</td>
-                                            <td>{{ object.total }}Fr</td>
+                                            <td>{{ object.product.price|intcomma}}Fr</td>
+                                            <td>{{ object.total|intcomma }}Fr</td>
                                         </tr>
                                     {% endfor %}
                                     <tr>
                                         <td colspan="3"><strong>Commission {{ title }}:</strong></td>
-                                        <td><strong>5% (- {{ object.get_cost }} Fr)</strong></td>
+                                        <td><strong>5% (- {{ cost|intcomma }} Fr)</strong></td>
                                     </tr>
                                     <tr>
                                         <td colspan="3"><strong>Total:</strong></td>
-                                        <td><strong>{{ object.total_order|intcomma }} Fr</strong></td>
+                                        <td><strong>{{ cash_total_seller|intcomma }} Fr</strong></td>
                                     </tr>
                                 </tbody>
                             </table>

@@ -66,6 +66,7 @@ class SellerRequiredMixin(SellerTextRequiredMixin, object):
             return account.first()
         return self.request.user
 
+    # liste des produits du magasin
     def get_product(self):
         account = self.get_account()
         object_list = Product.objects.filter(user=account)
@@ -73,9 +74,32 @@ class SellerRequiredMixin(SellerTextRequiredMixin, object):
         return object_list
 
     def get_order_items(self):
-        products = self.get_product()
-        order_items = OrderItem.objects.filter(product__in=products)
-        return order_items
+        account = self.get_account()
+        order_item_list = OrderItem.objects.filter(product__user=account)
+        return order_item_list
+
+    # liste des produits dans une commande
+    # concernant un magasin
+    def get_order_item(self):
+        account = self.get_account()
+        order_item_list = OrderItem.objects.exclude(product__user=account)
+        return order_item_list
+
+    # cash du vendeur
+    def cash_total(self):
+        total = decimal.Decimal('0')
+        for item in self.get_order_items():
+            total += item.total
+        return total
+
+    def get_cost(self):
+        percent = decimal.Decimal('0.05')
+        cost = self.cash_total() * percent
+        return cost
+
+    def cash_total_seller(self):
+        total = self.cash_total() - self.get_cost()
+        return total
 
     def get_order(self):
         order_list = Order.objects.all()
@@ -86,13 +110,6 @@ class SellerRequiredMixin(SellerTextRequiredMixin, object):
         today_min = datetime.datetime.combine(today, datetime.time.min)
         today_max = datetime.datetime.combine(today, datetime.time.max)
         return self.get_order_items().filter(date_created__range=(today_min, today_max))
-
-    def get_total_sale(self):
-        total = decimal.Decimal(0)
-        orders = self.get_order_items()
-        for item in orders:
-            total += item.total_order()
-        return total
 
     def get_today_sale(self):
         order_sale = self.get_order_today().aggregate(Sum("price__sum"))

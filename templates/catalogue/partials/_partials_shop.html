@@ -45,7 +45,6 @@
                             {% for object in object_list %}
                                 {% if query or object %}
                                     {% include "catalogue/snippet/_snippet_product.html" with instance=object %}
-                                {% else %}
                                 {% endif %}
                             {% endfor %}
                         {% else %}

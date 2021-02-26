@@ -1,12 +1,9 @@
 # search.views.py
 
-from itertools import chain
 from django.urls import reverse_lazy
 from django.views.generic import ListView
 
 from search import search
-from catalogue.models import Product
-from category.models import Category
 
 
 class SearchView(ListView):

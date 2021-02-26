@@ -45,7 +45,6 @@ class ProductImageForm(forms.ModelForm):
         label="Ajouter des images",
         widget=forms.ClearableFileInput(
             {
-                "class": "custom-file",
                 "accept": "image/*",
                 "multiple": True
             }

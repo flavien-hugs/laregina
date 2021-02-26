@@ -17,17 +17,17 @@
                 <div class="ps-card">
                     {% if order_list_today %}
                         <div class="ps-card__header">
-                            <h4>Vos produits commandés aujourd'hui</h4>
+                            <h4>Vos commandes pour aujourd'hui</h4>
                         </div>
                         
-                        <div class="ps-card__content">
+                        <div class="ps-card__content mb-4">
                             <div class="table-responsive">
                                 <table class="table ps-table">
                                     <thead>
                                         <tr>
                                             <th>#</th>
-                                            <th>Produit(s)</th>
-                                            <th>Quantité</th>
+                                            <th>ID Commande</th>
+                                            <th>Nbre produit</th>
                                             <th>Total</th>
                                             <th></th>
                                         </tr>
@@ -36,9 +36,10 @@
                                         {% for object in order_list_today|slice:'0:5' %}
                                             <tr>
                                                 <td>{{ forloop.counter }}</td>
-                                                <td><a class="font-weight-bold text-success" href="{{ object.order.get_absolute_url }}">
-                                                {{ object.get_product_name|truncatewords:'4' }}</a></td>
-                                                <td><strong>{{ object.quantity|intcomma }}</strong></td>
+                                                <td><a class="font-weight-bold text-success"
+                                                    href="{{ object.order.get_absolute_url }}">
+                                                {{ object.order.transaction_id }}</a></td>
+                                                <td><strong>{{ order_list_today.count|intcomma }}</strong></td>
                                                 <td><strong>{{ object.total|intcomma }}Fr</strong></td>
                                             </tr>
                                         {% endfor %}
@@ -70,8 +71,8 @@
                                     <thead>
                                         <tr>
                                             <th>#</th>
-                                            <th>Produit(s)</th>
-                                            <th>Quantité</th>
+                                            <th>ID Commande</th>
+                                            <th>Nbre produit</th>
                                             <th>Total</th>
                                             <th>Date</th>
                                         </tr>
@@ -80,9 +81,10 @@
                                         {% for object in order_list|slice:'0:5' %}
                                             <tr>
                                                 <td>{{ forloop.counter }}</td>
-                                                <td><a class="font-weight-bold text-success" href="{{ object.order.get_absolute_url }}">
-                                                {{ object.get_product_name|truncatewords:'4' }}</a></td>
-                                                <td><strong>{{ object.quantity|intcomma }}</strong></td>
+                                                <td><a class="font-weight-bold text-success"
+                                                    href="{{ object.order.get_absolute_url }}">
+                                                {{ object.order.transaction_id|truncatewords:'4' }}</a></td>
+                                                <td><strong>{{ order_list.count|intcomma }}</strong></td>
                                                 <td><strong>{{ object.total|intcomma }} Fr</strong></td>
                                                 <td><strong>{{ object.date_created|date }}</strong></td>
                                             </tr>

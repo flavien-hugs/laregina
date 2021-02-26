@@ -21,10 +21,22 @@
         </head>
 
         <body class="d-flex flex-column">
+            {% url 'home' as home %}
+
             <div class="flex-grow-1 flex-shrink-0">
                 <main class="ps-page--single">
                     <!-- mise en cache du header pendant 120ms -->
                     {% if request.resolver_match.url_name == 'account_signup' or request.resolver_match.url_name == 'account_login' or request.resolver_match.url_name == 'customer_signup' %} 
+                        <header class="header sticky-top">
+                            <nav class="navbar navbar-expand-lg navbar-inverse py-4" style="background-color:#fcb800;">
+                                <div class="container">
+                                    <!-- Navbar Brand -->
+                                    <a class="ps-logo" href="{{ home }}" class="navbar-brand">
+                                        <img src="{{ STATIC_PREFIX }}img/logo.png" alt="{{ title }}">
+                                    </a>
+                                </div>
+                            </nav>
+                        </header>
                     {% else %}
                         {% include "includes/partials/_partials_header.html" %}
                     {% endif %}

@@ -1,5 +1,11 @@
 <!-- includes/partials/menu_mobile.html : menu mobile -->
 
+{% url "account_login" as login %}
+{% url "account_signup"  as signup %}
+{% url "seller:profile" as seller_profile %}
+{% url "seller:order_list" as seller_order_list %}
+{% url "seller:product_list" as seller_product_list %}
+
 <div class="ps-panel--sidebar" id="menu-mobile">
     <div class="ps-panel__header"><h3>Menu</h3></div>
 
@@ -8,45 +14,43 @@
             {% if request.user.is_authenticated  %}
                 {% if request.user.is_seller or request.user.is_superuser %}
                     <li class="menu-item-has-children has-mega-menu">
-                        <a href="{% url "seller:profile" %}">
-                            <i class="icon-home mr-2"></i>Tableau de bord</a>
+                        <a href="{{ seller_profile }}">
+                            <i class="icon-home mr-2"></i>
+                            Tableau de bord
+                        </a>
                     </li>
 
                     <li class="menu-item-has-children has-mega-menu">
-                        <a href="{% url "seller:order_list" %}">
+                        <a href="{{ seller_order_list }}">
                         <i class="icon-bag2 mr-2"></i>Mes Commandes</a>
                     </li>
 
                     <li class="menu-item-has-children has-mega-menu">
-                        <a href="{% url "seller:product_list" %}">
+                        <a href="{{ seller_product_list }}">
                         <i class="icon-database mr-2"></i>Mes Articles</a>
                     </li>
+
+                    <hr class="dropdown-divider py-2">
 
                     <li class="menu-item-has-children has-mega-menu">
                         <a href="{{ request.user.get_update_url }}">
                         <i class="icon-cog mr-2"></i>Réglages</a>
                     </li>
 
-                    <li class="menu-item-has-children has-mega-menu">
-                        <a href="{{ request.user.get_absolute_url }}">
-                        <i class="icon-exit-right mr-2"></i>Mon Magasin</a>
-                    </li>
-                {% elif request.user.is_buyer %}
-                    <li class="menu-item-has-children has-mega-menu">
-                        <a href="{% url "account_login" %}?next={{ request.path }}">Mon compte</a>
-                    </li>
+                    <hr class="dropdown-divider py-2">
 
                     <li class="menu-item-has-children has-mega-menu">
-                        <a href="#">Mes commandes</a>
+                        <a href="{{ request.user.get_absolute_url }}">
+                        <i class="icon-exit-right mr-2"></i>Ma boutique</a>
                     </li>
                 {% endif %}
             {% else %}
                 <li class="menu-item-has-children has-mega-menu">
-                    <a href="{% url "account_login" %}?next={{ request.path }}">Se connecter</a>
+                    <a href="{{ login }}">Se connecter</a>
                 </li>
 
                 <li class="menu-item-has-children has-mega-menu">
-                    <a href="{% url "account_signup" %}">S'inscrire</a>
+                    <a href="{{ signup }}">Ouvrir une boutique</a>
                 </li>
             {% endif %}
         </ul>

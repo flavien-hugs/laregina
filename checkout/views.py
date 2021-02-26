@@ -1,16 +1,15 @@
 # checkout.views.py
 
-from django.urls import reverse
-from django.shortcuts import redirect, render
 from django.http import HttpResponseRedirect
-from django.views.generic import TemplateView
-from django.contrib.auth.decorators import login_required
+from django.urls import reverse, reverse_lazy
+from django.shortcuts import redirect, render
+from django.views.generic import DetailView, ListView
 
 from cart import cart
 from core import settings
 from checkout import checkout
-from checkout.models import Order
 from checkout.forms import CheckoutForm
+from checkout.models import Order, OrderItem
 
 
 def show_checkout(request, template='checkout/checkout.html'):
@@ -26,8 +25,13 @@ def show_checkout(request, template='checkout/checkout.html'):
         postdata = request.POST.copy()
         form = CheckoutForm(postdata)
         if form.is_valid():
-            checkout.create_order(request)
-            return HttpResponseRedirect(reverse('checkout:order_success'))
+            response = checkout.process(request)
+            order_id = response.get('order_id', 0)
+            print(order_id)
+            if order_id:
+                request.session['order_id'] = order_id
+                sucess_url = reverse('checkout:order_success') 
+            return HttpResponseRedirect(sucess_url)
     else:
         if request.user.is_authenticated:
             form = CheckoutForm(instance=request.user)
@@ -43,20 +47,59 @@ def show_checkout(request, template='checkout/checkout.html'):
         'SITEID': settings.CINETPAY_SITE_ID,
     }
 
-    # context.update(csrf_token)
     return render(request, template, context)
 
 
-class OrderResumeDetailView(TemplateView):
-    """ 
-    page affichée avec les informations relatives
-    à la commande après qu'une commande ait été passée avec succès
-    """
-    template_name = 'checkout/snippet/_partials_order_success.html'
-    extra_context = {'page_title': 'Résumé de votre commande'}
+def order_succes_view(request, template='checkout/checkout_success.html'):
+
+    order_id = request.session.get('order_id', '')
+
+    if order_id:
+        order = Order.objects.filter(transaction_id=order_id)[0]
+        order_items = OrderItem.objects.filter(order=order)
+    else:
+        cart_url = reverse('cart:cart')
+        return HttpResponseRedirect(cart_url)
+    
+    context = {
+        'page_title': 'Commande validée',
+        'object': Order.objects.filter(transaction_id=order_id)[0],
+        'order_items': OrderItem.objects.filter(order=order)
+    }
+
+    return render(request, template, context)
+
+
+def order_succes_view(request, template='checkout/checkout_success.html'):
+
+    order_id = request.session.get('order_id', '')
+
+    if order_id:
+        order = Order.objects.filter(transaction_id=order_id)[0]
+        order_items = OrderItem.objects.filter(order=order)
+    else:
+        cart_url = reverse('cart:cart')
+        return HttpResponseRedirect(cart_url)
+    
+    context = {
+        'page_title': 'Commande validée',
+        'object': Order.objects.filter(transaction_id=order_id)[0],
+        'order_items': OrderItem.objects.filter(order=order)
+    }
+
+    return render(request, template, context)
+
+
+class TrackOrderView(ListView):
+    template_name = 'checkout/snippet/_partials_order_tracking.html'
+    success_url = reverse_lazy('order_tracking')
 
     def get_context_data(self, **kwargs):
-        # kwargs['object_list'] = Order.objects.filter(user__email=self.request.user)
-        # kwargs['transaction_id'] = Order.objects.get(transaction_id=self.kwargs.transaction_id)
-        # print(kwargs['object_list'])
+        kwargs['query'] = self.request.GET.get('track', None)
         return super().get_context_data(**kwargs)
+
+    def get_queryset(self):
+        query = self.request.GET.get('track', None)
+        if query is not None:
+            return Order.objects.track_order(query)
+        return Order.objects.none()

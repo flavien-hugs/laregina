@@ -6,6 +6,11 @@
 {% block title %}Connexion{% endblock title %}
 
 {% block content %}
+    {% url "home" as home %}
+    {% url 'customer_signup' as buyer_signup %}
+    {% url 'account_signup' as seller_signup %}
+    {% url 'account_reset_password' as reset_password %}
+
     <div class="ps-page--my-account">
         <div class="container">
             <div class="row justify-content-center mt-5">
@@ -21,12 +26,9 @@
                             {% crispy form %}
 
                             <!-- connexion url -->
-                            <div class="text-center w-100 pt-5 pb-3">
+                            <div class="text-center w-100 pt-3 pb-3">
                                 <p>Vous êtes un nouvel utilisateur ? </p>
                                 <span class="font-weight-bold">
-                                    {% url 'customer_signup' as buyer_signup %}
-                                    {% url 'account_signup' as seller_signup %}
-                                    {% url 'account_reset_password' as reset_password %}
                                     <a href="{{ buyer_signup }}">
                                         <span><u>Créer un compte acheteur</u></span>
                                     </a> &smid;

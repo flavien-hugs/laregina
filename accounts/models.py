@@ -39,7 +39,7 @@ class User(BaseOrderInfo, AbstractBaseUser, PermissionsMixin):
     )
     store_id = models.CharField(
         max_length=50,
-        verbose_name='ID STORE',
+        verbose_name='ID BOUTIQUE',
         unique=True,
         **NULL_AND_BLANK
     )
@@ -143,13 +143,13 @@ class User(BaseOrderInfo, AbstractBaseUser, PermissionsMixin):
         today = datetime.date.today().strftime('%d%m%y')
         carac = string.digits
         random_carac = [random.choice(carac) for _ in range(nb_carac)]
-        self.store_id = 'KRB-{}'.format(today + ''.join(random_carac))
+        self.store_id = 'LRG-{}'.format(today + ''.join(random_carac))
 
     def get_fullname(self):
         if self.civility and self.shipping_first_name:
             full_name = '{civility} {shipping_first_name}'.format(
-                civility=self.civility,
-                shipping_first_name=self.shipping_first_name
+                civility=str(self.civility),
+                shipping_first_name=str(self.shipping_first_name)
             )
             return full_name.strip()
         return self.email

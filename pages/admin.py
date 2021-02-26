@@ -3,27 +3,8 @@
 from django.contrib import admin
 from django.utils.safestring import mark_safe
 
-from pages.models import Promotion, Subscribe, Contact
 from services.export_data_csv import export_to_csv
-
-
-@admin.register(Subscribe)
-class SubscribeAdmin(admin.ModelAdmin):
-    date_hierarchy = 'timestamp'
-    list_display = [
-        'email',
-        'timestamp',
-    ]
-    ordering = [
-        'timestamp',
-    ]
-    list_filter = [
-        'timestamp',
-    ]
-
-    list_display_links = ('email',)
-    search_fields = ['email',]
-
+from pages.models import Promotion, Contact, Testimonial
 
 @admin.register(Contact)
 class ContactAdmin(admin.ModelAdmin):
@@ -76,7 +57,7 @@ class PromotionAdmin(admin.ModelAdmin):
         'image',
         'link_to'
     )
-    list_per_page = 50
+    list_per_page = 10
     empty_value_display = '-empty-'
     search_fields = ['category', 'title']
     list_display_links = ('title',)
@@ -88,3 +69,17 @@ class PromotionAdmin(admin.ModelAdmin):
             return mark_safe('<img src="{url}" height="50"/>'.format(url=obj.image.url))
         else:
             return ""
+
+
+@admin.register(Testimonial)
+class PromotionAdmin(admin.ModelAdmin):
+    date_hierarchy = 'created_at'
+    list_display = [
+        'full_name',
+        'status_client',
+        'created_at',
+    ]
+    list_per_page = 10
+    empty_value_display = '-empty-'
+    list_display_links = ('full_name',)
+    actions = [export_to_csv]

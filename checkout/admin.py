@@ -6,10 +6,6 @@ from checkout.models import Order, OrderItem
 from services.export_data_csv import export_to_csv
 
 
-def make_refund_accepted(modeladmin, request, queryset):
-    queryset.update(refund_requested=False, refund_granted=True)
-make_refund_accepted.short_description = 'Mise à jour des ordres de remboursement accordés'
-
 
 class OrderItemStackedInline(admin.StackedInline):
     model = OrderItem
@@ -32,13 +28,22 @@ class OrderItemStackedInline(admin.StackedInline):
 
 @admin.register(Order)
 class OrderAdmin(admin.ModelAdmin):
+
     date_hierarchy = 'created_at'
     fk_name = "product"
-
+    readonly_fields = [
+        'email',
+        'shipping_country',
+        'shipping_city',
+        'shipping_adress',
+        'phone', 'phone_two',
+        'note', 'shipping_zip',
+        'emailing'
+    ]
     list_display = [
-        '__str__',
-        'total',
-        'date',
+        'get_order_id',
+        'get_shipping_delivery',
+        'total', 'date',
         'status',
     ]
     list_editable = (
@@ -48,7 +53,6 @@ class OrderAdmin(admin.ModelAdmin):
         'status',
         'date',
     ]
-
     search_fields = [
         'email',
         'full_name',
@@ -61,11 +65,10 @@ class OrderAdmin(admin.ModelAdmin):
     ]
 
     fieldsets = (
-        ('Information sur la commande',
+        ('Status de la commande',
             {
                 'fields': (
-                    'email',
-                    'status'
+                    'status',
                 )
             }
         ),
@@ -75,12 +78,12 @@ class OrderAdmin(admin.ModelAdmin):
                     ('shipping_country', 'shipping_city'),
                     ('shipping_adress', 'shipping_zip'),
                     ('phone', 'phone_two'),
-                    'note',
-                    'emailing'
+                    'note', 'emailing'
                 )
             }
         )
     )
+    list_per_page = 5
     inlines = [OrderItemStackedInline,]
     actions = [export_to_csv]
     search_fields = ['created_at', 'transaction_id']

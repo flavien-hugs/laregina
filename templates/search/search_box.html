@@ -1,7 +1,7 @@
-<!-- formulaire de recherche -->
+<!-- bare de recherche mobile -->
 
 <form role='search' class="ps-form--quick-search" action="{% url 'search' %}"
-method="get" accept-charset="utf-8">
+method="get" accept-charset="utf-8">{% csrf_token %}
     {{ form.q }}
-    <button type="submit">Rechercher</button>
+    <button type="submit"><i class="icon-magnifier"></i></button>
 </form>

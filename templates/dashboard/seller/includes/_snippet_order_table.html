@@ -1,11 +1,13 @@
 {% load humanize %}
 <tr>
 	<td>{{ forloop.counter }}</td>
-    <td><a class="font-weight-bold text-success" href="{{ object.get_absolute_url }}">
-    {{ object.get_product_name|truncatewords:'5' }}</a></td>
-    <td>{{ object.quantity|intcomma }}</td>
-    <td>{{ object.get_product_price|intcomma }} Fr</td>
-    <td>{{ object.order.total|intcomma }}</td>
+    <td>
+    	<a class="font-weight-bold text-success" href="{{ object.order.get_absolute_url }}">
+    		#{{ object.order.transaction_id }}
+    	</a>
+    </td>
+    <td>{{ object_list.count|intcomma }} </td>
+    <td>{{ cash_total_seller|intcomma }} Fr</td>
 	<td>{{ object.order.created_at|date }}</td>
 	<td>{{ object.order.status }}</td>
 </tr>

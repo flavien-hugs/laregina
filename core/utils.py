@@ -71,12 +71,12 @@ def unique_slug_generator(instance, new_slug=None):
     if new_slug is not None:
         slug = new_slug
     else:
-        slug = slugify(instance.store)
+        slug = slugify(instance.name)
 
     Klass = instance.__class__
     qs_exists = Klass.objects.filter(slug=slug).exists()
     
     if qs_exists:
-        new_slug = "{slug}-{randstr}".format(slug=slug, randstr=random_string_generator(size=10))
+        new_slug = "{slug}-{randstr}".format(slug=slug, randstr=random_string_generator(size=120))
         return unique_slug_generator(instance, new_slug=new_slug)
     return slug

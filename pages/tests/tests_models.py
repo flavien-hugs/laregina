@@ -4,7 +4,7 @@ from django.urls import reverse
 from django.test import TestCase
 from django.urls.exceptions import NoReverseMatch
 
-from pages.models import Contact, Annonce, Promotion
+from pages.models import Contact, Testimonial, Promotion
 
 
 class ContactTestCase(TestCase):
@@ -25,3 +25,13 @@ class ContactTestCase(TestCase):
             assert False
         response = self.client.get(url)
         assert response.status_code == 200
+
+
+class TestimonialtTestCase(TestCase):
+    def setUp(self):
+        Testimonial.objects.create(
+            full_name='flavien hugs',
+            status_client='Unsta INC',
+            message='je souhaite uns partenariat.',
+            image='',
+        )

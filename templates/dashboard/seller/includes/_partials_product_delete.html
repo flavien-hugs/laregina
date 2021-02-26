@@ -23,8 +23,8 @@
                         </span>
 
                         <p class="font-weight-bold">Nom du produit: {{ object.name }}</p>
-                        <p class="font-weight-bold">Catégorie: {{ object.category }}</p>
-                        <p class="font-weight-bold">Prix: {{ object.price }}</p>
+                        <p class="font-weight-bold">Prix: {{ object.price }} Fr</p>
+                        <p class="font-weight-bold">Ajouté le: {{ object.created_at|date }}</p>
 
                         <p class="pt-4">
                             <form action="." method="post">

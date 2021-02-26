@@ -18,8 +18,6 @@ admin.site.unregister(Group)
 @admin.register(User)
 class UserAdmin(BaseUserAdmin):
     add_form = MarketSignupForm
-    form = MarketChangeForm
-    model = User
     fieldsets = (
         (None, {'fields':
             (   
@@ -38,7 +36,6 @@ class UserAdmin(BaseUserAdmin):
             )}
         ),
     )
-
     add_fieldsets = (
         (
             None,
@@ -53,49 +50,28 @@ class UserAdmin(BaseUserAdmin):
             }
         ),
     )
-
     list_display = (
         "store_id",
         "store",
-        "email",
-        "is_seller",
-        "is_active",
         "last_login",
+        "is_active",
     )
 
     list_filter = (
-        "is_seller",
         "is_active",
-        ('is_staff', admin.BooleanFieldListFilter),
         "last_login",
     )
 
     list_editable = (
         "is_active",
-        "is_seller",
     )
 
     list_per_page = 5
-    list_display_links = ('store_id',  'store', 'email')
+    list_display_links = (
+        'store_id',
+        'store',
+    )
     prepopulated_fields = {'slug': ('store',)}
     search_fields = ('email', 'user', 'store',)
     ordering = ('date_joined',)
-    actions = [export_to_csv]
-
-
-@admin.register(Customer)
-class CustomerEmailAdmin(admin.ModelAdmin):
-    date_hierarchy = 'created_at'
-    model = Customer
-
-    list_display = (
-        "get_fullname",
-        "email",
-        "active",
-        "created_at",
-    )
-
-    list_per_page = 5
-    list_display_links = ('email',)
-    search_fields = ['email']
     actions = [export_to_csv]

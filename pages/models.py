@@ -24,7 +24,46 @@ class Annonce(models.Model):
     )
 
     class Meta:
-        abstract = True   
+        abstract = True
+
+
+class Testimonial(models.Model):
+    full_name = models.CharField(
+        max_length=120,
+        verbose_name='nom & prénoms',
+        help_text='Entrer le nom et prénoms du client'
+    )
+    status_client = models.CharField(
+        max_length=120,
+        verbose_name='Statut (entrepreneur/boutique/etc)',
+        help_text='Entrer le statut du client',
+        **NULL_AND_BLANK
+    )
+    message = models.TextField(
+        verbose_name='message',
+        help_text='Entrer le message du client'
+    )
+    image = models.ImageField(
+        verbose_name='image',
+        upload_to='testimonial_image/',
+        **NULL_AND_BLANK
+    )
+    created_at = models.DateField(
+        auto_now=True,
+        auto_now_add=False,
+        verbose_name='date',
+    )
+    activate_at = models.BooleanField(
+        default=False,
+        verbose_name='actif',
+        help_text='rendre visible cet témoignage ?'
+    )
+
+    class Meta:
+        db_table = 'testimonial_db'
+        ordering = ['-created_at',]
+        get_latest_by = ['-created_at',]
+        verbose_name_plural = 'Témoignage'
 
 
 class Promotion(Annonce):
@@ -42,9 +81,10 @@ class Promotion(Annonce):
         verbose_name='promotion active ?',
         default=False
     )
-    created_at = models.DateTimeField(
+    created_at = models.DateField(
+        auto_now=True,
+        auto_now_add=False,
         verbose_name='date de creation',
-        default=timezone.now
     )
 
     class Meta:
@@ -83,23 +123,6 @@ class Promotion(Annonce):
         if self.image:
             return self.image.url
         return self.image
-
-
-class Subscribe(models.Model):
-    email = models.EmailField(
-        verbose_name='email',
-        **NULL_AND_BLANK
-    )
-    timestamp = models.DateTimeField(
-        verbose_name="date",
-        default=timezone.now
-    )
-
-    class Meta:
-        verbose_name_plural = 'abonnement'
-
-    def __str__(self):
-        return self.email
 
 
 class Contact(models.Model):

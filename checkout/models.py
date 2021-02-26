@@ -8,10 +8,8 @@ from django.db import models
 from django.urls import reverse
 
 from core import settings
-from core.utils import unique_key_generator
-
-from cart.models import CartItem
 from catalogue.models import Product
+from checkout.managers import OrderManager
 
 from django_countries.fields import CountryField
 from phonenumber_field.modelfields import PhoneNumberField
@@ -52,15 +50,14 @@ class BaseOrderInfo(models.Model):
         max_length=50
     )
     shipping_country = CountryField(
-        blank_label='Sélection un pays',
+        blank_label='sélection un pays',
         verbose_name='pays/région',
         multiple=False
     )
     shipping_adress = models.CharField(
-        verbose_name='votre situation géographique',
+        verbose_name='situation géographique',
         max_length=50
     )
-
     shipping_zip = models.CharField(
         verbose_name='adresse postal (facultatif)',
         max_length=10,
@@ -80,9 +77,9 @@ class Order(BaseOrderInfo):
     # status de chaque commande
 
     SUBMITTED = 'Soumis'
-    PROCESSED = 'En cours de livraison'
     SHIPPED = 'Commande reçue'
     CANCELLED = 'Commande annulée'
+    PROCESSED = 'En cours de livraison'
 
     # ensemble de statuts d'ordre possibles
 
@@ -122,6 +119,8 @@ class Order(BaseOrderInfo):
         auto_now=True
     )
 
+    objects = OrderManager()
+
     class Meta:
         verbose_name_plural = 'commande'
     
@@ -129,23 +128,33 @@ class Order(BaseOrderInfo):
         return '#{transaction_id}'.format(
             transaction_id=self.transaction_id)
 
+    def get_order_id(self):
+        return '#{transaction_id}'.format(
+            transaction_id=str(self.transaction_id)
+        )
+    get_order_id.short_description='N° commande'
+
     def get_short_name(self):
         return '{first_name}'.format(
             first_name=self.shipping_first_name
         )
+    get_short_name.short_description='Nom'
 
     def get_full_name(self):
         return '{short_name} {last_name}'.format(
             short_name=self.get_short_name(),
             last_name=self.shipping_last_name
         )
+    get_full_name.short_description='Nom & prénoms'
 
     def get_shipping_delivery(self):
-        return '{shipping_city}, {shipping_adress}'.format(
+        return '{shipping_country}, {shipping_city}, {shipping_adress} | {shipping_phone}'.format(
             shipping_country=self.shipping_country.name,
             shipping_city=self.shipping_city,
-            shipping_adress=self.shipping_adress
+            shipping_adress=self.shipping_adress,
+            shipping_phone=self.phone
         )
+    get_shipping_delivery.short_description='Adresse de livraison'
 
     def save(self, *args, **kwargs):
         self.generate(8)
@@ -168,11 +177,19 @@ class Order(BaseOrderInfo):
             total += item.total
         return total + 1500
 
+    # cash du vendeur
+    @property
+    def total_seller(self):
+        total = decimal.Decimal('0')
+        for item in self.order_items():
+            total += item.total
+        return total
+
     # cout de la commande pour le vendeur
     # sans les frais
     def total_seller_order(self):
         fee =  1500
-        total = self.total - fee
+        total = self.total_seller - fee
         return total
 
     # calcul de la commission
@@ -186,6 +203,7 @@ class Order(BaseOrderInfo):
         total = self.total_seller_order() - self.get_cost()
         return total
 
+    # cash apres commission
     def get_total_sales(self):
         total = decimal.Decimal(0)
         orders = self.order_items()
@@ -195,6 +213,9 @@ class Order(BaseOrderInfo):
     
     def get_absolute_url(self):
         return reverse('seller:order_detail', kwargs={'pk': int(self.id)})
+
+    def get_success_url(self):
+        return reverse('checkout:order_success', kwargs={'pk': int(self.transaction_id)})
 
 
 class OrderItem(models.Model):
@@ -243,17 +264,23 @@ class OrderItem(models.Model):
         return self.quantity * self.product.price
 
     def get_product_price(self):
-        return '{product_price}'.format(product_price=self.product.price)
+        return '{product_price} Fr'.format(product_price=str(self.product.price))
     get_product_price.short_description='prix unitaire'
 
     def get_product_name(self):
-        return '{product_name}'.format(product_name=self.product.name)
+        return '{product_name}'.format(product_name=str(self.product.name))
     get_product_name.short_description='produit'
 
+    def get_phone_number(self):
+        return '{phone}'.format(phone=str(self.product.user.phone))
+    get_phone_number.short_description='N° de téléphone'
+
     def get_store_product(self):
-        return '{product_store}'.format(product_store=self.product.user.store)
-    get_store_product.short_description='magasin'
-    
+        return '{product_store} | {store_phone}'.format(
+            product_store=str(self.product.user.store),
+            store_phone=self.get_phone_number())
+    get_store_product.short_description='boutique'
+
     def get_absolute_url(self):
         return self.product.get_absolute_url()
 

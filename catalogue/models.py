@@ -2,6 +2,7 @@
 
 from PIL import Image
 from django.db import models
+from datetime import datetime
 from django.urls import reverse
 from django.dispatch import receiver
 from django.utils.text import slugify
@@ -102,7 +103,7 @@ class Product(models.Model):
         index_together = (('slug',),)
         ordering = ['-created_at', '-updated_at', '-timestamp']
         get_latest_by = ['-created_at', '-updated_at', '-timestamp']
-        verbose_name_plural = 'catalogue'
+        verbose_name_plural = 'produit'
 
     def __str__(self):
         return self.name
@@ -128,7 +129,7 @@ class Product(models.Model):
             return image.image.url
         return image
 
-    def show_image_tag(self):
+    def get_product_image(self):
         """
         Méthode pour créer un champ de table en
         mode lecture seule
@@ -137,11 +138,15 @@ class Product(models.Model):
             return mark_safe('<img src="{url}" height="50"/>'.format(url=self.get_image_url()))
         else:
             return ""
-    show_image_tag.short_description='image du produit'
+    get_product_image.short_description = 'image'
 
-    def show_description(self):
+    def get_product_description(self):
         return self.description
-    show_description.short_description='description du produit'
+    get_product_description.short_description = 'description'
+
+    def get_product_shop(self):
+        return self.user.store
+    get_product_shop.short_description = 'magasin'
 
     # calcul de la moyenne des note de commentaire
     def avaregereview(self):

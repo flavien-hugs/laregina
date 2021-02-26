@@ -1,7 +1,6 @@
 <!-- partials/breacrumb.html -->
 
-<div class="ps-breadcrumb {% if request.resolver_match.url_name == 'account_login' or request.resolver_match.url_name == 'customer_signup' %}
-text-center {% endif %}">
+<div class="ps-breadcrumb">
     <div class="container">
         <ul class="breadcrumb">
             <li><a href="{% url "home" %}">Accueil</a></li>
@@ -10,7 +9,7 @@ text-center {% endif %}">
     </div>
 </div>
 
-{% if messages %}
+{% if messages and request.resolver_match.url_name == 'product_update' or request.resolver_match.url_name == 'cart' %}
     {% for message in messages %}
         <div class="alert alert-block {{ message.tags }} alert-dismissible font-weight-bold" role="alert">
             {{ message|safe }}

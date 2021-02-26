@@ -162,9 +162,9 @@ CACHE_TIMEOUT = 60 * 60
 ENABLE_SSL = False
 
 MIDDLEWARE = [
-    # 'django.middleware.cache.UpdateCacheMiddleware',
+    'django.middleware.cache.UpdateCacheMiddleware',
+    
     'django.middleware.security.SecurityMiddleware',
-
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
@@ -175,7 +175,7 @@ MIDDLEWARE = [
     'django.middleware.http.ConditionalGetMiddleware',
     'django.middleware.common.CommonMiddleware',
 
-    # 'django.middleware.cache.FetchFromCacheMiddleware',
+    'django.middleware.cache.FetchFromCacheMiddleware',
 ]
 
 ROOT_URLCONF = 'core.urls'
@@ -330,6 +330,13 @@ MPTT_ADMIN_LEVEL_INDENT = 20
 #     }
 # }
 
+CACHES = {
+    'default': {
+        'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
+        'LOCATION': 'unique-snowflake',
+    }
+}
+
 # Cache time to live is 15 minutes.
 CACHE_TTL = 60 * 15
 DJANGO_REDIS_IGNORE_EXCEPTIONS = True
@@ -368,6 +375,7 @@ DJANGO_REDIS_IGNORE_EXCEPTIONS = True
 #         },
 #     },
 # }
+
 
 # phonenumber config
 PHONENUMBER_DEFAULT_REGION = "CI"

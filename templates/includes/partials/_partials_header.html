@@ -1,7 +1,11 @@
 <!-- includes/header.html -->
 
 {% load humanize mptt_tags search_tags catalogue_tags %}
+{% url 'search' as search %}
 {% url "cart:cart" as cart %}
+{% url "account_login" as login %}
+{% url "account_signup"  as signup %}
+{% url "seller:profile" as seller_profile %}
 
 <!-- affficher sur la page detail de produit -->
 {% if request.resolver_match.url_name == 'product_detail' %}
@@ -47,6 +51,7 @@
 
 <!-- afficher sur la page de detail des categorie -->
 <header class="header header--1" data-sticky="{% if not request.resolver_match.url_name == 'product_detail' %}true{% endif %}">
+    <!-- header top: first -->
     <div class="header__top">
         <div class="ps-container">
             <div class="header__left">
@@ -75,24 +80,23 @@
             <div class="header__right">
                 <div class="header__actions">
                     {% if request.user.is_authenticated %}
-                        {% if request.user.is_buyer %}
-                            <a class="header__extra" href="{% url 'cart:cart' %}">
-                                <i class="icon-heart"></i><span><i>0</i></span>
-                            </a>
-                            <div class="ps-cart--mini">
-                                {% include "cart/snippet/item_cart.html" %}
-                            </div>
-                        {% elif request.user.is_seller or request.user.is_superuser %}
+                        {% if request.user.is_seller or request.user.is_superuser %}
                             <div class="ps-block--header-hotline">
                                 <div class="ps-block__right">
                                     <p>Centre d'assistance <strong>{{ contact_one }}</strong></p>
                                 </div>
                             </div>
+                            <div class="ps-cart--mini">
+                                {% include "cart/snippet/item_cart.html" %}
+                            </div>
                         {% endif %}
                     {% else %}
+                        <div class="ps-cart--mini">
+                            {% include "cart/snippet/item_cart.html" %}
+                        </div>
                         <div class="ps-block--header-hotline">
                             <div class="ps-block__right">
-                                <p>Centre d'assistance <strong>{{ contact_one }}</strong></p>
+                                Centre d'assistance <br><strong>{{ contact_one }}</strong>
                             </div>
                         </div>
                     {% endif %}
@@ -121,32 +125,22 @@
                     {% full_tree_for_model category.Category as category %}
 
                     {% for node in category|slice:'0:3' %}
-                        <li>
-                            <a href="{{ node.get_absolute_url }}">
+                        <li><a href="{{ node.get_absolute_url }}">
                             {{ node.name|safe }}</a>
                         </li>
                     {% endfor %}
                 </ul>
 
                 <ul class="navigation__extra">
-                    {% url "account_signup"  as signup %}
-                    {% url "account_login" as login %}
-
-                    {% if request.user.is_authenticated %}
-                        {% if request.user.is_seller %}
-                            <li>
-                                <a href="{% url "seller:profile" %}" target="_blank">
-                                Ma boutique</a>
-                            </li>
-                            
-                            <li><a href="#">Ajouter une annonce</a></li>
-                        {% elif request.user.is_buyer %}
-                            <li><a class="font-weight-bold text-uppercase" href="{{ signup }}">
-                            ouvrir ma boutique</a></li>
-                        {% endif %}
+                    {% if request.user.is_authenticated and request.user.is_seller or request.user.is_superuser %}
+                        <li><a href="{{ seller_profile }}" target="_blank">Ma boutique</a>
+                        </li>
+                        <li><a href="#">Ajouter une annonce</a></li>
                     {% else %}
-                        <li><a href="{{ login }}">Se connecter</a></li>
-                        <li><a href="{{ signup }}">Ouvrir ma boutique</a></li>
+                        <li><a class="font-weight-bold text-uppercase" href="{{ signup }}">
+                        s'inscrire</a></li>
+                        <li><a class="font-weight-bold text-uppercase" href="{{ login }}">
+                        se connecter</a></li>
                     {% endif %}
                     </ul>
                 </div>
@@ -156,7 +150,6 @@
 
     <header class="header header--mobile header--mobile-categories header--mobile-product" data-sticky="true">
         <nav class="navigation--mobile">
-
             {% if request.resolver_match.url_name == 'category_list' %}
                 <div class="navigation__left">
                     <a class="header__back" href="#">
@@ -171,7 +164,7 @@
                 </div>
             {% else %}
                 <div class="navigation__left">
-                    <a class="ps-logo" href="{% url "home" %}">
+                    <a class="ps-logo" href="{{ home }}">
                         <img src="{{ STATIC_PREFIX }}img/logo_light.png" alt="{{ title }}">
                     </a>
                 </div>
@@ -184,17 +177,11 @@
                     </div>
 
                     <div class="ps-block--user-header">
-                        <div class="ps-block__left"><i class="icon-user"></i></div>
                         <div class="ps-block__right">
-                            {% if request.user.is_authenticated %}
-                                {% if request.user.is_seller %}
-                                    <a href="{% url "seller:profile" %}">
-                                    Ma Boutique</a>
-                                {% elif request.user.is_buyer %}
-                                    <a href="#">Mon Compte</a>
-                                {% endif %}
+                            {% if request.user.is_authenticated and request.user.is_seller or request.user.is_superuser %}
+                                <a href="{{ seller_profile }}"><i class="icon-user"></i></a>
                             {% else %}
-                                <a href="{% url "account_login" %}">Connexion</a>
+                                <a href="{{ login }}"><i class="icon-user"></i></a>
                             {% endif %}
                         </div>
                     </div>
@@ -203,8 +190,8 @@
         </nav>
 
         <div class="ps-search--mobile">
-            <form role='search' accept-charset="utf-8" class="ps-form--search-mobile" action="{% url 'search' %}" method="get">
-                <div class="form-group--nest">
+            <form role='search' accept-charset="utf-8" class="ps-form--search-mobile" action="{{ search }}" method="get">
+                <div class="form-group--nest">{% csrf_token %}
                     <input id='input-search' name='q' class="form-control" type="search"
                     placeholder="Rechercher un produit, une catégorie, une marque ..."
                     value="{{ request.GET.q }}">
@@ -248,5 +235,4 @@
         <div class="navigation__content"></div>
     </div>
     
-
     {% include "includes/partials/menu_mobile.html" %}

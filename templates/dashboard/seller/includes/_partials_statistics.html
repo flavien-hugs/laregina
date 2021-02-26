@@ -6,8 +6,7 @@
         <div class="ps-block__content">
             {% with count=order_list_today.count %}
                 <h4 style="font-size:18px;">{{ count|intcomma }}
-                    produit{{ count|pluralize:',s' }}
-                    commandé{{ count|pluralize:',s' }} aujourd'hui
+                    commande{{ count|pluralize }} aujourd'hui
                 </h4>
             {% endwith %}
         </div>
@@ -17,8 +16,7 @@
         <div class="ps-block__content">
             {% with count=order_list.count %}
                 <h4 style="font-size:18px;">{{ count|intcomma }}
-                    produit{{ count|pluralize:',s' }}
-                    commande{{ count|pluralize:',s' }}
+                    commande{{ count|pluralize }}
                 </h4>
             {% endwith %}
         </div>

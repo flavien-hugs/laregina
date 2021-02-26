@@ -102,6 +102,44 @@ class MarketSignupForm(UserCreationForm):
                 ),
             ),
 
+            layout.Row(
+                layout.Column(
+                    bootstrap.PrependedText(
+                        'shipping_country', '',
+                        placeholder='',
+                        css_class='custom-select'
+                    ),
+                    css_class='form-group col-md-6 mb-0'
+                ),
+
+                layout.Column(
+                    bootstrap.PrependedText(
+                        'shipping_city', '', 
+                        placeholder='Situation du magasin',
+                    ),
+                    css_class='form-group col-md-6 mb-0'
+                ),
+            ),
+
+            layout.Row(
+                layout.Column(
+                    bootstrap.PrependedText(
+                        'phone', '',
+                        placeholder='Entrer un numéro de téléphone',
+                    ),
+                    css_class='form-group col-md-6 mb-0'
+                ),
+
+                layout.Column(
+                    bootstrap.PrependedText(
+                        'phone_two', '', 
+                        placeholder='Numéro de téléphone supplémentaire',
+                    ),
+                    css_class='form-group col-md-6 mb-0'
+                ),
+            ),
+
+
             bootstrap.Field(
                 'password1', '',
                 placeholder="Entrez votre mot de passe"
@@ -126,6 +164,9 @@ class MarketSignupForm(UserCreationForm):
             'email', 'civility',
             'shipping_first_name', 
             'shipping_last_name',
+            'shipping_country',
+            'shipping_city',
+            'phone', 'phone_two',
             'store',
         ]
 

@@ -43,6 +43,8 @@ class ProductListView(FilterMixin, ListView):
                 | Q(description__icontains=query)
                 | Q(price__icontains=query)
                 | Q(keywords__icontains=query)
+                | Q(user__store__icontains=query)
+                | Q(category__icontains=query)
             )
             try:
                 query_two = self.model.objects.filter(Q(price=query))

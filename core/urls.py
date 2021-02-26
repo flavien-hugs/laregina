@@ -15,7 +15,7 @@ from django.views.generic import TemplateView
 
 from analytics import utils
 from search.views import SearchView
-from pages.views import subscribeView
+from checkout.views import TrackOrderView
 from accounts.views import customer, seller
 
 admin.autodiscover()
@@ -42,8 +42,10 @@ urlpatterns = [
     path('avis/', include('reviews.urls', namespace='reviews')),
     path('panier/', include('cart.urls', namespace='cart')),
     path('checkout/', include('checkout.urls', namespace='checkout')),
+    path('tracking/order/', TrackOrderView.as_view(
+        extra_context={'page_title': 'Suivi votre commande',}
+    ), name='order_tracking'),
     path('accounts/signup/customer/', customer.CustomerSignUpView.as_view(), name='customer_signup'),
-    path('abonnement/', subscribeView, name='subscribe'),
     path('sp-', include("pages.urls", namespace='pages')),
     path('accounts/', include('allauth.urls')),
     path('accounts/profile/', include('accounts.urls')),

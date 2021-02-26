@@ -5,24 +5,8 @@ from django.shortcuts import render, redirect
 from django.http import HttpResponse, JsonResponse
 from django.views.generic import View, CreateView, TemplateView
 
-from pages.models import Subscribe
 from pages.forms import ContactForm
 from core.utils import SendSubscribeMail
-
-
-def subscribeView(request):
-    if request.method == "POST":
-        email = request.POST["email"]
-        email_qs = Subscribe.objects.filter(email=email)
-        if email_qs.exists():
-            messages.success(
-                request, "Désolé cette adresse existe déjà comme abonné.")
-            return JsonResponse({"success": True}, status=200)
-        else:
-            Subscribe.objects.create(email=email)
-            messages.success(request, "Super ! vous êtes désormais un abonné.")
-            SendSubscribeMail(email)
-    return JsonResponse({"success": False}, status=400)
 
 
 class ContactView(View):
