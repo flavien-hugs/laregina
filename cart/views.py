@@ -13,8 +13,6 @@ from analytics.utils import get_recently_viewed, recommended_from_views
 
 def shopcart(request, template="cart/cart.html"):
 
-    request.session.set_expiry(12000)
-
     if request.method == 'POST':
         postdata = request.POST.copy()
 
@@ -35,7 +33,6 @@ def shopcart(request, template="cart/cart.html"):
         'cart_items': cart.get_cart_items(request),
         'cart_subtotal': cart.cart_subtotal(request),
         'recently_viewed': get_recently_viewed(request),
-        # 'recommended_product': recommended_from_views(request)
     }
 
     return render(request, template, context)

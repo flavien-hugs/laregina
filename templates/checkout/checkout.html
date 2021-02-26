@@ -17,6 +17,14 @@
                             <div class="row">
                                 <div class="col-xl-7 col-lg-7 col-md-12 col-sm-12 col-12 ">
                                     <div class="ps-form__billing-info">
+                                        {% if not request.user.is_authenticated %}
+                                            <div class="ps-block--payment-method mb-5">
+                                                <a class='p-2' href="{% url 'account_login' %}?next={{ request.path }}">
+                                                    <span class='font-weight-bold'>Vous avez un compte ? Connectez-vous maintenant !</span>
+                                                </a>
+                                            </div>
+                                        {% endif %}
+
                                         <h3 class="ps-form__heading pb-3">Détails de facturation</h3>
 
                                         <div class="row">

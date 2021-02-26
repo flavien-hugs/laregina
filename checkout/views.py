@@ -36,7 +36,7 @@ def show_checkout(request, template='checkout/checkout.html'):
         if request.user.is_authenticated:
             form = CheckoutForm(instance=request.user)
         else:
-            return redirect('account_login')
+            form = CheckoutForm()
 
     context = {
         'form': form,

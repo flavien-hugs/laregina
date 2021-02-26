@@ -50,13 +50,13 @@ class ProfileDetailView(SellerRequiredMixin, CashTotalSeller, DetailView):
 
 
 # même chose que ci-dessus, mais pour voir un autre vendeur.
-class StoreDetailView(SellerRequiredMixin, CashTotalSeller, DetailView):
+class StoreDetailView(DetailView):
     model = User
     template_name='dashboard/seller/includes/_partials_vendor_store.html'
 
     def get_context_data(self, *args, **kwargs):
         kwargs['page_title'] = 'Magasin : {store_name}'.format(store_name=self.object.store)
-        kwargs['object_list'] = self.get_product()
+        kwargs['object_list'] = Product.objects.filter(user=self.object.id)
         return super().get_context_data(*args, **kwargs)
 
 
