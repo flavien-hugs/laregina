@@ -74,24 +74,20 @@ class BaseOrderInfo(models.Model):
 
 class Order(BaseOrderInfo):
 
-    # status de chaque commande
-
-    SUBMITTED = 'Soumis'
-    SHIPPED = 'Commande reçue'
+    SHIPPED = 'Commande livrée'
     CANCELLED = 'Commande annulée'
-    PROCESSED = 'En cours de livraison'
-
-    # ensemble de statuts d'ordre possibles
+    PROCESSED = 'Commande en cours de livraison'
+    SUBMITTED = 'Commande en cours de traitement'
 
     ORDER_STATUSES = (
-        (SUBMITTED, 'Soumis'),
+        (SUBMITTED, 'Commande en cours de traitement'),
         (PROCESSED, 'Commande en cours de livraison'),
-        (SHIPPED, 'Commande reçue'),
+        (SHIPPED, 'Commande livrée'),
         (CANCELLED, 'Commande annulée'),
     )
     status = models.CharField(
         verbose_name='status',
-        max_length=26,
+        max_length=120,
         choices=ORDER_STATUSES,
         default=SUBMITTED
     )
@@ -148,13 +144,21 @@ class Order(BaseOrderInfo):
     get_full_name.short_description='Nom & prénoms'
 
     def get_shipping_delivery(self):
-        return '{shipping_country}, {shipping_city}, {shipping_adress} | {shipping_phone}'.format(
+        return '{shipping_country}, {shipping_city}, {shipping_adress} | {shipping_phone}/{shipping_phone_two}'.format(
             shipping_country=self.shipping_country.name,
             shipping_city=self.shipping_city,
             shipping_adress=self.shipping_adress,
-            shipping_phone=self.phone
+            shipping_phone=self.phone,
+            shipping_phone_two=self.phone_two
         )
     get_shipping_delivery.short_description='Adresse de livraison'
+
+    def get_shipping_delivery_for_seller(self):
+        return '{shipping_country}, {shipping_city}, {shipping_adress}'.format(
+            shipping_country=self.shipping_country.name,
+            shipping_city=self.shipping_city,
+            shipping_adress=self.shipping_adress,
+        )
 
     def save(self, *args, **kwargs):
         self.generate(8)

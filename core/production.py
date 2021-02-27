@@ -11,7 +11,8 @@ ALLOWED_HOSTS = [
 
 # Parse database configuration from $DATABASE_URL
 # Change 'default' database configuration with
-# $DATABASE_URL. __unstainc@@
+# $DATABASE_URL. pwd=__unstainc@@ bdd=c1581337c_laregina_deals_db
+# username=c1581337c_unsta_dev
 
 DATABASES['default'].update(
     dj_database_url.config(

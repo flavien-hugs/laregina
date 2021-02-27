@@ -35,8 +35,8 @@ loaddata:
 	$(MANAGE) loaddata __backups__/category_data.json
 	$(MANAGE) loaddata __backups__/product_data.json
 
-test:
-	$(MANAGE) test $(TEST_SETTINGS)
+test-deploy:
+	$(MANAGE) test check --deploy
 
 install-project:
 	pip install -r requirements.txt

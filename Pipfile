@@ -26,6 +26,7 @@ pillow = "*"
 django-admin-thumbnails = "*"
 mailchimp = "*"
 mysqlclient = "*"
+xhtml2pdf = "*"
 
 [requires]
 python_version = "3.8"

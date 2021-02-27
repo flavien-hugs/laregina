@@ -3,6 +3,10 @@
 
 
 {% block content %}
+	{% url 'order_tracking' as order_tracking %}
+	{% url 'catalogue:product_list' as product_list %}
+	{% url 'download_invoice' object.id as print_invoice %}
+
 	{% include "includes/partials/_partials_breadcrumb.html" %}
 
 	<section class="ps-section--account ps-checkout">
@@ -10,18 +14,17 @@
 			<div class="row justify-content-center">
 				<div class="col-lg-8">
 					<div class="ps-section__header">
-						{{ order }}
-						<h3>N° commande {{ object.get_order_id }}</h3>
+						<h4>Commande validée ! &smid; N° commande {{ object.get_order_id }}</h4>
 
-						<div class="ps-block--payment-method py-3 pb-3">
+						<div class="ps-block--payment-method mb-0">
 							<span class='font-weight-bold'>
-								Veuillez garder ce numéro ({{ object.get_order_id  }})
-									pour le retrait de votre commande.
+								NB: Veuillez garder ce numéro ({{ object.transaction_id  }}) 
+								pour le retrait de votre commande.
 							</span>
 						</div>
 					</div>
 
-					<div class="ps-section__content">
+					<div class="ps-section__content card p-4">
 						<div class="row">
 							<div class="col-md-4 col-12">
 								<figure class="ps-block--invoice">
@@ -29,13 +32,14 @@
 									<div class="ps-block__content">
 										<strong>{{ object.get_full_name|upper }}</strong>
 										<p>
-											<strong>Adresse</strong>:
-											{{ object.get_shipping_delivery }}
+											<strong>Email:</strong>:
+											{{ object.email }}
 										</p>
 										<p><strong>Téléphone</strong>: {{ object.phone }}</p>
 									</div>
 								</figure>
 							</div>
+
 							<div class="col-md-4 col-12">
 								<figure class="ps-block--invoice">
 									<figcaption>Adresse de livraison</figcaption>
@@ -44,6 +48,7 @@
 									</div>
 								</figure>
 							</div>
+
 							<div class="col-md-4 col-12">
 								<figure class="ps-block--invoice">
 									<figcaption>Paiement</figcaption>
@@ -62,17 +67,31 @@
 						</div>
 					</div>
 
-					<div class="ps-section__footer pt-5">
+                    <p class="text-muted py-3">
+                    	<span>Votre commande vous sera livrée dans 07 jours maximum.</span>
+                    	<span>Merci pour votre commande. Veuillez cliquer
+                        <a class="text-primary font-weight-bold" href="{{ tracking_order }}"><u>ICI</u></a>
+                    	pour vérifier l'état de votre commande.</span>
+                    </p>
+
+                    <div class="ps-section__footer mt-3">
 						<div class="row">
-							<div class="col-6">
-								<a class="ps-btn ps-btn--sm text-uppercase"
-								href="{% url 'catalogue:product_list' %}">continuer vos achats</a>
+							<div class="col-4 float-left">
+								<a class="ps-btn ps-btn--sm text-uppercase font-weight-normal"
+								href="{{ product_list }}">Continuer vos achats
+								<i class="icon-arrow-right"></i></a>
 							</div>
 
-							<div class="col-6">
-								<a class="ps-btn ps-btn--sm ps-btn--gray text-uppercase"
-								href="{% url 'checkout:order_success' %}">
-								finaliser votre commande</a>
+							<div class="col-4">
+								<a class="btn ps-btn--sm text-uppercase font-weight-normal"
+								href="{{ print_invoice }}"><i class="icon-printer"></i>
+								Imprimer le réçu.</a>
+							</div>
+
+							<div class="col-4 float-right">
+								<a class="ps-btn ps-btn--sm text-uppercase font-weight-normal"
+								href="{{ order_tracking }}">
+								suivre votre commande</a>
 							</div>
 						</div>
 					</div>

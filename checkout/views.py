@@ -1,8 +1,11 @@
 # checkout.views.py
 
+from django.template import Context
+from django.http import HttpResponse
 from django.http import HttpResponseRedirect
 from django.urls import reverse, reverse_lazy
 from django.shortcuts import redirect, render
+from django.template.loader import get_template
 from django.views.generic import DetailView, ListView
 
 from cart import cart
@@ -10,6 +13,9 @@ from core import settings
 from checkout import checkout
 from checkout.forms import CheckoutForm
 from checkout.models import Order, OrderItem
+
+import io
+from xhtml2pdf import pisa
 
 
 def show_checkout(request, template='checkout/checkout.html'):
@@ -88,6 +94,35 @@ def order_succes_view(request, template='checkout/checkout_success.html'):
     }
 
     return render(request, template, context)
+
+
+def render_to_pdf(template_src, context_dict):
+    template = get_template(template_src)
+    template_src = Context({'pagesize': 'A4'})
+    html  = template.render(context_dict)
+
+    result = io.BytesIO()
+    pdf = pisa.pisaDocument(io.BytesIO(html.encode("UTF-8")), result)
+    if not pdf.err:
+        response = HttpResponse(result.getvalue(), content_type='application/pdf',)
+        response['Content-Disposition'] = 'attachment; filename="facture.pdf"'
+        return response
+    else:
+        return HttpResponse("Erreur lors du rendu de la facture.", status=400)
+
+
+def download_invoice_view(request, order_id):
+    order = Order.objects.get(id=order_id)
+    order_item = OrderItem.objects.filter(order=order)
+    mydict = {
+        'object_date': order.date,
+        'order_total': order.total,
+        'object_id': order.transaction_id,
+        'get_full_name': order.get_full_name,
+        'get_shipping_delivery': order.get_shipping_delivery,
+        'order_item': order_item,
+    }
+    return render_to_pdf('checkout/snippet/_partials_order_invoice.html', mydict)
 
 
 class TrackOrderView(ListView):

@@ -46,9 +46,6 @@ class OrderAdmin(admin.ModelAdmin):
         'total', 'date',
         'status',
     ]
-    list_editable = (
-        "status",
-    )
     list_filter = [
         'status',
         'date',
@@ -85,5 +82,28 @@ class OrderAdmin(admin.ModelAdmin):
     )
     list_per_page = 5
     inlines = [OrderItemStackedInline,]
-    actions = [export_to_csv]
+    actions = [
+        export_to_csv,
+        'make_submitted',
+        'make_shipped',
+        'make_cancelled',
+        'make_processed'
+    ]
     search_fields = ['created_at', 'transaction_id']
+
+
+    def make_submitted(self, request, queryset):
+        queryset.update(status='SUBMITTED')
+    make_submitted.short_description = 'Marquer comme en cours de traitement'
+
+    def make_shipped(self, request, queryset):
+        queryset.update(status='SHIPPED')
+    make_shipped.short_description = 'Marquer comme livrée'
+
+    def make_cancelled(self, request, queryset):
+        queryset.update(status='CANCELLED')
+    make_cancelled.short_description = 'Marquer comme annulée'
+
+    def make_processed(self, request, queryset):
+        queryset.update(status='PROCESSED')
+    make_processed.short_description = 'Marquer comme en cours de livraison'

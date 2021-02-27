@@ -128,7 +128,6 @@ class ProductCreateView(ProductEditMixin, CashTotalSeller, CreateView):
         return HttpResponseRedirect(self.get_success_url())
 
     def get_context_data(self, **kwargs):
-        kwargs['total_sale'] = self.get_total_sale()
         if self.request.POST:
             kwargs['image_formset'] = ProductCreateFormSet(self.request.POST, self.request.FILES)
         else:

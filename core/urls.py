@@ -15,10 +15,12 @@ from django.views.generic import TemplateView
 
 from analytics import utils
 from search.views import SearchView
-from checkout.views import TrackOrderView
 from accounts.views import customer, seller
+from checkout.views import TrackOrderView, download_invoice_view
+
 
 admin.autodiscover()
+
 
 def handler404(request, exception, template_name='404.html'):
     return render(request, template_name=template_name, status=404,
@@ -42,9 +44,9 @@ urlpatterns = [
     path('avis/', include('reviews.urls', namespace='reviews')),
     path('panier/', include('cart.urls', namespace='cart')),
     path('checkout/', include('checkout.urls', namespace='checkout')),
-    path('tracking/order/', TrackOrderView.as_view(
-        extra_context={'page_title': 'Suivi votre commande',}
-    ), name='order_tracking'),
+    path('tracking/order/', TrackOrderView.as_view(extra_context={
+        'page_title': 'Suivi votre commande',}), name='order_tracking'),
+    path('print-invoice/<int:order_id>/', download_invoice_view, name='download_invoice'),
     path('accounts/signup/customer/', customer.CustomerSignUpView.as_view(), name='customer_signup'),
     path('sp-', include("pages.urls", namespace='pages')),
     path('accounts/', include('allauth.urls')),
