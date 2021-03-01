@@ -30,12 +30,6 @@ AUTH_USER_MODEL = 'accounts.User'
 # site ID for allauth
 SITE_ID = 1
 
-ADMINS = (
-    #(, )
-)
-
-MANAGERS = ADMINS
-
 # DJANGO-ADMIN CONFIGURATION
 # Location of root django.contrib.admin URL
 ADMIN_URL = 'lrg-admin/'
@@ -162,8 +156,6 @@ CACHE_TIMEOUT = 60 * 60
 ENABLE_SSL = False
 
 MIDDLEWARE = [
-    'django.middleware.cache.UpdateCacheMiddleware',
-    
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -174,8 +166,6 @@ MIDDLEWARE = [
     'django.middleware.locale.LocaleMiddleware',
     'django.middleware.http.ConditionalGetMiddleware',
     'django.middleware.common.CommonMiddleware',
-
-    'django.middleware.cache.FetchFromCacheMiddleware',
 ]
 
 ROOT_URLCONF = 'core.urls'
@@ -310,71 +300,10 @@ MPTT_ADMIN_LEVEL_INDENT = 20
 # https://django-redis-cache.readthedocs.io/en/latest/intro_quick_start.html
 # https://pypi.org/project/django-redis/
 
-# import lzma
-
-# CACHES = {
-#     "default": {
-#         "BACKEND": "django_redis.cache.RedisCache",
-#         "LOCATION": "redis://127.0.0.1:6379/1",
-#         "OPTIONS": {
-#             'PICKLE_VERSION': -1,
-#             'PASSWORD': config('REDIS_PASSWORD'),
-#             "COMPRESSOR": "django_redis.compressors.lzma.LzmaCompressor",
-#             "CLIENT_CLASS": "django_redis.client.DefaultClient",
-#             'COMPRESSOR_CLASS_KWARGS': {'level': 5,},
-#             "SOCKET_CONNECT_TIMEOUT" : 5 ,
-#             "SOCKET_TIMEOUT" : 5 ,
-#         },
-
-#         "KEY_PREFIX": "caching"
-#     }
-# }
-
-CACHES = {
-    'default': {
-        'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
-        'LOCATION': 'unique-snowflake',
-    }
-}
-
 # Cache time to live is 15 minutes.
 CACHE_TTL = 60 * 15
+CACHE_TIMEOUT = 60 * 60
 DJANGO_REDIS_IGNORE_EXCEPTIONS = True
-
-# LOGGING = {
-#     'version': 1,
-#     'disable_existing_loggers': False,
-#     "handlers": {
-#         "file": {
-#             "level": "INFO",
-#             "class": "logging.handlers.TimedRotatingFileHandler",
-#             "filename": BASE_DIR / "logs/debug.log",
-#             "when": "D",
-#             "interval": 1,
-#             "backupCount": 100,
-#         }
-#     },
-
-#     'loggers': {
-#         "django": {
-#             "handlers": ["file"],
-#             "level": "INFO",
-#             "propagate": True
-#         },
-
-#         "project": {
-#             "handlers": ["file"],
-#             "level": "INFO",
-#             "propagate": True
-#         },
-
-#         "": {
-#             "handlers": ["file"],
-#             "level": "INFO",
-#             "propagate": True
-#         },
-#     },
-# }
 
 
 # phonenumber config

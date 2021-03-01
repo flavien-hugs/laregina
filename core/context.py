@@ -31,3 +31,12 @@ def cart_items(request):
     return {
         'cart_items': get_cart_items(request)
     }
+
+
+# CSRF_FAILURE_VIEW
+def csrf_failure(request, reason=""):
+    ctx = {
+        'message': 'Oops veuillez actualiser votre page, votre session est expirée.'
+    }
+    template = 'includes/partials/403_csrf.html'
+    return render_to_reponse(request, template, ctx)
