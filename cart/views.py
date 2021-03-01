@@ -3,6 +3,7 @@
 from django.contrib import messages
 from django.shortcuts import render
 from django.http import HttpResponseRedirect
+from django.views.decorators.csrf import csrf_exempt
 
 from cart import cart
 from core import settings
@@ -11,6 +12,7 @@ from checkout import checkout
 from analytics.utils import get_recently_viewed, recommended_from_views
 
 
+@csrf_exempt
 def shopcart(request, template="cart/cart.html"):
 
     if request.method == 'POST':

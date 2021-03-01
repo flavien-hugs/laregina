@@ -1,12 +1,11 @@
 # pages.views.py
 
 from django.contrib import messages
+from django.http import JsonResponse
+from django.views.generic import View
 from django.shortcuts import render, redirect
-from django.http import HttpResponse, JsonResponse
-from django.views.generic import View, CreateView, TemplateView
 
 from pages.forms import ContactForm
-from core.utils import SendSubscribeMail
 
 
 class ContactView(View):

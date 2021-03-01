@@ -10,7 +10,7 @@
             <div class="ps-section--shopping ps-shopping-cart py-5">
                 {% if cart_items %}
 
-                    <h3>Panier ({% cart_items request %})</h3>
+                    <h3>Panier ({% cart_items_count request %})</h3>
 
                     <div class="ps-section__content">
                         <div class="table-responsive">
@@ -31,13 +31,13 @@
                                             <td data-label="Produit">
                                                 <div class="ps-product--cart">
                                                     <div class="ps-product__thumbnail">
-                                                        <a href="{{ object.get_absolute_url }}">
+                                                        <a href="{{ object.product.get_absolute_url }}">
                                                             <img src="{{ object.product.get_image_url }}" alt="{{ object.product.name }}">
                                                         </a>
                                                     </div>
                                                     <div class="ps-product__content">
                                                         <a href="{{ object.get_absolute_url }}">
-                                                            {{ object.name|safe }}
+                                                            {{ object.product.name|safe }}
                                                         </a>
                                                         {% if object.product.user.store %}   
                                                             <p>Vendu par: <strong>

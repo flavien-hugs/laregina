@@ -8,6 +8,7 @@ from django.contrib import messages
 from django.core.cache import cache
 from django.views.generic import ListView
 from django.utils.safestring import mark_safe
+from django.views.decorators.csrf import csrf_exempt
 from django.shortcuts import render, get_object_or_404
 from django.http import HttpResponseRedirect, HttpResponse
 
@@ -54,6 +55,7 @@ class ProductListView(FilterMixin, ListView):
         return qs
 
 
+@csrf_exempt
 def show_product(request, slug, template="catalogue/product_detail.html"):
     
     """
@@ -133,6 +135,7 @@ def show_product(request, slug, template="catalogue/product_detail.html"):
     return render(request, template, context)
 
 
+@csrf_exempt
 def addRreview(request, slug):
     
     """

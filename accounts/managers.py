@@ -10,7 +10,7 @@ class UserManager(BaseUserManager):
 
     # use_in_migrations = True
 
-    def _create_user(self, email, password, is_buyer, **extra_fields):
+    def _create_user(self, email, password, is_seller, **extra_fields):
         
         """Créer et enregistrer un utilisateur avec l'adresse électronique et le mot de passe donnés"""
 
@@ -21,7 +21,7 @@ class UserManager(BaseUserManager):
         email = self.normalize_email(email)
         user = self.model(
             email=email,
-            is_buyer=is_buyer,
+            is_seller=is_seller,
             is_active=True,
             last_login=now,
             date_joined=now,
@@ -37,7 +37,7 @@ class UserManager(BaseUserManager):
         """Créez et enregistrez un utilisateur régulier avec l'adresse électronique et le mot de passe donnés."""
         extra_fields.setdefault('is_staff', False)
         extra_fields.setdefault('is_superuser', False)
-        return self._create_user(email, password, False, False, **extra_fields)
+        return self._create_user(email, password, False, **extra_fields)
 
 
     def create_superuser(self, email, password, **extra_fields):
@@ -50,4 +50,4 @@ class UserManager(BaseUserManager):
         if extra_fields.get('is_superuser') is not True:
             raise ValueError("Le super-utilisateur doit avoir is_superuser=True.")
 
-        return self._create_user(email, password, False, False, **extra_fields)
+        return self._create_user(email, password, False, **extra_fields)

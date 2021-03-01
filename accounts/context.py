@@ -1,7 +1,4 @@
-# core/context.py
-
-import os
-import sys
+# core.context.py
 
 def profile(request):
     

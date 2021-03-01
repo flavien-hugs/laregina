@@ -21,7 +21,7 @@ def currency(value):
 
 # compter le nombre d'articles dans le panier
 @register.simple_tag
-def cart_items(request):
+def cart_items_count(request):
     cart_item_count = cart.cart_distinct_item_count(request)
     return cart_item_count
 

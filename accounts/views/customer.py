@@ -3,7 +3,6 @@
 from django.urls import reverse_lazy
 from django.shortcuts import redirect
 from django.views.generic import CreateView
-from django.contrib.auth.models import Group
 
 from ..forms import CustomerSignUpForm
 from ..mixins import NextUrlMixin, RequestFormAttachMixin

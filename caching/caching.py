@@ -6,9 +6,10 @@ from core.settings import CACHE_TIMEOUT
 
 def cache_update(sender, **kwargs):
 
-    """ pour mettre à jour une instance de modèle dans le cache;
-        toute classe de modèle utilisant ce signal doit avoir une
-        propriété "cache_key" d'identification unique. 
+    """
+    pour mettre à jour une instance de modèle dans le cache;
+    toute classe de modèle utilisant ce signal doit avoir une
+    propriété "cache_key" d'identification unique. 
     """
 
     item = kwargs.get('instance')
@@ -16,9 +17,10 @@ def cache_update(sender, **kwargs):
 
 
 def cache_evict(sender, **kwargs):
-    """ pour mettre à jour une instance de modèle dans le cache;
-        toute classe de modèle utilisant ce signal doit avoir
-        une propriété "cache_key" d'identification unique. 
+    """
+    pour mettre à jour une instance de modèle dans le cache;
+    toute classe de modèle utilisant ce signal doit avoir
+    une propriété "cache_key" d'identification unique. 
     """
 
     item = kwargs.get('instance')

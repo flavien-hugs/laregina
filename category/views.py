@@ -1,6 +1,5 @@
 # category.views.py
 
-from django.db import connection
 from django.views.generic import DetailView
 
 from category.models import Category

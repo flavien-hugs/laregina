@@ -1,12 +1,12 @@
 # checkout.views.py
 
 from django.template import Context
-from django.http import HttpResponse
-from django.http import HttpResponseRedirect
+from django.shortcuts import render
+from django.views.generic import ListView
 from django.urls import reverse, reverse_lazy
-from django.shortcuts import redirect, render
 from django.template.loader import get_template
-from django.views.generic import DetailView, ListView
+from django.views.decorators.csrf import csrf_exempt
+from django.http import HttpResponse, HttpResponseRedirect
 
 from cart import cart
 from core import settings
@@ -18,6 +18,7 @@ import io
 from xhtml2pdf import pisa
 
 
+@csrf_exempt
 def show_checkout(request, template='checkout/checkout.html'):
     
     """

@@ -6,7 +6,7 @@ from datetime import datetime
 from django.urls import reverse
 from django.dispatch import receiver
 from django.utils.text import slugify
-from django.db.models import Avg, Count, Q
+from django.db.models import Avg, Count
 from django.utils.safestring import mark_safe
 
 from core import settings

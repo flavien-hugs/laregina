@@ -130,6 +130,7 @@ EMAIL_HOST = 'smtp-relay.sendinblue.com'
 EMAIL_HOST_USER = 'flavienhgs@gmail.com'
 EMAIL_HOST_PASSWORD = config('EMAIL_HOST_PASSWORD')
 SENDGRID_API_KEY = config('SENDGRID_API_KEY', default='')
+DEFAULT_FROM_EMAIL = SERVER_EMAIL = 'hello@kareeba.com'
 
 # Pour le développement, envoyer tous les courriers électroniques
 # à la console au lieu de les envoyer
@@ -151,9 +152,6 @@ CACHE_MIDDLEWARE_ALIAS = 'default'
 CACHE_MIDDLEWARE_SECONDS = 600
 CACHE_MIDDLEWARE_KEY_PREFIX = ''
 CACHE_TIMEOUT = 60 * 60
-
-# Upon deployment, change to True
-ENABLE_SSL = False
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -259,7 +257,7 @@ DEFAULT_HASHING_ALGORITHM = 'sha1'
 LANGUAGE_CODE = 'fr-fr'
 TIME_ZONE = 'UTC'
 USE_I18N = USE_L10N = USE_TZ = True
-
+DATE_INPUT_FORMATS = ('%d/%m/%Y', '%Y-%m-%d')
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.1/howto/static-files/

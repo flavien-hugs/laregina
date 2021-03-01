@@ -8,12 +8,11 @@ The `urlpatterns` list routes URLs to views. For more information
 
 from django.contrib import admin
 from django.conf import settings
+from django.shortcuts import render
 from django.urls import path, include
 from django.conf.urls.static import static
-from django.shortcuts import redirect, render
 from django.views.generic import TemplateView
 
-from analytics import utils
 from search.views import SearchView
 from accounts.views import customer, seller
 from checkout.views import TrackOrderView, download_invoice_view

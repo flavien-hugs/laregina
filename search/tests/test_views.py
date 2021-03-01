@@ -1,4 +1,4 @@
-# search.tests.py
+# search.tests.test_views.py
 
 import httplib
 from django.utils import html

@@ -28,12 +28,10 @@ migratedb:
 dumpdata:
 	$(MANAGE) dumpdata --format=json accounts.user > __backups__/users_data.json
 	$(MANAGE) dumpdata --format=json category.category > __backups__/category_data.json
-	$(MANAGE) dumpdata --format=json catalogue.product > __backups__/product_data.json
 
 loaddata:
 	$(MANAGE) loaddata __backups__/users_data.json
 	$(MANAGE) loaddata __backups__/category_data.json
-	$(MANAGE) loaddata __backups__/product_data.json
 
 test-deploy:
 	$(MANAGE) test check --deploy
