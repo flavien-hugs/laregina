@@ -1,5 +1,6 @@
 <!-- mobile cartitem list -->
 {% load static catalogue_tags %}{% get_static_prefix as STATIC_PREFIX %}
+{% url "cart:cart" as cart %}
 
 <div class="ps-panel--sidebar" id="cart-mobile">
     <div class="ps-panel__header">
@@ -35,9 +36,10 @@
                         <strong>{{ cart_subtotal }}</strong>
                     </h3>
                     <figure>
-                        <a class="ps-btn text-uppercase" href="{% url "cart:cart" %}">
+                        <a class="ps-btn text-uppercase" href="{{ cart }}">
                         voir le panier</a>
                         <form method="POST" action=".">
+                            {% csrf_token %}
                             <input type="hidden" name="submit" value="checkout">
                             <input class="ps-btn text-uppercase" type="submit" name="submit" value="checkout">
                         </form>

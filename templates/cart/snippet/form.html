@@ -3,7 +3,6 @@
 
 <form method="post" action=".">
     {% csrf_token %}
-    
     <div class="ps-product__shopping extend">
         {{ form.quantity }}
         <input value="{{ product.slug }}" id="{{ form.slug.id_for_label }}"

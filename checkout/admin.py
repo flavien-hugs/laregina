@@ -6,7 +6,6 @@ from checkout.models import Order, OrderItem
 from services.export_data_csv import export_to_csv
 
 
-
 class OrderItemStackedInline(admin.StackedInline):
     model = OrderItem
     list_display = [
@@ -43,7 +42,7 @@ class OrderAdmin(admin.ModelAdmin):
     list_display = [
         'get_order_id',
         'get_shipping_delivery',
-        'total', 'date',
+        'get_order_total', 'date',
         'status',
     ]
     list_filter = [

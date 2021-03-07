@@ -10,7 +10,7 @@
         <div class="ps-shopping-product" style="min-height:50vh!important;">
             <div class="row">
                 {% for instance in object_list %}
-                {% include "catalogue/snippet/_snippet_product.html" with instance=instance %}
+                    {% include "catalogue/snippet/_snippet_product.html" with instance=instance %}
                 {% endfor %}
             </div>
         </div>

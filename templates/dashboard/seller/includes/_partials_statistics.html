@@ -4,30 +4,26 @@
     <div class="ps-block--stat yellow">
         <div class="ps-block__left"><span><i class="icon-bag2"></i></span></div>
         <div class="ps-block__content">
-            {% with count=order_list_today.count %}
-                <h4 style="font-size:18px;">{{ count|intcomma }}
-                    commande{{ count|pluralize }} aujourd'hui
-                </h4>
-            {% endwith %}
+            <h4 style="font-size:18px;">{{ order_today_count|intcomma }}
+                commande{{ order_today_count|pluralize }} aujourd'hui
+            </h4>
         </div>
     </div>
     <div class="ps-block--stat yellow">
         <div class="ps-block__left"><span><i class="icon-bag2"></i></span></div>
         <div class="ps-block__content">
-            {% with count=order_list.count %}
-                <h4 style="font-size:18px;">{{ count|intcomma }}
-                    commande{{ count|pluralize }}
-                </h4>
-            {% endwith %}
+            <h4 style="font-size:18px;">{{ orders_count|intcomma }}
+                commande{{ orders_count|pluralize }}
+            </h4>
         </div>
     </div>
     <div class="ps-block--stat pink">
         <div class="ps-block__left"><span><i class="icon-database"></i></span></div>
         <div class="ps-block__content">
-            {% with count=product_list.count %}
-            <h4 style="font-size:18px;">{{ count|intcomma }} produit{{ count|pluralize:',s' }}
-            en vente</h4>
-            {% endwith %}
+            <h4 style="font-size:18px;">
+                {{ product_count|intcomma }} produit{{ product_count|pluralize:',s' }}
+                en vente
+            </h4>
         </div>
     </div>
 </div>

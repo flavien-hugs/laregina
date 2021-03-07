@@ -22,9 +22,8 @@ class ContactView(View):
         return render(request, self.template_name, ctx)
 
     def post(self, request, *args, **kwargs):
-        if self.request.method == "POST" and self.request.is_ajax():
-            form = self.form_class(request.POST)
+        form = ContactForm(request.POST or None)
+        if form.is_valid():
             form.save()
             messages.success(request, "Votre message a été envoyé avec success.")
-            return JsonResponse({"success":True}, status=200)
-        return JsonResponse({"success":False}, status=400)
+        return redirect('pages:contact')

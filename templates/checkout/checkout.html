@@ -143,7 +143,7 @@
                                             <figure class="ps-block__items">
                                                 {% for object in cart_items %}
                                                     <figcaption>
-                                                    <span>{{ object.name|truncatewords:"3" }}
+                                                    <span>{{ object.product.name|truncatewords:"3" }}
                                                         x {{ object.quantity }}</span>
                                                     <span>{{ object.total|intcomma }} Fr</span>
                                                     </figcaption>
@@ -194,9 +194,9 @@
                                                 type="submit" name="submit">payer à la livraison</button>
                                             </div>
 
-                                            <div class="form-group">
+                                            <!--  <div class="form-group">
                                                 {% include "includes/partials/_partials_payment.html" %}
-                                            </div>
+                                            </div> -->
                                         </div>
                                     </div>
                                 </div>

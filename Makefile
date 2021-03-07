@@ -12,10 +12,10 @@ help:
 	@echo "  make deploy - pull and deploy the update"
 	@echo "  make test - run automated tests"
 
-install-deps:
+pip-install:
 	pip install -r requirements.txt
 
-deps:
+pipenv-install:
 	pipenv install
 
 runserver:
@@ -24,6 +24,9 @@ runserver:
 migratedb:
 	$(MANAGE) makemigrations
 	$(MANAGE) migrate
+
+collectstatic:
+	$(MANAGE) collectstatic --no-input
 
 dumpdata:
 	$(MANAGE) dumpdata --format=json accounts.user > __backups__/users_data.json
@@ -34,10 +37,10 @@ loaddata:
 	$(MANAGE) loaddata __backups__/category_data.json
 
 test-deploy:
-	$(MANAGE) test check --deploy
+	$(MANAGE) check --deploy
 
 install-project:
-	pip install -r requirements.txt
+	$(MANAGE) collectstatic
 	$(MANAGE) makemigrations
 	$(MANAGE) migrate
 	$(MANAGE) loaddata __backups__/users_data.json

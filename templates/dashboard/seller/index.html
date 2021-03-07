@@ -4,6 +4,8 @@
 {% load humanize %}
 
 {% block content %}
+    {% url 'seller:order_list' as order_list_url %}
+
     <div class="ps-main__wrapper">
         <header class="header--dashboard mb-5">
             <div class="header__left">
@@ -17,7 +19,7 @@
                 <div class="ps-card">
                     {% if order_list_today %}
                         <div class="ps-card__header">
-                            <h4>Vos commandes pour aujourd'hui</h4>
+                            <h4>Vos produits commandés aujourd'hui</h4>
                         </div>
                         
                         <div class="ps-card__content mb-4">
@@ -27,20 +29,21 @@
                                         <tr>
                                             <th>#</th>
                                             <th>ID Commande</th>
-                                            <th>Nbre produit</th>
                                             <th>Total</th>
-                                            <th></th>
+                                            <th>Date</th>
                                         </tr>
                                     </thead>
                                     <tbody>
                                         {% for object in order_list_today|slice:'0:5' %}
                                             <tr>
                                                 <td>{{ forloop.counter }}</td>
-                                                <td><a class="font-weight-bold text-success"
-                                                    href="{{ object.order.get_absolute_url }}">
-                                                {{ object.order.transaction_id }}</a></td>
-                                                <td><strong>{{ order_list_today.count|intcomma }}</strong></td>
-                                                <td><strong>{{ object.total|intcomma }}Fr</strong></td>
+                                                <td>
+                                                    <a class="font-weight-bold text-success"
+                                                        href="{{ object.order.get_absolute_url }}">
+                                                    {{ object.order.transaction_id }}</a>
+                                                </td>
+                                                <td><strong>{{ object.total|intcomma }} Fr</strong></td>
+                                                <td><strong>{{ object.date_created|date }}</strong></td>
                                             </tr>
                                         {% endfor %}
                                     </tbody>
@@ -72,7 +75,6 @@
                                         <tr>
                                             <th>#</th>
                                             <th>ID Commande</th>
-                                            <th>Nbre produit</th>
                                             <th>Total</th>
                                             <th>Date</th>
                                         </tr>
@@ -83,9 +85,8 @@
                                                 <td>{{ forloop.counter }}</td>
                                                 <td><a class="font-weight-bold text-success"
                                                     href="{{ object.order.get_absolute_url }}">
-                                                {{ object.order.transaction_id|truncatewords:'4' }}</a></td>
-                                                <td><strong>{{ order_list.count|intcomma }}</strong></td>
-                                                <td><strong>{{ object.total|intcomma }} Fr</strong></td>
+                                                {{ object.order.transaction_id }}</a></td>
+                                                <td><strong>{{ object.order.total_seller|intcomma }} Fr</strong></td>
                                                 <td><strong>{{ object.date_created|date }}</strong></td>
                                             </tr>
                                         {% endfor %}
@@ -95,7 +96,7 @@
                         </div>
 
                         <div class="ps-card__footer">
-                            <a class="ps-card__morelink" href="{% url 'seller:order_list' %}">
+                            <a class="ps-card__morelink" href="{{ order_list_url }}">
                                 Afficher tous les produits commandés <i class="icon icon-chevron-right"></i>
                             </a>
                         </div>

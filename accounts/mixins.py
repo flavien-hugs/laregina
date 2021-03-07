@@ -73,17 +73,18 @@ class SellerRequiredMixin(SellerTextRequiredMixin, object):
         self.products = object_list
         return object_list
 
+    def get_products_count(self):
+        product_count = self.get_product().count()
+        return product_count
+
     def get_order_items(self):
         account = self.get_account()
-        order_item_list = OrderItem.objects.filter(product__user=account)
-        return order_item_list
+        orders_item_list = OrderItem.objects.filter(product__user=account)
+        return orders_item_list
 
-    # liste des produits dans une commande
-    # concernant un magasin
-    def get_order_item(self):
-        account = self.get_account()
-        order_item_list = OrderItem.objects.exclude(product__user=account)
-        return order_item_list
+    def get_orders_count(self):
+        orders_count = self.get_order_items().count()
+        return orders_count
 
     # cash du vendeur
     def cash_total(self):
@@ -94,16 +95,12 @@ class SellerRequiredMixin(SellerTextRequiredMixin, object):
 
     def get_cost(self):
         percent = decimal.Decimal('0.05')
-        cost = self.cash_total() * percent
-        return cost
+        cash = self.cash_total() * percent
+        return cash
 
     def cash_total_seller(self):
         total = self.cash_total() - self.get_cost()
         return total
-
-    def get_order(self):
-        order_list = Order.objects.all()
-        return order_list
 
     def get_order_today(self):
         today = datetime.date.today()
@@ -111,10 +108,9 @@ class SellerRequiredMixin(SellerTextRequiredMixin, object):
         today_max = datetime.datetime.combine(today, datetime.time.max)
         return self.get_order_items().filter(date_created__range=(today_min, today_max))
 
-    def get_today_sale(self):
-        order_sale = self.get_order_today().aggregate(Sum("price__sum"))
-        total_sale = order_sale["price__sum"]
-        return total_sale
+    def get_order_today_count(self):
+        order_today_count = self.get_order_today().count()
+        return order_today_count
 
 
 class ProductMixin(SellerRequiredMixin):

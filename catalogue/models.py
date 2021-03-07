@@ -17,7 +17,6 @@ from caching.caching import cache_update, cache_evict
 from mptt.models import TreeForeignKey
 from core.utils import upload_image_path, unique_slug_generator
 
-# user Manager
 User = settings.AUTH_USER_MODEL
 
 NULL_AND_BLANK = {'null': True, 'blank': True}
@@ -28,15 +27,10 @@ DECIMAFIELD_OPTION = {'default': 0, 'max_digits': 50, 'decimal_places': 0}
 class Product(models.Model):
     user = models.ForeignKey(
         User,
-        models.SET_NULL,
-        null=True,
-        limit_choices_to={
-            'is_staff': True,
-            'is_seller': True,
-            'is_superuser': True
-        },
+        models.CASCADE,
+        limit_choices_to={'is_seller': True,},
         verbose_name='vendeur',
-        help_text="Le magasin en charge de la vente."
+        help_text="magasin en charge de la vente."
     )
     category = TreeForeignKey(
         Category,

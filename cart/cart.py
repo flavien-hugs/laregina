@@ -41,15 +41,14 @@ def _generate_cart_id():
     """
 
     cart_id = ''
-    characters = '1234567890'
+    characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz1234567890!@#$%^&*()'
     cart_id_length = 50
-    for cart_id in range(cart_id_length):
-        cart_id = characters[random.randint(0, len(characters)-1)]
+    for y in range(cart_id_length):
+        cart_id += characters[random.randint(0, len(characters)-1)]
     return cart_id
 
 
 def get_cart_items(request):
-
     """
     restituer tous les objets du chariot de l'utilisateur actuel
     """
@@ -62,7 +61,6 @@ def add_to_cart(request):
     fonction qui prend une demande de POST
     et ajoute une instance de produit au panier du client actuel
     """
-
     postdata = request.POST.copy()
 
     # obtenir l'url du produit à partir des données POST,
@@ -88,11 +86,11 @@ def add_to_cart(request):
 
     if not product_in_cart:
         # créer et enregistrer un nouvel article dans le panier
-        cartitem = CartItem()
-        cartitem.product = p
-        cartitem.quantity = quantity
-        cartitem.cart_id = _cart_id(request)
-        cartitem.save()
+        ci = CartItem()
+        ci.product = p
+        ci.quantity = quantity
+        ci.cart_id = _cart_id(request)
+        ci.save()
 
         
 def get_single_item(request, item_id):

@@ -43,21 +43,23 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    {% for object in order_items_list %}
+                                    {% for object in object.order_items %}
                                         <tr>
                                             <td>{{ object.get_product_name }}</td>
                                             <td>{{ object.quantity }}</td>
-                                            <td>{{ object.product.price|intcomma}}Fr</td>
-                                            <td>{{ object.total|intcomma }}Fr</td>
+                                            <td>{{ object.get_product_price }}</td>
+                                            <td>{{ object.total|intcomma }} Fr</td>
                                         </tr>
                                     {% endfor %}
+
                                     <tr>
                                         <td colspan="3"><strong>Commission {{ title }}:</strong></td>
-                                        <td><strong>5% (- {{ cost|intcomma }} Fr)</strong></td>
+                                        <td><strong>5% (-{{ object.get_cost|intcomma }})</strong></td>
                                     </tr>
+
                                     <tr>
                                         <td colspan="3"><strong>Total:</strong></td>
-                                        <td><strong>{{ cash_total_seller|intcomma }} Fr</strong></td>
+                                        <td><strong>{{ object.total_order|intcomma }} Fr</strong></td>
                                     </tr>
                                 </tbody>
                             </table>

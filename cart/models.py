@@ -21,7 +21,7 @@ class CartItem(models.Model):
         unique=False
     )
     quantity = models.PositiveIntegerField(verbose_name='quantité', default=1)
-    created_at = models.DateTimeField(verbose_name='date d\'ajout', auto_now=True)
+    created_at = models.DateTimeField(verbose_name='date d\'ajout', auto_now_add=True)
     updated_at = models.DateTimeField(
         verbose_name='date de mise à jour',
         auto_now_add=False,

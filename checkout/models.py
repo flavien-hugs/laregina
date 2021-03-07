@@ -131,9 +131,7 @@ class Order(BaseOrderInfo):
     get_order_id.short_description='N° commande'
 
     def get_short_name(self):
-        return '{first_name}'.format(
-            first_name=self.shipping_first_name
-        )
+        return '{first_name}'.format(first_name=self.shipping_first_name)
     get_short_name.short_description='Nom'
 
     def get_full_name(self):
@@ -174,38 +172,33 @@ class Order(BaseOrderInfo):
         order_items = OrderItem.objects.filter(order=self)
         return order_items
 
-    @property
-    def total(self):
+    # admin: commande total
+    def get_order_total(self):
         total = decimal.Decimal('0')
         for item in self.order_items():
             total += item.total
-        return total + 1500
+        total = total + 1500
+        return total
+    get_order_total.short_description='Total commande'
 
     # cash du vendeur
-    @property
-    def total_seller(self):
-        total = decimal.Decimal('0')
-        for item in self.order_items():
-            total += item.total
-        return total
-
-    # cout de la commande pour le vendeur
-    # sans les frais
     def total_seller_order(self):
-        fee =  1500
-        total = self.total_seller - fee
-        return total
+        total_se_ = self.get_order_total() - 1500
+        return total_se_
+    total_seller_order.short_description='Total'
 
     # calcul de la commission
     def get_cost(self):
         percent = decimal.Decimal('0.05')
         cost = self.total_seller_order() * percent
         return cost
+    get_cost.short_description='Commission'
 
     # cout total apres commission
     def total_order(self):
-        total = self.total_seller_order() - self.get_cost()
-        return total
+        total_or_ = self.total_seller_order() - self.get_cost()
+        return total_or_
+    total_order.short_description='Coût total'
 
     # cash apres commission
     def get_total_sales(self):
@@ -214,6 +207,7 @@ class Order(BaseOrderInfo):
         for item in orders:
             total += item.total_order()
         return total
+    get_total_sales.short_description='Cash total'
     
     def get_absolute_url(self):
         return reverse('seller:order_detail', kwargs={'pk': int(self.id)})
@@ -268,7 +262,7 @@ class OrderItem(models.Model):
         return self.quantity * self.product.price
 
     def get_product_price(self):
-        return '{product_price} Fr'.format(product_price=str(self.product.price))
+        return '{product_price}'.format(product_price=str(self.product.price))
     get_product_price.short_description='prix unitaire'
 
     def get_product_name(self):
@@ -287,11 +281,6 @@ class OrderItem(models.Model):
 
     def get_absolute_url(self):
         return self.product.get_absolute_url()
-
-    # cout total apres commission
-    def total_order(self):
-        total = self.order.total_seller_order() - self.order.get_cost()
-        return total
 
 
 from django.dispatch import receiver

@@ -15,6 +15,8 @@ from analytics.utils import get_recently_viewed, recommended_from_views
 @csrf_exempt
 def shopcart(request, template="cart/cart.html"):
 
+    request.session.set_expiry(12000)
+
     if request.method == 'POST':
         postdata = request.POST.copy()
 

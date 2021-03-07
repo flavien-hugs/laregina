@@ -3,6 +3,7 @@
 from django.db import transaction
 from django.contrib import messages
 from django.http import HttpResponseRedirect
+from django.contrib.auth import get_user_model
 from django.urls import reverse, reverse_lazy
 from django.shortcuts import get_object_or_404
 from django.views.generic import (
@@ -17,7 +18,8 @@ from catalogue.models import Product
 from checkout.models import Order, OrderItem
 from catalogue.forms import ProductAdminForm, ProductCreateFormSet
 
-from ..models import User
+User = get_user_model()
+
 from ..forms import MarketSignupForm, StoreUpdateForm
 from ..mixins import SellerRequiredMixin, ProductEditMixin
 
@@ -25,12 +27,16 @@ from ..mixins import SellerRequiredMixin, ProductEditMixin
 class CashTotalSeller(object):
 
     def get_context_data(self, *args, **kwargs):
+        # kwargs['cost'] = self.get_cost()
+        kwargs['orders_count'] = self.get_orders_count()
+        kwargs['order_list_today'] = self.get_order_today()
+        kwargs['order_today_count'] = self.get_order_today_count()
+        kwargs['product_count'] = self.get_products_count()
         kwargs['cash_total_seller'] = self.cash_total_seller()
-        kwargs['cost'] = self.get_cost()
         return super().get_context_data(*args, **kwargs)
 
 
-class ProfileDetailView(SellerRequiredMixin, CashTotalSeller, DetailView):
+class DashboardView(SellerRequiredMixin, CashTotalSeller, DetailView):
     model = User
     template_name = 'dashboard/seller/index.html'
 
@@ -39,7 +45,6 @@ class ProfileDetailView(SellerRequiredMixin, CashTotalSeller, DetailView):
 
     def get_context_data(self, *args, **kwargs):
         kwargs['page_title'] = self.object.store
-        kwargs['order_list_today'] = self.get_order_today()
         kwargs['order_list'] = self.get_order_items()
         kwargs['product_list'] = self.get_product()
         return super().get_context_data(*args, **kwargs)
@@ -62,7 +67,6 @@ class StoreDetailView(DetailView):
 
 # update a profile.
 class SettingsUpdateView(SellerRequiredMixin, CashTotalSeller, UpdateView):
-    model = User
     form_class = StoreUpdateForm
     template_name = 'dashboard/seller/includes/_partials_settings_store.html'
     success_url = reverse_lazy('seller:profile')
@@ -96,7 +100,6 @@ class OrderDetailView(SellerRequiredMixin, CashTotalSeller, DetailView):
     def get_context_data(self, **kwargs):
         kwargs['page_title'] = 'Commande N°: {transaction_id}'.format(
             transaction_id=self.object.transaction_id)
-        kwargs['order_items_list'] = self.get_order_items()
         return super().get_context_data(**kwargs)
 
 

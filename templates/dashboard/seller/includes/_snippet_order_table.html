@@ -6,8 +6,7 @@
     		#{{ object.order.transaction_id }}
     	</a>
     </td>
-    <td>{{ object_list.count|intcomma }} </td>
-    <td>{{ cash_total_seller|intcomma }} Fr</td>
+    <td>{{ object.order.total_order|intcomma }} Fr</td>
 	<td>{{ object.order.created_at|date }}</td>
 	<td>{{ object.order.status }}</td>
 </tr>

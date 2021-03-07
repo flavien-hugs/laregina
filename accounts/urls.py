@@ -14,7 +14,7 @@ urlpatterns = [
     ], 'accounts'), namespace='customer')),
 
     path('seller/', include(([
-        path('dashboard/', seller.ProfileDetailView.as_view(
+        path('dashboard/', seller.DashboardView.as_view(
             extra_context={'page_description': "Tableau de bord"}
         ), name='profile'),
 

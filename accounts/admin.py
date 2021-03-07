@@ -4,13 +4,12 @@ from django.contrib import admin
 from django.contrib.auth.models import Group
 from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
 
-from accounts.models import User, Customer
+from accounts.models import User, GuestCustomer
 from services.export_data_csv import export_to_csv
 from accounts.forms import MarketSignupForm, MarketChangeForm
 
 admin.site.site_header = "Laregina"
 admin.site.site_title = "Laregina"
-admin.site.index_title = "Espace d'Administration Laregina"
 
 admin.site.unregister(Group)
 
@@ -75,3 +74,5 @@ class UserAdmin(BaseUserAdmin):
     search_fields = ('email', 'user', 'store',)
     ordering = ('date_joined',)
     actions = [export_to_csv]
+
+admin.site.register(GuestCustomer)

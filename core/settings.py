@@ -56,6 +56,7 @@ INSTALLED_APPS = [
 ]
 
 OTHERS_APPS = [
+
     'crispy_forms',
 
     'allauth',
@@ -138,19 +139,9 @@ EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 
 # https://docs.djangoproject.com/fr/3.0/ref/settings/
 # Let's Encrypt ssl/tls https
-SECURE_FRAME_DENY = True
+
 CSRF_COOKIE_SECURE = True
-
-SESSION_COOKIE_DAYS = 90
 SESSION_COOKIE_SECURE = True
-SESSION_COOKIE_NAME = '__cks__'
-SESSION_EXPIRE_AT_BROWSER_CLOSE = False
-SESSION_COOKIE_AGE = 60 * 60 * 24 * SESSION_COOKIE_DAYS 
-SESSION_ENGINE = "django.contrib.sessions.backends.cache"
-
-CACHE_MIDDLEWARE_ALIAS = 'default'
-CACHE_MIDDLEWARE_SECONDS = 600
-CACHE_MIDDLEWARE_KEY_PREFIX = ''
 CACHE_TIMEOUT = 60 * 60
 
 MIDDLEWARE = [
@@ -196,6 +187,8 @@ TEMPLATES = [
     },
 ]
 
+# Configuration django-jet
+# https://jet.readthedocs.io/en/latest/config_file.html
 
 # See: http://django-crispy-forms.readthedocs.io/en/latest/install.html#template-packs
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
@@ -214,7 +207,6 @@ DATABASES = {
         'PASSWORD': config('DATABASE_PASSWORD'),
         'HOST': config('DATABASE_HOST', cast=str),
         'PORT': config('DATABASE_PORT', cast=int),
-        'ATOMIC_REQUESTS': True,
         'OPTIONS': {
             "init_command": "SET sql_mode='STRICT_TRANS_TABLES'",
         }

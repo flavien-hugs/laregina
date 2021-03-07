@@ -28,7 +28,7 @@
                             </div>
                             <p class="ps-product__price sale">
                                 {{ instance.price }}
-                                {% if instance.old_price %}<del>{{ instance.old_price }}</del>
+                                    {% if instance.old_price %}<del>{{ instance.old_price }}</del>
                                 {% endif %}
                             </p>
                         </div>
@@ -37,7 +37,10 @@
                             <a class="ps-product__title" href="{{ instance.get_absolute_url }}">{{ instance.name|truncatewords:"10"|safe }}</a>
 
                             <p class="ps-product__price sale">{{ instance.price }}
-                                {% if instance.old_price %}<del>{{ instance.old_price }} </del>{% endif %}</p>
+                                {% if instance.old_price %}
+                                    <del>{{ instance.old_price }} </del>
+                                {% endif %}
+                            </p>
                         </div>
                     </div>
                 </div>

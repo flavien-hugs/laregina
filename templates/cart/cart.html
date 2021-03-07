@@ -4,6 +4,7 @@
 
 {% block content %}
     {% include "includes/partials/_partials_breadcrumb.html" %}
+    {% url "catalogue:product_list" as product_list %}
 
     <section class="container">
         <div class="ps-page__container">
@@ -95,7 +96,7 @@
 
                         <div class="ps-section__cart-actions">
                             <!-- poursuivre ces commandes : liste des produits -->
-                            <a href="{% url "catalogue:product_list" %}" class="ps-btn ps-btn--outline text-uppercase">
+                            <a href="{{ product_list }}" class="ps-btn ps-btn--outline text-uppercase">
                                 Poursuivre vos achats <i class="icon-arrow-right"></i>
                             </a>
 
@@ -107,89 +108,11 @@
                             </form>
                         </div>
                     </div>
-
-                    <!--  <div class="ps-section__footer">
-                        <div class="row">
-                            <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 col-12 ">
-                                <figure>
-                                    <figcaption>Remise de coupon</figcaption>
-                                    <div class="form-group">
-                                        <input class="form-control" type="text" placeholder="Entrer le code promo">
-                                    </div>
-                                    
-                                    <div class="form-group">
-                                        <button class="ps-btn ps-btn--outline">Appliquer le coupon</button>
-                                    </div>
-                                </figure>
-                            </div>
-
-                            <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 col-12 ">
-                                <figure>
-                                    <figcaption>Calculer Frais de livraison</figcaption>
-                                    <div class="form-group">
-                                        <select class="ps-select">
-                                            <option value="1">Burkina</option>
-                                            <option value="2">Mali</option>
-                                            <option value="3">Ghana</option>
-                                        </select>
-                                    </div>
-
-                                    <div class="form-group">
-                                        <input class="form-control" type="text" placeholder="Ville">
-                                    </div>
-
-                                    <div class="form-group">
-                                        <input class="form-control" type="text" placeholder="Quartier">
-                                    </div>
-
-                                    <div class="form-group">
-                                        <button class="ps-btn ps-btn--outline">Mettre à jour</button>
-                                    </div>
-                                </figure>
-                            </div>
-
-                            <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 col-12 ">
-                                <div class="ps-block--shopping-total">
-                                    <div class="ps-block__header">
-                                        <p>Sous-total <span> {{ cart_subtotal }}</span></p>
-                                    </div>
-                                    
-                                    <div class="ps-block__content">
-                                        <ul class="ps-block__product">
-                                            {% for object in cart_items %}
-                                                <li>
-                                                    <span class="ps-block__shop">Vendu par :
-                                                        <strong>
-                                                        {{ object.product.user.store }}</strong>
-                                                    
-                                                        <a href="{{ object.get_absolute_url }}">
-                                                        {{ object.name|truncatewords:'4' }} × {{ object.quantity }}</a>
-                                                    </span>
-                                                </li>
-                                            {% endfor %}
-                                        </ul>
-                                        <h3>Total <span>{{ cart_subtotal }}</span></h3>
-                                    </div>
-                                </div>
-
-                                <form method="POST" action=".">
-                                    {% csrf_token %}
-                                    <button class="ps-btn ps-btn--fullwidth text-uppercase" type="submit" name="submit" value="checkout">
-                                    passer à la commande</button>
-                                </form>
-                            </div>
-                        </div>
-                    </div>-->
                 {% else %}
                     {% include "cart/empty_cart.html" %}
                 {% endif %}
             </div>
         </div>
-
-        <!-- afficher liste des articles recommandés
-        {% if recommended_product and not cart_items %}
-            {% product_list recommended_product 'Les clients ayant acheté cet article ont également acheté' %}
-        {% endif %} -->
         {% if recently_viewed and not cart_items %}
             {% product_list recently_viewed 'Produits récemment vus' %}
         {% endif %}

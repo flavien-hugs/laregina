@@ -2,15 +2,14 @@
 
 from django import forms
 from django.db import transaction
-from django.contrib.auth.models import Group
 from django.contrib.auth import get_user_model
 from django.contrib.auth.forms import UserCreationForm, UserChangeForm
 
-from accounts.models import Customer
+from accounts.models import GuestCustomer
 
 from crispy_forms import bootstrap, layout
 from crispy_forms.helper import FormHelper
-from allauth.account.forms import SignupForm, LoginForm
+from allauth.account.forms import LoginForm
 
 from django_countries.fields import CountryField
 from django_countries.widgets import CountrySelectWidget
@@ -43,19 +42,6 @@ class LoginForm(LoginForm):
                 ),
             ),
         )
-
-    def clean_email(self):
-        email = self.cleaned_data.get('email')
-        email_base, provider = email.split("@")
-        domain, extension = provider.split('.')
-        return email
-
-    def form_valid(self, form):
-        user = form.save()
-        if self.request.user.is_authenticated:
-            if self.request.user.is_buyer:
-                login(self.request, user)
-            return redirect('catalogue:product_list')
 
 
 class MarketSignupForm(UserCreationForm):
@@ -188,6 +174,10 @@ class MarketSignupForm(UserCreationForm):
 
 class CustomerSignUpForm(forms.ModelForm):
 
+    class Meta:
+        model = GuestCustomer
+        fields = ['email',]
+
     def __init__(self, request, *args, **kwargs):
         self.request = request
         super().__init__(*args, **kwargs)
@@ -197,15 +187,11 @@ class CustomerSignUpForm(forms.ModelForm):
             bootstrap.PrependedText('email', '', placeholder="Entrez votre adresse email"),
             bootstrap.FormActions(
                 layout.Submit(
-                    'submit', 'Créer mon compte',
+                    'submit', "Continuer en tant qu'invité",
                     css_class='mt-4 ps-btn btn-block text-uppercase border-0'
                 ),
             ),
         )
-
-    class Meta:
-        model = Customer
-        fields = ['email',]
 
     def clean(self):
         cleaned_data = super().clean()

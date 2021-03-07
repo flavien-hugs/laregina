@@ -8,19 +8,9 @@
 
         <h3 class="font-weight-bold">Votre panier est vide !</h3>
 
-        {% if not request.user.is_authenticated %}
-            <p class="py-4 h3">
-                Vous avez déjà un compte ?
-                <a href="{% url "account_login" %}?next={{ request.path }}">
-                    <span class="text-primary">Connectez-vous</span>
-                </a>
-                pour voir les articles dans votre panier.
-            </p>
-        {% else %}
-            <p class="py-4 h3">Explorez nos catégories et découvrez nos meilleures offres !</p>
-        {% endif %}
+        <p class="py-4 h3">Explorez nos catégories et découvrez nos meilleures offres !</p>
 
-        <a href="{% url "catalogue:product_list" %}" class="ps-btn">
+        <a href="{{ product_list }}" class="ps-btn">
             <span class="text-uppercase font-weight-bold py-2">
                 commencer vos achats <i class="icon-arrow-right"></i>
             </span>

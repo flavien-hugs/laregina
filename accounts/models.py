@@ -84,6 +84,10 @@ class User(BaseOrderInfo, AbstractBaseUser, PermissionsMixin):
         max_length=250,
         **NULL_AND_BLANK
     )
+    is_seller = models.BooleanField(
+        default=False,
+        verbose_name='statut vendeur',
+    )
     is_staff = models.BooleanField(
         verbose_name='statut équipe',
         default=False
@@ -95,10 +99,6 @@ class User(BaseOrderInfo, AbstractBaseUser, PermissionsMixin):
     is_active = models.BooleanField(
         verbose_name='active',
         default=True
-    )
-    is_seller = models.BooleanField(
-        default=False,
-        verbose_name='statut vendeur',
     )
     last_login = models.DateTimeField(
         auto_now_add=True,
@@ -129,7 +129,10 @@ class User(BaseOrderInfo, AbstractBaseUser, PermissionsMixin):
         verbose_name_plural = 'vendeur(s)'
 
     def __str__(self):
-        return f'{self.shipping_first_name.upper()} {self.shipping_last_name.capitalize()}'
+        return '{store} {name}'.format(
+            store=self.store.upper(),
+            name=self.shipping_last_name.capitalize()
+        )
 
     def save(self, *args, **kwargs):
         if self.is_seller:
@@ -169,7 +172,7 @@ class User(BaseOrderInfo, AbstractBaseUser, PermissionsMixin):
         return reverse('store_detail_view', kwargs={'slug': self.slug})
 
 
-class Customer(BaseOrderInfo):
+class GuestCustomer(BaseOrderInfo):
     email = models.EmailField(
         unique=True,
         max_length=254,
@@ -190,7 +193,7 @@ class Customer(BaseOrderInfo):
         verbose_name_plural = 'acheteur(s)'
 
     def __str__(self):
-        return self.email
+        return '{email}({created})'.format(email=self.email, created=self.active)
 
     def get_fullname(self):
         if self.shipping_first_name and self.shipping_last_name:
