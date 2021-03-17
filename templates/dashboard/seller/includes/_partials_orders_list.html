@@ -51,9 +51,7 @@
                             </tbody>
                         </table>
                     </div>
-                    {% if order_object_list.count >= 10 %}
-                        {% include "dashboard/seller/includes/_partials_pagination.html" %}
-                    {% endif %}
+                    {% include "dashboard/seller/includes/_partials_pagination.html" %}
                 {% else %}
                     <div class="text-center py-2">
                         <span class="d-flex justify-content-center">

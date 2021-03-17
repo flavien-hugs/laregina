@@ -58,6 +58,7 @@ ProductCreateFormSet = inlineformset_factory(
         'timestamp',
         'updated',
     ],
+    can_delete=False,
     extra=4
 )
 

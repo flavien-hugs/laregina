@@ -159,7 +159,8 @@ class Order(BaseOrderInfo):
         )
 
     def save(self, *args, **kwargs):
-        self.generate(8)
+        if self.transaction_id is None:
+            self.generate(8)
         super().save(*args, **kwargs)
 
     def generate(self, nb_carac):
@@ -239,11 +240,11 @@ class OrderItem(models.Model):
     )
     date_updated = models.DateTimeField(
         verbose_name='derniere modification',
-        auto_now=True
+        auto_now_add=True
     )
     date_created = models.DateTimeField(
         verbose_name='date ajout',
-        auto_now=True
+        auto_now_add=True
     )
 
     class Meta:

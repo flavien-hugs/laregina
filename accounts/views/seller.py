@@ -107,16 +107,18 @@ class OrderDetailView(SellerRequiredMixin, CashTotalSeller, DetailView):
 
 
 class ProductListView(SellerRequiredMixin, CashTotalSeller, ListView):
-    model = Product
-    paginate_by = 10
-    template_name = 'dashboard/seller/includes/_partials_product_list.html'
+    paginate_by = 15
     permission_required = 'product.product_list'
+    template_name = 'dashboard/seller/includes/_partials_product_list.html'
     
     def get_object(self, *args, **kwargs):
         return self.get_account()
+
+    def get_queryset(self):
+        return self.get_product()
     
     def get_context_data(self, *args, **kwargs):
-        kwargs['product_object_list'] = self.get_product()
+        kwargs['object_list'] = self.get_product()
         return super().get_context_data(*args, **kwargs)
 
 

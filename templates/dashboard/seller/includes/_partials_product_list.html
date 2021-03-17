@@ -36,7 +36,7 @@
             </div>
             
             <div class="ps-section__content">
-                {% if product_object_list %}
+                {% if object_list %}
                     <div class="table-responsive">
                         <table class="table ps-table">
                             <thead>
@@ -49,15 +49,13 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                {% for object in product_object_list %}
+                                {% for object in object_list %}
                                     {% include "dashboard/seller/includes/_snippet_product_table.html" %}
                                 {% endfor %}
                             </tbody>
                         </table>
                     </div>
-                    {% if product_object_list.count >= 10 %}
-                        {% include "dashboard/seller/includes/_partials_pagination.html" %}
-                    {% endif %}
+                    {% include "dashboard/seller/includes/_partials_pagination.html" %}
                 {% else %}
                     {% include "dashboard/seller/includes/_partials_store_empty.html" %}
                 {% endif %}
