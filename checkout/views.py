@@ -117,7 +117,7 @@ def download_invoice_view(request, order_id):
     order_item = OrderItem.objects.filter(order=order)
     mydict = {
         'object_date': order.date,
-        'order_total': order.total,
+        'order_total': order.get_order_total,
         'object_id': order.transaction_id,
         'get_full_name': order.get_full_name,
         'get_shipping_delivery': order.get_shipping_delivery,

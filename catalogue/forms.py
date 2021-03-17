@@ -34,27 +34,18 @@ class ProductAdminForm(forms.ModelForm):
 
         if price <= 100:
             msg = "Le prix doit être supérieur à 100 !"
-            self._errors['price'] = self.error_class([msg])
+            self.errors['price'] = self.error_class([msg])
 
         return cleaned_data
 
 
 class ProductImageForm(forms.ModelForm):
 
-    image = forms.ImageField(
-        label="Ajouter des images",
-        widget=forms.ClearableFileInput(
-            {
-                "accept": "image/*",
-                "multiple": True
-            }
-        ), required=True,
-    )
+    image = forms.ImageField(label="Ajouter des images", required=True)
 
     class Meta:
         model = ProductImage
-        fields = ['image']
-        exclude = ('product',)
+        fields = ('image',)
 
 
 ProductCreateFormSet = inlineformset_factory(
@@ -67,8 +58,7 @@ ProductCreateFormSet = inlineformset_factory(
         'timestamp',
         'updated',
     ],
-    can_delete=True,
-    extra=1
+    extra=4
 )
 
 class ProductAddToCartForm(forms.Form):

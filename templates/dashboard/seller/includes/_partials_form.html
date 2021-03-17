@@ -46,9 +46,14 @@
                         {{ form.description }}
                     </div>
 
-                    <div class="form-group">
-                        <div class="custom-file">{{ image_formset }}</div>
-                    </div>
+                    {% for field in formset %}
+                        <div class="form-group">
+                            {{ field.non_form_errors }}
+                            <div class="custom-file mb-4">{{ field }}</div>
+                        </div>
+                    {% endfor %}
+                    {{ formset.management_form }}
+                    
 
                     <div class="form-group">
                         <div class="ps-checkbox">

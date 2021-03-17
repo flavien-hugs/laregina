@@ -10,13 +10,20 @@ from django.contrib import admin
 from django.conf import settings
 from django.shortcuts import render
 from django.urls import path, include
+from django.contrib.sitemaps import views
 from django.conf.urls.static import static
 from django.views.generic import TemplateView
 
 from search.views import SearchView
 from accounts.views import customer, seller
 from checkout.views import TrackOrderView, download_invoice_view
+from core.sitemap import StaticViewSitemap, CategorySitemapView, ProductSitemapView
 
+sitemaps = {
+    'static': StaticViewSitemap,
+    'category': CategorySitemapView,
+    'product': ProductSitemapView,
+}
 
 admin.autodiscover()
 
@@ -51,6 +58,7 @@ urlpatterns = [
     path('accounts/', include('allauth.urls')),
     path('accounts/profile/', include('accounts.urls')),
     path('magasin/<slug>/', seller.StoreDetailView.as_view(), name='store_detail_view'),
+    path('sitemap.xml', views.sitemap, {'sitemaps': sitemaps}, name='django.contrib.sitemaps.views.sitemap'),
 ]
 
 handler404 = handler404

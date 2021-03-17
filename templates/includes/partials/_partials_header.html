@@ -17,7 +17,7 @@
                     <div class="ps-product__thumbnail">
                         <img {% if object.get_image_url %}
                         src="{{ object.get_image_url }}"{% else %} src="{{ STATIC_PREFIX }}img/empty_image.svg"{% endif %}
-                        alt="{{ object.name }}">
+                        alt="{{ object.name }}" height="60" width="60">
                     </div>
 
                     <div class="ps-product__wrapper">

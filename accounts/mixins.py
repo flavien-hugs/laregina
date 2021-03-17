@@ -3,7 +3,6 @@
 import decimal
 import datetime
 from django.urls import reverse_lazy
-from django.db.models import Sum, Avg
 from django.utils.http import is_safe_url
 from django.contrib.auth import get_user_model
 from django.contrib.auth.mixins import(
@@ -40,13 +39,13 @@ class NextUrlMixin(object):
 class CustomerWithOwnerMixin(LoginRequiredMixin):
     def get_form(self, *args, **kwargs):
         form = super().get_form(*args, **kwargs)
-        form.instance.user = User.objects.get(user=self.request.user.is_buyer)
+        form.instance.user = User.objects.get(user=self.request.user)
         return form
 
 
 class CustomerRequiredMixin(LoginRequiredMixin, UserPassesTestMixin):
     def test_func(self):
-        return self.request.user.is_buyer
+        return self.request.user
 
 
 class SellerTextRequiredMixin(LoginRequiredMixin, UserPassesTestMixin):
@@ -86,6 +85,11 @@ class SellerRequiredMixin(SellerTextRequiredMixin, object):
         orders_count = self.get_order_items().count()
         return orders_count
 
+    def get_order_account(self):
+        account = self.get_account()
+        orders_account = OrderItem.objects.filter(product__user=account, order=self)
+        return orders_account
+
     # cash du vendeur
     def cash_total(self):
         total = decimal.Decimal('0')
@@ -111,17 +115,9 @@ class SellerRequiredMixin(SellerTextRequiredMixin, object):
     def get_order_today_count(self):
         order_today_count = self.get_order_today().count()
         return order_today_count
+    
 
-
-class ProductMixin(SellerRequiredMixin):
+class ProductEditMixin(SellerRequiredMixin):
     model = Product
     form_class = ProductAdminForm
-
-    def get_form(self, *args, **kwargs):
-        form = super().get_form(*args, **kwargs)
-        form.instance.user = self.request.user
-        return form
-
-class ProductEditMixin(ProductMixin):
     success_url = reverse_lazy('seller:product_list')
-    template_name = 'dashboard/seller/includes/_partials_product_create.html'

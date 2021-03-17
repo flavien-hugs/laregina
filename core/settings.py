@@ -20,7 +20,7 @@ DEBUG = TEMPLATE_DEBUG = config('DEBUG', default=True, cast=bool)
 DEFAULT_CHARSET = 'UTF-8'
 SITE_DESCRIPTION = ""
 INDEX_DESCRIPTION = "Vendez sur LaRegina"
-META_KEYWORDS = 'vente, achat, '
+META_KEYWORDS = 'créer boutique vente ligne, vente, achat, laregina, deals, acheter, vendre, boutique, ouvrir un magasin en ligne'
 SITE_NAME = 'LaRegina Deals'
 APPEND_SLASH = True
 
@@ -91,34 +91,34 @@ AUTHENTICATION_BACKENDS = [
 
 # Les utilisateurs connectés sont redirigés ici s'ils
 # consultent les pages de connexion/inscription
+LOGOUT_URL = 'home'
 LOGIN_URL = 'account_login'
-ACCOUNT_LOGOUT_REDIRECT_URL = 'home'
 LOGIN_REDIRECT_URL = 'seller:profile'
 SIGNUP_CUSTOMER_URL = 'customer_signup'
-
-# Ne pas afficher la confirmation de déconnexion
-ACCOUNT_LOGOUT_ON_GET = True
 
 # Configuration django-allauth
 # https://django-allauth.readthedocs.io/en/latest/configuration.html
 
 ACCOUNT_UNIQUE_EMAIL = True
+ACCOUNT_LOGOUT_ON_GET = True
 ACCOUNT_EMAIL_REQUIRED = True
-ACCOUNT_SESSION_REMEMBER = 'yes'
 ACCOUNT_USERNAME_MIN_LENGTH = 4
+ACCOUNT_SESSION_REMEMBER = False
 ACCOUNT_USERNAME_REQUIRED = False
 ACCOUNT_AUTHENTICATION_METHOD = 'email'
 ACCOUNT_EMAIL_VERIFICATION = "mandatory"
 ACCOUNT_USER_MODEL_EMAIL_FIELD = 'email'
+ACCOUNT_USER_MODEL_USERNAME_FIELD = None
+ACCOUNT_LOGOUT_REDIRECT_URL = LOGOUT_URL
 ACCOUNT_EMAIL_CONFIRMATION_EXPIRE_DAYS = 7
-ACCOUNT_USER_MODEL_USERNAME_FIELD = 'username'
 ACCOUNT_AUTHENTICATED_LOGIN_REDIRECTS = True
-ACCOUNT_EMAIL_CONFIRMATION_ANONYMOUS_REDIRECT_URL = 'account_login'
-ACCOUNT_EMAIL_CONFIRMATION_AUTHENTICATED_REDIRECT_URL = 'account_login'
+# ACCOUNT_DEFAULT_HTTP_PROTOCOL = ''
+ACCOUNT_EMAIL_CONFIRMATION_ANONYMOUS_REDIRECT_URL = LOGIN_URL
+ACCOUNT_EMAIL_CONFIRMATION_AUTHENTICATED_REDIRECT_URL = LOGIN_REDIRECT_URL
 ACCOUNT_EMAIL_SUBJECT_PREFIX = "LaRegina Deals <no-reply@laregina.deals>"
 
 ACCOUNT_FORMS = {
-    'login': 'accounts.forms.LoginForm',
+    'login': 'accounts.forms.MarketLoginForm',
     'signup': 'accounts.forms.MarketSignupForm',
 }
 
@@ -131,7 +131,7 @@ EMAIL_HOST = 'smtp-relay.sendinblue.com'
 EMAIL_HOST_USER = 'flavienhgs@gmail.com'
 EMAIL_HOST_PASSWORD = config('EMAIL_HOST_PASSWORD')
 SENDGRID_API_KEY = config('SENDGRID_API_KEY', default='')
-DEFAULT_FROM_EMAIL = SERVER_EMAIL = 'hello@kareeba.com'
+DEFAULT_FROM_EMAIL = SERVER_EMAIL = 'hello@laregina.com'
 
 # Pour le développement, envoyer tous les courriers électroniques
 # à la console au lieu de les envoyer
@@ -140,8 +140,7 @@ EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 # https://docs.djangoproject.com/fr/3.0/ref/settings/
 # Let's Encrypt ssl/tls https
 
-CSRF_COOKIE_SECURE = True
-SESSION_COOKIE_SECURE = True
+CACHE_TTL = 60 * 15
 CACHE_TIMEOUT = 60 * 60
 
 MIDDLEWARE = [
@@ -269,7 +268,6 @@ STATICFILES_FINDERS = [
     'django.contrib.staticfiles.finders.AppDirectoriesFinder',
 ]
 
-
 # Activez le backend de stockage WhiteNoise qui se charge de compresser
 # les fichiers statiques et de créer des noms uniques pour chaque version
 # afin qu'ils puissent être mis en cache à jamais en toute sécurité.
@@ -289,11 +287,6 @@ MPTT_ADMIN_LEVEL_INDENT = 20
 
 # https://django-redis-cache.readthedocs.io/en/latest/intro_quick_start.html
 # https://pypi.org/project/django-redis/
-
-# Cache time to live is 15 minutes.
-CACHE_TTL = 60 * 15
-CACHE_TIMEOUT = 60 * 60
-DJANGO_REDIS_IGNORE_EXCEPTIONS = True
 
 
 # phonenumber config

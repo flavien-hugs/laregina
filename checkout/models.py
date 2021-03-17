@@ -277,14 +277,11 @@ class OrderItem(models.Model):
         return '{product_store} | {store_phone}'.format(
             product_store=str(self.product.user.store),
             store_phone=self.get_phone_number())
-    get_store_product.short_description='boutique'
+    get_store_product.short_description='contact boutique'
+
+    def get_store_name(self):
+        return '{store_name}'.format(store_name=str(self.product.user.store))
+    get_store_name.short_description='boutique'
 
     def get_absolute_url(self):
         return self.product.get_absolute_url()
-
-
-from django.dispatch import receiver
-@receiver(models.signals.pre_save, sender=Order)
-def pre_save_create_order_id(sender, instance, *args, **kwargs):
-    if not instance.transaction_id:
-        instance.transaction_id = unique_order_id_generator(instance)

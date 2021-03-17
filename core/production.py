@@ -27,9 +27,7 @@ INSTALLED_APPS += ['whitenoise.runserver_nostatic']
 
 # 'django.middleware.security.SecurityMiddleware',
 MIDDLEWARE += [
-    'django.middleware.cache.UpdateCacheMiddleware',
     'whitenoise.middleware.WhiteNoiseMiddleware',
-    'django.middleware.cache.FetchFromCacheMiddleware',
 ]
 
 # https://docs.djangoproject.com/fr/3.0/ref/settings/
@@ -37,25 +35,21 @@ MIDDLEWARE += [
 
 # https://docs.djangoproject.com/fr/3.0/ref/settings/
 # Let's Encrypt ssl/tls https
-HOST_SCHEME = "https://"
 
-CSRF_COOKIE_SECURE = True
-# CSRF_FAILURE_VIEW = ''
-
-USE_X_FORWARDED_HOST = True
-CORS_REPLACE_HTTPS_REFERER = True
-
-SECURE_FRAME_DENY = True
 SECURE_SSL_REDIRECT = True
+SECURE_HSTS_SECONDS = 86400
 SECURE_HSTS_PRELOAD = True
-SECURE_REDIRECT_EXEMPT = []
-SECURE_HSTS_SECONDS = 15768000
 SECURE_BROWSER_XSS_FILTER = True
+SECURE_CONTENT_TYPE_NOSNIFF = True
 SECURE_HSTS_INCLUDE_SUBDOMAINS = True
 SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 
 SESSION_COOKIE_SECURE = True
 SESSION_EXPIRE_AT_BROWSER_CLOSE = False
+
+CSRF_USE_SESSIONS = True
+CSRF_COOKIE_SECURE = True
+# CSRF_FAILURE_VIEW = ''
 
 # https://warehouse.python.org/project/whitenoise/
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'

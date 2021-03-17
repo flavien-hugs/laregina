@@ -31,7 +31,7 @@
             </div>
 
             <div class="ps-section__content">
-                {% if object_list %}
+                {% if order_object_list %}
                     <div class="table-responsive">
                         <table class="table ps-table">
                             <thead>
@@ -45,19 +45,19 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                {% for object in object_list %}
+                                {% for object in order_object_list %}
                                     {% include "dashboard/seller/includes/_snippet_order_table.html" %}
                                 {% endfor %}
                             </tbody>
                         </table>
                     </div>
-                    {% if object_list.count >= 10 %}
+                    {% if order_object_list.count >= 10 %}
                         {% include "dashboard/seller/includes/_partials_pagination.html" %}
                     {% endif %}
                 {% else %}
                     <div class="text-center py-2">
                         <span class="d-flex justify-content-center">
-                            <img class="img-fluid" height="160px" width="160px"
+                            <img class="img-fluid" height="160" width="160"
                             srcset="{{ STATIC_PREFIX }}img/emptycart.png"
                             src="{{ STATIC_PREFIX }}img/emptycart.png" alt="empty-cart-{{ page_title }}">
                         </span>

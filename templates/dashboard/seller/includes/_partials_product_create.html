@@ -15,7 +15,6 @@
         </header>
 
         <section class="ps-new-item">
-            {% include "dashboard/seller/includes/_partials_message.html" %}
             <form enctype="multipart/form-data" class="ps-form ps-form--new-product" action="." method="post">
                 {% csrf_token %}
                 {% include "dashboard/seller/includes/_partials_form.html" %}

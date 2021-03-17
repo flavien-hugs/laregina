@@ -19,7 +19,7 @@
                 <div class="ps-card">
                     {% if order_list_today %}
                         <div class="ps-card__header">
-                            <h4>Vos produits commandés aujourd'hui</h4>
+                            <h4>Vos commandes aujourd'hui</h4>
                         </div>
                         
                         <div class="ps-card__content mb-4">
@@ -42,7 +42,7 @@
                                                         href="{{ object.order.get_absolute_url }}">
                                                     {{ object.order.transaction_id }}</a>
                                                 </td>
-                                                <td><strong>{{ object.total|intcomma }} Fr</strong></td>
+                                                <td><strong>{{ object.order.total_order|intcomma }} Fr</strong></td>
                                                 <td><strong>{{ object.date_created|date }}</strong></td>
                                             </tr>
                                         {% endfor %}
@@ -66,7 +66,7 @@
 
                     {% if order_list %}
                         <div class="ps-card__header">
-                            <h4>Vos produits commandés</h4>
+                            <h4>Vos commandes</h4>
                         </div>
                         <div class="ps-card__content">
                             <div class="table-responsive">
@@ -86,7 +86,7 @@
                                                 <td><a class="font-weight-bold text-success"
                                                     href="{{ object.order.get_absolute_url }}">
                                                 {{ object.order.transaction_id }}</a></td>
-                                                <td><strong>{{ object.order.total_seller|intcomma }} Fr</strong></td>
+                                                <td><strong>{{ object.order.total_order|intcomma }} Fr</strong></td>
                                                 <td><strong>{{ object.date_created|date }}</strong></td>
                                             </tr>
                                         {% endfor %}

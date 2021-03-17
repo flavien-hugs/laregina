@@ -1,7 +1,6 @@
 # pages.views.py
 
 from django.contrib import messages
-from django.http import JsonResponse
 from django.views.generic import View
 from django.shortcuts import render, redirect
 

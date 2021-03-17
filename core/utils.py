@@ -58,6 +58,6 @@ def unique_slug_generator(instance, new_slug=None):
     qs_exists = Klass.objects.filter(slug=slug).exists()
     
     if qs_exists:
-        new_slug = "{slug}-{randstr}".format(slug=slug, randstr=random_string_generator(size=120))
+        new_slug = "{slug}-{randstr}".format(slug=slug, randstr=random_string_generator(size=8))
         return unique_slug_generator(instance, new_slug=new_slug)
     return slug

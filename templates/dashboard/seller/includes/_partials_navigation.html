@@ -1,4 +1,7 @@
 {% load humanize %}
+{% url "account_logout" as deconnexion %}
+{% url "seller:order_list" as seller_order_list %}
+{% url "seller:product_list" as seller_product_list %}
 
 <div class="ps-main__sidebar">
     <div class="ps-sidebar">
@@ -15,7 +18,7 @@
 
             <div class="ps-block--earning-count">
                 <small>Cash</small>
-                <h3>{{ cash_total_seller|intcomma }} Fr</h3>
+                <h4>{{ cash_total_seller|intcomma }} Fr</h4>
             </div>
         </div>
 
@@ -29,11 +32,11 @@
                     </li>
 
                     <li><a class="{% if request.resolver_match.url_name == 'product_list' or request.resolver_match.url_name == 'product_create' or request.resolver_match.url_name == 'product_update' or request.resolver_match.url_name == 'product_delete' %}
-                        active {% endif %}" href="{% url "seller:product_list" %}">
+                        active {% endif %}" href="{{ seller_product_list }}">
                         <i class="icon-database"></i>Mes produits</a></li>
 
                     <li><a class="{% if request.resolver_match.url_name == 'order_list' or request.resolver_match.url_name == 'order_detail' %}active{% endif %}"
-                        href="{% url "seller:order_list" %}"><i class="icon-bag2"></i>Mes commandes</a></li>
+                        href="{{ seller_order_list }}"><i class="icon-bag2"></i>Mes commandes</a></li>
 
                     <hr class="pt-2 pb-2 mx-2">
                     
@@ -45,8 +48,10 @@
 
                     <hr class="pt-2 pb-2 mx-2">
 
-                    <li><a href="{% url "account_logout" %}">
-                        <i class="icon-exit"></i>Deconnexion</a>
+                    <li>
+                        <a href="{{ deconnexion }}">
+                            <i class="icon-exit"></i>Deconnexion
+                        </a>
                     </li>
                 </ul>
 

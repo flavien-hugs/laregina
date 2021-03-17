@@ -3,6 +3,7 @@
 <!--[if IE 9]><html class="ie ie9"><![endif]-->
 
 <meta charset="utf-8" >
+<base href="{{ request.get_host }}">
 <meta http-equiv="Content-Type" content="text/html">
 <meta name="format-detection" content="telephone=yes">
 <meta name="apple-mobile-web-app-capable" content="yes">
@@ -23,7 +24,7 @@
 <meta name="twitter:creator" content="@flavien_hugs">
 <meta name="twitter:title" content="{% if page_title %} {{ page_title }} {% else %} {{ title }} {% endif %}">
 <meta name="twitter:description" content="{% if object.description %} {{ object.description }} {% else %} {{ description }} {% endif %}">
-<meta name="twitter:image" content="">
+<meta name="twitter:image" content="{{ STATIC_PREFIX }}img/favicon.ico">
 <meta name="twitter:image:alt" content="{{ title }}">
 
 <!-- OpenGraph -->
@@ -31,11 +32,12 @@
 <meta property="og:title" content="{% if page_title %} {{ page_title }} {% else %} {{ title }} {% endif %}">
 <meta property="og:description" content="{% if object.description %} {{ object.description }} {% else %} {{ description }} {% endif %}">
 <meta property="og:type" content="article">
-<meta property="og:image" content="">
+<meta property="og:image" content="{{ STATIC_PREFIX }}img/favicon.ico">
 <meta property="og:image:alt" content="image/png">
 <meta property="og:url" content="{{ request.get_host }}">
 <meta property="og:image:type" content="image/png">
 <meta property="og:locale" content="fr_CI">
 <meta name="bingbot" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1">
-
+<!-- Favicon-->
+<link rel="shortcut icon" href="{{ STATIC_PREFIX }}img/favicon.ico">
 <link rel="canonical" href="">

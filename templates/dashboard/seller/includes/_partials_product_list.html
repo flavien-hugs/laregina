@@ -2,6 +2,8 @@
 {% load humanize %}
 
 {% block content %}
+    {% url "seller:product_create" as seller_create_product %}
+
     <div class="ps-main__wrapper">
         <header class="header--dashboard mb-2">
             <div class="header__left">
@@ -28,14 +30,13 @@
                 </div>
 
                 <div class="ps-section__actions">
-                    <a class="ps-btn success" href="{% url "seller:product_create" %}">
+                    <a class="ps-btn success" href="{{ seller_create_product }}">
                     <i class="icon icon-plus mr-2"></i>Ajouter un nouveau produit</a>
                 </div>
             </div>
-
             
             <div class="ps-section__content">
-                {% if object_list %}
+                {% if product_object_list %}
                     <div class="table-responsive">
                         <table class="table ps-table">
                             <thead>
@@ -44,17 +45,17 @@
                                     <th>Nom</th>
                                     <th>Prix</th>
                                     <th>Date</th>
-                                    <th></th>
+                                    <th class="text-right">Modifier/Supprimmer</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                {% for object in object_list %}
+                                {% for object in product_object_list %}
                                     {% include "dashboard/seller/includes/_snippet_product_table.html" %}
                                 {% endfor %}
                             </tbody>
                         </table>
                     </div>
-                    {% if object_list.count >= 10 %}
+                    {% if product_object_list.count >= 10 %}
                         {% include "dashboard/seller/includes/_partials_pagination.html" %}
                     {% endif %}
                 {% else %}

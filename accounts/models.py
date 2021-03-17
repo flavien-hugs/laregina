@@ -129,7 +129,7 @@ class User(BaseOrderInfo, AbstractBaseUser, PermissionsMixin):
         verbose_name_plural = 'vendeur(s)'
 
     def __str__(self):
-        return '{store} {name}'.format(
+        return '{store} | {name}'.format(
             store=self.store.upper(),
             name=self.shipping_last_name.capitalize()
         )

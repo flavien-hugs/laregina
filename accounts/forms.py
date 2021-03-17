@@ -20,7 +20,7 @@ from phonenumber_field.widgets import PhoneNumberPrefixWidget
 User = get_user_model()
 
 
-class LoginForm(LoginForm):
+class MarketLoginForm(LoginForm):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -226,16 +226,6 @@ class StoreUpdateForm(forms.ModelForm):
         widget=CountrySelectWidget(attrs={
         'class': 'form-control custom-select'
     }))
-
-    logo = forms.FileField(
-        label="Logo du Magasin",
-        widget=forms.FileInput(
-            {
-                "class": "as-parent file-upload",
-                "accept": "image/*",
-            }
-        ), required=False,
-    )
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)

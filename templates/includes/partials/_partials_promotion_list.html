@@ -2,8 +2,8 @@
 
 {% load pages_tags %}
 
-{% for object in object_list %}
+{% for object in promotion_object_list %}
 	<a href="{{ object.category.get_absolute_url }}">
-		<img class="img-fluid" src="{{ object.get_image_url }}" alt="{{ object.title }}">
+		<img height="399" width="1650" class="img-fluid" src="{{ object.get_image_url }}" alt="{{ object.title }}">
 	</a>
 {% endfor %}

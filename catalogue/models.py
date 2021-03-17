@@ -4,12 +4,11 @@ from PIL import Image
 from django.db import models
 from datetime import datetime
 from django.urls import reverse
+from django.conf import settings
 from django.dispatch import receiver
-from django.utils.text import slugify
 from django.db.models import Avg, Count
 from django.utils.safestring import mark_safe
 
-from core import settings
 from category.models import Category
 from catalogue.managers import CatalogueManager
 from caching.caching import cache_update, cache_evict
@@ -40,7 +39,7 @@ class Product(models.Model):
     )
     name = models.CharField(
         verbose_name='nom du produit',
-        max_length=120,
+        max_length=255,
         help_text="Le nom du produit"
     )
     quantity = models.PositiveIntegerField(
@@ -104,11 +103,6 @@ class Product(models.Model):
 
     def __repr__(self):
        return self.__str__()
-
-    def save(self, *args, **kwargs):
-        if not self.slug:
-            self.slug = slugify(self.name)
-        super().save(*args, **kwargs)
 
     def get_product_price(self):
         return self.price
@@ -294,4 +288,4 @@ class ProductImage(models.Model):
 @receiver([models.signals.pre_save], sender=Product)
 def product_pre_save_receiver(sender, instance, *args, **kwargs):
     if not instance.slug:
-        instance.slug = unique_slug_generator(instance.name)
+        instance.slug = unique_slug_generator(instance)

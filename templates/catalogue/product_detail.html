@@ -50,8 +50,7 @@
                                         </div>
                                     </div>
 
-                                    <h4 class="ps-product__price">
-                                    {{ object.price|intcomma }} Fr</h4>
+                                    <h4 class="ps-product__price">{{ object.price|intcomma }} Fr</h4>
                                     
                                     <div class="ps-product__desc">
                                         {% if object.user.store %}
@@ -80,7 +79,9 @@
                                     </div>
 
                                     <div class="ps-product__sharing">
-                                        <a class="facebook" href="#"><i class="fa fa-facebook"></i></a>
+                                        <a class="facebook" href="https://www.facebook.com/sharer.php?u={{ request.get_host }}{{ request.get_full_path|urlencode }}" onclick="window.open(this.href,'mywin','left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" >
+                                            <i class="fa fa-facebook"></i>
+                                        </a>
                                         <a class="twitter" href="#"><i class="fa fa-twitter"></i></a>
                                     </div>
                                 </div>

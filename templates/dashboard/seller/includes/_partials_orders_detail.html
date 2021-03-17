@@ -45,7 +45,10 @@
                                 <tbody>
                                     {% for object in object.order_items %}
                                         <tr>
-                                            <td>{{ object.get_product_name }}</td>
+                                            <td>
+                                                {{ object.get_product_name|truncatewords:'10' }}
+                                                &smid; <b>{{ object.get_store_name }}</b>
+                                            </td>
                                             <td>{{ object.quantity }}</td>
                                             <td>{{ object.get_product_price }}</td>
                                             <td>{{ object.total|intcomma }} Fr</td>
@@ -93,15 +96,15 @@
                                     </figure>
                                     <figure class="active">
                                         <figcaption>Emballé</figcaption>
-                                        <p>Sep 19, 2020 <small>10:00am</small></p>
+                                        <p>Emballage estimé sous 24H</p>
                                     </figure>
                                     <figure class="active">
                                         <figcaption>Expédié</figcaption>
-                                        <p>Sep 19, 2020 <small>4:00pm</small></p>
+                                        <p>Expédition estimée sous 1 jour</p>
                                     </figure>
                                     <figure>
                                         <figcaption>Livré</figcaption>
-                                        <p>Livraison estimée sous 03 jours</p>
+                                        <p>Livraison estimée sous 02 jours</p>
                                     </figure>
                                 </div>
                             </div>
