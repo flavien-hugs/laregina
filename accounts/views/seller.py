@@ -85,8 +85,7 @@ class SettingsUpdateView(SellerRequiredMixin, CashTotalSeller, UpdateView):
 
 
 class OrderListView(SellerRequiredMixin, CashTotalSeller, ListView):
-    paginate_by = 10
-    context_object_name = 'order_object_list'
+    paginate_by = 15
     template_name = 'dashboard/seller/includes/_partials_orders_list.html'
 
     def get_object(self, *args, **kwargs):
