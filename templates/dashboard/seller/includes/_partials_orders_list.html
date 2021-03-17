@@ -31,7 +31,7 @@
             </div>
 
             <div class="ps-section__content">
-                {% if order_object_list %}
+                {% if object_list %}
                     <div class="table-responsive">
                         <table class="table ps-table">
                             <thead>
@@ -45,7 +45,7 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                {% for object in order_object_list %}
+                                {% for object in object_list %}
                                     {% include "dashboard/seller/includes/_snippet_order_table.html" %}
                                 {% endfor %}
                             </tbody>
