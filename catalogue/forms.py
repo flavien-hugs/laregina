@@ -3,7 +3,6 @@
 from django import forms
 from django.forms.models import inlineformset_factory
 
-from category.models import Category
 from catalogue.models import Product, ProductImage
 
 
@@ -26,16 +25,13 @@ class ProductAdminForm(forms.ModelForm):
         self.fields['price'].widget.attrs['placeholder'] = 'Entrer le prix de vente du produit'
         self.fields['keywords'].widget.attrs['placeholder'] = 'Ajouter quelques mots-clés (facultatif)'
 
-        
     def clean(self):
         cleaned_data = super().clean()
         price = cleaned_data.get('price')
-        name = cleaned_data.get('name')
 
         if price <= 100:
-            msg = "Le prix doit être supérieur à 100 !"
+            msg = "Le prix doit être supérieur à 100 Fr !"
             self.errors['price'] = self.error_class([msg])
-
         return cleaned_data
 
 

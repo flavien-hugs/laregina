@@ -5,12 +5,10 @@
     <figure>
         <div class="ps-wrapper">
             <div class="ps-product__gallery" data-arrow="true">
-                {% for obj in product_image %}
+                {% for object in product_image %}
                     <div class="item">
-                        <a href="{{ obj.image }}">
-                            <img {% if obj.image.url %} srcset="{{ obj.image.url }}" src="{{ obj.image.url }}"
-                            {% else %} srcset="{{ STATIC_PREFIX }}img/empty_image.svg"
-                            src="{{ STATIC_PREFIX }}img/empty_image.svg"{% endif %} alt="{{ obj.product.name }}">
+                        <a href="{{ object.image }}">
+                            <img src="{% if object.image.url %} {{ object.image.url }} {% else %} {{ STATIC_PREFIX }}img/empty_image.svg{% endif %}" alt="{{ object.product.name }}">
                         </a>
                     </div>
                 {% endfor %}
@@ -21,9 +19,7 @@
     <div class="ps-product__variants" data-item="4" data-md="4" data-sm="4" data-arrow="false">
         {% for obj in product_image %}
             <div class="item">
-                <img {% if obj.image.url %} srcset="{{ obj.image.url }}" src="{{ obj.image.url }}"
-                {% else %} srcset="{{ STATIC_PREFIX }}img/empty_image.svg"
-                src="{{ STATIC_PREFIX }}img/empty_image.svg"{% endif %} alt="{{ obj.product.name }}">
+                <img src="{% if obj.image.url %} {{ obj.image.url }} {% else %} {{ STATIC_PREFIX }}img/empty_image.svg{% endif %}" alt="{{ obj.product.name }}">
             </div>
         {% endfor %}
     </div>

@@ -1,0 +1,10 @@
+# robots.txt file based on webmasterworld.com
+# and searchengineworld.com. Please, we do NOT
+# allow nonauthorized robots any longer.
+# Yes, feel free to copy and use the following.
+
+
+User-agent: *
+Disallow: /admin/
+Disallow: /cgi-bin/
+Disallow: /dashboard/

@@ -1,11 +1,12 @@
 <!-- product create form -->
-{% load mptt_tags %}
+{% load mptt_tags crispy_forms_tags %}
+{% url 'seller:product_list' as seller_product_list %}
 
 <div class="ps-form__content">
     <div class="row">
         <div class="col-sm-12 col-12">
             <figure class="ps-block--form-box">
-                <figcaption>Information sur le produit</figcaption>
+                <figcaption class="text-lowercase">Information sur le produit</figcaption>
                 <div class="ps-block__content">
                     <div class="form-group">
                         <div class="form-group form-group--select">
@@ -46,14 +47,15 @@
                         {{ form.description }}
                     </div>
 
-                    {% for field in formset %}
-                        <div class="form-group">
-                            {{ field.non_form_errors }}
-                            <div class="custom-file mb-4">{{ field }}</div>
-                        </div>
-                    {% endfor %}
-                    {{ formset.management_form }}
-                    
+                    <div class="form-row">
+                        {{ formset.management_form }}
+                        {% for form in formset %}
+                            {{ form.non_form_errors }}
+                            <div class="form-group col-lg-6 col-md-6 col-sm-12 mb-0">
+                                {{ form.image|as_crispy_field }}
+                            </div>
+                        {% endfor %}
+                    </div>
 
                     <div class="form-group">
                         <div class="ps-checkbox">
@@ -74,7 +76,7 @@
                     </div>
 
                     <div class="ps-form__bottom pt-2">
-                        <a href="{% url 'seller:product_list' %}" class="ps-btn ps-btn--gray">
+                        <a href="{{ seller_product_list }}" class="ps-btn ps-btn--gray">
                         Annuler</a>
                         <button class="ps-btn">Valider</button>
                     </div>

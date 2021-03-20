@@ -59,6 +59,7 @@ urlpatterns = [
     path('accounts/profile/', include('accounts.urls')),
     path('magasin/<slug>/', seller.StoreDetailView.as_view(), name='store_detail_view'),
     path('sitemap.xml', views.sitemap, {'sitemaps': sitemaps}, name='django.contrib.sitemaps.views.sitemap'),
+    path('robots.txt', TemplateView.as_view(template_name='robots.txt', content_type='text/plain')),
 ]
 
 handler404 = handler404
