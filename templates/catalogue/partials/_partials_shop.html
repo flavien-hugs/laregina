@@ -42,7 +42,7 @@
                 <div class="ps-shopping-product">
                     <div class="row">
                         {% if object_list %}
-                            {% for object in object_list %}
+                            {% for object in object_list|shuffle %}
                                 {% if query or object %}
                                     {% include "catalogue/snippet/_snippet_product.html" with instance=object %}
                                 {% endif %}

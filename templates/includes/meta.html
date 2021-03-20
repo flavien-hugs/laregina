@@ -2,7 +2,7 @@
 <!--[if IE 8]><html class="ie ie8"><![endif]-->
 <!--[if IE 9]><html class="ie ie9"><![endif]-->
 
-<meta charset="utf-8" >
+<meta charset="utf-8"/>
 <base href="{{ request.get_host }}">
 <meta http-equiv="Content-Type" content="text/html">
 <meta name="format-detection" content="telephone=yes">
@@ -40,4 +40,6 @@
 <meta name="bingbot" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1">
 <!-- Favicon-->
 <link rel="shortcut icon" href="{{ STATIC_PREFIX }}img/favicon.ico">
-<link rel="canonical" href="">
+<link rel="canonical" href="https://{{ request.get_host }}"/>
+<link rel="preconnect" href="https://{{ request.get_host }}"/>
+<link rel="dns-prefetch" href="https://{{ request.get_host }}"/>

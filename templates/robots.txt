@@ -1,10 +1,64 @@
-# robots.txt file based on webmasterworld.com
-# and searchengineworld.com. Please, we do NOT
-# allow nonauthorized robots any longer.
-# Yes, feel free to copy and use the following.
+# Public site
+# bot must follow this rules
+# Site scaping is permited IF the user-agent is clearly identify it as a bot and
+# the bot owner and is using less than 200 request per minute
+# Bot identification must have a owner url or contact if we need to contact them
+# Bots with fake user-agent will be blocked Bots trying to use too many IPs to
+# increase performance may also be blocked. If you need more than 200 RPM,
+# please contact the email techops at laregina.deals
 
+# Sitemap files
+Sitemap: https://www.laregina.deals/sitemap.xml
+
+# facets
+
+Disallow: /*burners=
+Disallow: /*capacity=
+Disallow: /*capacity_litres=
+Disallow: /*capacity_kg=
+Disallow: /*capacity_kva=
+Disallow: /*capacity_mah=
+Disallow: /*compatible_with=
+Disallow: /*connection=
+Disallow: /*connectivity=
+Disallow: /*connexion=
+Disallow: /*cookertype=
+Disallow: /*cpu_brand=
+Disallow: /*cpu_speed=
+Disallow: /*network_supported=
+Disallow: /*network_type=
+Disallow: /*operating_system=
+Disallow: /*optical_zoom=
+Disallow: /*paper_size=
+Disallow: /*perfume_size=
+Disallow: /*perfume_type=
+Disallow: /*phone_compatibility=
+Disallow: /*power=
+Disallow: /*price=
+Disallow: /*product_line=
+Disallow: /*product_type=
+Disallow: /*ram=
+Disallow: /*ram_memory=
+Disallow: /*width=
+Disallow: /*userSpecific=
+Disallow: /*token=
 
 User-agent: *
 Disallow: /admin/
-Disallow: /cgi-bin/
 Disallow: /dashboard/
+
+# site search
+User-agent: *
+Disallow: /*q=
+
+# paths
+User-agent: *
+Disallow: /ur/
+Disallow: /assets/
+Disallow: /accounts/
+Disallow: /accounts/profile/
+Disallow: /accounts/signup/customer/
+Disallow: /panier/
+Disallow: /checkout/
+Disallow: /search/
+Disallow: /tracking/order/

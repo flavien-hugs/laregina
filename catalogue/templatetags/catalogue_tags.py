@@ -1,11 +1,18 @@
 # catalogue filters
 
 import locale
+import random
 from django import template
 
 from cart import cart
 
 register = template.Library()
+
+@register.filter
+def shuffle(arg):
+    tmp = list(arg)[:]
+    random.shuffle(tmp)
+    return tmp
 
 
 # afficher la monnaie

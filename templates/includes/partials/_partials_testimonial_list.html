@@ -11,24 +11,24 @@
 		<div class="ps-section__content">
 			<div class="ps-carousel--nav owl-slider" data-owl-auto="true" data-owl-loop="true" data-owl-speed="10000" data-owl-gap="30" data-owl-nav="true" data-owl-dots="true" data-owl-item="2" data-owl-item-xs="1" data-owl-item-sm="1" data-owl-item-md="1" data-owl-item-lg="2" data-owl-duration="1000" data-owl-mousedrag="on">
 				{% for object in testimonial_object_list %}
-				<div class="ps-block--testimonial">	
-					<div class="ps-block__header">
-						<img src="{% if object.image %}{{ object.image.url }} {% else %}
-						{{ STATIC_PREFIX }}img/users/default_user.png
-						{% endif %}" alt="{{ object.full_name }}">
+					<div class="ps-block--testimonial">	
+						<div class="ps-block__header">
+							<img height="91" width="91" src="{% if object.image %}{{ object.image.url }} {% else %}
+							{{ STATIC_PREFIX }}img/users/default_user.png
+							{% endif %}" alt="{{ object.full_name }}">
+						</div>
+						<div class="ps-block__content"><i class="icon-quote-close"></i>
+							<h4>
+								{{ object.full_name|title }}
+								{% if object.status_client %}
+									<span>{{ object.status_client }}</span>
+								{% endif %}
+							</h4>
+							<p>
+								{{ object.message|truncatewords:25 }}
+							</p>
+						</div>
 					</div>
-					<div class="ps-block__content"><i class="icon-quote-close"></i>
-						<h4>
-							{{ object.full_name|title }}
-							{% if object.status_client %}
-							<span>{{ object.status_client }}</span>
-							{% endif %}
-						</h4>
-						<p>
-							{{ object.message }}
-						</p>
-					</div>
-				</div>
 				{% endfor %}
 			</div>
 		</div>
