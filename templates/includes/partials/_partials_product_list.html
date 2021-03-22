@@ -9,7 +9,7 @@
     <div class="ps-section__content">
         <div class="ps-shopping-product" style="min-height:50vh!important;">
             <div class="row">
-                {% for instance in object_list|slice:'0:10' %}
+                {% for instance in object_list|shuffle|slice:'0:12' %}
                     {% include "catalogue/snippet/_snippet_product.html" with instance=instance %}
                 {% endfor %}
             </div>
