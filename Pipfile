@@ -4,8 +4,6 @@ url = "https://pypi.org/simple"
 verify_ssl = true
 
 [dev-packages]
-autopep8 = "*"
-pycodestyle = "*"
 
 [packages]
 django = "*"
@@ -13,7 +11,6 @@ gunicorn = "*"
 django-mptt = "*"
 django-countries = "*"
 whitenoise = "*"
-argon2-cffi = "*"
 python-decouple = "*"
 dj-database-url = "*"
 django-redis = "*"
@@ -27,6 +24,7 @@ django-admin-thumbnails = "*"
 mailchimp = "*"
 mysqlclient = "*"
 xhtml2pdf = "*"
+argon2-cffi = "*"
 
 [requires]
 python_version = "3.8"
