@@ -175,12 +175,8 @@ class Product(models.Model):
     def cross_sells(self):
 
         """
-        obtient d'autres instances de produit
-        qui ont été combinées avec l'instance
-        actuelle dans des commandes antérieures et 
-        inclut les commandes qui ont été passées
-        par des utilisateurs anonymes qui ne se
-        sont pas enregistrés
+        NOTE : les utilisateurs qui ont acheté
+        ce produit ont également acheté....
         """
 
         from checkout.models import Order, OrderItem
@@ -189,28 +185,6 @@ class Product(models.Model):
         object_list = Product.objects.filter(orderitem__in=order_items).distinct()
         return object_list
 
-    
-    def cross_sells_user(self):
-
-        """
-        NOTE : les utilisateurs qui ont acheté
-        ce produit ont également acheté....
-        
-        obtient d'autres instances de produits
-        qui ont été commandées par d'autres clients
-        enregistrés qui ont également commandé
-        l'instance en cours. Utilise toutes les
-        commandes passées de chaque client
-        enregistré et pas seulement l'ordre dans
-        lequel l'instance actuelle a été achetée
-        """
-
-        from checkout.models import Order, OrderItem
-        users = User.objects.filter(order__orderitem__product=self)
-        items = OrderItem.objects.filter(order__user__in=users).exclude(product=self)
-        object_list = Product.objects.filter(orderitem__in=items).distinct()
-        return object_list
-    
     def cross_sells_hybrid(self):
         
         """
@@ -219,14 +193,10 @@ class Product(models.Model):
         clients non enregistrés, et tous les produits qui ont déjà
         été commandés par des clients enregistrés
         """
-        
-        from checkout.models import Order, OrderItem
         from django.db.models import Q
+        from checkout.models import Order, OrderItem
         orders = Order.objects.filter(orderitem__product=self)
-        users = User.objects.filter(order__orderitem__product=self)
-        items = OrderItem.objects.filter(
-            Q(order__in=orders) | Q(order__user__in=users)
-            ).exclude(product=self)
+        items = OrderItem.objects.filter(Q(order__in=orders)).exclude(product=self)
         object_list = Product.objects.filter(orderitem__in=items).distinct()
         return object_list
 
