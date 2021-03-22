@@ -158,10 +158,18 @@
                                 </p>
                             {% endif %}
                         </aside>
+
+                        <aside>
+                            <div>
+                                {% for obj in object.cross_sells %}
+                                    {{ obj.name }}
+                                {% endfor %}
+                            </div>
+                        </aside>    
                     </div>
                 </div>
 
-                <!-- product recommended Les clients ayant acheté cet article ont également acheté -->
+                <!-- produit recommendé -->
                 {% if recommended_product %}
                     {% product_list recommended_product 'Produits récommandés pour vous' %}
                 {% endif %}
