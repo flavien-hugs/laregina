@@ -1,44 +1,46 @@
 <!-- partials/pagination.html -->
 
 {% if is_paginated %}
-<nav aria-label="ps-pagination">
-    <ul class="pagination">
-        {% if page_obj.has_previous %}
-        <li>
-            <a href="{{ request.path }}?p={{ page_obj.previous_page_number }}">
-                Précédent <i class="icon-chevron-right"></i>
-            </a>
-        </li>
-        {% else %}
-        <li class="disabled">
-            <a href="#">
-                Précédent <i class="icon-chevron-right"></i>
-            </a>
-        </li>
-        {% endif %}
-
-        {% for object in page_obj.paginator.page_range %}
-        {% if object == page_obj.number %}
-        <li class="active" aria-current="page">
-            <a href="{{ request.path }}?p={{ object }}">{{ object }}</a>
-        </li>
-        {% else %}
-        <li>
-            <a href="{{ request.path }}?p={{ object }}">{{ object }}</a>
-        </li>
-        {% endif %}
-        {% endfor %}
-
-        {% if page_obj.has_next %}
-        <li>
-            <a href="{{ request.path }}?p={{ page_obj.next_page_number }}">
-                <i class="icon-chevron-right">
-                </a>
-            </li>
+    <nav aria-label="page navigation" class="text-center mt-3">
+        <ul class="pagination">
+            {% if page_obj.has_previous %}
+                <li>
+                    <a href="?page={{ page_obj.previous_page_number }}">
+                        <i class="icon-chevron-left"></i>
+                    </a>
+                </li>
             {% else %}
-            <li class="disabled">
-                <a href="{{ request.path }}?p={{ page_obj.next_page_number }}">Suivant <i class="icon-chevron-right"></i></a>
-            </li>
+                <li class="disabled">
+                    <a href="#">
+                        <i class="icon-chevron-left"></i>
+                    </a>
+                </li>
+            {% endif %}
+
+            {% for obj in paginator.page_range %}
+                {% if page_obj.number == obj %}
+                    <li class="{% if obj %} active {% endif %}" aria-current="page">
+                        <a href="?page={{ obj }}">{{ obj }}</a>
+                    </li>
+                {% else %}
+                    <li>
+                        <a href="?page={{ obj }}">{{ obj }}</a>
+                    </li>
+                {% endif %}
+            {% endfor %}
+
+            {% if page_obj.has_next %}
+                <li>
+                    <a href="?page={{ page_obj.next_page_number }}">
+                        <i class="icon-chevron-right"></i>
+                    </a>
+                </li>
+            {% else %}
+                <li class="disabled">
+                    <a href="?page={{ page_obj.next_page_number }}">
+                        <i class="icon-chevron-right"></i>
+                    </a>
+                </li>
             {% endif %}
         </ul>
     </nav>
