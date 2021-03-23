@@ -27,7 +27,7 @@ from reviews.forms import ProductReviewForm
 # PRODUCT LIST VIEW
 class ProductListView(FilterMixin, ListView):
     model = Product
-    paginate_by = 80
+    paginate_by = 100
     extra_context = {'page_title': 'Tous les produits'}
     template_name = "catalogue/product_list.html"
 
