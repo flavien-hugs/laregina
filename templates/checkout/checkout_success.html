@@ -14,7 +14,22 @@
 			<div class="row justify-content-center">
 				<div class="col-lg-8">
 					<div class="ps-section__header">
-						<h4 class="text-success">Commande validée ! &smid; N° commande {{ object.get_order_id }}</h4>
+						<h4 class="text-success">Commande validée ! &smid; N° commande 
+						{{ object.get_order_id }}</h4>
+
+						{% if object.get_order_total > 10000 %}
+							<p class="text-justify text-success">
+								Votre commande (<strong>{{ object.get_order_total|intcomma }} Fr</strong>) est supérieur à 10 000 Fr,
+								Vous allez devoir payer les <b>50%</b> du coût total avant la livraison de votre
+								commande. <strong>Veuillez descendre juste en bas pour payer.</strong>
+							</p>
+						{% elif object.get_order_total <= 10000 %}
+							<p class="text-justify text-success">
+								Votre commande (<strong>{{ object.get_order_total|intcomma }} Fr</strong>).
+								Vous pouvez regler la totalité de votre commande avant livraison.
+								<strong>Veuillez descendre juste en bas pour payer.</strong>
+							</p>
+						{% endif %}
 
 						<div class="ps-block--payment-method mb-0">
 							<span class='font-weight-bold'>
@@ -70,12 +85,10 @@
 					{% if object.get_order_total > 10000 %}
 						<div class="form-group">
 							<div class="ps-checkbox">
-								<p class="text-justify">
-									Votre commande (<strong>{{ object.get_order_payment|intcomma }} Fr</strong>) est supérieur à 10 000 Fr,
+								<p class="text-justify text-success">
+									Votre commande (<strong>{{ object.get_order_total|intcomma }} Fr</strong>) est supérieur à 10 000 Fr,
 									Vous allez devoir payer les <b>50%</b> du coût total avant la livraison de votre
-									commande. <br>
-
-									Coût = <strong>{{ object.get_order_payment|intcomma }} Fr CFA</strong>
+									commande. Coût = <strong>{{ object.get_order_payment|intcomma }} Fr CFA</strong>
 								</p>
 							</div>
 							{% include "includes/partials/_partials_payment.html" %}
@@ -83,10 +96,9 @@
 					{% elif object.get_order_total <= 10000 %}
 						<div class="form-group">
 							<div class="ps-checkbox">
-								<p class="text-justify">
+								<p class="text-justify text-success">
 									Votre commande (<strong>{{ object.get_order_total|intcomma }} Fr</strong>).
-									Vous pouvez regler la totalité de votre commande avant livraison.<br>
-
+									Vous pouvez regler la totalité de votre commande avant livraison.
 									Coût = <strong>{{ object.get_order_total|intcomma }} Fr CFA</strong>
 								</p>
 							</div>
