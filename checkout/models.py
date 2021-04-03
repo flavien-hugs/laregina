@@ -184,7 +184,6 @@ class Order(BaseOrderInfo):
 
     def get_order_payment(self):
         order_total = self.get_order_total()
-        print(order_total)
         payment_api = int('0')
         min_amount = int('10000')
         percent_amount = decimal.Decimal('0.5')
