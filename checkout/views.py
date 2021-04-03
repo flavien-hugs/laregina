@@ -50,14 +50,12 @@ def show_checkout(request, template='checkout/checkout.html'):
         'page_title': 'Paiement',
         'cart_items': cart.get_cart_items(request),
         'cart_subtotal': cart.cart_subtotal(request),
-        'APIKEY': settings.CINETPAY_API_KEY,
-        'SITEID': settings.CINETPAY_SITE_ID,
     }
 
     return render(request, template, context)
 
 
-def order_succes_view(request, template='checkout/checkout_success.html'):
+def order_success_view(request, template='checkout/checkout_success.html'):
 
     order_id = request.session.get('order_id', '')
 
@@ -71,27 +69,9 @@ def order_succes_view(request, template='checkout/checkout_success.html'):
     context = {
         'page_title': 'Commande validée',
         'object': Order.objects.filter(transaction_id=order_id)[0],
-        'order_items': OrderItem.objects.filter(order=order)
-    }
-
-    return render(request, template, context)
-
-
-def order_succes_view(request, template='checkout/checkout_success.html'):
-
-    order_id = request.session.get('order_id', '')
-
-    if order_id:
-        order = Order.objects.filter(transaction_id=order_id)[0]
-        order_items = OrderItem.objects.filter(order=order)
-    else:
-        cart_url = reverse('cart:cart')
-        return HttpResponseRedirect(cart_url)
-    
-    context = {
-        'page_title': 'Commande validée',
-        'object': Order.objects.filter(transaction_id=order_id)[0],
-        'order_items': OrderItem.objects.filter(order=order)
+        'order_items': OrderItem.objects.filter(order=order),
+        'CINETPAY_API_KEY': settings.CINETPAY_API_KEY,
+        'CINETPAY_SITE_ID': settings.CINETPAY_SITE_ID,
     }
 
     return render(request, template, context)
