@@ -144,7 +144,6 @@ def cart_subtotal(request):
         cart_total += cart_item.product.price * cart_item.quantity
     return int(cart_total) + delivery_fee
 
-
 def cart_distinct_item_count(request):
 
     """
