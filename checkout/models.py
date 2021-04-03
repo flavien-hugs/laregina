@@ -182,6 +182,17 @@ class Order(BaseOrderInfo):
         return total
     get_order_total.short_description='Total commande'
 
+    def get_order_payment(self):
+        order_total = self.get_order_total()
+        print(order_total)
+        payment_api = int('0')
+        min_amount = int('10000')
+        percent_amount = decimal.Decimal('0.5')
+        if order_total >= min_amount:
+            payment_api = order_total * percent_amount
+        return int(payment_api)
+    get_order_payment.short_description='paiement en avance'
+
     # cash du vendeur
     def total_seller_order(self):
         total_se_ = self.get_order_total() - 1500
