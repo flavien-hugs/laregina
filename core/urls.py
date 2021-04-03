@@ -66,6 +66,9 @@ handler404 = handler404
 handler403 = handler403
 handler201600 = handler500
 
+admin.site.site_header = "LAREGINA DEALS ADMIN"
+admin.site.site_title = "LAREGINA DEALS ADMIN"
+
 if settings.DEBUG:
     urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

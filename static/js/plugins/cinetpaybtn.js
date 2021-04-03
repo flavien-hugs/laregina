@@ -106,12 +106,11 @@ CINETPAY.apps = CINETPAY.apps || {},
             var elements = a.getElementById("cinetpay-form");
             var formData = new FormData();
             for (var i = 0; i < elements.length; i++) {
-                /*
-                 if(elements[i].name == 'cpm_trans_id' && (elements[i].value == '' || elements[i].value == 'undefined')){
-                 var generator = new IDGenerator();
-                 elements[i].value = generator.generate();
-                 }
-                 */
+                
+                if(elements[i].name == 'cpm_trans_id' && (elements[i].value == '' || elements[i].value == 'undefined')){
+                    var generator = new IDGenerator();
+                    elements[i].value = generator.generate();
+                }
 
                 formData.append(elements[i].name, elements[i].value);
             }
@@ -140,7 +139,20 @@ CINETPAY.apps = CINETPAY.apps || {},
 
         function b() {
             var b, c, d, e;
-            a.getElementById("cinetpay-button") || (b = "", c = a.createElement("style"), d = ".cinetpay-button", e = d + " button", b += d + " { white-space: nowrap; }", b += d + " .field-error {  border: 1px solid #FF0000; }", b += d + " .hide { display: none; }", b += d + " .error-box { background: #FFFFFF; border: 1px solid #DADADA; border-radius: 5px; padding: 8px; display: inline-block; }", b += e + ' { white-space: nowrap; overflow: hidden; border-radius: 13px; font-family: "Arial", bold, italic; font-weight: bold; font-style: italic; border: 1px solid #2ECC71; color: #000000; background: #2ECC71; position: relative; text-shadow: 0 1px 0 rgba(255,255,255,.5); cursor: pointer; z-index: 0; }', b += e + ':before { content: " "; position: absolute; width: 100%; height: 100%; border-radius: 11px; top: 0; left: 0; background: #2ECC71; background: -webkit-linear-gradient(top, #28B463 0%,#28B463 80%,#FFF8FC 100%); background: -moz-linear-gradient(top, #28B463 0%,#28B463 80%,#FFF8FC 100%); background: -ms-linear-gradient(top, #28B463 0%,#28B463 80%,#FFF8FC 100%); background: linear-gradient(top, #28B463 0%,#28B463 80%,#FFF8FC 100%); z-index: -2; }', b += e + ':after { content: " "; position: absolute; width: 98%; height: 60%; border-radius: 40px 40px 38px 38px; top: 0; left: 0; background: -webkit-linear-gradient(top, #fefefe 0%, #28B463 100%); background: -moz-linear-gradient(top, #fefefe 0%, #28B463 100%); background: -ms-linear-gradient(top, #fefefe 0%, #28B463 100%); background: linear-gradient(top, #fefefe 0%, #28B463 100%); z-index: -1; -webkit-transform: translateX(1%);-moz-transform: translateX(1%); -ms-transform: translateX(1%); transform: translateX(1%); }', b += e + ".small { padding: 3px 15px; font-size: 12px; }", b += e + ".large { padding: 4px 19px; font-size: 14px; }", c.type = "text/css", c.id = "cinetpay-button", c.styleSheet ? c.styleSheet.cssText = b : c.appendChild(a.createTextNode(b)), a.getElementsByTagName("head")[0].appendChild(c))
+            a.getElementById("cinetpay-button") || (b = "", c = a.createElement("style"), 
+                d = ".cinetpay-button",
+                e = d + " button",
+                b += d + " { white-space: nowrap; }",
+                b += d + " .field-error {  border: 1px solid #FF0000; }",
+                b += d + " .hide { display: none; }",
+                b += d + " .error-box { background: #FFFFFF; border: 1px solid #DADADA; border-radius: 5px; padding: 8px; display: inline-block; }",
+                b += e + ' {overflow: hidden; font-weight: 600; color: #000000; background-color: #FCB800; position: relative; text-transform: uppercase;}',
+                b += e + ".small { padding: 3px 15px; font-size: 12px; }",
+                b += e + ".large {display: inline-block; width:100%; text-align: center; padding: 10px 15px; font-size: 14px; line-height: 20px; border: none; border-radius: 0px;}",
+                c.type = "text/css",
+                c.id = "cinetpay-button",
+                c.styleSheet ? c.styleSheet.cssText = b : c.appendChild(a.createTextNode(b)),
+                a.getElementsByTagName("head")[0].appendChild(c))
         }
 
         function c(b, c) {
@@ -174,8 +186,9 @@ CINETPAY.apps = CINETPAY.apps || {},
                 }
             try {
                 x.type = "submit"
+                x.name = "sumbit"
             } catch (I) {
-                x.setAttribute("type", "submit")
+                x.setAttribute("type", "name", "submit")
             }
             return x.className = "cinetpay-button " + l, x.appendChild(a.createTextNode(p)), w.appendChild(x), w
         }
@@ -275,14 +288,14 @@ CINETPAY.apps = CINETPAY.apps || {},
             },
             n = {
                 en_GB: {
-                    buynow: "Buy Now",
-                    donate: "Donate",
-                    paynow: "Pay Now"
+                    buynow: "buy Now",
+                    donate: "donate",
+                    paynow: "pay Now"
                 },
                 fr_FR: {
-                    buynow: "Acheter",
-                    donate: "Faire un don",
-                    paynow: "Payer maintenant"
+                    buynow: "acheter",
+                    donate: "faire un don",
+                    paynow: "payer maintenant"
                 }
             };
 

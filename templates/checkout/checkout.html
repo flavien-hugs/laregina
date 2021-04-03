@@ -5,6 +5,7 @@
 
 {% block content %}
     {% include "includes/partials/_partials_breadcrumb.html" %}
+    {% url 'pages:cgu' as ps_cgu %}
 
     <section class="ps-section--account ps-checkout py-5">
         <div class="container">
@@ -133,14 +134,14 @@
                                         </h4>
 
                                         <div class="ps-block__content pb-2">
-                                            <figure>
+                                            <figure class="mb-3">
                                                 <figcaption>
                                                     <strong>produit</strong>
                                                     <strong>sous-total</strong>
                                                 </figcaption>
                                             </figure>
 
-                                            <figure class="ps-block__items">
+                                            <figure class="ps-block__items mb-3">
                                                 {% for object in cart_items %}
                                                     <figcaption>
                                                     <span>{{ object.product.name|truncatewords:"3" }}
@@ -150,14 +151,14 @@
                                                 {% endfor %}
                                             </figure>
 
-                                            <figure>
+                                            <figure class="mb-3">
                                                 <figcaption>
                                                     <span>Frais de livraison</span>
                                                     <span>1500 Fr</span>
                                                 </figcaption>
                                             </figure>
 
-                                            <figure class="border-0">
+                                            <figure class="border-bottom-0 mb-1 pb-1">
                                                 <figcaption>
                                                     <h3><strong>Total</strong></h3>
                                                     <strong>
@@ -179,10 +180,10 @@
                                                         décrites dans notre politique de confidentialité
                                                     </p>
 
-                                                    <input checked id="ckeckobx" type="checkbox" name="privacy" class="form-check">
-                                                    <label for="ckeckobx">
+                                                    {{ form.privacy }}
+                                                    <label for="{{ form.privacy.id_for_label }}">
                                                         J’ai lu et j’accepte les
-                                                        <a href="{% url 'pages:cgu' %}">
+                                                        <a href="{{ ps_cgu }}">
                                                             <strong>conditions générales</strong>
                                                         </a> *
                                                     </label>
@@ -191,12 +192,8 @@
 
                                             <div class="form-group">
                                                 <button class="ps-btn ps-btn--fullwidth text-uppercase"
-                                                type="submit" name="submit">payer à la livraison</button>
+                                                type="submit" name="submit">valider votre commande</button>
                                             </div>
-
-                                            <!--  <div class="form-group">
-                                                {% include "includes/partials/_partials_payment.html" %}
-                                            </div> -->
                                         </div>
                                     </div>
                                 </div>

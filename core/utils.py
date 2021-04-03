@@ -3,7 +3,6 @@
 import os
 import string
 import random
-from django.conf import settings
 from django.utils.text import slugify
 from django.core.validators import EmailValidator
 

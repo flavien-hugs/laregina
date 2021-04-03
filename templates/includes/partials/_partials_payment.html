@@ -1,18 +1,21 @@
-<script src="{{ STATIC_PREFIX }}js/plugins/cinetpaybtn.js?apikey={{ APIKEY }}"
+{% load humanize %}
+{% url 'cart:cart' as cart_url %}
+
+<script src="{{ STATIC_PREFIX }}js/plugins/cinetpaybtn.js?apikey={{ CINETPAY_API_KEY }}"
       data-button="paynow"
-      data-site_id="{{ SITEID }}"
-      {% for obj in cart_items %}data-designation="{{ obj.name }}"{% endfor %}
-      data-amount="{{ cart_subtotal }}"
-      data-trans_id="908642597"
+      data-site_id="{{ CINETPAY_SITE_ID }}"
+      data-designation="valider la commande"
+      data-amount="{% if object.get_order_total < 10000 %}{{ object.get_order_total }}{% else %}{{ object.get_order_payment }}{% endif %}"
+      data-trans_id="{{ object.transaction_id }}"
       data-payment_config="SINGLE"
       data-page_action="PAYMENT"
-      data-version="V2"
+      data-version="V1"
       data-currency="CFA"
       data-language="fr"
       data-custom=""
       data-golive="yes"
-      data-callback="{% url 'cart:cart' %}"
-      data-return_page="{% url 'cart:cart' %}"
-      data-cancel_page="{% url 'cart:cart' %}"
-      async>
-</script>
+      data-callback="{{ cart_url }}"
+      data-return_page="{{ cart_url }}"
+      data-cancel_page="{{ cart_url }}"
+      async
+></script>

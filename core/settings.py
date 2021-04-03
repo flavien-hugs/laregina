@@ -20,7 +20,7 @@ DEBUG = TEMPLATE_DEBUG = config('DEBUG', default=True, cast=bool)
 DEFAULT_CHARSET = 'UTF-8'
 SITE_DESCRIPTION = ""
 INDEX_DESCRIPTION = "Vendez sur LaRegina"
-META_KEYWORDS = 'créer boutique vente ligne, vente, achat, laregina, deals, acheter, vendre, boutique, ouvrir un magasin en ligne'
+META_KEYWORDS = 'créer boutique vente ligne, vente, achat, laregina, deals, acheter, vendre, boutique en ligne, laregina deals, ouvrir un magasin en ligne'
 SITE_NAME = 'LaRegina Deals'
 APPEND_SLASH = True
 
@@ -296,7 +296,6 @@ PHONENUMBER_DB_FORMAT = "NATIONAL"
 # CINETPAY API KEY
 CINETPAY_API_KEY = config('CINETPAY_API_KEY')
 CINETPAY_SITE_ID = config('CINETPAY_SITE_ID')
-CINETPAY_TRANS_ID = config('CINETPAY_TRANS_ID')
 
 # Mailchimp Configuration
 MAILCHIMP_API_KEY = config('MAILCHIMP_API_KEY')

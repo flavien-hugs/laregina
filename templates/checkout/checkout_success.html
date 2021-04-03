@@ -67,8 +67,35 @@
 						</div>
 					</div>
 
+					{% if object.get_order_total > 10000 %}
+						<div class="form-group">
+							<div class="ps-checkbox">
+								<p class="text-justify">
+									Votre commande (<strong>{{ object.get_order_payment|intcomma }} Fr</strong>) est supérieur à 10 000 Fr,
+									Vous allez devoir payer les <b>50%</b> du coût total avant la livraison de votre
+									commande. <br>
+
+									Coût = <strong>{{ object.get_order_payment|intcomma }} Fr CFA</strong>
+								</p>
+							</div>
+							{% include "includes/partials/_partials_payment.html" %}
+						</div>
+					{% elif object.get_order_total <= 10000 %}
+						<div class="form-group">
+							<div class="ps-checkbox">
+								<p class="text-justify">
+									Votre commande (<strong>{{ object.get_order_total|intcomma }} Fr</strong>).
+									Vous pouvez regler la totalité de votre commande avant livraison.<br>
+
+									Coût = <strong>{{ object.get_order_total|intcomma }} Fr CFA</strong>
+								</p>
+							</div>
+							{% include "includes/partials/_partials_payment.html" %}
+						</div>
+					{% endif %}
+
                     <p class="text-muted py-3">
-                    	<span>Votre commande vous sera livrée dans 07 jours maximum.</span>
+                    	<span>Votre commande vous sera livrée dans 07 jours maximum. </span>
                     	<span>Merci pour votre commande. Veuillez cliquer
                         <a class="text-primary font-weight-bold" href="{{ tracking_order }}"><u>ICI</u></a>
                     	pour vérifier l'état de votre commande.</span>
@@ -90,8 +117,7 @@
 
 							<div class="col-4 float-right">
 								<a class="ps-btn ps-btn--sm text-uppercase font-weight-normal"
-								href="{{ order_tracking }}">
-								suivre votre commande</a>
+								href="{{ order_tracking }}">suivre votre commande</a>
 							</div>
 						</div>
 					</div>
