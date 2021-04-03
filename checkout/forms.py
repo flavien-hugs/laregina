@@ -19,6 +19,8 @@ class CheckoutForm(forms.ModelForm):
         'class': 'form-control custom-select'
     }))
 
+    privacy = forms.BooleanField(required=True)
+
     def __init__(self, *args, **kwargs):
         super(CheckoutForm, self).__init__(*args, **kwargs)
 
@@ -40,6 +42,9 @@ class CheckoutForm(forms.ModelForm):
         self.fields['shipping_adress'].widget.attrs['placeholder'] = shipping_adress_text
         self.fields['shipping_zip'].widget.attrs['placeholder'] = 'Code postal'
         self.fields['emailing'].widget.attrs['type'] = 'checkbox'
+        self.fields['privacy'].widget.attrs['type'] = 'checkbox'
+        self.fields['privacy'].widget.attrs['checked'] = 'True'
+        self.fields['privacy'].widget.attrs['class'] = 'form-check'
         self.fields['note'].widget.attrs['rows'] = '5'
         self.fields['note'].widget.attrs['placeholder'] = note_placehoder
 
