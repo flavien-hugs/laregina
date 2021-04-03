@@ -2,11 +2,12 @@
 
 from django.urls import path
 from django.views.generic import TemplateView
-from checkout.views import show_checkout, order_succes_view
+
+from checkout import views
 
 
 app_name = 'checkout'
 urlpatterns = [
-    path('', show_checkout, name='checkout'),
-    path('commande/success/', order_succes_view, name='order_success'),
+    path('', views.show_checkout, name='checkout'),
+    path('commande/success/', views.order_success_view, name='order_success'),
 ]
