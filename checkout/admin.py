@@ -42,8 +42,9 @@ class OrderAdmin(admin.ModelAdmin):
     list_display = [
         'get_order_id',
         'get_shipping_delivery',
-        'get_order_total', 'date',
-        'status',
+        'get_order_payment',
+        'get_order_total',
+        'date', 'status',
     ]
     list_filter = [
         'status',
