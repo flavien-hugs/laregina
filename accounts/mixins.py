@@ -68,7 +68,7 @@ class SellerRequiredMixin(SellerTextRequiredMixin, object):
     # liste des produits du magasin
     def get_product(self):
         account = self.get_account()
-        object_list = Product.objects.filter(user=account)
+        object_list = Product.objects.filter(user=account).select_related("user")
         self.products = object_list
         return object_list
 
@@ -78,7 +78,7 @@ class SellerRequiredMixin(SellerTextRequiredMixin, object):
 
     def get_order_items(self):
         account = self.get_account()
-        orders_item_list = OrderItem.objects.filter(product__user=account)
+        orders_item_list = OrderItem.objects.filter(product__user=account).select_related("order")
         return orders_item_list
 
     def get_orders_count(self):
@@ -87,7 +87,7 @@ class SellerRequiredMixin(SellerTextRequiredMixin, object):
 
     def get_order_account(self):
         account = self.get_account()
-        orders_account = OrderItem.objects.filter(product__user=account, order=self)
+        orders_account = OrderItem.objects.filter(product__user=account, order=self).select_related("order")
         return orders_account
 
     # cash du vendeur
