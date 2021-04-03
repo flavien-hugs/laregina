@@ -8,9 +8,6 @@ from accounts.models import User, GuestCustomer
 from services.export_data_csv import export_to_csv
 from accounts.forms import MarketSignupForm, MarketChangeForm
 
-admin.site.site_header = "Laregina"
-admin.site.site_title = "Laregina"
-
 admin.site.unregister(Group)
 
 
