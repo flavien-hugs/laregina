@@ -182,6 +182,7 @@ class Order(BaseOrderInfo):
         return total
     get_order_total.short_description='Total commande'
 
+    # paiement en avance
     def get_order_payment(self):
         order_total = self.get_order_total()
         payment_api = int('0')

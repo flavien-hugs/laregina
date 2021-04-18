@@ -13,6 +13,7 @@ admin.site.unregister(Group)
 
 @admin.register(User)
 class UserAdmin(BaseUserAdmin):
+    date_hierarchy = 'date_joined'
     add_form = MarketSignupForm
     fieldsets = (
         (None, {'fields':
