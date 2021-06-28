@@ -87,7 +87,8 @@ class SellerRequiredMixin(SellerTextRequiredMixin, object):
 
     def get_order_account(self):
         account = self.get_account()
-        orders_account = OrderItem.objects.filter(product__user=account, order=self).select_related("order")
+        orders_account = OrderItem.objects.filter(
+            product__user=account, order=self).select_related("order")
         return orders_account
 
     # cash du vendeur
