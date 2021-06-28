@@ -8,6 +8,7 @@ from django.utils import timezone
 
 # STRUCTURE PRODUCT MODEL QUERYSET
 class CatalogueQuerySet(models.query.QuerySet):
+    
     def active(self):
         return self.filter(is_active=True)
 
