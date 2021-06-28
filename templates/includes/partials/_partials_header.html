@@ -6,6 +6,7 @@
 {% url "account_login" as login %}
 {% url "account_signup"  as signup %}
 {% url "seller:profile" as seller_profile %}
+{% url "pages:promotion" as promotion_url %}
 {% load humanize mptt_tags search_tags catalogue_tags %}
 
 <!-- affficher sur la page detail de produit -->
@@ -136,7 +137,7 @@
                     {% if request.user.is_authenticated and request.user.is_seller or request.user.is_superuser %}
                         <li><a href="{{ seller_profile }}" target="_blank">Ma boutique</a>
                         </li>
-                        <li><a href="#">Ajouter une annonce</a></li>
+                        <li><a href="{{ promotion_url }}">Ajouter une annonce</a></li>
                     {% else %}
                         <li><a class="font-weight-bold text-uppercase" href="{{ signup }}">
                         s'inscrire</a></li>
