@@ -8,7 +8,7 @@
                 {% for object in product_image %}
                     <div class="item">
                         <a href="{{ object.image }}">
-                            <img src="{% if object.image.url %} {{ object.image.url }} {% else %} {{ STATIC_PREFIX }}img/empty_image.svg{% endif %}" alt="{{ object.product.name }}">
+                            <img loading="lazy" src="{% if object.image.url %} {{ object.image.url }} {% else %} {{ STATIC_PREFIX }}img/empty_image.svg{% endif %}" alt="{{ object.product.name }}">
                         </a>
                     </div>
                 {% endfor %}
