@@ -11,11 +11,11 @@
 {% url "seller:order_list" as seller_order_list %}
 {% url "seller:product_list" as seller_product_list %}
 
-<footer class="ps-footer pt-5 mt-5 flex-shrink-0">
+<footer class="ps-footer pt-5 flex-shrink-0">
     <div class="ps-container">
         {% if not request.resolver_match.url_name == 'order_tracking' and not request.resolver_match.url_name == 'account_signup' and not request.resolver_match.url_name == 'account_login' and not request.resolver_match.url_name == 'customer_signup' %}
             <div class="ps-footer__widgets pb-0 pt-5" style="border-top:1px solid #e1e1e1;">
-                <aside class="widget widget_footer widget_contact-us">
+                <aside class="widget widget_footer widget_contact-us pb-0 mb-0">
                     <h4 class="widget-title">Contactez-nous</h4>
                     <div class="widget_content">
                         <p><span class="text-uppercase"><strong>{{ title }}</strong>,
@@ -76,7 +76,9 @@
         <div class="ps-footer__copyright py-3">
             <p>
                 &copy; <script>document.write(new Date().getFullYear());</script>
-                <a class="font-weight-bold" title="{{ title }}" href="{{ home }}"> {{ title }}</a>.
+                <a class="font-weight-bold" title="{{ title }}" href="{{ home }}"> {{ title }}</a>. 
+                Développé par <span><a target="_blank" href="https://web.whatsapp.com/send?phone=2250151571396&text=Bonjour Flavien Hugs !" class="font-weight-bold"
+                >unsta inc</a></span>.
             </p>
 
             {% include "includes/partials/_partials_social_link.html" %}
