@@ -1,8 +1,7 @@
 # pages.forms.py
 
 from django import forms
-from pages.models import Contact
-
+from pages.models import Contact, Promotion
 
 
 OBJECT_TYPES = (
@@ -83,9 +82,30 @@ class ContactForm(forms.ModelForm):
             if self.fields['subject']:
                 self.fields['subject'].widget.attrs.update({'class': 'form-control custom-select'})
 
-    def clean(self):
+    def email_clean(self):
         cleaned_data = super().clean()
         email = cleaned_data.get('email')
         email_base, provider = email.split("@")
         domain, extension = provider.split('.')
         return cleaned_data
+
+
+
+class PromotionForm(forms.ModelForm):
+
+    class Meta:
+        model = Promotion
+        fields = [
+            "category",
+            "title",
+            "image"
+        ]
+
+    def __init__(self, *args, **kwargs):
+        super(PromotionForm, self).__init__(*args, **kwargs)
+
+        for field in self.fields:
+            self.fields[field].widget.attrs['class'] = 'form-control'
+
+            if self.fields['category']:
+                self.fields['category'].widget.attrs.update({'class': 'form-control custom-select'})

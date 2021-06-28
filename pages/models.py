@@ -6,25 +6,11 @@ from django.db import models
 from django.utils import timezone
 
 from category.models import Category
+from django.utils.safestring import mark_safe
 from core.utils import upload_promotion_image_path
 
 
 NULL_AND_BLANK = {'null': True, 'blank': True}
-
-
-class Annonce(models.Model):
-    link_to = models.SlugField(
-        verbose_name='lien',
-        max_length=100
-    )
-    image = models.ImageField(
-        verbose_name='image',
-        upload_to=upload_promotion_image_path,
-        **NULL_AND_BLANK
-    )
-
-    class Meta:
-        abstract = True
 
 
 class Testimonial(models.Model):
@@ -66,7 +52,7 @@ class Testimonial(models.Model):
         verbose_name_plural = 'Témoignage'
 
 
-class Promotion(Annonce):
+class Promotion(models.Model):
     category = models.ForeignKey(
         Category,
         models.SET_NULL,
@@ -76,6 +62,16 @@ class Promotion(Annonce):
     title = models.CharField(
         max_length=120,
         verbose_name='Titre de la promotion'
+    )
+    slug = models.SlugField(
+        verbose_name='lien',
+        blank=True,
+
+    )
+    image = models.ImageField(
+        verbose_name='image',
+        upload_to=upload_promotion_image_path,
+        **NULL_AND_BLANK
     )
     active = models.BooleanField(
         verbose_name='promotion active ?',
@@ -89,8 +85,6 @@ class Promotion(Annonce):
 
     class Meta:
         db_table = 'promotion_db'
-        unique_together = ['link_to']
-        index_together = (('link_to','title'),)
         ordering = ['-created_at',]
         get_latest_by = ['-created_at',]
         verbose_name_plural = 'promotion'
@@ -112,7 +106,7 @@ class Promotion(Annonce):
     def save(self, *args, **kwargs): 
         super().save(*args, **kwargs)
         if self.has_changed('image'):
-            img = Image.open(self.image.path) 
+            img = Image.open(self.image.path)
             if img.height > 399 and img.width > 1650: 
                 output_size = (399, 1650) 
                 img.thumbnail(output_size)
@@ -123,6 +117,13 @@ class Promotion(Annonce):
         if self.image:
             return self.image.url
         return self.image
+
+
+    def show_image_tag(self):
+        if self.image is not None:
+            return mark_safe('<img src="{url}" height="50"/>'.format(url=self.get_image_url))
+        else:
+            return ""
 
 
 class Contact(models.Model):

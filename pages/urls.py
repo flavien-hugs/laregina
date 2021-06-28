@@ -8,11 +8,12 @@ from django.core.cache.backends.base import DEFAULT_TIMEOUT
 
 CACHE_TTL = getattr(settings, 'CACHE_TTL', DEFAULT_TIMEOUT)
 
-from pages.views import ContactView
+from pages import views
 
 app_name = 'pages'
 urlpatterns  = [
-    path('contact/', ContactView.as_view(), name='contact'),
+    path('contact/', views.ContactView.as_view(), name='contact'),
+    path('promotion/', views.PromotionView.as_view(), name='promotion'),
 
     path('about-us/',
         cache_page(CACHE_TTL)(TemplateView.as_view(
