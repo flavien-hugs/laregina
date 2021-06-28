@@ -8,7 +8,6 @@
         <div class="ps-sidebar__top">
             <div class="ps-block--user-wellcome">
                 <div class="ps-block__left">
-                    <!-- <img src="{{ STATIC_PREFIX }}img/users/admin.jpg" alt="{{ object.store }}"> -->
                 </div>
                 <div class="ps-block__right">
                     <p>Bonjour, <a>
@@ -31,12 +30,16 @@
                         <i class="icon-home"></i>Tableau de bord</a>
                     </li>
 
+                    <li><a class="{% if request.resolver_match.url_name == 'order_list' or request.resolver_match.url_name == 'order_detail' %}active{% endif %}"
+                        href="{{ seller_order_list }}"><i class="icon-bag2"></i>Mes Commandes</a></li>
+
                     <li><a class="{% if request.resolver_match.url_name == 'product_list' or request.resolver_match.url_name == 'product_create' or request.resolver_match.url_name == 'product_update' or request.resolver_match.url_name == 'product_delete' %}
                         active {% endif %}" href="{{ seller_product_list }}">
-                        <i class="icon-database"></i>Mes produits</a></li>
+                        <i class="icon-database"></i>Mes Produits</a></li>
 
                     <li><a class="{% if request.resolver_match.url_name == 'order_list' or request.resolver_match.url_name == 'order_detail' %}active{% endif %}"
-                        href="{{ seller_order_list }}"><i class="icon-bag2"></i>Mes commandes</a></li>
+                        href="{{ seller_order_list }}"><i class="icon-percent-circle"></i>Promotions</a>
+                    </li>
 
                     <hr class="pt-2 pb-2 mx-2">
                     
@@ -50,7 +53,8 @@
 
                     <li>
                         <a href="{{ deconnexion }}">
-                            <i class="icon-exit"></i>Deconnexion
+                            <i class="icon-exit"></i>
+                            Deconnexion
                         </a>
                     </li>
                 </ul>
