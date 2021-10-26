@@ -2,14 +2,10 @@
 
 from django.db import models
 from django.urls import reverse
-from django.conf import settings
-from django.utils import timezone
-from catalogue.models import Product
 
+from catalogue.models import Product
 from caching.caching import cache_update, cache_evict
 from reviews.managers import ActiveProductReviewManager
-
-User = settings.AUTH_USER_MODEL
 
 
 class ProductReview(models.Model):
@@ -20,17 +16,15 @@ class ProductReview(models.Model):
     
     RATINGS = ((1,1), (2,2), (3,3), (4,4), (5,5),)
 
-    user = models.ForeignKey(
-        User,
-        verbose_name='client',
-        on_delete=models.SET_NULL, 
+    name = models.CharField(
+        max_length=180,
+        verbose_name='nom & prénoms',
         null=True
     )
 
     product = models.ForeignKey(
-        Product,
-        models.SET_NULL,
-        null=True,
+        to=Product,
+        on_delete=models.PROTECT,
         verbose_name='produit'
     )
     email = models.EmailField(verbose_name='email')
@@ -56,10 +50,13 @@ class ProductReview(models.Model):
         index_together = (('product',),)
         ordering = ['-rating', '-created_time_at', '-created_time_at']
         get_latest_by = ['-created_time_at', '-created_time_at', '-rating']
-        verbose_name_plural = 'avis des clients'
+        verbose_name_plural = 'feedbacks'
+        indexes = [
+            models.Index(fields=['id'], name='id_index_reviews'),
+        ]
 
     def __str__(self):
-        return f'{self.product.name}: {self.rating} - {self.created_time_at}'
+        return f'{self.name} a donné son avis sur {self.product.name}: {self.rating} le {self.created_time_at}'
 
     def get_absolute_url(self):
         return reverse('reviews:add_product_review', kwargs={'slug': self.product.slug})
@@ -71,5 +68,6 @@ class ProductReview(models.Model):
 # attacher des signaux aux classes de modèles de review
 # pour mettre à jour les données du cache sur les opérations
 # de sauvegarde et de suppression
+
 models.signals.post_save.connect(cache_update, sender=ProductReview)
 models.signals.post_delete.connect(cache_evict, sender=ProductReview) 

@@ -1,256 +1,125 @@
 {% extends "base.html" %}
-{% load cache mptt_tags pages_tags %}
-
+{% load static mptt_tags pages_tags catalogue_tags %}
+{% get_static_prefix as STATIC_PREFIX %}
 
 {% block content %}
     {% url "home" as home_url %}
     {% url "account_signup" as signup %}
     {% url "pages:contact" as contact %}
     
-    {% cache 120 home request.user.id %}
-        <div class="ps-carousel--nav-inside owl-slider" data-owl-auto="true" data-owl-loop="true" data-owl-speed="5000" data-owl-gap="0" data-owl-nav="true" data-owl-dots="true" data-owl-item="1" data-owl-item-xs="1" data-owl-item-sm="1" data-owl-item-md="1" data-owl-item-lg="1" data-owl-duration="1000" data-owl-mousedrag="on">
-            <a href="{{ signup }}">
-                <div class="ps-vendor-banner bg--cover" data-background="{{ STATIC_PREFIX }}img/bg/vendor_slider.jpg"></div>
-            </a>
+    <div id="page-wrapper">
+        <section class="ps-home-banner ps-home-banner--1">
+            <div class="container px-0">
+                <div class="ps-section__left">
+                    <ul class="menu--dropdown">
+                        {% full_tree_for_model category.Category as category %}
 
-            <a href="{{ signup }}">
-                <div class="ps-vendor-banner bg--cover" data-background="{{ STATIC_PREFIX }}img/bg/vendor_slider_1.jpg"></div>
-            </a>
-
-            <a href="{{ signup }}">
-                <div class="ps-vendor-banner bg--cover" data-background="{{ STATIC_PREFIX }}img/bg/vendor_slider_2.jpg"></div>
-            </a>
-        </div>
-
-        <div class="ps-section--vendor ps-vendor-about p-5">
-            <div class="container">
-                <div class="ps-section__header">
-                    <p class="text-uppercase">pourquoi vendre sur {{ title }}</p>
-                    <h4>Rejoignez un marché où près de 50 millions d'acheteurs <br>
-                    du monde entier achètent des articles uniques</h4>
+                        {% recursetree category %}
+                        <li {% if not node.is_leaf_instance %} class="menu-item-has-children has-mega-menu" {% endif %}>
+                            <a href="{{ node.get_absolute_url }}">{{ node.name|safe }}</a>
+                        </li>
+                        {% endrecursetree category %}
+                    </ul>
                 </div>
-                <div class="ps-section__content">
-                    <div class="row">
-                        <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 col-12 ">
-                            <div class="ps-block--icon-box-2">
-                                <div class="ps-block__thumbnail">
-                                    <img src="{{ STATIC_PREFIX }}img/icons/vendor-1.png" alt="{{ title }}">
-                                </div>
-                                <div class="ps-block__content">
-                                    <h4>Frais bas</h4>
-                                    <div class="ps-block__desc" data-mh="about-desc">
-                                        <p>Il ne faut pas grand-chose pour lister vos articles et une fois que vous faites une vente,
-                                        les frais de transaction de <strong>{{ title }}</strong> ne sont que de <strong>5%</strong>.</p>
+
+                <div class="ps-section__right">
+                    <div class="ps-carousel--dots owl-slider" data-owl-auto="true" data-owl-loop="true" data-owl-speed="5000" data-owl-gap="0" data-owl-nav="false" data-owl-dots="true" data-owl-item="1" data-owl-item-xs="1" data-owl-item-sm="1" data-owl-item-md="1" data-owl-item-lg="1" data-owl-duration="1000" data-owl-mousedrag="on">
+                        <div class="ps-banner bg--cover" data-background="{{ STATIC_PREFIX }}img/bg/vendor_slider.jpg"><a href="#" class="ps-banner__overlay"></a></div>
+
+                        <div class="ps-banner bg--cover" data-background="{{ STATIC_PREFIX }}img/bg/vendor_slider_1.jpg"><a href="#" class="ps-banner__overlay"></a></div>
+
+                        <div class="ps-banner bg--cover" data-background="{{ STATIC_PREFIX }}img/bg/vendor_slider_2.jpg"><a href="#" class="ps-banner__overlay"></a></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        {% if supermaket.exists %}
+        
+        {% url "catalogue:product_list" as product_list_url %}
+
+        <section class="ps-deal-of-day pb-3">
+            <div class="container bg-white py-3">
+                <div class="ps-section__header mb-2">
+                    <h3 class="text-muted font-weight-bold">Électromenagers &amp; électroniques</h3>
+                    <a href="{{ product_list_url }}">Voir plus</a>
+                </div>
+
+                <div class="ps-section__content pt-4">
+                    <div class="ps-carousel--nav owl-slider" data-owl-auto="true" data-owl-loop="true" data-owl-speed="5000" data-owl-gap="30" data-owl-nav="true" data-owl-dots="true" data-owl-item="5" data-owl-item-xs="2" data-owl-item-sm="3" data-owl-item-md="4" data-owl-item-lg="4" data-owl-item-xl="5" data-owl-duration="1000" data-owl-mousedrag="on">
+                        {% for instance in supermaket|shuffle|slice:'0:12' %}
+                        {% include "catalogue/snippet/_snippet_product.html" with instance=instance %}
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </section>
+        {% endif %}
+
+        <section class="ps-home-ads pb-3">
+            <div class="container px-0">
+                <div class="row">
+                    <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 col-12 ">
+                        <a class="ps-collection" href="#">
+                            <img src="{{ STATIC_PREFIX }}img/bg/promotion-1.jpg" alt="">
+                        </a>
+                    </div>
+                    <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 col-12 ">
+                        <a class="ps-collection" href="#">
+                            <img src="{{ STATIC_PREFIX }}img/bg/promotion-2.jpg" alt="">
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        {% if vendor_list %}
+            <div class="ps-deal-of-day pb-4">
+                <div class="container bg-white py-5">
+                    <div class="ps-section__header mb-2">
+                        <h3 class="text-muted font-weight-bold">Ils nous ont réjoins</h3>
+                        <a href="{{ market.get_absolute_url }}">Voir plus</a>
+                    </div>
+                    <div class="ps-section__content">
+                        <div class="ps-carousel--nav owl-slider" data-owl-auto="true" data-owl-loop="true" data-owl-speed="10000" data-owl-gap="30" data-owl-nav="true" data-owl-dots="true" data-owl-item="5" data-owl-item-xs="2" data-owl-item-sm="3" data-owl-item-md="4" data-owl-item-lg="4" data-owl-item-xl="5" data-owl-duration="1000" data-owl-mousedrag="on">
+                            {% for vendor in vendor_list %}
+                                <div class="ps-block--category-room border">
+                                    <div class="ps-block__thumbnail">
+                                        <a href="{{ vendor.get_absolute_url }}">
+                                            <img src="{{ STATIC_PREFIX }}img/empty_image.svg" alt="{{ vendor.store }}">
+                                        </a>
+                                    </div>
+                                    <div class="ps-block__content">
+                                        <a class="font-weight-bold" href="{{ vendor.get_absolute_url }}">{{ vendor.store }}</a>
                                     </div>
                                 </div>
-                            </div>
-                        </div>
-                        <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 col-12 ">
-                            <div class="ps-block--icon-box-2">
-                                <div class="ps-block__thumbnail">
-                                    <img src="{{ STATIC_PREFIX }}img/icons/vendor-2.png" alt="{{ title }}">
-                                </div>
-                                <div class="ps-block__content">
-                                    <h4>Des outils puissants</h4>
-                                    <div class="ps-block__desc" data-mh="about-desc">
-                                        <p>Nos outils et services facilitent la gestion,
-                                        la promotion et la croissance de votre boutique.</p>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-xl-4 col-lg-4 col-md-12 col-sm-12 col-12 ">
-                            <div class="ps-block--icon-box-2">
-                                <div class="ps-block__thumbnail">
-                                    <img src="{{ STATIC_PREFIX }}img/icons/vendor-3.png" alt="{{ title }}">
-                                </div>
-                                <div class="ps-block__content">
-                                    <h4>Assistance 24/7</h4>
-                                    <div class="ps-block__desc" data-mh="about-desc">
-                                        <p>Assistance client 24h/24 et 7jrs/7 pour vous aider à vendre vos produits.</p>
-                                    </div>
-                                </div>
-                            </div>
+                            {% endfor %}
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
+        {% endif %}
 
-        <div class="ps-section--vendor ps-vendor-milestone">
-            <div class="container">
-                <div class="ps-section__header">
-                    <p class="text-uppercase">comment ça fonctionne</p>
-                    <h5>Facile de commencer à vendre en ligne sur <strong>{{ title }}</strong> en seulement 4 
-                    étapes simples</h5>
+        <!-- product recently viewed -->
+        {% if recently_viewed %}
+        <section class="ps-deal-of-day pb-3">
+            <div class="container bg-white py-5">
+                <div class="ps-section__header mb-2">
+                    <h3 class="text-muted font-weight-bold">Produits récemment vus</h3>
                 </div>
-                <div class="ps-section__content">
-                    <div class="ps-block--vendor-milestone">
-                        <div class="ps-block__left">
-                            <h4>Ouvrez un compte</h4>
-                            <ul>
-                                <li>Enregistrez votre <strong>boutique</strong> gratuitement et ajouter des produits à vendre.
-                                Obtenez une formation gratuite sur la gestion de votre <strong>boutique</strong> en ligne.</li>
-                                <li>Nos conseillers <strong>{{ title }}</strong> vous aideront à chaque étape et vous assisteront
-                                pleinement dans la mise en ligne de votre entreprise</li>
-                            </ul>
-                        </div>
-                        <div class="ps-block__right"><img src="{{ STATIC_PREFIX }}img/vendor/milestone-1.png" alt=""></div>
-                        <div class="ps-block__number"><span>1</span></div>
-                    </div>
-                    
-                    <div class="ps-block--vendor-milestone reverse">
-                        <div class="ps-block__left">
-                            <h4>Gestion de vos commandes</h4>
-                            <ul>
-                                <li>Vos commandes sont listées sur votre tableau de bord.</li>
-                            </ul>
-                        </div>
-                        <div class="ps-block__right"><img src="{{ STATIC_PREFIX }}img/vendor/milestone-2.png" alt=""></div>
-                        <div class="ps-block__number"><span>2</span></div>
-                    </div>
 
-                    <div class="ps-block--vendor-milestone">
-                        <div class="ps-block__left">
-                            <h4>Emballer et expédier facilement</h4>
-                            <ul>
-                               <li>Vos commandes sont collectés par les serivces de livraison de <strong>{{ title }}</strong>
-                               et livré en toute sécurité et garantie.</li>
-                            </ul>
-                        </div>
-                        <div class="ps-block__right"><img src="{{ STATIC_PREFIX }}img/vendor/milestone-3.png" alt=""></div>
-                        <div class="ps-block__number"><span>3</span></div>
-                    </div>
-                    
-                    <div class="ps-block--vendor-milestone reverse">
-                        <div class="ps-block__left">
-                            <h4>Paiement facile &amp; sécurisé</h4>
-                            <ul>
-                                <li>L'achat de vos produits se via mobile money ou par livraison.</li>
-                            </ul>
-                        </div>
-                        <div class="ps-block__right"><img src="{{ STATIC_PREFIX }}img/vendor/milestone-4.png" alt=""></div>
-                        <div class="ps-block__number"><span>4</span></div>
+                <div class="ps-section__content">
+                    <div class="ps-carousel--nav owl-slider" data-owl-auto="true" data-owl-loop="true" data-owl-speed="5000" data-owl-gap="30" data-owl-nav="true" data-owl-dots="true" data-owl-item="5" data-owl-item-xs="2" data-owl-item-sm="3" data-owl-item-md="4" data-owl-item-lg="4" data-owl-item-xl="5" data-owl-duration="1000" data-owl-mousedrag="on">
+                        {% for instance in recently_viewed|slice:'0:25' %}
+                        {% include "catalogue/snippet/_snippet_product.html" with instance=instance %}
+                        {% endfor %}
                     </div>
                 </div>
             </div>
-        </div>
-
-        <div class="ps-section--vendor ps-vendor-best-fees">
-            <div class="container">
-                <div class="ps-section__header">
-                    <p class="text-uppercase">aucun frais pour commencer</p>
-                    <h4>Abordable, transparent et sécurisé</h4>
-                </div>
-                <div class="ps-section__content">
-                    <h5>
-                        Cela ne coûte rien de répertorier jusqu'à 50 articles par mois, et vous êtes 
-                        payez qu'une fois vos articles vendus. 
-                        C'est juste un petit pourcentage de l'argent que nous gagnons.
-                    </h5>
-                    <div class="ps-section__numbers">
-                        <figure>
-                            <h3>0Fr</h3>
-                            <span>Frais de liste</span>
-                        </figure>
-                        <figure>
-                            <h3>5%</h3><span>Commission</span>
-                        </figure>
-                    </div>
-                    <div class="ps-section__desc">
-                        <figure>
-                            <figcaption>Voici ce que vous obtenez pour vos frais:</figcaption>
-                            <ul>
-                                <li>Une communauté mondiale de plus de 160 millions d'acheteurs.</li>
-                                <li>Des étiquettes d'expédition que vous pouvez imprimer à la maison, avec de gros rabais sur les frais de port.</li>
-                            </ul>
-                        </figure>
-                    </div>
-                    <div class="ps-section__highlight"><img src="{{ STATIC_PREFIX }}img/icons/vendor-4.png" alt="{{ title }}">
-                        <figure>
-                            <p>Nous traitons les paiements avec Le service de paiement mobile CINETPAY, une plateforme de paiement externe qui vous permet de traiter les transactions avec une variété de méthodes de paiement. Les fonds provenant des ventes sur {{ title }} seront déposés sur votre compte.</p>
-                        </figure>
-                    </div>
-                </div>
-            </div>
-        </div>
+        </section>
+        {% endif %}
 
         <!-- user testimonial -->
         {% testimonial_list 5 %}
-
-        <!-- faq -->
-        <div class="ps-section--vendor ps-vendor-faqs">
-            <div class="container">
-                <div class="ps-section__header">
-                    <p class="text-uppercase">questions fréquemment posées</p>
-                    <h4>Voici quelques questions courantes sur la vente sur {{ title }}</h4>
-                </div>
-                <div class="ps-section__content">
-                    <div class="row">
-                        <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12 ">
-                            <figure>
-                                <figcaption>Comment fonctionnent les frais sur {{ title }} ?</figcaption>
-                                <p>Rejoindre et démarrer une boutique sur <a href="{{ home_url }}"><strong>{{ title }}</strong></a> est gratuit.</p>
-                                <p>
-                                    Il en coûte <strong>10 000 FRCFA</strong> pour publier une annonce sur publicitaire sur <strong>{{ title }}</strong>.
-                                    Une liste de produits dure trois (03) mois ou jusqu'à ce que l'article soit vendu.
-                                </p>
-                                <p>Une commision de <strong>5%</strong> s'applique sur la commande finale (hors frais de port).</p>
-                                <p>
-                                    Si vous acceptez les paiements via PayPal/Carte Visa/Master Card, des frais de traitement des paiements sont également
-                                    facturés en fonction de leur structure de frais
-                                </p>
-                            </figure>
-
-                            <figure>
-                                <figcaption>Que dois-je faire pour créer une boutique?</figcaption>
-                                <p>Il est facile de créer une boutique sur {{ title }}. Créez un compte {{ title }} (si vous n'en avez pas déjà un), définissez l'emplacement de votre boutique, choisissez un nom de boutique et enfin créez une liste.</p>
-                            </figure>
-                        </div>
-                        
-                        <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12 ">
-                            <figure>
-                                <figcaption>Comment suis-je payé ?</figcaption>
-                                <p>
-                                    Tout vendeur sur <strong>{{ title }}</strong> est soumis a une règlementation stricte afin d’éviter toute arnaque …
-                                </p>
-
-                                <p>
-                                    Une fois le produit d’un vendeur acheté sur la plateforme, ledit vendeur reçoit son paiement dès lors que le produit vendu est livré au consommateur final et ce,
-                                    dans un délai de sept (07) jours maximum.
-                                </p>
-                            </figure>
-
-                            <figure>
-                                <figcaption>
-                                Ai-je besoin d'une carte de crédit ou de débit pour créer une boutique?</figcaption>
-                                <p>Non, une carte de crédit ou de débit n'est pas nécessaire pour créer une boutique.
-                                Pour être vérifié en tant que vendeur, vous avez le choix d'utiliser une carte de crédit.
-                                Vous n'aurez aucun frais jusqu'à ce que vous publiez vos annonces.</p>
-                            </figure>
-
-                            <figure>
-                                <figcaption>Que puis-je vendre sur {{ title }}?</figcaption>
-                                <p>{{ title }} fournit un marché aux aux entrepreneurs, aux hommes d’affaires, aux commerçants, aux fonctionnaires
-                                avec une variété de catégories telles que : supermarché, électroménagers, électronique, informatique, téléphones et 
-                                tablettes, beauté et soins corporel, habillement et mode, librairie et papeterie, loisirs et jouets ...
-                                </p>
-                            </figure>
-                        </div>
-                    </div>
-                </div>
-                <div class="ps-section__footer">
-                    <p>Vous avez encore d'autres questions? N'hésitez pas à nous contacter.</p>
-                    <a class="ps-btn" href="{{ contact }}">Nous contacter</a>
-                </div>
-            </div>
-        </div>
-        
-        <div class="ps-vendor-banner bg--cover" data-background="{{ STATIC_PREFIX }}img/bg/vendor.jpg">
-            <div class="container">
-                <h2>Il est temps de commencer à gagner de l'argent.</h2>
-                <a class="ps-btn ps-btn--lg" href="{{ signup }}">Commencer à vendre</a>
-            </div>
-        </div>
-    {% endcache %}
+    </div>
 {% endblock content %}

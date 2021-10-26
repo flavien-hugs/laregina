@@ -20,3 +20,6 @@ class SearchView(ListView):
         query = self.request.GET.get('q', None)
         search.store(self.request, query)
         return search.products(query).get('products', [])
+
+
+search_view = SearchView.as_view()

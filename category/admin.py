@@ -7,23 +7,31 @@ from category.models import Category
 from catalogue.models import Product
 
 from mptt.admin import DraggableMPTTAdmin
-from mptt.admin import TreeRelatedFieldListFilter
 
 
 @admin.register(Category)
 class CategoryAdmin(DraggableMPTTAdmin):
-    mptt_indent_field = "name"
     mptt_level_indent = 20
+    mptt_indent_field = "parent"
+    expand_tree_by_default = False
 
+    fieldsets = (
+        ('catégorie', {'fields':
+            (   
+                "parent", 
+                ("name", "slug"),
+                "image",
+                "is_active",
+            )}
+        ),
+    )
+    list_per_page = mptt_level_indent
     list_display = (
-        'tree_actions', 'indented_title',
-        'related_products_count',
+        'id', 'tree_actions', 'indented_title',
         'related_products_cumulative_count'
     )
-
-    list_display_links = ('indented_title',)
+    list_display_links = ('id', 'indented_title',)
     prepopulated_fields = {'slug': ('name',)}
-    list_filter = (('parent', TreeRelatedFieldListFilter),)
 
     def get_queryset(self, request):
         qs = super().get_queryset(request)
@@ -36,10 +44,6 @@ class CategoryAdmin(DraggableMPTTAdmin):
             qs, Product, 'category', 'products_count', cumulative=True)
         return qs
 
-    def related_products_count(self, instance):
-        return instance.products_count
-    related_products_count.short_description = 'Produits similaires (pour cette catégorie spécifique)'
-
+    @admin.display(description="nombre de produits similaires")
     def related_products_cumulative_count(self, instance):
         return instance.products_cumulative_count
-    related_products_cumulative_count.short_description = 'Produits similaires'

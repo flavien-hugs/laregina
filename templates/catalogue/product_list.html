@@ -20,8 +20,8 @@
     {% endif %}
 
     <div class="ps-page--shop pt-2">
-        <div class="ps-container">
-            {% if not request.resolver_match.url_name == 'product_list' and not request.resolver_match.url_name == 'search' %}
+        <div class="container">
+            {% if promotion_list and not request.resolver_match.url_name == 'product_list' and not request.resolver_match.url_name == 'search' %}
                 <div class="ps-shop-banner">
                     <div class="ps-carousel--nav-inside owl-slider" data-owl-auto="true" data-owl-loop="true" data-owl-speed="5000" data-owl-gap="0" data-owl-nav="true" data-owl-dots="true" data-owl-item="1" data-owl-item-xs="1" data-owl-item-sm="1" data-owl-item-md="1" data-owl-item-lg="1" data-owl-duration="1000" data-owl-mousedrag="on">
                         {% promotion_list 8 %}
@@ -29,7 +29,7 @@
                 </div>
             {% endif %}
 
-            <div class="ps-layout--shop">
+            <div class="ps-layout--shop border-bottom">
                 {% include "catalogue/partials/_partials_shop.html" %}
             </div>
         </div>

@@ -1,12 +1,11 @@
 # category.models.py
 
-import operator
 from django.db import models
-from django.db.models import Q
 from django.urls import reverse
+from django.dispatch import receiver
 
-from core.utils import unique_slug_generator
 from mptt.models import MPTTModel, TreeForeignKey
+from core.utils import upload_image_path, unique_slug_generator
 
 
 class ActiveCategoryManager(models.Manager):
@@ -27,9 +26,17 @@ class Category(MPTTModel):
         db_index=True,
         verbose_name='sous-catégorie',
     )
+    image = models.ImageField(
+        verbose_name='cover catégorie',
+        upload_to=upload_image_path,
+        null=True, blank=True,
+        help_text="Taille: 300x300px"
+    )
     slug = models.SlugField(
         verbose_name='lien',
-        db_index=True,
+        db_index=True, unique=True,
+        blank=True, null=True
+
     )
     created_at = models.DateTimeField(auto_now_add=True, auto_now=False)
     updated_at = models.DateTimeField(auto_now_add=False, auto_now=True)
@@ -44,7 +51,6 @@ class Category(MPTTModel):
         db_table = 'category_db'
         verbose_name_plural = 'catégories'
         unique_together = (('parent', 'slug',))
-
 
     def get_slug_list(self):
         try:
@@ -62,8 +68,10 @@ class Category(MPTTModel):
     def __str__(self):
         return self.name
 
-    def __repr__(self):
-       return self.__str__()
+    def get_products_in_category(self):
+        from catalogue.models import Product
+        products = Product.objects.filter(category=self)
+        return products
 
     def get_absolute_url(self):
         return reverse('category:category_detail', kwargs={'slug': str(self.slug)})
@@ -71,3 +79,9 @@ class Category(MPTTModel):
     @property
     def cache_key(self):
         return self.get_absolute_url()
+
+
+@receiver([models.signals.pre_save], sender=Category)
+def category_pre_save_receiver(sender, instance, *args, **kwargs):
+    if not instance.slug:
+        instance.slug = unique_slug_generator(instance)

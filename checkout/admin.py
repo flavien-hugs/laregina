@@ -27,7 +27,7 @@ class OrderItemStackedInline(admin.StackedInline):
 
 @admin.register(Order)
 class OrderAdmin(admin.ModelAdmin):
-
+    model = Order
     date_hierarchy = 'created_at'
     fk_name = "product"
     readonly_fields = [
@@ -58,29 +58,28 @@ class OrderAdmin(admin.ModelAdmin):
         'shipping_country',
         'shipping_city',
         'phone',
-        'phone_two',
     ]
 
     fieldsets = (
         ('Status de la commande',
             {
                 'fields': (
-                    'status',
+                    ('status', 'email'),
                 )
             }
         ),
-        ('Information sur la livraison',
+        ('Information sur la commande',
             {
                 'fields': (
                     ('shipping_country', 'shipping_city'),
                     ('shipping_adress', 'shipping_zip'),
                     ('phone', 'phone_two'),
-                    'note', 'emailing'
+                    'note', 'emailing',
                 )
             }
         )
     )
-    list_per_page = 5
+    list_per_page = 10
     inlines = [OrderItemStackedInline,]
     actions = [
         export_to_csv,
@@ -91,19 +90,18 @@ class OrderAdmin(admin.ModelAdmin):
     ]
     search_fields = ['created_at', 'transaction_id']
 
-
+    @admin.display(description="commande en cours de traitement")
     def make_submitted(self, request, queryset):
         queryset.update(status='SUBMITTED')
-    make_submitted.short_description = 'Marquer comme en cours de traitement'
 
+    @admin.display(description="commande livrée")
     def make_shipped(self, request, queryset):
         queryset.update(status='SHIPPED')
-    make_shipped.short_description = 'Marquer comme livrée'
 
+    @admin.display(description="commande annulée")
     def make_cancelled(self, request, queryset):
         queryset.update(status='CANCELLED')
-    make_cancelled.short_description = 'Marquer comme annulée'
 
+    @admin.display(description="commande en cours de livraison")
     def make_processed(self, request, queryset):
         queryset.update(status='PROCESSED')
-    make_processed.short_description = 'Marquer comme en cours de livraison'

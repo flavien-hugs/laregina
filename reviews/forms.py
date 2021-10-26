@@ -12,6 +12,14 @@ class ProductReviewForm(forms.ModelForm):
     un avis utilisateur
     """
 
+    name = forms.EmailField(
+        max_length=180,
+        required=True,
+        widget=forms.EmailInput(attrs={
+            "placeholder": "Votre nom & prénoms *"
+        }),
+    )
+
     email = forms.EmailField(
         max_length=150,
         required=True,
@@ -35,7 +43,7 @@ class ProductReviewForm(forms.ModelForm):
     
     class Meta:
         model = ProductReview
-        fields = ['rating', 'email', 'content']
+        fields = ['name', 'rating', 'email', 'content']
 
     def __init__(self, *args, **kwargs):
         super(ProductReviewForm, self).__init__(*args, **kwargs)

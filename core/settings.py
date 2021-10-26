@@ -1,9 +1,11 @@
 # core/settings.py
 
+import re
 import os
 from pathlib import Path
-from decouple import config
 from django.contrib.messages import constants as messages
+
+from decouple import config
 
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -50,12 +52,13 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
 
     'django.contrib.humanize',
-    'django.contrib.admin',
-
     'django.contrib.sitemaps',
 ]
 
 OTHERS_APPS = [
+    'jet.dashboard',
+    'jet',
+    'django.contrib.admin',
 
     'crispy_forms',
 
@@ -66,6 +69,9 @@ OTHERS_APPS = [
     'phonenumber_field',
     'phonenumbers',
     'mptt',
+
+    'django_summernote',
+    'compressor',
 ]
 
 LOCAL_APPS = [
@@ -145,15 +151,21 @@ CACHE_TIMEOUT = 60 * 60
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',
+
     'django.contrib.sessions.middleware.SessionMiddleware',
+    
+    'django.middleware.locale.LocaleMiddleware',
+    'django.middleware.common.CommonMiddleware',
+
     'django.middleware.csrf.CsrfViewMiddleware',
-    'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
+    "django.middleware.common.BrokenLinkEmailsMiddleware",
+    'django.middleware.clickjacking.XFrameOptionsMiddleware',
 
-    'django.middleware.locale.LocaleMiddleware',
+    'django.middleware.gzip.GZipMiddleware',
     'django.middleware.http.ConditionalGetMiddleware',
-    'django.middleware.common.CommonMiddleware',
 ]
 
 ROOT_URLCONF = 'core.urls'
@@ -186,31 +198,48 @@ TEMPLATES = [
     },
 ]
 
-# Configuration django-jet
-# https://jet.readthedocs.io/en/latest/config_file.html
+# See: https://docs.djangoproject.com/en/1.11/ref/settings/#wsgi-application
+WSGI_APPLICATION = 'core.wsgi.application'
+
+# https://docs.djangoproject.com/en/dev/ref/settings/#session-cookie-httponly
+SESSION_COOKIE_HTTPONLY = True
+
+# https://docs.djangoproject.com/en/dev/ref/settings/#csrf-cookie-httponly
+CSRF_COOKIE_HTTPONLY = True
+
+# https://docs.djangoproject.com/en/dev/ref/settings/#secure-browser-xss-filter
+SECURE_BROWSER_XSS_FILTER = True
+
+# https://docs.djangoproject.com/en/dev/ref/settings/#x-frame-options
+X_FRAME_OPTIONS = "SAMEORIGINE"
 
 # See: http://django-crispy-forms.readthedocs.io/en/latest/install.html#template-packs
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
 
-# See: https://docs.djangoproject.com/en/1.11/ref/settings/#wsgi-application
-WSGI_APPLICATION = 'core.wsgi.application'
-
 # Database
 # https://docs.djangoproject.com/en/3.1/ref/settings/#databases
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.mysql',
-        'NAME': config('DATABASE_NAME'),
-        'USER': config('DATABASE_USER'),
-        'PASSWORD': config('DATABASE_PASSWORD'),
-        'HOST': config('DATABASE_HOST', cast=str),
-        'PORT': config('DATABASE_PORT', cast=int),
-        'OPTIONS': {
-            "init_command": "SET sql_mode='STRICT_TRANS_TABLES'",
+if DEBUG:
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.sqlite3',
+            'NAME': str(BASE_DIR / 'db.sqlite3')
         }
     }
-}
+else:
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.mysql',
+            'NAME': config('DATABASE_NAME'),
+            'USER': config('DATABASE_USER'),
+            'PASSWORD': config('DATABASE_PASSWORD'),
+            'HOST': config('DATABASE_HOST', cast=str),
+            'PORT': config('DATABASE_PORT', cast=int),
+            'OPTIONS': {
+                "init_command": "SET sql_mode='STRICT_TRANS_TABLES'",
+            }
+        }
+    }
 
 
 # Password validation
@@ -241,12 +270,11 @@ PASSWORD_HASHERS = [
 # https://docs.djangoproject.com/fr/3.1/ref/settings/
 DEFAULT_HASHING_ALGORITHM = 'sha1'
 
-
 # Internationalization
 # https://docs.djangoproject.com/en/3.1/topics/i18n/
 
-LANGUAGE_CODE = 'fr-fr'
 TIME_ZONE = 'UTC'
+LANGUAGE_CODE = 'fr-fr'
 USE_I18N = USE_L10N = USE_TZ = True
 DATE_INPUT_FORMATS = ('%d/%m/%Y', '%Y-%m-%d')
 
@@ -266,11 +294,12 @@ STATICFILES_DIRS = [BASE_DIR / 'static']
 STATICFILES_FINDERS = [
     'django.contrib.staticfiles.finders.FileSystemFinder',
     'django.contrib.staticfiles.finders.AppDirectoriesFinder',
+
+    'compressor.finders.CompressorFinder',
 ]
 
-# Activez le backend de stockage WhiteNoise qui se charge de compresser
-# les fichiers statiques et de créer des noms uniques pour chaque version
-# afin qu'ils puissent être mis en cache à jamais en toute sécurité.
+# https://warehouse.python.org/project/whitenoise/
+
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 # Messages built-in framework
@@ -283,21 +312,23 @@ MESSAGE_TAGS = {
     messages.ERROR: 'alert-danger',
 }
 
+# default is 10 pixels
+# https://django-mptt.readthedocs.io/en/latest/admin.html
+
 MPTT_ADMIN_LEVEL_INDENT = 20
 
-# https://django-redis-cache.readthedocs.io/en/latest/intro_quick_start.html
-# https://pypi.org/project/django-redis/
-
-
 # phonenumber config
+
 PHONENUMBER_DEFAULT_REGION = "CI"
 PHONENUMBER_DB_FORMAT = "NATIONAL"
 
 # CINETPAY API KEY
+
 CINETPAY_API_KEY = config('CINETPAY_API_KEY')
 CINETPAY_SITE_ID = config('CINETPAY_SITE_ID')
 
 # Mailchimp Configuration
+
 MAILCHIMP_API_KEY = config('MAILCHIMP_API_KEY')
 MAILCHIMP_SUBSCRIBE_LIST_ID = config('MAILCHIMP_SUBSCRIBE_LIST_ID')
 
@@ -305,4 +336,82 @@ MAILCHIMP_SUBSCRIBE_LIST_ID = config('MAILCHIMP_SUBSCRIBE_LIST_ID')
 # sérialise pas les modèles. Nous devrions résoudre ce problème en étendant la
 # django/core/serializers/json.Serializer pour avoir la fonction de `dumps`.
 # dans tests/config.py
+
 SESSION_SERIALIZER = 'django.contrib.sessions.serializers.JSONSerializer'
+
+# Default primary key field type
+# https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
+
+DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+# https://docs.djangoproject.com/fr/3.2/ref/settings/#ignorable-404-urls
+
+IGNORABLE_404_URLS = [
+    re.compile(r'^/apple-touch-icon.*\.png$'),
+    re.compile(r'^/favicon\.ico$'),
+    re.compile(r'^/robots\.txt$'),
+]
+
+
+# Configuration django-jet
+# https://jet.readthedocs.io/en/latest/config_file.html
+
+JET_THEMES = [
+    {
+        'theme': 'light-gray',
+        'color': '#222',
+        'title': 'Light Gray'
+    }
+]
+
+JET_SIDE_MENU_COMPACT = True
+JET_CHANGE_FORM_SIBLING_LINKS = True
+
+# Summernote configuration
+# https://github.com/summernote/django-summernote
+
+# Show summernote with Bootstrap4
+SUMMERNOTE_THEME = 'bs4'
+
+SUMMERNOTE_CONFIG = {
+    # Using SummernoteWidget - iframe mode, default
+    'iframe': True,
+
+    'summernote': {
+        # As an example, using Summernote Air-mode
+        'airMode': False,
+
+        # Change editor size
+        'width': '790',
+        'height': '300',
+
+        # Toolbar customization
+        # https://summernote.org/deep-dive/#custom-toolbar-popover
+        'toolbar': [
+            ['font', ['bold', 'italic', 'underline', 'clear']],
+            ['fontname', ['fontname']],
+            ['color', ['color']],
+            ['para', ['ul', 'ol', 'paragraph']],
+            ['height', ['height']],
+            ['table', ['table']],
+            ['insert', ['picture', 'hr']],
+            ['view', ['fullscreen']],
+        ],
+
+        # Set to `True` to return attachment paths in absolute URIs.
+        'attachment_absolute_uri': True,
+
+        # Require users to be authenticated for uploading attachments.
+        'attachment_require_authentication': True,
+
+        # Set custom storage class for attachments.
+        'attachment_storage_class': 'core.utils.upload_image_path',
+
+        'codemirror': {
+            'mode': 'htmlmixed',
+            'lineNumbers': 'true',
+            # You have to include theme file in 'css' or 'css_for_inplace' before using it.
+            'theme': 'monokai',
+        },
+    },
+}

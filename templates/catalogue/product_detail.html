@@ -26,7 +26,7 @@
         {% endif %}
 
         <div class="ps-page--product">
-            <div class="ps-container">
+            <div class="container">
                 <div class="ps-page__container">
                     <div class="ps-page__left">
                         <div class="ps-product--detail ps-product--fullwidth">
@@ -92,8 +92,6 @@
                                     <li class="active"><a href="#tab-1">Description</a></li>
                                     <li><a href="#tab-2">Vendeur</a></li>
                                     <li><a href="#tab-3">Avis client ({{ object.countreview|safe }})</a></li>
-                                    <li><a href="#tab-4">FAQ</a></li>
-                                    <li><a href="#tab-5">Plus d'Offres</a></li>
                                 </ul>
 
                                 <div class="ps-tabs">
@@ -119,20 +117,6 @@
                                         <div class="row">
                                             {% include "includes/partials/_partials_product_review.html" %}
                                         </div>
-                                    </div>
-
-                                    <div class="ps-tab" id="tab-4">
-                                        <div class="ps-block--questions-answers">
-                                            <h3>Questions et Réponses</h3>
-                                            <div class="form-group">
-                                                <input class="form-control" type="text" placeholder="Vous avez une question ? Chercher une réponse ?">
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="ps-tab" id="tab-5">
-                                        <p>
-                                            Désolé, il n'y a plus d'offres disponibles
-                                        </p>
                                     </div>
                                 </div>
                             </div>

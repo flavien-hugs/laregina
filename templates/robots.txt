@@ -10,38 +10,6 @@
 # Sitemap files
 Sitemap: https://www.laregina.deals/sitemap.xml
 
-# facets
-
-Disallow: /*burners=
-Disallow: /*capacity=
-Disallow: /*capacity_litres=
-Disallow: /*capacity_kg=
-Disallow: /*capacity_kva=
-Disallow: /*capacity_mah=
-Disallow: /*compatible_with=
-Disallow: /*connection=
-Disallow: /*connectivity=
-Disallow: /*connexion=
-Disallow: /*cookertype=
-Disallow: /*cpu_brand=
-Disallow: /*cpu_speed=
-Disallow: /*network_supported=
-Disallow: /*network_type=
-Disallow: /*operating_system=
-Disallow: /*optical_zoom=
-Disallow: /*paper_size=
-Disallow: /*perfume_size=
-Disallow: /*perfume_type=
-Disallow: /*phone_compatibility=
-Disallow: /*power=
-Disallow: /*price=
-Disallow: /*product_line=
-Disallow: /*product_type=
-Disallow: /*ram=
-Disallow: /*ram_memory=
-Disallow: /*width=
-Disallow: /*userSpecific=
-Disallow: /*token=
 
 User-agent: *
 Disallow: /admin/

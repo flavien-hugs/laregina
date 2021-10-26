@@ -6,15 +6,18 @@ import datetime
 
 from django.db import models
 from django.urls import reverse
+from django.contrib import admin
+from django.dispatch import receiver
 from django.utils.text import slugify
 from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin
 
-from category.models import Category
 from checkout.models import BaseOrderInfo
 from accounts.managers import UserManager
 
-from core.utils import upload_image_path
+from allauth.account.models import EmailAddress
+from core.utils import vendor_unique_slug_generator
 
+import phonenumbers
 from django_countries.fields import CountryField
 from phonenumber_field.modelfields import PhoneNumberField
 
@@ -80,7 +83,7 @@ class User(BaseOrderInfo, AbstractBaseUser, PermissionsMixin):
         **NULL_AND_BLANK
     )
     instagramm = models.URLField(
-        verbose_name='compte instagramm',
+        verbose_name='compte instagram',
         max_length=250,
         **NULL_AND_BLANK
     )
@@ -126,20 +129,17 @@ class User(BaseOrderInfo, AbstractBaseUser, PermissionsMixin):
         index_together = (('email',),)
         ordering = ('-date_joined', '-last_login')
         get_latest_by = ('-date_joined', '-last_login')
-        verbose_name_plural = 'vendeur(s)'
+        verbose_name_plural = 'boutiques'
+
+        indexes = [models.Index(fields=['id'], name='id_index'),]
+
 
     def __str__(self):
-        return '{store} | {name}'.format(
-            store=self.store.upper(),
-            name=self.shipping_last_name.capitalize()
-        )
+        return f"{self.store.upper()} | {self.shipping_last_name.capitalize()}"
 
     def save(self, *args, **kwargs):
         if self.is_seller:
             self.generate(6)
-
-        if not self.slug:
-            self.slug = slugify(self.store)
         super().save(*args, **kwargs)
 
     def generate(self, nb_carac):
@@ -150,12 +150,19 @@ class User(BaseOrderInfo, AbstractBaseUser, PermissionsMixin):
 
     def get_fullname(self):
         if self.civility and self.shipping_first_name:
-            full_name = '{civility} {shipping_first_name}'.format(
-                civility=str(self.civility),
-                shipping_first_name=str(self.shipping_first_name)
-            )
+            full_name = f"{self.civility} {self.shipping_first_name}"
             return full_name.strip()
         return self.email
+
+    def formatted_phone(self, country=None):
+        return phonenumbers.parse(self.phone, country)
+
+    @admin.display(description="account verified")
+    def account_verified(self):
+        result = EmailAddress.objects.filter(email=self.email)
+        if len(result):
+            return result[0].verified
+        return False
 
     def has_perm(self, perm, obj=None):
         "L'utilisateur a-t-il les permissions pour voir l'application `app_label` ?"
@@ -203,3 +210,9 @@ class GuestCustomer(BaseOrderInfo):
             )
             return full_name.strip()
         return self.email
+
+
+@receiver([models.signals.pre_save], sender=User)
+def vendor_pre_save_receiver(sender, instance, *args, **kwargs):
+    if not instance.slug:
+        instance.slug = vendor_unique_slug_generator(instance)

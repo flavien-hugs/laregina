@@ -1,36 +1,54 @@
 # acccounts.admin.py
 
 from django.contrib import admin
+from django.utils.html import format_html
 from django.contrib.auth.models import Group
-from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
+from django.utils.safestring import mark_safe
+from django.contrib.auth import get_user_model
+from django.contrib.auth.forms import UserChangeForm
 
-from accounts.models import User, GuestCustomer
 from services.export_data_csv import export_to_csv
-from accounts.forms import MarketSignupForm, MarketChangeForm
 
 admin.site.unregister(Group)
 
 
-@admin.register(User)
-class UserAdmin(BaseUserAdmin):
+@admin.register(get_user_model())
+class UserAdmin(admin.ModelAdmin):
+    model = get_user_model()
+    form = UserChangeForm
     date_hierarchy = 'date_joined'
-    add_form = MarketSignupForm
     fieldsets = (
-        (None, {'fields':
+        ('information sur boutique', {'fields':
             (   
-                "store_id",
-                "store",
-                "shipping_first_name",
-                "shipping_last_name",
-                "email",
-                "slug",
-                "phone",
-                "phone_two",
-                "shipping_country",
-                "shipping_city",
-                "store_description",
-                "shipping_adress",
+                ("store_id", "email"), 
+                ("store", "slug"),
+                ("shipping_first_name", "shipping_last_name"),
             )}
+        ),
+        (
+            'address de la boutique',
+            {
+                'classes': ('collapse',),
+                'fields': [
+                    ('shipping_country', "shipping_city"),
+                    ("phone", "phone_two"),
+                    "shipping_adress",
+                ],
+            }
+        ),
+        (
+            'description de la boutique',
+            {
+                'classes': ('collapse',),
+                'fields': ["store_description"],
+            }
+        ),
+        (
+            'profile réseaux sociaux',
+            {
+                'classes': ('collapse',),
+                'fields': ["facebook", "twitter", "linkedin", "instagramm"],
+            }
         ),
     )
     add_fieldsets = (
@@ -40,9 +58,8 @@ class UserAdmin(BaseUserAdmin):
                 'classes': ('wide',),
                 'fields': (
                     'email',
-                    'slug',
                     'is_staff',
-                    'is_active'
+                    'account_verified'
                 )
             }
         ),
@@ -50,27 +67,33 @@ class UserAdmin(BaseUserAdmin):
     list_display = (
         "store_id",
         "store",
+        "email",
         "last_login",
-        "is_active",
+        "date_joined",
+        "account_verified",
+        "show_vendor_url"
     )
-
     list_filter = (
-        "is_active",
         "last_login",
+        "date_joined",
     )
-
-    list_editable = (
-        "is_active",
-    )
-
-    list_per_page = 5
+    list_per_page = 10
     list_display_links = (
         'store_id',
         'store',
+        'email',
     )
     prepopulated_fields = {'slug': ('store',)}
     search_fields = ('email', 'user', 'store',)
-    ordering = ('date_joined',)
+    readonly_fields = ['store_id', 'show_vendor_url', 'last_login', 'date_joined']
     actions = [export_to_csv]
 
-admin.site.register(GuestCustomer)
+    @mark_safe
+    @admin.display(description="Voir la boutique", empty_value="???")
+    def show_vendor_url(self, instance):
+        if instance.is_seller:
+            url = instance.get_absolute_url()
+            response = format_html(f"""<a target="_blank" href="{url}">{url}</a>""")
+            return response
+        else:
+            return "not url"

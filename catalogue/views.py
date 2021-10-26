@@ -3,14 +3,15 @@
 import random
 from django.db.models import Q
 from django.urls import reverse
+from django.views import generic
 from django.utils import timezone
 from django.contrib import messages
 from django.core.cache import cache
-from django.views.generic import ListView
 from django.utils.safestring import mark_safe
+from django.contrib.auth import get_user_model
 from django.views.decorators.csrf import csrf_exempt
-from django.shortcuts import render, get_object_or_404
 from django.http import HttpResponseRedirect, HttpResponse
+from django.shortcuts import render, get_object_or_404, get_list_or_404
 
 from cart import cart
 from analytics import utils
@@ -24,8 +25,26 @@ from catalogue.filters import FilterMixin
 from reviews.forms import ProductReviewForm
 
 
-# PRODUCT LIST VIEW
-class ProductListView(FilterMixin, ListView):
+class HomeView(generic.TemplateView):
+
+    def get_context_data(self, **kwargs):
+        queryset = Category.objects.all()
+
+        promotion = queryset.get(pk=1).get_descendants(include_self=True)
+        market = queryset.get(pk=2).get_descendants(include_self=True)
+
+        kwargs['vendor_list'] = get_list_or_404(get_user_model())[0:8]
+        kwargs['supermaket'] = Product.objects.filter(category__in=market)
+        kwargs['recently_viewed'] = utils.get_recently_viewed(request=self.request)
+        kwargs['category_informatique'] = Product.objects.filter(category__in=promotion)
+        
+        return super(HomeView, self).get_context_data(**kwargs)
+
+
+home_view = HomeView.as_view(template_name='index.html')
+
+
+class ProductListView(FilterMixin, generic.ListView):
     model = Product
     paginate_by = 100
     extra_context = {'page_title': 'Tous les produits'}
@@ -87,7 +106,7 @@ def show_product(request, slug, template="catalogue/product_detail.html"):
             # vers la page du panier
             cart.add_to_cart(request)
             
-            msg = """ '{product}' a été ajouté à votre panier.""".format(product=p.name)
+            msg = f""" '{p.name}' a été ajouté à votre panier."""
             messages.success(request, mark_safe(msg))
 
             # si le cookie de test a fonctionné,
@@ -137,31 +156,18 @@ def show_product(request, slug, template="catalogue/product_detail.html"):
 
 @csrf_exempt
 def addRreview(request, slug):
-    
-    """
-    Vue AJAX qui prend le formulaire POST d'un utilisateur soumettant
-    une nouvelle évaluation de produit; nécessite un slug de produit
-    valide et des args d'une instance de ProductReviewForm;
-    renvoie une réponse JSON contenant deux variables : "review",
-    qui contient le modèle rendu de l'évaluation du produit pour
-    mettre à jour la page du produit, et "success", une valeur 
-    Vrai/Faux indiquant si la sauvegarde a réussi.
-    """
-
     product = get_object_or_404(Product, slug=slug)
     
-    # review posted
     if request.method == 'POST':
         form = ProductReviewForm(request.POST or None)
         if form.is_valid():
-            # Affecter le produit actuel au commentaire
+            name = form.cleaned_data['name']
             rating = form.cleaned_data['rating']
             email = form.cleaned_data['email']
             content = form.cleaned_data['content']
             
             ProductReview.objects.create(
-                user=request.user,
-                rating=rating,
+                name=name,
                 email=email,
                 product=product,
                 content=content,

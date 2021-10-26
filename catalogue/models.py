@@ -4,6 +4,7 @@ from PIL import Image
 from django.db import models
 from datetime import datetime
 from django.urls import reverse
+from django.contrib import admin
 from django.conf import settings
 from django.dispatch import receiver
 from django.db.models import Avg, Count
@@ -25,8 +26,8 @@ DECIMAFIELD_OPTION = {'default': 0, 'max_digits': 50, 'decimal_places': 0}
 
 class Product(models.Model):
     user = models.ForeignKey(
-        User,
-        models.CASCADE,
+        to=User,
+        on_delete=models.CASCADE,
         limit_choices_to={'is_seller': True,},
         verbose_name='vendeur',
         help_text="magasin en charge de la vente."
@@ -73,7 +74,7 @@ class Product(models.Model):
     )
     slug = models.SlugField(
         verbose_name="URL du produit",
-        blank=True,
+        blank=True, unique=True,
         help_text='Unique value for product page URL, created automatically from name.'
     )
     created_at = models.DateTimeField(
@@ -96,14 +97,13 @@ class Product(models.Model):
         index_together = (('slug',),)
         ordering = ['-created_at', '-updated_at', '-timestamp']
         get_latest_by = ['-created_at', '-updated_at', '-timestamp']
-        verbose_name_plural = 'produit'
+        verbose_name_plural = 'produits'
+        indexes = [models.Index(fields=['id'], name='id_index_product'),]
 
     def __str__(self):
         return self.name
 
-    def __repr__(self):
-       return self.__str__()
-
+    @admin.display(description="prix du produit")
     def get_product_price(self):
         return self.price
 
@@ -117,26 +117,22 @@ class Product(models.Model):
             return image.image.url
         return image
 
+    @admin.display(description="image du produit")
     def get_product_image(self):
-        """
-        Méthode pour créer un champ de table en
-        mode lecture seule
-        """
         if self.productimage_set.first() is not None:
             return mark_safe('<img src="{url}" height="50"/>'.format(url=self.get_image_url()))
         else:
             return ""
-    get_product_image.short_description = 'image'
 
+    @admin.display(description="description du produit")
     def get_product_description(self):
         return self.description
-    get_product_description.short_description = 'description'
 
+    @admin.display(description="magasin du produit")
     def get_product_shop(self):
         return self.user.store
-    get_product_shop.short_description = 'magasin'
 
-    # calcul de la moyenne des note de commentaire
+    @admin.display(description="score du produit")
     def avaregereview(self):
         from reviews.models import ProductReview
         reviews = ProductReview.objects.filter(product=self).aggregate(avarage=Avg('rating'))
@@ -145,7 +141,11 @@ class Product(models.Model):
             avg = "%.1f" % float(reviews["avarage"])
         return avg
 
-    # compter le nombre de commentaires
+    def percentaverage(self):
+        percent = "%.0f" % (float(self.avaregereview()) * 10)
+        return percent
+
+    @admin.display(description="nombre de commentaire sur le produit")
     def countreview(self):
         from reviews.models import ProductReview
         reviews = ProductReview.objects.filter(product=self).aggregate(count=Count('id'))
@@ -153,6 +153,12 @@ class Product(models.Model):
         if reviews["count"] is not None:
             cnt = int(reviews["count"])
         return cnt
+
+    @admin.display(description="liste des avis")
+    def review_list(self):
+        from reviews.models import ProductReview
+        rvw_list = ProductReview.objects.all().filter(product=self)
+        return rvw_list
 
     def get_absolute_url(self):
         return reverse(
@@ -173,12 +179,6 @@ class Product(models.Model):
         return self.get_absolute_url()
 
     def cross_sells(self):
-
-        """
-        NOTE : les utilisateurs qui ont acheté
-        ce produit ont également acheté....
-        """
-
         from checkout.models import Order, OrderItem
         orders = Order.objects.filter(orderitem__product=self)
         order_items = OrderItem.objects.filter(order__in=orders).exclude(product=self)
@@ -186,13 +186,6 @@ class Product(models.Model):
         return object_list
 
     def cross_sells_hybrid(self):
-        
-        """
-        obtient d'autres exemples de produits qui ont été combinés
-        avec l'exemple actuel dans des commandes passées par des
-        clients non enregistrés, et tous les produits qui ont déjà
-        été commandés par des clients enregistrés
-        """
         from django.db.models import Q
         from checkout.models import Order, OrderItem
         orders = Order.objects.filter(orderitem__product=self)
@@ -203,7 +196,7 @@ class Product(models.Model):
 
 class ProductImage(models.Model):
     product = models.ForeignKey(
-        Product,
+        to=Product,
         on_delete=models.CASCADE,
         verbose_name='image produit'
     )
@@ -228,10 +221,6 @@ class ProductImage(models.Model):
 
     def __str__(self):
         return self.product.name
-
-    def __repr__(self):
-       return self.__str__()
-
 
     def has_changed(instance, field):
         """

@@ -118,7 +118,7 @@ class Order(BaseOrderInfo):
     objects = OrderManager()
 
     class Meta:
-        verbose_name_plural = 'commande'
+        verbose_name_plural = 'commandes'
     
     def __str__(self):
         return '#{transaction_id}'.format(
@@ -297,3 +297,10 @@ class OrderItem(models.Model):
 
     def get_absolute_url(self):
         return self.product.get_absolute_url()
+
+
+from django.dispatch import receiver
+@receiver(models.signals.pre_save, sender=Order)
+def pre_save_create_order_id(sender, instance, *args, **kwargs):
+    if not instance.transaction_id:
+        instance.transaction_id = unique_order_id_generator(instance)

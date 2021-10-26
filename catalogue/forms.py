@@ -4,6 +4,7 @@ from django import forms
 from django.forms.models import inlineformset_factory
 
 from catalogue.models import Product, ProductImage
+from django_summernote.widgets import SummernoteWidget
 
 
 class ProductAdminForm(forms.ModelForm):
@@ -11,6 +12,8 @@ class ProductAdminForm(forms.ModelForm):
     class Meta:
         model = Product
         exclude = ('user', 'quantity', 'slug', 'updated_at', 'created_at', 'timestamp')
+
+        widgets = {'description': SummernoteWidget()}
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)

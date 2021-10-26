@@ -82,23 +82,40 @@
             <div class="header__right">
                 <div class="header__actions">
                     {% if request.user.is_authenticated %}
-                        {% if request.user.is_seller or request.user.is_superuser %}
-                            <div class="ps-block--header-hotline">
-                                <div class="ps-block__right">
-                                    <p>Centre d'assistance <strong>{{ contact_one }}</strong></p>
-                                </div>
+                        <div class="ps-block--user-header">
+                            <div class="ps-block__left"><i class="icon-user"></i></div>
+                            <div class="ps-block__right">
+                                {% if request.user.is_authenticated and request.user.is_seller or request.user.is_superuser %}
+                                    <a class="font-weight-bold text-uppercase" href="{{ seller_profile }}" target="_blank">ma boutique</a>
+                                    <a class="font-weight-bold text-uppercase" href="{{ promotion_url }}">ajouter une annonce</a>
+                                {% else %}
+                                    <a class="font-weight-bold text-uppercase" href="{{ login }}">
+                                    se connecter</a>
+                                    <a class="font-weight-bold text-uppercase" href="{{ signup }}">
+                                    ouvrir une boutique</a>
+                                {% endif %}
                             </div>
-                            <div class="ps-cart--mini">
-                                {% include "cart/snippet/item_cart.html" %}
-                            </div>
-                        {% endif %}
+                        </div>
+                        <div class="ps-cart--mini">
+                            {% include "cart/snippet/item_cart.html" %}
+                        </div>
                     {% else %}
                         <div class="ps-cart--mini">
                             {% include "cart/snippet/item_cart.html" %}
                         </div>
-                        <div class="ps-block--header-hotline">
+                        <div class="ps-block--user-header">
+                            <div class="ps-block__left"><i class="icon-user"></i></div>
                             <div class="ps-block__right">
-                                Centre d'assistance <br><strong>{{ contact_one }}</strong>
+                                {% if request.user.is_authenticated and request.user.is_seller or request.user.is_superuser %}
+                                    <a class="font-weight-bold text-uppercase" href="{{ seller_profile }}" target="_blank">ma boutique</a>
+                                    <a class="font-weight-bold text-uppercase" href="{{ promotion_url }}">ajouter une annonce</a>
+                                {% else %}
+                                    <a class="font-weight-bold text-uppercase" href="{{ login }}">
+                                    se connecter</a>
+
+                                    <a class="font-weight-bold text-uppercase" href="{{ signup }}">
+                                    ouvrir une boutique</a>
+                                {% endif %}
                             </div>
                         </div>
                     {% endif %}
@@ -106,129 +123,87 @@
             </div>
         </div>
     </div>
+</header>
 
-    <nav class="navigation">
-        <div class="ps-container">
-            <div class="navigation__left">
-                <div class="menu--product-categories">
-                    <div class="menu__toggle">
-                        <i class="icon-menu"></i><span>Catégories</span>
-                    </div>
-                    <div class="menu__content">
-                        <ul class="menu--dropdown">
-                            {% include "includes/partials/_partials_menu_category.html" %}
-                        </ul>
-                    </div>
-                </div>
-            </div>
-
-            <div class="navigation__right">
-                <ul class="menu">
-                    {% full_tree_for_model category.Category as category %}
-
-                    {% for node in category|slice:'0:3' %}
-                        <li><a href="{{ node.get_absolute_url }}">
-                            {{ node.name|safe }}</a>
-                        </li>
-                    {% endfor %}
-                </ul>
-
-                <ul class="navigation__extra">
-                    {% if request.user.is_authenticated and request.user.is_seller or request.user.is_superuser %}
-                        <li><a href="{{ seller_profile }}" target="_blank">Ma boutique</a>
-                        </li>
-                        <li><a href="{{ promotion_url }}">Ajouter une annonce</a></li>
-                    {% else %}
-                        <li><a class="font-weight-bold text-uppercase" href="{{ signup }}">
-                        s'inscrire</a></li>
-                        <li><a class="font-weight-bold text-uppercase" href="{{ login }}">
-                        se connecter</a></li>
-                    {% endif %}
-                    </ul>
-                </div>
-            </div>
-        </nav>
-    </header>
-
-    <header class="header header--mobile header--mobile-categories header--mobile-product" data-sticky="true">
-        <nav class="navigation--mobile">
-            {% if request.resolver_match.url_name == 'product_list' %}
-                <div class="navigation__left">
-                    <a class="header__back" href="{{ home }}">
-                        <i class="icon-chevron-left"></i><strong>Retour</strong>
-                    </a>
-                </div>
-            {% else %}
-                <div class="navigation__left">
-                    <a class="ps-logo" href="{{ home }}">
-                        <img src="{{ STATIC_PREFIX }}img/logo_light.png" alt="{{ title }}">
-                    </a>
-                </div>
-            {% endif %}
-
-            <div class="navigation__right">
-                <div class="header__actions">
-                    <div class="ps-cart--mini">
-                        {% include "cart/snippet/item_cart.html" %}
-                    </div>
-
-                    <div class="ps-block--user-header">
-                        <div class="ps-block__right">
-                            {% if request.user.is_authenticated and request.user.is_seller or request.user.is_superuser %}
-                                <a href="{{ seller_profile }}"><i class="icon-user"></i></a>
-                            {% else %}
-                                <a href="{{ login }}"><i class="icon-user"></i></a>
-                            {% endif %}
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </nav>
-
-        <div class="ps-search--mobile">
-            <form role='search' accept-charset="utf-8" class="ps-form--search-mobile" action="{{ search }}" method="get">
-                <div class="form-group--nest">{% csrf_token %}
-                    <input id='input-search' name='q' class="form-control" type="search"
-                    placeholder="Rechercher un produit, une catégorie, une marque ..."
-                    value="{{ request.GET.q }}">
-                    <button type="submit"><i class="icon-magnifier"></i></button>
-                </div>
-            </form>
-        </div>
-    </header>
-
-    <!-- contenu du panier -->
-    {% shopcart_items items request %}
-    <!-- .end contenu du panier -->
-
-    {% include "includes/partials/menu_category_mobile.html" %}
-
-    <!-- menu de navigation mobile -->
-    <div class="navigation--list">
-        <div class="navigation__content">
-            <a class="navigation__item ps-toggle--sidebar" href="#menu-mobile">
-                <i class="icon-menu"></i><span> Menu</span>
-            </a>
-
-            <a class="navigation__item ps-toggle--sidebar" href="#navigation-mobile">
-                <i class="icon-list4"></i><span> Catégories</span>
-            </a>
-
-            <a class="navigation__item ps-toggle--sidebar" href="#search-sidebar">
-                <i class="icon-magnifier"></i><span> Rechercher</span>
-            </a>
-
-            <a class="navigation__item ps-toggle--sidebar" href="#cart-mobile">
-                <i class="icon-bag2"></i><span> Panier</span>
+<header class="header header--mobile header--mobile-categories header--mobile-product" data-sticky="true">
+    <nav class="navigation--mobile">
+        {% if request.resolver_match.url_name == 'product_list' %}
+        <div class="navigation__left">
+            <a class="header__back" href="{{ home }}">
+                <i class="icon-chevron-left"></i><strong>Retour</strong>
             </a>
         </div>
+        {% else %}
+        <div class="navigation__left">
+            <a class="ps-logo" href="{{ home }}">
+                <img src="{{ STATIC_PREFIX }}img/logo_light.png" alt="{{ title }}">
+            </a>
+        </div>
+        {% endif %}
+
+        <div class="navigation__right">
+            <div class="header__actions">
+                <div class="ps-cart--mini">
+                    {% include "cart/snippet/item_cart.html" %}
+                </div>
+
+                <div class="ps-block--user-header">
+                    <div class="ps-block__right">
+                        {% if request.user.is_authenticated and request.user.is_seller or request.user.is_superuser %}
+                        <a href="{{ seller_profile }}"><i class="icon-user"></i></a>
+                        {% else %}
+                        <a href="{{ login }}"><i class="icon-user"></i></a>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <div class="ps-search--mobile">
+        <form role='search' accept-charset="utf-8" class="ps-form--search-mobile" action="{{ search }}" method="get">
+            <div class="form-group--nest">
+                <input id='input-search' name='q' class="form-control" type="search"
+                placeholder="Rechercher un produit, une catégorie, une marque ..."
+                value="{{ request.GET.q }}">
+                <button type="submit"><i class="icon-magnifier"></i></button>
+            </div>
+        </form>
     </div>
+</header>
 
-    <div class="ps-panel--sidebar" id="search-sidebar">
-        <div class="ps-panel__header">
-            {% search_box request %}
-        </div>
-        <div class="navigation__content"></div>
+<!-- contenu du panier -->
+{% shopcart_items items request %}
+<!-- .end contenu du panier -->
+
+{% include "includes/partials/menu_category_mobile.html" %}
+
+<!-- menu de navigation mobile -->
+<div class="navigation--list">
+    <div class="navigation__content">
+        <a class="navigation__item ps-toggle--sidebar" href="#menu-mobile">
+            <i class="icon-menu"></i><span> Menu</span>
+        </a>
+
+        <a class="navigation__item ps-toggle--sidebar" href="#navigation-mobile">
+            <i class="icon-list4"></i><span> Catégories</span>
+        </a>
+
+        <a class="navigation__item ps-toggle--sidebar" href="#search-sidebar">
+            <i class="icon-magnifier"></i><span> Rechercher</span>
+        </a>
+
+        <a class="navigation__item ps-toggle--sidebar" href="#cart-mobile">
+            <i class="icon-bag2"></i><span> Panier</span>
+        </a>
     </div>
-    
-    {% include "includes/partials/menu_mobile.html" %}
+</div>
+
+<div class="ps-panel--sidebar" id="search-sidebar">
+    <div class="ps-panel__header">
+        {% search_box request %}
+    </div>
+    <div class="navigation__content"></div>
+</div>
+
+{% include "includes/partials/menu_mobile.html" %}

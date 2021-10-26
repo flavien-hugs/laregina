@@ -60,6 +60,9 @@ class StoreDetailView(DetailView):
         return super().get_context_data(*args, **kwargs)
 
 
+store_detail_view = StoreDetailView.as_view()
+
+
 # update a profile.
 class SettingsUpdateView(SellerRequiredMixin, CashTotalSeller, UpdateView):
     model = User

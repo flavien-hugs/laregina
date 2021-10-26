@@ -2,8 +2,7 @@
 
 """
 The `urlpatterns` list routes URLs to views. For more information
-    please see:
-    https://docs.djangoproject.com/en/3.1/topics/http/urls/
+please see: https://docs.djangoproject.com/en/3.1/topics/http/urls/
 """
 
 from django.contrib import admin
@@ -14,7 +13,8 @@ from django.contrib.sitemaps import views
 from django.conf.urls.static import static
 from django.views.generic import TemplateView
 
-from search.views import SearchView
+from search.views import search_view
+from catalogue.views import home_view
 from accounts.views import customer, seller
 from checkout.views import TrackOrderView, download_invoice_view
 from core.sitemap import StaticViewSitemap, CategorySitemapView, ProductSitemapView
@@ -42,11 +42,10 @@ def handler500(request, template_name='500.html'):
 
 
 urlpatterns = [
-    path('', TemplateView.as_view(template_name='index.html'), name='home'),
-    path('lrg-admin/', admin.site.urls),
-    path('search/', SearchView.as_view(), name="search"),
-    path('c/', include('category.urls', namespace='category')),
-    path('p/', include('catalogue.urls', namespace='catalogue')),
+    path(route='', view=home_view, name='home'),
+    path(route='search/', view=search_view, name="search"),
+    path('categorie/', include('category.urls', namespace='category')),
+    path('produit/', include('catalogue.urls', namespace='catalogue')),
     path('avis/', include('reviews.urls', namespace='reviews')),
     path('panier/', include('cart.urls', namespace='cart')),
     path('checkout/', include('checkout.urls', namespace='checkout')),
@@ -57,7 +56,13 @@ urlpatterns = [
     path('sp-', include("pages.urls", namespace='pages')),
     path('accounts/', include('allauth.urls')),
     path('accounts/profile/', include('accounts.urls')),
-    path('magasin/<slug>/', seller.StoreDetailView.as_view(), name='store_detail_view'),
+    path(route='boutique/<slug>/', view=seller.store_detail_view, name='store_detail_view'),
+    
+    path('jet/', include('jet.urls', 'jet')),
+    path('jet/dashboard/', include('jet.dashboard.urls', 'jet-dashboard')),
+    path('summernote/', include('django_summernote.urls')),
+    path(settings.ADMIN_URL, admin.site.urls),
+    
     path('sitemap.xml', views.sitemap, {'sitemaps': sitemaps}, name='django.contrib.sitemaps.views.sitemap'),
     path('robots.txt', TemplateView.as_view(template_name='robots.txt', content_type='text/plain')),
 ]

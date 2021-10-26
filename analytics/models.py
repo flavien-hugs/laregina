@@ -35,7 +35,12 @@ class ProductView(ObjectViewed):
     suit les pages de produits que les clients consultent
     """
 
-    product = models.ForeignKey(Product, models.SET_NULL, null=True)
+    product = models.ForeignKey(
+        to=Product,
+        on_delete=models.SET_NULL,
+        verbose_name='produit',
+        null=True
+    )
 
     def __str__(self):
         return f'{self.user}: {self.product}'

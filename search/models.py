@@ -41,7 +41,7 @@ class SearchTerm(models.Model):
         db_table = 'search_db'
         ordering = ['-date_search_at', '-time_search_at']
         get_latest_by = ['-date_search_at', '-time_search_at']
-        verbose_name_plural = 'recherche'
+        verbose_name_plural = 'recherches'
 
     def __str__(self):
         return str(self.q)

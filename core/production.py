@@ -25,11 +25,6 @@ STATICFILES_DIRS = [BASE_DIR / 'assets']
 # APPLICATION DEFINITION
 INSTALLED_APPS += ['whitenoise.runserver_nostatic']
 
-# 'django.middleware.security.SecurityMiddleware',
-MIDDLEWARE += [
-    'whitenoise.middleware.WhiteNoiseMiddleware',
-]
-
 # https://docs.djangoproject.com/fr/3.0/ref/settings/
 # Let's Encrypt ssl/tls https
 

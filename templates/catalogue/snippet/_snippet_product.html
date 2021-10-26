@@ -1,39 +1,62 @@
-{% load static humanize catalogue_tags %}{% get_static_prefix as STATIC_PREFIX %}
+{% load static humanize catalogue_tags %}
+{% get_static_prefix as STATIC_PREFIX %}
 
-    <div class="col-xl-3 col-lg-3 col-md-4 col-sm-6 col-6">
-        <div class="ps-product">
-            <div class="ps-product__thumbnail">
-                <a href="{{ instance.get_absolute_url }}">
-                    <img width="300" height="150" src="{% if instance.get_image_url %}{{ instance.get_image_url }}{% else %}
-                    {{ STATIC_PREFIX }}img/empty_image.svg{% endif %}" alt="{{ instance.name }}">                 
-                </a>
-            </div>
 
-            <div class="ps-product__container text-center">
-                {% if instance.user.store %}
-                    <a class="ps-product__vendor" href="{{ instance.user.get_absolute_url }}">
-                    {{ instance.user.store|upper }}</a>
-                {% endif %}
-
-                <div class="ps-product__content">
-                    <a class="ps-product__title" href="{{ instance.get_absolute_url }}">
-                        {{ instance.name|truncatewords:"10"|safe }}
-                    </a>
-
-                    <div class="ps-product__rating">
-                        <span>{{ instance.countreview }} avis clients</span>
-                    </div>
-
-                    <p class="ps-product__price sale">{{ instance.price|intcomma }} Fr</p>
-                </div>
-
-                <div class="ps-product__content hover">
-                    <a class="ps-product__title" href="{{ instance.get_absolute_url }}">
-                        {{ instance.name|truncatewords:"10"|safe }}
-                    </a>
-                    <p class="ps-product__price sale">{{ instance.price|intcomma }} Fr</p>
-                </div>
-            </div>
-        </div>
+<article class="ps-product ps-product--inner p-4">
+    <div class="ps-product__thumbnail">
+        <a href="{{ instance.get_absolute_url }}">
+            <img width="150" height="150" src="{% if instance.get_image_url %}{{ instance.get_image_url }}{% else %}
+            {{ STATIC_PREFIX }}img/empty_image.svg{% endif %}" alt="{{ instance.name }}">                 
+        </a>
     </div>
 
+    <div class="ps-product__container">
+        <a class="ps-product__vendor" href="{{ instance.user.get_absolute_url }}">
+        {{ instance.user.store|upper }}</a>
+
+        <div class="ps-product__content">
+            <a class="ps-product__title" href="{{ instance.get_absolute_url }}">
+                {{ instance.name|truncatewords:"10"|safe }}
+            </a>
+            {% if instance.countreview %}
+                <div class="ps-product__rating">
+                    <select class="ps-rating" data-read-only="true">
+                        {% if instance.countreview <= 1 %}
+                            <option value="1">1</option>
+                            <option value="2">1</option>
+                            <option value="2">1</option>
+                            <option value="2">1</option>
+                            <option value="2">1</option>
+                        {% elif instance.countreview <= 2 %}
+                            <option value="1">1</option>
+                            <option value="1">1</option>
+                            <option value="2">1</option>
+                            <option value="2">1</option>
+                            <option value="2">1</option>
+                        {% elif instance.countreview <= 3 %}
+                            <option value="1">1</option>
+                            <option value="1">1</option>
+                            <option value="1">1</option>
+                            <option value="2">1</option>
+                            <option value="2">1</option>
+                        {% elif instance.countreview <= 4 %}
+                            <option value="1">1</option>
+                            <option value="1">1</option>
+                            <option value="1">1</option>
+                            <option value="1">1</option>
+                            <option value="2">1</option>
+                        {% elif instance.countreview == 5 %}
+                            <option value="1">1</option>
+                            <option value="1">1</option>
+                            <option value="1">1</option>
+                            <option value="1">1</option>
+                            <option value="1">1</option>
+                        {% endif %}
+                    </select>
+                    <span>{{ instance.avaregereview }}</span>
+                </div>
+            {% endif %}
+            <span class="ps-product__price font-weight-bold">{{ instance.price|intcomma }} Fr</span>
+        </div>
+    </div>
+</article>
