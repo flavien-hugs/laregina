@@ -9,9 +9,17 @@
         <div class="ps-breadcrumb">
             <div class="ps-container">
                 <ul class="breadcrumb">
-                    <li><a href="{{ home_url }}">Accueil</a></li>
+                   <li>
+                        <a class="text-capitalize" href="{{ home_url }}">
+                            <i class="fa fa-home fw-2x text-success"></i>
+                        </a>
+                    </li>
                     {% if object.get_ancestors %}
-                        <li>{{ object.get_ancestors|tree_path:" ∕ " }}</li>
+                        <li>
+                            <a href="{{ object.parent.get_absolute_url }}">
+                                {{ object.parent.get_ancestors|tree_path|lower }}
+                            </a>
+                        </li>
                     {% endif %}
                     <li>{{ object.name|safe }}</li>
                 </ul>
@@ -21,13 +29,41 @@
 
     <div class="ps-page--shop pt-2">
         <div class="container">
-            {% if promotion_list and not request.resolver_match.url_name == 'product_list' and not request.resolver_match.url_name == 'search' %}
-                <div class="ps-shop-banner">
-                    <div class="ps-carousel--nav-inside owl-slider" data-owl-auto="true" data-owl-loop="true" data-owl-speed="5000" data-owl-gap="0" data-owl-nav="true" data-owl-dots="true" data-owl-item="1" data-owl-item-xs="1" data-owl-item-sm="1" data-owl-item-md="1" data-owl-item-lg="1" data-owl-duration="1000" data-owl-mousedrag="on">
-                        {% promotion_list 8 %}
+            {% promotion_list 8 %}
+
+            <div class="ps-block--container-hightlight pb-4">
+                <div class="ps-section__header">
+                    <h3>Les meilleures offres super chaudes aujourd'hui</h3>
+                </div>
+                <div class="ps-section__content">
+                    <div class="row">
+                        {% for promo in promotion_list %}
+                            {% for promo in promo.product.all %}
+                                <div class="col-xl-3 col-lg-3 col-md-4 col-sm-6 col-6 ">
+                                    {% include "catalogue/snippet/_snippet_product.html" with instance=promo %}
+                                </div>
+                            {% endfor %}
+                        {% endfor %}
                     </div>
                 </div>
-            {% endif %}
+            </div>
+
+            {% if product_recommended %}
+
+            <div class="ps-block--container-hightlight pb-4">
+                <div class="ps-section__header">
+                    <h3>Produits récommandés pour vous</h3>
+                </div>
+                <div class="ps-section__content">
+                    <div class="row">
+                        {% for product in product_recommended %}
+                            <div class="col-xl-3 col-lg-3 col-md-4 col-sm-6 col-6 ">
+                                {% include "catalogue/snippet/_snippet_product.html" with instance=product %}
+                            </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
 
             <div class="ps-layout--shop border-bottom">
                 {% include "catalogue/partials/_partials_shop.html" %}

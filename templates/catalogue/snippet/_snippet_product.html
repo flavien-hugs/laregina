@@ -2,7 +2,7 @@
 {% get_static_prefix as STATIC_PREFIX %}
 
 
-<article class="ps-product ps-product--inner p-4">
+<div class="ps-product ps-product--inner">
     <div class="ps-product__thumbnail">
         <a href="{{ instance.get_absolute_url }}">
             <img width="150" height="150" src="{% if instance.get_image_url %}{{ instance.get_image_url }}{% else %}
@@ -59,4 +59,4 @@
             <span class="ps-product__price font-weight-bold">{{ instance.price|intcomma }} Fr</span>
         </div>
     </div>
-</article>
+</div>
