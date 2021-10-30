@@ -1,21 +1,15 @@
 # accounts.views.seller.py
 
+from django.views import generic
 from django.contrib import messages
 from django.urls import reverse_lazy
 from django.http import HttpResponseRedirect
 from django.contrib.auth import get_user_model
-from django.views.generic import (
-    CreateView, DeleteView,
-    DetailView, RedirectView,
-    ListView, UpdateView
-)
 
 from core import settings
 from catalogue.models import Product
 from checkout.models import Order, OrderItem
 from catalogue.forms import ProductCreateFormSet
-
-User = get_user_model()
 
 from ..forms import MarketSignupForm, StoreUpdateForm
 from ..mixins import SellerRequiredMixin, ProductEditMixin
@@ -32,7 +26,7 @@ class CashTotalSeller(object):
         return super().get_context_data(*args, **kwargs)
 
 
-class DashboardView(SellerRequiredMixin, CashTotalSeller, DetailView):
+class DashboardView(SellerRequiredMixin, CashTotalSeller, generic.DetailView):
     template_name = 'dashboard/seller/index.html'
 
     def get_object(self, *args, **kwargs):
@@ -49,13 +43,29 @@ class DashboardView(SellerRequiredMixin, CashTotalSeller, DetailView):
         return queryset.filter(user=self.get_object())
 
 
-# même chose que ci-dessus, mais pour voir un autre vendeur.
-class StoreDetailView(DetailView):
-    model = User
+class StoreListView(generic.ListView):
+    paginate_by = 180
+    context_object_name = 'vendor_list_object'
+    queryset = get_user_model().objects.order_by('-date_joined')
+    template_name = 'includes/partials/_partials_vendor_list.html'
+
+    def head(self, *args, **kwargs):
+        last_vendor_register = self.get_queryset().latest('-date_joined')
+        response = HttpResponse()
+        response['Last-Modified'] = last_vendor_register.date_joined.strftime(
+            '%a, %d %b %Y %H:%M:%S GMT')
+        return response
+
+
+store_list_view = StoreListView.as_view(extra_context={'page_title': 'boutiques'})
+
+
+class StoreDetailView(generic.DetailView):
+    model = get_user_model()
     template_name='dashboard/seller/includes/_partials_vendor_store.html'
 
     def get_context_data(self, *args, **kwargs):
-        kwargs['page_title'] = 'Magasin : {store_name}'.format(store_name=self.object.store)
+        kwargs['page_title'] = f'Boutique : {self.object.store}'
         kwargs['object_list'] = Product.objects.filter(user=self.object.id)
         return super().get_context_data(*args, **kwargs)
 
@@ -64,8 +74,8 @@ store_detail_view = StoreDetailView.as_view()
 
 
 # update a profile.
-class SettingsUpdateView(SellerRequiredMixin, CashTotalSeller, UpdateView):
-    model = User
+class SettingsUpdateView(SellerRequiredMixin, CashTotalSeller, generic.UpdateView):
+    model = get_user_model()
     form_class = StoreUpdateForm
     template_name = 'dashboard/seller/includes/_partials_settings_store.html'
     success_url = reverse_lazy('seller:profile')
@@ -87,7 +97,7 @@ class SettingsUpdateView(SellerRequiredMixin, CashTotalSeller, UpdateView):
         return HttpResponseRedirect(self.get_success_url())
 
 
-class OrderListView(SellerRequiredMixin, CashTotalSeller, ListView):
+class OrderListView(SellerRequiredMixin, CashTotalSeller, generic.ListView):
     paginate_by = 15
     template_name = 'dashboard/seller/includes/_partials_orders_list.html'
 
@@ -97,37 +107,35 @@ class OrderListView(SellerRequiredMixin, CashTotalSeller, ListView):
     def get_queryset(self):
         return self.get_order_items()
 
-
-class OrderDetailView(SellerRequiredMixin, CashTotalSeller, DetailView):
+class OrderDetailView(SellerRequiredMixin, CashTotalSeller, generic.DetailView):
     model = Order
     template_name = 'dashboard/seller/includes/_partials_orders_detail.html'
 
     def get_context_data(self, **kwargs):
-        kwargs['page_title'] = 'Commande N°: {transaction_id}'.format(
-            transaction_id=self.object.transaction_id)
+        kwargs['page_title'] = f'Commande N°: {self.object.transaction_id}'
         return super().get_context_data(**kwargs)
 
 
-class ProductListView(SellerRequiredMixin, CashTotalSeller, ListView):
+class ProductListView(SellerRequiredMixin, CashTotalSeller, generic.ListView):
     paginate_by = 15
     permission_required = 'product.product_list'
     template_name = 'dashboard/seller/includes/_partials_product_list.html'
-    
+
     def get_object(self, *args, **kwargs):
         return self.get_account()
 
     def get_queryset(self):
         return self.get_product()
-    
+
     def get_context_data(self, *args, **kwargs):
         kwargs['object_list'] = self.get_product()
         return super().get_context_data(*args, **kwargs)
 
 
-class ProductCreateView(ProductEditMixin, CashTotalSeller, CreateView):
+class ProductCreateView(ProductEditMixin, CashTotalSeller, generic.CreateView):
 
     template_name = 'dashboard/seller/includes/_partials_product_create.html'
-    
+
     def get_object(self, *args, **kwargs):
         return self.get_account()
 
@@ -149,7 +157,7 @@ class ProductCreateView(ProductEditMixin, CashTotalSeller, CreateView):
         form_class = self.get_form_class()
         form = self.get_form(form_class)
         formset = ProductCreateFormSet(self.request.POST, self.request.FILES)
-         
+
         if form.is_valid() and formset.is_valid():
             return self.form_valid(form, formset)
         else:
@@ -171,7 +179,7 @@ class ProductCreateView(ProductEditMixin, CashTotalSeller, CreateView):
         return self.render_to_response(self.get_context_data(form=form, formset=formset))
 
 
-class ProductUpdateView(ProductEditMixin, CashTotalSeller, UpdateView):
+class ProductUpdateView(ProductEditMixin, CashTotalSeller, generic.UpdateView):
 
     template_name = 'dashboard/seller/includes/_partials_product_create.html'
 
@@ -189,7 +197,7 @@ class ProductUpdateView(ProductEditMixin, CashTotalSeller, UpdateView):
         return HttpResponseRedirect(self.get_success_url())
 
 
-class ProductDeleteView(ProductEditMixin, CashTotalSeller, DeleteView):
+class ProductDeleteView(ProductEditMixin, CashTotalSeller, generic.DeleteView):
     permission_required = 'product.product_delete'
     template_name = 'dashboard/seller/includes/_partials_product_delete.html'
 

@@ -13,8 +13,8 @@ urlpatterns = [
         ), name='customer_dashboard'),
     ], 'accounts'), namespace='customer')),
 
-    path('seller/', include(([
-        path('dashboard/', seller.DashboardView.as_view(
+    path('dashboard/', include(([
+        path('fh/', seller.DashboardView.as_view(
             extra_context={'page_description': "Tableau de bord"}
         ), name='profile'),
 
@@ -58,6 +58,11 @@ urlpatterns = [
         path('settings/<slug>/', seller.SettingsUpdateView.as_view(
             extra_context={'page_description': "Configuration"}
         ), name='update'),
-    
+
     ], 'accounts'), namespace='seller')),
+
+    path('boutique/', include(([
+        path(route='', view=seller.store_list_view, name='store_list_view'),
+        path(route='<slug>/', view=seller.store_detail_view, name='store_detail_view'),
+    ], 'accounts'), namespace='vendor')),
 ]

@@ -176,7 +176,7 @@ class User(BaseOrderInfo, AbstractBaseUser, PermissionsMixin):
         return reverse('seller:update', kwargs={'slug': self.slug})
 
     def get_absolute_url(self):
-        return reverse('store_detail_view', kwargs={'slug': self.slug})
+        return reverse('vendor:store_detail_view', kwargs={'slug': self.slug})
 
 
 class GuestCustomer(BaseOrderInfo):
