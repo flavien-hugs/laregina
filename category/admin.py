@@ -30,6 +30,8 @@ class CategoryAdmin(DraggableMPTTAdmin):
         'id', 'tree_actions', 'indented_title',
         'related_products_cumulative_count'
     )
+
+    list_per_page = 20
     list_display_links = ('id', 'indented_title',)
     prepopulated_fields = {'slug': ('name',)}
 

@@ -6,7 +6,6 @@ from category.models import Category
 from catalogue.models import Product
 
 
-# DETAIL CATEGORY VIEW
 class CategoryDetailView(DetailView):
     model = Category
     template_name = "category/category_detail.html"

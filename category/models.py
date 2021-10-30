@@ -5,7 +5,7 @@ from django.urls import reverse
 from django.dispatch import receiver
 
 from mptt.models import MPTTModel, TreeForeignKey
-from core.utils import upload_image_path, unique_slug_generator
+from core.utils import upload_promotion_image_path, unique_slug_generator
 
 
 class ActiveCategoryManager(models.Manager):
@@ -28,7 +28,7 @@ class Category(MPTTModel):
     )
     image = models.ImageField(
         verbose_name='cover catégorie',
-        upload_to=upload_image_path,
+        upload_to=upload_promotion_image_path,
         null=True, blank=True,
         help_text="Taille: 300x300px"
     )
@@ -67,6 +67,13 @@ class Category(MPTTModel):
 
     def __str__(self):
         return self.name
+
+    def get_image_url(self):
+        if self.image:
+            return self.image.url
+        else:
+            return "https://via.placeholder.com/150"
+        return self.image
 
     def get_products_in_category(self):
         from catalogue.models import Product
