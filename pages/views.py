@@ -1,14 +1,16 @@
 # pages.views.py
 
+from django.views import generic
 from django.contrib import messages
-from django.views.generic import View
 from django.shortcuts import render, redirect
 
-from pages.forms import ContactForm, PromotionForm
+
+from analytics import utils
+from pages import models, forms, mixins
 
 
-class ContactView(View):
-    form_class = ContactForm
+class ContactView(generic.View):
+    form_class = forms.ContactForm
     template_name = "pages/contact.html"
 
     def get(self, request, *args, **kwargs):
@@ -28,9 +30,9 @@ class ContactView(View):
         return redirect('pages:contact')
 
 
-class PromotionView(View):
-    form_class = PromotionForm
-    template_name = "pages/promotion.html"
+class PromotionView(generic.View):
+    form_class = forms.PromotionForm
+    template_name = "pages/promotion/form.html"
 
     def get(self, request, *args, **kwargs):
         form = self.form_class()
@@ -46,3 +48,18 @@ class PromotionView(View):
             form.save()
             messages.success(request, "Votre promotion a été envoyé avec success !")
         return redirect('pages:promotion')
+
+
+class PromotionDetailView(mixins.PromotionMixin, generic.DetailView):
+    model = models.Promotion
+    paginate_by = 50
+    template_name = "pages/promotion/promotion_list.html"
+
+    def get_context_data(self, *args, **kwargs):
+        kwargs["page_title"] = self.object.name
+        kwargs['promotion_list'] = self.get_promotions_list()
+        kwargs['product_recommended'] = utils.get_recently_viewed(self.request)
+        return super().get_context_data(*args, **kwargs)
+
+
+promotion_detail = PromotionDetailView.as_view()

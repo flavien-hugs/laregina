@@ -1,6 +1,8 @@
 # pages.forms.py
 
 from django import forms
+
+from catalogue.models import Product
 from pages.models import Contact, Promotion
 
 
@@ -96,16 +98,18 @@ class PromotionForm(forms.ModelForm):
     class Meta:
         model = Promotion
         fields = [
-            "category",
-            "title",
+            "name",
+            "product",
             "image"
         ]
 
     def __init__(self, *args, **kwargs):
         super(PromotionForm, self).__init__(*args, **kwargs)
+        forms.ModelForm.__init__(self, *args, **kwargs)
+        self.fields['product'].queryset = Product.objects.all()
 
         for field in self.fields:
             self.fields[field].widget.attrs['class'] = 'form-control'
 
-            if self.fields['category']:
-                self.fields['category'].widget.attrs.update({'class': 'form-control custom-select'})
+            if self.fields['product']:
+                self.fields['product'].widget.attrs.update({'class': 'form-control custom-select'})

@@ -3,9 +3,11 @@
 from PIL import Image
 
 from django.db import models
+from django.urls import reverse
 from django.utils import timezone
+from django.dispatch import receiver
 
-from category.models import Category
+from catalogue.models import Product
 from django.utils.safestring import mark_safe
 from core.utils import upload_promotion_image_path
 
@@ -53,15 +55,13 @@ class Testimonial(models.Model):
 
 
 class Promotion(models.Model):
-    category = models.ForeignKey(
-        Category,
-        models.SET_NULL,
-        verbose_name='promotion',
-        **NULL_AND_BLANK
+    product = models.ManyToManyField(
+        to=Product,
+        verbose_name='produit en promotions'
     )
-    title = models.CharField(
+    name = models.CharField(
         max_length=120,
-        verbose_name='Titre de la promotion'
+        verbose_name='titre de la promotion'
     )
     slug = models.SlugField(
         verbose_name='lien',
@@ -87,10 +87,10 @@ class Promotion(models.Model):
         db_table = 'promotion_db'
         ordering = ['-created_at',]
         get_latest_by = ['-created_at',]
-        verbose_name_plural = 'promotion'
+        verbose_name_plural = 'promotions'
 
     def __str__(self):
-        return f"{self.title}: {self.category.name}"
+        return f"{self.name}"
 
     def has_changed(instance, field):
         """
@@ -116,14 +116,20 @@ class Promotion(models.Model):
     def get_image_url(self):
         if self.image:
             return self.image.url
+        else:
+            return "https://via.placeholder.com/180"
         return self.image
-
 
     def show_image_tag(self):
         if self.image is not None:
-            return mark_safe('<img src="{url}" height="50"/>'.format(url=self.get_image_url))
+            return mark_safe(f'<img src="{self.get_image_url()}" height="50"/>')
         else:
-            return ""
+            return "https://via.placeholder.com/50"
+
+    def get_absolute_url(self):
+        return reverse(
+            'promotion:promotion_detail', kwargs={'slug': str(self.slug)}
+        )
 
 
 class Contact(models.Model):
@@ -165,3 +171,9 @@ class Contact(models.Model):
         ordering = ['-timestamp',]
         get_latest_by = ['-timestamp',]
         verbose_name_plural = 'messages'
+
+
+@receiver([models.signals.pre_save], sender=Promotion)
+def promotion_pre_save_receiver(sender, instance, *args, **kwargs):
+    if not instance.slug:
+        instance.slug = unique_slug_generator(instance)

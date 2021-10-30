@@ -3,9 +3,10 @@
 from django.contrib import admin
 
 from services.export_data_csv import export_to_csv
-from pages.models import Promotion, Contact, Testimonial
 
-@admin.register(Contact)
+from pages import models, forms
+
+@admin.register(models.Contact)
 class ContactAdmin(admin.ModelAdmin):
     date_hierarchy = 'timestamp'
     list_display = [
@@ -38,27 +39,49 @@ class ContactAdmin(admin.ModelAdmin):
     actions = [export_to_csv]
 
 
-@admin.register(Promotion)
+@admin.register(models.Promotion)
 class PromotionAdmin(admin.ModelAdmin):
+    form = forms.PromotionForm
     date_hierarchy = 'created_at'
+    fieldsets = (
+        (
+            'produit en promotions', {
+            'classes': ('collapse',),
+            'fields':
+                (   
+                    "product",
+                    ("name", "slug"),
+                )
+            }
+        ),
+        (
+            'cover de la promotion', {
+            'classes': ('collapse',),
+            'fields':
+                (
+                    "image", "active",
+                )
+            }
+        ),
+    )
     list_display = [
-        'title',
-        'category',
+        'name',
         'show_image_tag',
         'created_at',
     ]
     list_filter = [
-        'category',
+        'product',
+        'active'
     ]
     list_per_page = 10
-    empty_value_display = '-empty-'
-    search_fields = ['category', 'title']
-    list_display_links = ('title',)
-    prepopulated_fields = {'slug': ('title',),}
+    search_fields = ['name']
     actions = [export_to_csv]
+    list_display_links = ('name',)
+    empty_value_display = '-empty-'
+    prepopulated_fields = {'slug': ('name',),}
 
 
-@admin.register(Testimonial)
+@admin.register(models.Testimonial)
 class PromotionAdmin(admin.ModelAdmin):
     date_hierarchy = 'created_at'
     list_display = [
