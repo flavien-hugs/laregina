@@ -41,7 +41,6 @@ SESSION_EXPIRE_AT_BROWSER_CLOSE = False
 
 CSRF_USE_SESSIONS = True
 CSRF_COOKIE_SECURE = True
-# CSRF_FAILURE_VIEW = ''
 
 # https://warehouse.python.org/project/whitenoise/
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'

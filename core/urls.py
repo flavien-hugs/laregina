@@ -15,7 +15,6 @@ from django.views.generic import TemplateView
 
 from search.views import search_view
 from catalogue.views import home_view
-from accounts.views import customer, seller
 from checkout.views import TrackOrderView, download_invoice_view
 from core.sitemap import StaticViewSitemap, CategorySitemapView, ProductSitemapView
 
@@ -44,25 +43,23 @@ def handler500(request, template_name='500.html'):
 urlpatterns = [
     path(route='', view=home_view, name='home'),
     path(route='search/', view=search_view, name="search"),
+    path('', include('catalogue.urls')),
     path('categorie/', include('category.urls', namespace='category')),
-    path('produit/', include('catalogue.urls', namespace='catalogue')),
     path('avis/', include('reviews.urls', namespace='reviews')),
     path('panier/', include('cart.urls', namespace='cart')),
     path('checkout/', include('checkout.urls', namespace='checkout')),
-    path('tracking/order/', TrackOrderView.as_view(extra_context={
-        'page_title': 'Suivi votre commande',}), name='order_tracking'),
-    path('print-invoice/<int:order_id>/', download_invoice_view, name='download_invoice'),
-    path('accounts/signup/customer/', customer.CustomerSignUpView.as_view(), name='customer_signup'),
+    path(route='tracking/order/', view=TrackOrderView.as_view(extra_context={
+        'page_title': 'suivre votre commande',}), name='order_tracking'),
+    path(route='print-invoice/<int:order_id>/', view=download_invoice_view, name='download_invoice'),
     path('sp-', include("pages.urls", namespace='pages')),
     path('accounts/', include('allauth.urls')),
-    path('accounts/profile/', include('accounts.urls')),
-    path(route='boutique/<slug>/', view=seller.store_detail_view, name='store_detail_view'),
-    
+    path('', include('accounts.urls')),
+
     path('jet/', include('jet.urls', 'jet')),
     path('jet/dashboard/', include('jet.dashboard.urls', 'jet-dashboard')),
     path('summernote/', include('django_summernote.urls')),
     path(settings.ADMIN_URL, admin.site.urls),
-    
+
     path('sitemap.xml', views.sitemap, {'sitemaps': sitemaps}, name='django.contrib.sitemaps.views.sitemap'),
     path('robots.txt', TemplateView.as_view(template_name='robots.txt', content_type='text/plain')),
 ]

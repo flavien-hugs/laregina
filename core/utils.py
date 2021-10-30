@@ -27,16 +27,14 @@ def get_filename_ext(filepath):
 def upload_image_path(instance, filename):
     new_filename = slugify(instance.product.name)
     name, ext = get_filename_ext(filename)
-    final_filename = "{new_filename}-{filename}{ext}".format(
-        new_filename=new_filename, filename=instance.id, ext=ext)
-    return "images/produit/{final_filename}".format(final_filename=final_filename)
+    final_filename = "{new_filename}-{instance.id}{ext}"
+    return f"images/produit/{final_filename}"
 
 def upload_promotion_image_path(instance, filename):
-    new_filename = slugify(instance.title)
+    new_filename = slugify(instance.name)
     name, ext = get_filename_ext(filename)
-    final_filename = "{new_filename}-{filename}{ext}".format(
-        new_filename=new_filename, filename=instance.id, ext=ext)
-    return "images/promotion/{final_filename}".format(final_filename=final_filename)
+    final_filename = f"{new_filename}-{instance.id}{ext}"
+    return f"images/promotion/{final_filename}"
 
 def email_validation_function(value):
     validator = EmailValidator()
