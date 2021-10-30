@@ -1,9 +1,14 @@
 <!-- includes/partials/_partials_promotion_list -->
 
-{% load pages_tags %}
+{% if promotion_object_list %}
+	<div class="ps-shop-banner py-3">
+		<div class="ps-carousel--nav-inside owl-slider" data-owl-auto="true" data-owl-loop="true" data-owl-speed="5000" data-owl-gap="0" data-owl-nav="true" data-owl-dots="true" data-owl-item="1" data-owl-item-xs="1" data-owl-item-sm="1" data-owl-item-md="1" data-owl-item-lg="1" data-owl-duration="1000" data-owl-mousedrag="on">
+			{% for object in promotion_object_list %}
+				<a href="{{ object.get_absolute_url }}">
+					<img class="img-fluid" src="{{ object.get_image_url }}" alt="{{ object.name }}">
+				</a>
+			{% endfor %}
+		</div>
+	</div>
+{% endif %}
 
-{% for object in promotion_object_list %}
-	<a href="{{ object.category.get_absolute_url }}">
-		<img height="399" width="1650" class="img-fluid" src="{{ object.get_image_url }}" alt="{{ object.title }}">
-	</a>
-{% endfor %}

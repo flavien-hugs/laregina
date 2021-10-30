@@ -1,0 +1,17 @@
+{% load static %}
+{% get_static_prefix as STATIC_PREFIX %}
+
+{% for object in object_vendor_recent %}
+    <article class="ps-block--category-room">
+        <div class="ps-block__thumbnail">
+            <a href="{{ object.get_absolute_url }}">
+                <img src="{{ STATIC_PREFIX }}img/favicon.ico" alt="{{ object.name }}">
+            </a>
+        </div>
+        <div class="ps-block__content">
+            <a class="font-weight-bold" href="{{ object.get_absolute_url }}">
+                {{ object.store }}
+            </a>
+        </div>
+    </article>
+{% endfor %}

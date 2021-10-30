@@ -26,17 +26,19 @@
 <meta name="twitter:image" content="{{ STATIC_PREFIX }}img/favicon.ico">
 <meta name="twitter:image:alt" content="{{ title }}">
 
-<!-- OpenGraph -->
+<!-- Facebook Meta Tags -->
+
+<meta property="og:type" content="website">
 <meta property="og:site_name" content="{{ title }}">
-<meta property="og:title" content="{% if page_title %} {{ page_title }} {% else %} {{ title }} {% endif %}">
-<meta property="og:description" content="{% if object.description %} {{ object.description }} {% else %} {{ description }} {% endif %}">
-<meta property="og:type" content="article">
-<meta property="og:image" content="{{ STATIC_PREFIX }}img/favicon.ico">
-<meta property="og:image:alt" content="image/png">
-<meta property="og:url" content="{{ request.get_host }}">
+<meta property="og:url" content="{% if object %}{{ object.get_absolute_url }}{% else %}{{ request.get_host }} {% endif %}">
+<meta property="og:title" content="{% if object.name %}{{ object.name }}{% else %}Vente et achat en ligne Informatiques, Électromenager, Habillement et mode, Téléphones, TV, Jeux Vidéos, {% endif %}">
+<meta property="og:image" content="{% if object.image %}{{ object.get_image_url }}{% else %}{{ STATIC_PREFIX }}img/favicon.ico {% endif %}">
+<meta property="og:description" content="{% if object.description %}{{ object.description }}Vente et achat en ligne Informatiques, Électromenager, Habillement et mode, Téléphones, TV, Jeux Vidéos,{{ description }}{% endif %}">
+<meta property="og:image:alt" content="{% if object.image %}{{ object.name }}{% else %}{{ title }}{% endif %}">
 <meta property="og:image:type" content="image/png">
 <meta property="og:locale" content="fr_CI">
 <meta name="bingbot" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1">
+
 <!-- Favicon-->
 <link rel="shortcut icon" href="{{ STATIC_PREFIX }}img/favicon.ico">
 <link rel="canonical" href="https://{{ request.get_host }}"/>
