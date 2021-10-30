@@ -3,10 +3,13 @@
 import locale
 import random
 from django import template
+from django.contrib.auth import get_user_model
 
 from cart import cart
+from catalogue.models import Product
 
 register = template.Library()
+
 
 @register.filter
 def shuffle(arg):
@@ -52,3 +55,17 @@ def product_list(object_list, header_text):
         'object_list': object_list,
         'header_text': header_text
     }
+
+
+@register.inclusion_tag("includes/partials/_partials_product_recent.html")
+def product_recent_list(count=80):
+    product_list = sorted(Product.objects.product_recent()[:count], key=lambda x: random.random())
+    context = {'object_product_recent': product_list}
+    return context
+
+
+@register.inclusion_tag("includes/partials/_partials_vendors.html")
+def vendor_recent(count=50):
+    vendor_list = get_user_model().objects.order_by('-date_joined')[:count]
+    context = {'object_vendor_recent': vendor_list}
+    return context

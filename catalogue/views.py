@@ -19,39 +19,38 @@ from category.models import Category
 from core.settings import CACHE_TIMEOUT
 from catalogue.forms import ProductAddToCartForm
 from catalogue.models import Product, ProductImage
-
+from pages.mixins import PromotionMixin
 from reviews.models import ProductReview
 from catalogue.filters import FilterMixin
 from reviews.forms import ProductReviewForm
 
 
-class HomeView(generic.TemplateView):
+class HomeView(PromotionMixin, generic.TemplateView):
+
+    queryset = Category.objects.all()
 
     def get_context_data(self, **kwargs):
-        queryset = Category.objects.all()
-
-        promotion = queryset.get(pk=1).get_descendants(include_self=True)
-        market = queryset.get(pk=2).get_descendants(include_self=True)
-
+        kwargs['promotion_list'] = self.get_promotions_list()[:6]
         kwargs['vendor_list'] = get_list_or_404(get_user_model())[0:8]
-        kwargs['supermaket'] = Product.objects.filter(category__in=market)
         kwargs['recently_viewed'] = utils.get_recently_viewed(request=self.request)
-        kwargs['category_informatique'] = Product.objects.filter(category__in=promotion)
-        
+        kwargs['category_list'] =  self.queryset.get_ancestors(include_self=False)
+
         return super(HomeView, self).get_context_data(**kwargs)
 
 
 home_view = HomeView.as_view(template_name='index.html')
 
 
-class ProductListView(FilterMixin, generic.ListView):
+class ProductListView(FilterMixin, PromotionMixin, generic.ListView):
     model = Product
-    paginate_by = 100
+    paginate_by = 50
     extra_context = {'page_title': 'Tous les produits'}
     template_name = "catalogue/product_list.html"
 
     def get_context_data(self, *args, **kwargs):
         kwargs["query"] = self.request.GET.get("q", None)
+        kwargs['promotion_list'] = self.get_promotions_list()
+        kwargs['product_recommended'] = utils.get_recently_viewed(self.request)
         return super().get_context_data(*args, **kwargs)
 
     def get_queryset(self, *args, **kwargs):
@@ -63,8 +62,6 @@ class ProductListView(FilterMixin, generic.ListView):
                 | Q(description__icontains=query)
                 | Q(price__icontains=query)
                 | Q(keywords__icontains=query)
-                | Q(user__store__icontains=query)
-                | Q(category__icontains=query)
             )
             try:
                 query_two = self.model.objects.filter(Q(price=query))
@@ -76,16 +73,16 @@ class ProductListView(FilterMixin, generic.ListView):
 
 @csrf_exempt
 def show_product(request, slug, template="catalogue/product_detail.html"):
-    
+
     """
     vue pour chaque page de produit
     """
     p = get_object_or_404(Product, slug=slug)
     product_cache_key = request.path
-    
+
     # essayer de récupérer le produit à partir du cache
     p = cache.get(product_cache_key)
-    
+
     # si le cache manque, on se rabat sur
     # la requête de la base de données
     if not p:
@@ -99,13 +96,13 @@ def show_product(request, slug, template="catalogue/product_detail.html"):
         # créer le formulaire lié
         postdata = request.POST.copy()
         form = ProductAddToCartForm(request, postdata)
-        
+
         # vérifier si les données affichées sont valides
         if form.is_valid():
             # ajouter au panier et rediriger
             # vers la page du panier
             cart.add_to_cart(request)
-            
+
             msg = f""" '{p.name}' a été ajouté à votre panier."""
             messages.success(request, mark_safe(msg))
 
@@ -125,15 +122,15 @@ def show_product(request, slug, template="catalogue/product_detail.html"):
 
     # affiche les produits recommendés
     recommended_product = Product.objects.recomended_product(instance=p)
-    
+
     # définir le cookie de test pour s'assurer
     # que les cookies sont activés
     request.session.set_test_cookie()
-    
+
     # ajout d'avis sur le produit courant
     # product_review = ProductReview.objects.filter(product=p)
-    
-    # sauvegarder l'utilisateur actuel 
+
+    # sauvegarder l'utilisateur actuel
     utils.log_product_view(request, p)
 
     context = {
@@ -141,7 +138,7 @@ def show_product(request, slug, template="catalogue/product_detail.html"):
         'object': p,
         'category': Category.objects.all(),
         'product_image': ProductImage.objects.filter(product_id=p.id),
-        
+
         'form': form,
         'review_form': ProductReviewForm(),
 
@@ -157,7 +154,7 @@ def show_product(request, slug, template="catalogue/product_detail.html"):
 @csrf_exempt
 def addRreview(request, slug):
     product = get_object_or_404(Product, slug=slug)
-    
+
     if request.method == 'POST':
         form = ProductReviewForm(request.POST or None)
         if form.is_valid():
@@ -165,7 +162,7 @@ def addRreview(request, slug):
             rating = form.cleaned_data['rating']
             email = form.cleaned_data['email']
             content = form.cleaned_data['content']
-            
+
             ProductReview.objects.create(
                 name=name,
                 email=email,

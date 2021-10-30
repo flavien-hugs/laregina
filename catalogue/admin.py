@@ -10,11 +10,12 @@ from services.export_data_csv import export_to_csv
 from django_summernote.admin import SummernoteModelAdmin
 
 
-class ProductImageInline(admin.StackedInline):
+class ProductImageInline(admin.TabularInline):
     extra = 0
     max_num = 3
     model = models.ProductImage
     readonly_fields = ['product']
+    show_change_link = True
 
 
 @admin.register(models.Product)
@@ -67,7 +68,6 @@ class ProductAdmin(SummernoteModelAdmin):
     list_per_page = 10
     inlines = [ProductImageInline]
     prepopulated_fields = {
-        'slug': ('name',),
         'keywords': ('name',)
     }
     search_fields = ['category', 'name', 'keywords']

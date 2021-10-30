@@ -111,7 +111,7 @@ class Product(models.Model):
         try:
             image = self.productimage_set.first()
         except:
-            return ''
+            return 'https://via.placeholder.com/150'
         
         if image:
             return image.image.url
@@ -122,7 +122,7 @@ class Product(models.Model):
         if self.productimage_set.first() is not None:
             return mark_safe('<img src="{url}" height="50"/>'.format(url=self.get_image_url()))
         else:
-            return ""
+            return "https://via.placeholder.com/50"
 
     @admin.display(description="description du produit")
     def get_product_description(self):
