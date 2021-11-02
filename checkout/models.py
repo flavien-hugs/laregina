@@ -6,6 +6,7 @@ import string
 import datetime
 from django.db import models
 from django.urls import reverse
+from django.contrib import admin
 
 from core import settings
 from catalogue.models import Product
@@ -79,7 +80,7 @@ class Order(BaseOrderInfo):
     PROCESSED = 'Commande en cours de livraison'
     SUBMITTED = 'Commande en cours de traitement'
 
-    ORDER_STATUSES = (
+    ORDER_STATUS = (
         (SUBMITTED, 'Commande en cours de traitement'),
         (PROCESSED, 'Commande en cours de livraison'),
         (SHIPPED, 'Commande livrée'),
@@ -88,7 +89,7 @@ class Order(BaseOrderInfo):
     status = models.CharField(
         verbose_name='status',
         max_length=120,
-        choices=ORDER_STATUSES,
+        choices=ORDER_STATUS,
         default=SUBMITTED
     )
     transaction_id = models.CharField(
@@ -121,42 +122,26 @@ class Order(BaseOrderInfo):
         verbose_name_plural = 'commandes'
     
     def __str__(self):
-        return '#{transaction_id}'.format(
-            transaction_id=self.transaction_id)
+        return f'#{self.transaction_id}'
 
+    @admin.display(description="n° commande")
     def get_order_id(self):
-        return '#{transaction_id}'.format(
-            transaction_id=str(self.transaction_id)
-        )
-    get_order_id.short_description='N° commande'
+        return self.__str__()
 
+    @admin.display(description="nom")
     def get_short_name(self):
-        return '{first_name}'.format(first_name=self.shipping_first_name)
-    get_short_name.short_description='Nom'
+        return f'{self.shipping_first_name}'
 
+    @admin.display(description="nom & prénoms")
     def get_full_name(self):
-        return '{short_name} {last_name}'.format(
-            short_name=self.get_short_name(),
-            last_name=self.shipping_last_name
-        )
-    get_full_name.short_description='Nom & prénoms'
+        return f'{self.get_short_name()} {self.shipping_last_name}'
 
+    @admin.display(description="adresse de livraison")
     def get_shipping_delivery(self):
-        return '{shipping_country}, {shipping_city}, {shipping_adress} | {shipping_phone}/{shipping_phone_two}'.format(
-            shipping_country=self.shipping_country.name,
-            shipping_city=self.shipping_city,
-            shipping_adress=self.shipping_adress,
-            shipping_phone=self.phone,
-            shipping_phone_two=self.phone_two
-        )
-    get_shipping_delivery.short_description='Adresse de livraison'
+        return f'{self.shipping_country.name}, {self.shipping_city}, {self.shipping_adress} | {self.phone}'
 
     def get_shipping_delivery_for_seller(self):
-        return '{shipping_country}, {shipping_city}, {shipping_adress}'.format(
-            shipping_country=self.shipping_country.name,
-            shipping_city=self.shipping_city,
-            shipping_adress=self.shipping_adress,
-        )
+        return f'{self.shipping_country.name}, {self.shipping_city}, {self.shipping_adress}'
 
     def save(self, *args, **kwargs):
         if self.transaction_id is None:
@@ -173,53 +158,57 @@ class Order(BaseOrderInfo):
         order_items = OrderItem.objects.filter(order=self)
         return order_items
 
-    # admin: commande total
+    @admin.display(description="montant commande")
     def get_order_total(self):
         total = decimal.Decimal('0')
         for item in self.order_items():
             total += item.total
         total = total + 1500
         return total
-    get_order_total.short_description='Total commande'
 
-    # paiement en avance
+    @admin.display(description="montant réglé")
     def get_order_payment(self):
         order_total = self.get_order_total()
-        payment_api = int('0')
+        payment_advance = int('0')
         min_amount = int('10000')
         percent_amount = decimal.Decimal('0.5')
         if order_total >= min_amount:
-            payment_api = order_total * percent_amount
-        return int(payment_api)
-    get_order_payment.short_description='paiement en avance'
+            payment_advance = order_total * percent_amount
+        elif order_total <= min_amount:
+            payment_advance = order_total
+        return payment_advance
 
-    # cash du vendeur
+    @admin.display(description="reste à payé")
+    def get_order_rest_payment(self):
+        payment_rest = int("0")
+        order_total = self.get_order_total()
+        order_advance = self.get_order_payment()
+        payment_rest = float(order_total - order_advance)
+        return payment_rest
+
+    @admin.display(description="cash du vendeur")
     def total_seller_order(self):
         total_se_ = self.get_order_total() - 1500
         return total_se_
-    total_seller_order.short_description='Total'
 
-    # calcul de la commission
+    @admin.display(description="commission")
     def get_cost(self):
         percent = decimal.Decimal('0.05')
         cost = self.total_seller_order() * percent
         return cost
-    get_cost.short_description='Commission'
 
-    # cout total apres commission
+    @admin.display(description="coût total")
     def total_order(self):
         total_or_ = self.total_seller_order() - self.get_cost()
         return total_or_
-    total_order.short_description='Coût total'
 
-    # cash apres commission
+    @admin.display(description="cash total")
     def get_total_sales(self):
         total = decimal.Decimal(0)
         orders = self.order_items()
         for item in orders:
             total += item.total_order()
         return total
-    get_total_sales.short_description='Cash total'
     
     def get_absolute_url(self):
         return reverse('seller:order_detail', kwargs={'pk': int(self.id)})
