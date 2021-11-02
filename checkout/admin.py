@@ -43,6 +43,7 @@ class OrderAdmin(admin.ModelAdmin):
         'get_order_id',
         'get_shipping_delivery',
         'get_order_payment',
+        'get_order_rest_payment',
         'get_order_total',
         'date', 'status',
     ]
