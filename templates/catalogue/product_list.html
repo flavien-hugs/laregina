@@ -3,8 +3,11 @@
 
 {% block content %}
     {% url "home" as home_url %}    
+    
     {% if request.resolver_match.url_name == 'product_list' %}
+        
         {% include "includes/partials/_partials_breadcrumb.html" %}
+
     {% elif request.resolver_match.url_name == 'category_detail' %}
         <div class="ps-breadcrumb">
             <div class="ps-container">
@@ -49,21 +52,21 @@
             </div>
 
             {% if product_recommended %}
-
-            <div class="ps-block--container-hightlight pb-4">
-                <div class="ps-section__header">
-                    <h3>Produits récommandés pour vous</h3>
-                </div>
-                <div class="ps-section__content">
-                    <div class="row">
-                        {% for product in product_recommended %}
-                            <div class="col-xl-3 col-lg-3 col-md-4 col-sm-6 col-6 ">
-                                {% include "catalogue/snippet/_snippet_product.html" with instance=product %}
-                            </div>
-                        {% endfor %}
+                <div class="ps-block--container-hightlight pb-4">
+                    <div class="ps-section__header">
+                        <h3>Produits récommandés pour vous</h3>
+                    </div>
+                    <div class="ps-section__content">
+                        <div class="row">
+                            {% for product in product_recommended %}
+                                <div class="col-xl-3 col-lg-3 col-md-4 col-sm-6 col-6 ">
+                                    {% include "catalogue/snippet/_snippet_product.html" with instance=product %}
+                                </div>
+                            {% endfor %}
+                        </div>
                     </div>
                 </div>
-            </div>
+            {% endif %}
 
             <div class="ps-layout--shop border-bottom">
                 {% include "catalogue/partials/_partials_shop.html" %}
