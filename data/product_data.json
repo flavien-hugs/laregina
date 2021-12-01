@@ -1,28 +1,11 @@
 [
 {
     "model": "catalogue.product",
-    "pk": 1,
-    "fields": {
-        "user": 1,
-        "category": 4,
-        "name": "Lorem ipsum dolor",
-        "quantity": 1,
-        "price": "2500",
-        "description": "Le Python est devenu ces dernières années l'un des langages de programmation les plus populaires au près des développeurs,",
-        "keywords": "lorem-ipsum-dolor-sit-amet",
-        "is_external": false,
-        "is_active": true,
-        "slug": "lorem-ipsum-dolor-sit-amet",
-        "created_at": "2021-02-09T02:06:03.519Z",
-        "updated_at": "2021-02-09T02:06:03.520Z",
-        "timestamp": "2021-02-09T02:06:03.520Z"
-    }
-},
-{
-    "model": "catalogue.product",
     "pk": 17,
     "fields": {
-        "user": 1,
+        "user": [
+            "flavienhugs@gmail.com"
+        ],
         "category": 2,
         "name": "Fournitures scolaires & Universitaires",
         "quantity": 1,
@@ -32,16 +15,18 @@
         "is_external": false,
         "is_active": true,
         "slug": "fournitures-scolaires-universitaires",
-        "created_at": "2021-02-21T02:16:44.010Z",
-        "updated_at": "2021-02-21T02:16:44.010Z",
-        "timestamp": "2021-02-21T02:16:44.010Z"
+        "created_at": "2021-02-21T02:16:44.010",
+        "updated_at": "2021-02-21T02:16:44.010",
+        "timestamp": "2021-02-21T02:16:44.010"
     }
 },
 {
     "model": "catalogue.product",
     "pk": 35,
     "fields": {
-        "user": 1,
+        "user": [
+            "flavienhugs@gmail.com"
+        ],
         "category": 63,
         "name": "monde entier achètent des articles uniques",
         "quantity": 1,
@@ -51,9 +36,9 @@
         "is_external": false,
         "is_active": true,
         "slug": "monde-entier-achetent-des-articles-uniques",
-        "created_at": "2021-02-21T12:23:17.342Z",
-        "updated_at": "2021-02-21T12:23:17.342Z",
-        "timestamp": "2021-02-21T12:23:17.342Z"
+        "created_at": "2021-02-21T12:23:17.342",
+        "updated_at": "2021-02-21T12:23:17.342",
+        "timestamp": "2021-02-21T12:23:17.342"
     }
 }
 ]
