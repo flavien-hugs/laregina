@@ -1,35 +1,20 @@
-
-<nav ria-label="page navigation example" class="ps-section__footer pt-3">
-	<p></p>
-	{% if is_paginated %}
-	    <ul class="pagination">
-	    	{% if page_obj.has_previous %}
-	        	<li>
-	        		<a href="?page={{ page_obj.previous_page_number }}">
-	        			<i class="icon icon-chevron-left"></i>
-	        		</a>
-	        	</li>
-	        {% endif %}
-
-	        {% for obj in paginator.page_range %}
-				{% if page_obj.number == obj %}
-					<li class="{% if obj %} active {% endif %}">
-						<a href="?page={{ obj }}">{{ obj }}</a>
-					</li>
-				{% else %}
-					<li>
-						<a href="?page={{ obj }}">{{ obj }}</a>
-					</li>
+{% if is_paginated %}
+	<div class="row p-4">
+		<div class="col-7 mt-1"></div>
+		<div class="col-5">
+			<div class="btn-group float-end">
+				{% if page_obj.has_previous %}
+				<a href="?page={{ page_obj.previous_page_number }}" class="btn btn-gray-800">
+					<svg class="icon icon-sm" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z" clip-rule="evenodd"></path></svg>
+				</a>
 				{% endif %}
-			{% endfor %}
 
-			{% if page_obj.has_next %}
-				<li>
-					<a href="?page={{ page_obj.next_page_number }}">
-						<i class="icon-chevron-right">
-					</a>
-				</li>
-			{% endif %}
-	    </ul>
-    {% endif %}
-</nav>
+				{% if page_obj.has_next %}
+				<a href="?page={{ page_obj.next_page_number }}" class="btn btn-gray-800">
+					<svg class="icon icon-sm" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd"></path></svg>
+				</a>
+				{% endif %}
+			</div>
+		</div>
+	</div>
+{% endif %}

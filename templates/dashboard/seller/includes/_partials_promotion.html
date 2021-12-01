@@ -1,0 +1,130 @@
+{% extends "dashboard/seller/base.html" %}
+{% load humanize %}
+
+{% block block_extra_breadcrumb %}
+    
+    {% url "seller:promotion_create" as promotion_create_url %}
+
+    <div class="btn-toolbar mb-2 mb-md-0">
+        <a href="{{ promotion_create_url }}" class="btn btn-sm btn-secondary d-inline-flex align-items-center">
+            <svg class="icon icon-xs me-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path></svg> Faire une promotion
+        </a>
+    </div>
+{% endblock block_extra_breadcrumb %}
+
+{% block block_header_navbar %}
+    <div class="table-settings mb-4">
+        <div class="row justify-content-between align-items-center">
+            <div class="col-9 col-lg-8 d-md-flex">
+                <div class="input-group me-2 me-lg-3 fmxw-300">
+                    <span class="input-group-text">
+                        <svg class="icon icon-xs" x-description="Heroicon name: solid/search" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true"><path fill-rule="evenodd" d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z" clip-rule="evenodd"></path></svg>
+                    </span>
+                    <input type="text" class="form-control shadow-none" placeholder="Rechercher une promotion">
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock block_header_navbar %}
+
+{% block content %}
+    <div class="card card-body shadow border-0 table-wrapper table-responsive">
+        {% if object_list %}
+            <table class="table user-table table-hover align-items-center">
+                <thead class="thead-light">
+                    <tr>
+                        <th class="border-bottom">id</th>
+                        <th class="border-bottom">produit</th>
+                        <th class="border-bottom">date</th>
+                        <th class="border-bottom">status</th>
+                        <th class="border-bottom">action</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    {% for object in object_list %}
+                        <tr>
+                            <td><span class="text-primary fw-bold">{{ forloop.counter }}</span></td>
+                            <td>
+                                <a target="_blank" href="{{ object.get_absolute_url }}" class="d-flex align-items-center">
+                                    <img
+                                    src="{{ object.get_image_url }}"
+                                    class="avatar rounded-circle me-3"
+                                    alt="{{ object.name|slugify }}"
+                                    >
+                                    <div class="d-block">
+                                        <span class="fw-bold">{{ object.product.name|capfirst|safe }}</span>
+                                        <div class="small text-gray">
+                                        PROMO: {{ object.name|safe }}</div>
+                                    </div>
+                                </a>
+                            </td>
+                            <td><span>{{ object.created_at|date:"SHORT_DATE_FORMAT" }}</span></td>
+                            <td>
+                                <span class="d-fle align-items-center">
+                                    {% if object.active %}
+                                        <svg class="icon icon-xxs text-success me-1" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path></svg>
+                                    {% else %}
+                                        <svg class="icon icon-xs text-danger ms-1" title="" data-bs-toggle="tooltip" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg" data-bs-original-title="Delete" aria-label="Delete"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd"></path></svg>
+                                    {% endif %}
+                                    {{ object.get_status }}
+                                </span>
+                            </td>
+
+                            <td>
+                                <div class="btn-group">
+                                    <button class="shadow-none btn btn-link text-dark dropdown-toggle dropdown-toggle-split m-0 p-0" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                        <svg class="icon icon-xs" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M6 10a2 2 0 11-4 0 2 2 0 014 0zM12 10a2 2 0 11-4 0 2 2 0 014 0zM16 12a2 2 0 100-4 2 2 0 000 4z"></path></svg>
+                                        <span class="visually-hidden">toggle dropdown</span>
+                                    </button>
+
+                                    <div class="dropdown-menu dashboard-dropdown dropdown-menu-start mt-2 py-1" style="">
+                                        <a class="dropdown-item d-flex align-items-center" href="{{ object.get_absolute_url }}">
+                                            <svg class="dropdown-icon text-gray-400 me-2" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M10 12a2 2 0 100-4 2 2 0 000 4z"></path><path fill-rule="evenodd" d="M.458 10C1.732 5.943 5.522 3 10 3s8.268 2.943 9.542 7c-1.274 4.057-5.064 7-9.542 7S1.732 14.057.458 10zM14 10a4 4 0 11-8 0 4 4 0 018 0z" clip-rule="evenodd"></path></svg>
+                                            Detail
+                                        </a>
+
+                                        <a 
+                                            class="dropdown-item d-flex align-items-center"
+                                            href="{{ object.get_update_promo_url }}"
+                                        >
+                                            <svg class="icon icon-xs me-2" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M17.414 2.586a2 2 0 00-2.828 0L7 10.172V13h2.828l7.586-7.586a2 2 0 000-2.828z"></path><path fill-rule="evenodd" d="M2 6a2 2 0 012-2h4a1 1 0 010 2H4v10h10v-4a1 1 0 112 0v4a2 2 0 01-2 2H4a2 2 0 01-2-2V6z" clip-rule="evenodd"></path></svg>
+                                            Modifier
+                                        </a>
+                                        
+                                        <form method="post" action="{{ object.get_delete_promo_url }}">
+                                            {% csrf_token %}
+                                            <button class="dropdown-item d-flex align-items-center">
+                                                <svg class="dropdown-icon text-danger me-2" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z" clip-rule="evenodd"></path></svg> Suppimer
+                                            </button>
+                                        </form>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+
+            {% include "dashboard/seller/includes/_partials_pagination.html" %}
+        {% else %}
+        {% url "seller:promotion_create" as create_promotion %}
+            <div class="text-center py-2">
+                <span class="d-flex justify-content-center">
+                    <img class="img-fluid" height="160" width="160"
+                        srcset="{{ STATIC_PREFIX }}img/emptycart.png"
+                        alt="empty-cart-{{ page_title }}">
+                </span>
+
+                <p class="font-weight-bold">Vous n'avez aucune promotion en cours.</p>
+
+                <a href="{{ create_promotion }}" class="btn btn-outline-gray-500 d-inline-flex align-items-center justify-content-center dashed-outline">
+                    <span class="text-uppercase font-weight-bold py-2">
+                        <svg class="icon icon-xs me-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path></svg>
+                        faire une promotion
+                    </span>
+                </a>
+            </div>
+        {% endif %}
+    </div>
+{% endblock content %}

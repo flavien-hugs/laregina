@@ -1,17 +1,99 @@
 {% extends "dashboard/seller/base.html" %}
+
 {% load crispy_forms_tags %}
 
 {% block content %}
-    <div class="ps-main__wrapper">
-        <header class="header--dashboard mb-2">
-            <div class="header__left">
-                <h3>Réglages</h3>
-                <p>Paramètres du compte</p>
-            </div>
-        </header>
+    <div class="row">
+        <div class="col-12 col-xl-7">
+            <div class="card card-body border-0 shadow mb-4">
+                <h2 class="h5 mb-4">
+                    {% block settings_title %}Information générale{% endblock settings_title %}
+                </h2>
 
-        <section class="ps-dashboard ps-items-listing">
-            {% crispy form %}
-        </section>
+                {% block form_content %}
+                    {% crispy form %}
+                {% endblock form_content %}
+            </div>
+        </div>
+
+        <div class="col-12 col-xl-5">
+            <div class="row">
+                <div class="col-12 mb-4">
+                    <div class="card shadow border-0 text-center p-0">
+                        <img
+                            class="profile-cover rounded-top text-center" src="{{ STATIC_PREFIX }}img/signup_page.jpg"
+                        >
+
+                        <div class="card-body pb-3">
+                            <img src="{{ request.user.get_logo_url }}" class="avatar-xl rounded-circle mx-auto mt-n7 mb-4" alt="{{ request.user.store|slugify }}">
+
+                            <h4 class="h3">{{ request.user.store|upper }}</h4>
+                            <h5 class="fw-normal">{{ request.user.email }}</h5>
+                            <p class="text-gray mb-4">
+                                {{ request.user.shipping_city }}, {{ request.user.shipping_country.name }}
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-12">
+                    <div class="card card-body border-0 shadow mb-4">
+                        <h2 class="h5 mb-4">Information sur votre compte</h2>
+                        <ul class="list-group list-group-flush">
+
+                            <li class="list-group-item d-flex align-items-center justify-content-between px-0 border-bottom">
+                                <div>
+                                    <h3 class="h6 mb-1">ID Compte</h3>
+                                    <p class="small pe-4">
+                                        #{{ request.user.store_id }}
+                                    </p>
+                                </div>
+                            </li>
+
+                            <li class="list-group-item d-flex align-items-center justify-content-between px-0">
+                                <div>
+                                    <h3 class="h6 mb-1">Dernière connexion</h3>
+                                    <p class="small">
+                                        {{ request.user.last_login }}
+                                    </p>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="col-12">
+                    <div class="card card-body border-0 shadow mb-4">
+                        <h2 class="h5 mb-4">Profile réseaux sociaux</h2>
+                        
+                        <ul class="list-group list-group-flush">
+                            {% for psc in user.get_social_profile %}
+                                <li class="list-group-item d-flex align-items-center justify-content-between px-0 {% if forloop.first %}border-bottom{% endif %}">
+                                    <div>
+                                        <p class="small pe-4">
+                                            <a href="{{ psc.facebook }}" target="_blank" class="btn btn-icon-only btn-facebook d-inline-flex align-items-center">
+                                                <svg class="icon icon-xxs" aria-hidden="true" focusable="false" data-prefix="fab" data-icon="facebook-f" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><path fill="currentColor" d="M279.14 288l14.22-92.66h-88.91v-60.13c0-25.35 12.42-50.06 52.24-50.06h40.42V6.26S260.43 0 225.36 0c-73.22 0-121.08 44.38-121.08 124.72v70.62H22.89V288h81.39v224h100.17V288z"></path></svg>
+                                            </a>
+                                            {{ psc.get_facebook }}
+                                        </p>
+                                    </div>
+                                </li>
+
+                                <li class="list-group-item d-flex align-items-center justify-content-between px-0">
+                                    <div>
+                                        <p class="small pe-4">
+                                            <a href="{{ psc.instagram }}" target="_blank" class="btn btn-icon-only btn-instagram d-inline-flex align-items-center">
+                                                <i class="fa fa-instagram"></i>
+                                            </a>
+                                            {{ psc.get_instagram }}
+                                        </p>
+                                    </div>
+                                </li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 {% endblock content %}

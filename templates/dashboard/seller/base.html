@@ -2,28 +2,102 @@
     <!DOCTYPE html>
     <html lang="fr">
         <head>
-            {% load static cache %}{% get_static_prefix as STATIC_PREFIX %}
+            {% load static compress %}{% get_static_prefix as STATIC_PREFIX %}
             {% include "dashboard/seller/includes/meta.html" %}
-            {% include "dashboard/seller/includes/css.html" %}
+
+            {% compress css %}
+                <link rel="stylesheet" href="{{ STATIC_PREFIX }}css/plugins/fontawesome.min.css">
+                <link rel="stylesheet" href="{{ STATIC_PREFIX }}admin/css/apexcharts.css">
+                <link rel="stylesheet" href="{{ STATIC_PREFIX }}admin/css/custom.css">
+            {% endcompress css %}
 
             <title>
                 {% block title %}
                     {% if page_title %}
-                        {{ page_title }}
+                        {{ page_title|capfirst }}
                     {% endif %} &smid; Tableau de bord
                 {% endblock title %}
             </title>
 
         </head>
 
-        <body class="d-flex flex-column">
-            <div class="flex-grow-1 flex-shrink-0">
-                <main class="ps-main">
-                    {% include "dashboard/seller/includes/_partials_navigation.html" %}
-                    {% block content %}{% endblock content %}
-                </main>
-            </div>
-            {% include "dashboard/seller/includes/javascript.html" %}
+        <body>
+            {% include "dashboard/seller/includes/_partials_navigation.html" %}
+
+            <main class="content">
+                {% url 'seller:profile' as dashbord_url %}
+                
+                {% include "dashboard/seller/includes/_partials_content_navbar.html" %}
+
+                {% block breadcrumb %}
+                    <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center py-4">
+                        <div class="d-block mb-4 mb-md-0">
+                            <nav aria-label="breadcrumb" class="d-none d-md-inline-block">
+                                <ol class="breadcrumb breadcrumb-dark breadcrumb-transparent">
+                                    <li class="breadcrumb-item">
+                                        <a href="{{ dashbord_url }}"><span class="fa fa-home"></span></a>
+                                    </li>
+                                    <li class="breadcrumb-item {% if request.resolver_match.url_name == 'profile' %}active{% endif %}">
+                                        {{ subtitle|capfirst }}
+                                    </li>
+                                </ol>
+                            </nav>
+                            <h2 class="h4">{{ page_title|capfirst }}</h2>
+                            <p class="mb-0">{{ subtitle|capfirst }}</p>
+                        </div>
+
+                        {% block block_extra_breadcrumb %}
+                            <!-- extar breadcrumb here -->
+                        {% endblock block_extra_breadcrumb %}
+                    </div>
+                {% endblock breadcrumb %}
+
+                {% block block_header_navbar %}
+                    <!-- header navbar here -->
+                {% endblock block_header_navbar %}
+
+                {% block message %}
+                    {% include "dashboard/seller/includes/_partials_message.html" %}
+                {% endblock message %}
+
+                {% block content %}
+                    <!-- dashboard content here -->
+                {% endblock content %}
+
+                <footer class="p-3 mt-4">
+                    <div class="row">
+                        <div class="col-12 col-md-4 col-xl-6 mb-4 mb-md-0">
+                            <p class="mb-0 text-center fw-extrabold text-lg-start">
+                                &copy; {% now 'Y' %}
+                                {{ title }}
+                            </p>
+                        </div>
+
+                        <div class="col-12 col-md-8 col-xl-6 text-center text-lg-start">
+                            <ul class="list-inline list-group-flush list-group-borderless text-md-end mb-0">
+                                <li class="list-inline-item px-0 px-sm-2">
+                                    <a href="#">FAQ</a>
+                                </li>
+
+                                <li class="list-inline-item px-0 px-sm-2">
+                                    <a href="#">Contact</a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </footer>
+            </main>
+
+            {% compress js %}
+                <script src="{{ STATIC_PREFIX }}admin/js/popper.min.js"></script>
+                <script src="{{ STATIC_PREFIX }}admin/js/bootstrap.min.js"></script>
+                <script src="{{ STATIC_PREFIX }}admin/js/onscreen.min.js"></script>
+                <script src="{{ STATIC_PREFIX }}admin/js/nouislider.min.js"></script>
+                <script src="{{ STATIC_PREFIX }}admin/js/smooth-scroll.polyfills.min.js"></script>
+                <script src="{{ STATIC_PREFIX }}admin/js/apexcharts.min.js"></script>
+                <script src="{{ STATIC_PREFIX }}admin/js/simplebar.min.js"></script>
+                <script src="{{ STATIC_PREFIX }}admin/js/custom.js"></script>
+            {% endcompress js %}
         </body>
     </html>
 {% endspaceless %}

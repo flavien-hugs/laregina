@@ -6,172 +6,198 @@
 {% block content %}
     {% url 'seller:order_list' as order_list_url %}
 
-    <div class="ps-main__wrapper">
-        <header class="header--dashboard mb-5">
-            <div class="header__left">
-                <span>Tableau de bord: </span>
-                <h3>{{ page_title }}</h3>
-            </div>
-        </header>
-
-        <section class="ps-dashboard">
-            <div class="ps-section__left">
-                <div class="ps-card">
-                    {% if order_list_today %}
-                        <div class="ps-card__header">
-                            <h4>Vos commandes aujourd'hui</h4>
+    <section class="row">
+        <div class="col-12 col-sm-6 col-xl-4 mb-4">
+            <div class="card border-0 shadow">
+                <div class="card-body">
+                    <div class="row d-block d-xxl-flex align-items-center">
+                        <div class="col-12 col-xxl-6 px-xxl-0 mb-3 mb-xxl-0">
+                            <div id="chart-revenue"></div>
                         </div>
-                        
-                        <div class="ps-card__content mb-4">
-                            <div class="table-responsive">
-                                <table class="table ps-table">
-                                    <thead>
-                                        <tr>
-                                            <th>#</th>
-                                            <th>ID Commande</th>
-                                            <th>Total</th>
-                                            <th>Date</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        {% for object in order_list_today|slice:'0:5' %}
-                                            <tr>
-                                                <td>{{ forloop.counter }}</td>
-                                                <td>
-                                                    <a class="font-weight-bold text-success"
-                                                        href="{{ object.order.get_absolute_url }}">
-                                                    {{ object.order.transaction_id }}</a>
-                                                </td>
-                                                <td><strong>{{ object.order.total_order|intcomma }} Fr</strong></td>
-                                                <td><strong>{{ object.date_created|date }}</strong></td>
-                                            </tr>
-                                        {% endfor %}
-                                    </tbody>
-                                </table>
+
+                        <div class="col-12 col-xxl-6 ps-xxl-4 pe-xl-0">
+                            <h2 class="fs-5 fw-normal mb-1">Revenue</h2>
+                            <h3 class="fw-extrabold mb-1">{{ cash_total_seller|intcomma }}Fr</h3>
+                            <small class="d-flex align-items-center">
+                                <svg class="icon icon-xxs text-gray-400 me-1" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z" clip-rule="evenodd"></path></svg>
+                                Apr 1 - May 1
+                            </small>
+                            <div class="small d-flex mt-1">
+                                <svg class="icon icon-xs text-danger" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                                    <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd"></path>
+                                </svg>
+                                <div><span class="text-danger fw-bolder me-1">4,6%</span>Since last month</div>
                             </div>
                         </div>
-                    {% else %}
-                        <div class="ps-section__content">
-                            <div class="text-center py-2">
-                                <span class="d-flex justify-content-center">
-                                    <img class="img-fluid" height="160px" width="160px"
-                                    srcset="{{ STATIC_PREFIX }}img/emptycart.png"
-                                    src="{{ STATIC_PREFIX }}img/emptycart.png" alt="empty-cart-{{ page_title }}">
-                                </span>
-
-                                <p class="font-weight-bold">Vous n'avez aucun produit commandé pour aujourd'hui.</p>
-                            </div>
-                        </div>
-                    {% endif %}
-
-                    {% if order_list %}
-                        <div class="ps-card__header">
-                            <h4>Vos commandes</h4>
-                        </div>
-                        <div class="ps-card__content">
-                            <div class="table-responsive">
-                                <table class="table ps-table">
-                                    <thead>
-                                        <tr>
-                                            <th>#</th>
-                                            <th>ID Commande</th>
-                                            <th>Total</th>
-                                            <th>Date</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        {% for object in order_list|slice:'0:5' %}
-                                            <tr>
-                                                <td>{{ forloop.counter }}</td>
-                                                <td><a class="font-weight-bold text-success"
-                                                    href="{{ object.order.get_absolute_url }}">
-                                                {{ object.order.transaction_id }}</a></td>
-                                                <td><strong>{{ object.order.total_order|intcomma }} Fr</strong></td>
-                                                <td><strong>{{ object.date_created|date }}</strong></td>
-                                            </tr>
-                                        {% endfor %}
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
-
-                        <div class="ps-card__footer">
-                            <a class="ps-card__morelink" href="{{ order_list_url }}">
-                                Afficher tous les produits commandés <i class="icon icon-chevron-right"></i>
-                            </a>
-                        </div>
-                    {% else %}
-                        <div class="ps-section__content">
-                            <div class="text-center py-2">
-                                <span class="d-flex justify-content-center">
-                                    <img class="img-fluid" height="160px" width="160px"
-                                    srcset="{{ STATIC_PREFIX }}img/emptycart.png"
-                                    src="{{ STATIC_PREFIX }}img/emptycart.png" alt="empty-cart-{{ page_title }}">
-                                </span>
-
-                                <p class="font-weight-bold">Vous n'avez aucun produit commandé pour l'instant.</p>
-                            </div>
-                        </div>
-                    {% endif %}
-                </div>
-
-
-                <div class="ps-card">
-                    {% if product_list %}
-                        <div class="ps-card__header">
-                            <h4>Vos produits en vente</h4>
-                        </div>
-                        
-                        <div class="ps-card__content">
-                            <div class="table-responsive">
-                                <table class="table ps-table">
-                                    <thead>
-                                        <tr>
-                                            <th>#</th>
-                                            <th>Nom</th>
-                                            <th>Prix</th>
-                                            <th>Date</th>
-                                            <th></th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        {% for object in product_list|slice:'0:5' %}
-                                            {% include "dashboard/seller/includes/_snippet_product_table.html" %}
-                                        {% endfor %}
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
-
-                        <div class="ps-card__footer">
-                            <a class="ps-card__morelink" href="{% url 'seller:product_list' %}">
-                                Afficher tous vos produits
-                                <i class="icon icon-chevron-right"></i>
-                            </a>
-                        </div>
-                    {% else %}
-                        <div class="ps-section__content">
-                            <div class="text-center py-2">
-                                <span class="d-flex justify-content-center">
-                                    <img class="img-fluid" height="160px" width="160px"
-                                    srcset="{{ STATIC_PREFIX }}img/emptycart.png"
-                                    src="{{ STATIC_PREFIX }}img/emptycart.png" alt="empty-cart-{{ page_title }}">
-                                </span>
-
-                                <p class="font-weight-bold">Vous n'avez aucun produit en vente pour l'instant.</p>
-                            </div>
-                        </div>
-                    {% endif %}
-                </div>
-            </div>
-            <div class="ps-section__right">
-                <section class="ps-card ps-card--statics">
-                    <div class="ps-card__header">
-                        <h4>Statistiques</h4>
                     </div>
-                    {% include "dashboard/seller/includes/_partials_statistics.html" with object=object %}
-                </section>
+                </div>
             </div>
-        </section>
-    </div>
+        </div>
+
+        <div class="col-12 col-sm-12 col-xl-4 mb-4">
+            <div class="card border-0 shadow">
+                <div class="card-body">
+                    <div class="row d-block d-sm-flex d-xl-block d-xxl-flex align-items-center">
+                        <div class="col-12 col-sm-6 col-xl-12 col-xxl-6 px-xxl-0 mb-3 mb-sm-0 mb-xl-3 mb-xxl-0">
+                            <div id="chart-users"></div>
+                        </div>
+
+                        <div class="col-12 col-sm-6 col-xl-12 col-xxl-6 ps-xxl-4 pe-xxl-0">
+                            <h2 class="fs-5 fw-normal mb-1">Commande{{ orders_count|pluralize }}</h2>
+                            <h3 class="fw-extrabold mb-1">{{ orders_count|intcomma }}</h3>
+
+                            <small class="d-flex align-items-center">
+                                <svg class="icon icon-xxs text-gray-400 me-1" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z" clip-rule="evenodd"></path></svg>
+                                Apr 1 - May 1
+                            </small>
+
+                            <div class="small d-flex mt-1">
+                                <svg class="icon icon-xs text-success" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M14.707 12.707a1 1 0 01-1.414 0L10 9.414l-3.293 3.293a1 1 0 01-1.414-1.414l4-4a1 1 0 011.414 0l4 4a1 1 0 010 1.414z" clip-rule="evenodd"></path></svg>
+                                <div>
+                                    <span class="text-success fw-bolder me-1">20%</span>
+                                    Since last month
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-12 col-sm-6 col-xl-4 mb-4">
+            <div class="card border-0 shadow">
+                <div class="card-body">
+                    <div class="row d-block d-xxl-flex align-items-center">
+                        <div class="col-12 col-xxl-6 px-xxl-0 mb-3 mb-xxl-0">
+                            <div id="chart-customers"></div>
+                        </div>
+
+                        <div class="col-12 col-xxl-6 ps-xxl-4 pe-xxl-0">
+                            <h2 class="fs-5 fw-normal mb-1">Produit{{ product_count|pluralize }}</h2>
+                            <h3 class="fw-extrabold mb-1">{{ product_count }}</h3>
+                            <small class="d-flex align-items-center">
+                                <svg class="icon icon-xxs text-gray-400 me-1" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z" clip-rule="evenodd"></path></svg>
+                                Apr 1 - May 1
+                            </small>
+                            
+                            <div class="small d-flex mt-1">
+                                <svg class="icon icon-xs text-success" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M14.707 12.707a1 1 0 01-1.414 0L10 9.414l-3.293 3.293a1 1 0 01-1.414-1.414l4-4a1 1 0 011.414 0l4 4a1 1 0 010 1.414z" clip-rule="evenodd"></path></svg>
+                                <div><span class="text-success fw-bolder me-1">18,2%</span> Since last month</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="row">
+        <div class="col-12 col-md-6 col-xxl-4 mb-4">
+            <div class="card border-0 shadow">
+                <div class="card-header d-flex align-items-center">
+                    <h2 class="fs-5 fw-bold mb-0">Vos commandes d'aujourd'hui</h2>
+                    <div class="ms-auto">
+                        <a class="fw-normal d-inline-flex align-items-center" href="#">
+                            <svg class="icon icon-xxs me-2" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M10 12a2 2 0 100-4 2 2 0 000 4z"></path><path fill-rule="evenodd" d="M.458 10C1.732 5.943 5.522 3 10 3s8.268 2.943 9.542 7c-1.274 4.057-5.064 7-9.542 7S1.732 14.057.458 10zM14 10a4 4 0 11-8 0 4 4 0 018 0z" clip-rule="evenodd"></path></svg> Tout afficher
+                        </a>
+                    </div>
+                </div>
+
+                <div class="card-body py-0">
+                    <ul class="list-group list-group-flush">
+                        {% for object in order_list_today|slice:'0:5' %}
+                            <li class="list-group-item bg-transparent border-bottom py-3 px-0">
+                                <div class="row align-items-center">
+                                    <div class="col-auto px-0">
+                                        <h4 class="fs-6 fw-extrabold mb-0">
+                                            <a href="{{ object.order.get_absolute_url }}">
+                                                #{{ object.order.transaction_id }}
+                                            </a>
+                                        </h4>
+                                        <span class="small">
+                                            {{ object.order.get_full_name|safe }}
+                                            &smid; {{ object.order.date|date:"SHORT_DATE_FORMAT" }}
+                                        </span>
+                                    </div>
+
+                                    <div class="col text-end">
+                                        <span class="fs-6 fw-bolder text-dark">
+                                            {{ object.order.total_order|intcomma }} Fr
+                                        </span>
+                                    </div>
+                                </div>
+                            </li>
+                        {% empty %}
+                        <div class="text-center py-2">
+                            <span class="d-flex justify-content-center">
+                                <img class="img-fluid" height="160px" width="160px"
+                                src="{{ STATIC_PREFIX }}img/emptycart.png" alt="empty-cart-{{ page_title }}">
+                            </span>
+
+                            <p class="font-weight-bold">Vous n'avez aucun produit commandé pour aujourd'hui.</p>
+                        </div>
+                        {% endfor %}
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-12 col-md-6 col-xxl-4 mb-4">
+            <div class="card border-0 shadow">
+                <div class="card-header d-flex align-items-center">
+                    <h2 class="fs-5 fw-bold mb-0">Vos produits en vente</h2>
+                    <div class="ms-auto">
+                        <a class="fw-normal d-inline-flex align-items-center" href="{% url 'seller:product_list' %}">
+                            <svg class="icon icon-xxs me-2" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M10 12a2 2 0 100-4 2 2 0 000 4z"></path><path fill-rule="evenodd" d="M.458 10C1.732 5.943 5.522 3 10 3s8.268 2.943 9.542 7c-1.274 4.057-5.064 7-9.542 7S1.732 14.057.458 10zM14 10a4 4 0 11-8 0 4 4 0 018 0z" clip-rule="evenodd"></path></svg> Tout afficher
+                        </a>
+                    </div>
+                </div>
+
+                <div class="card-body py-0">
+                    <ul class="list-group list-group-flush">
+                        {% for object in product_list|slice:'0:5' %}
+                            <li class="list-group-item bg-transparent border-bottom py-3 px-0">
+                                <div class="row align-items-center">
+                                    <div class="col-auto">
+                                        <a href="{{ object.get_absolute_url }}" class="avatar-md">
+                                            <img class="rounded" alt="{{ object.name|slugify }}" src="{{ object.get_image_url }}">
+                                        </a>
+                                    </div>
+
+                                    <div class="col-auto px-0">
+                                        <h4 class="fs-6 fw-extrabold mb-0">
+                                            <a href="{{ object.get_absolute_url }}">
+                                                {{ object.name|truncatewords:"2"|safe }}
+                                            </a>
+                                        </h4>
+                                        <span class="small">
+                                            {{ object.category.name|safe }}
+                                            &smid; {{ object.created_at|date:"SHORT_DATE_FORMAT" }}
+                                        </span>
+                                    </div>
+
+                                    <div class="col text-end">
+                                        <span class="fs-6 fw-bolder text-dark">
+                                            {{ object.price|intcomma }} Fr
+                                        </span>
+                                    </div>
+                                </div>
+                            </li>
+                        {% empty %}
+                            <div class="text-center py-2">
+                                <span class="d-flex justify-content-center">
+                                    <img class="img-fluid" height="160px" width="160px"
+                                    src="{{ STATIC_PREFIX }}img/emptycart.png" alt="empty-cart-{{ page_title }}">
+                                </span>
+
+                                <p class="font-weight-bold">
+                                    Vous n'avez aucun produit en vente pour l'instant.
+                                </p>
+                            </div>
+                        {% endfor %}
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
 {% endblock content %}

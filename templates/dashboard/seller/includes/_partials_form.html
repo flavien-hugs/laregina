@@ -1,87 +1,84 @@
 <!-- product create form -->
 {% load mptt_tags crispy_forms_tags %}
-{% url 'seller:product_list' as seller_product_list %}
 
-<div class="ps-form__content">
+<form class="card-body" action="#" method="post" enctype="multipart/form-data">
+    {% csrf_token %}
     <div class="row">
-        <div class="col-sm-12 col-12">
-            <figure class="ps-block--form-box">
-                <figcaption class="text-lowercase">Information sur le produit</figcaption>
-                <div class="ps-block__content">
-                    <div class="form-group">
-                        <div class="form-group form-group--select">
-                            <label>Choisir la catégorie du produit</label>
-                            <select id="{{ form.category.id_for_label }}" name="{{ form.category.name }}" class="form-control ps-select" title="Catégories">
-                                {% for node, structure in category|tree_info:"ancestors" %}
-                                    {% if node.is_child_node %}
-                                        <option value="{{ node.pk }}">
-                                            {{ structure.ancestors|tree_path }} :: {{ node }}
-                                        </option>
-                                    {% else %}
-                                        <option value="{{ node.pk }}">
-                                            {{ node }}
-                                        </option>
-                                    {% endif %}
-                                {% endfor %}
-                            </select>
-                        </div>
-                    </div>
+        <div class="col-12 col-lg-12">
+            <label for="{{ form.category.id_for_label }}">
+                Choisir la catégorie du produit
+            </label>
 
-                    <div class="row">
-                        <div class="col-sm-6">
-                            <div class="form-group">
-                                <label for="{{ form.name.id_for_label }}">Nom du produit<sup>*</sup></label>
-                                {{ form.name }}
-                            </div>
-                        </div>
-                        <div class="col-sm-6">
-                            <div class="form-group">
-                                <label for="{{ form.price.id_for_label }}">Prix de vente<sup>*</sup></label>
-                                {{ form.price }}
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="{{ form.description.id_for_label }}">Description du produit<sup>*</sup></label>
-                        {{ form.description }}
-                    </div>
-
-                    <div class="form-row">
-                        {{ formset.management_form }}
-                        {% for form in formset %}
-                            {{ form.non_form_errors }}
-                            <div class="form-group col-lg-6 col-md-6 col-sm-12 mb-0">
-                                {{ form.image|as_crispy_field }}
-                            </div>
-                        {% endfor %}
-                    </div>
-
-                    <div class="form-group">
-                        <div class="ps-checkbox">
-                            {{ form.is_external }}
-                            <label for="{{ form.is_external.id_for_label }}">
-                                Ce produit peut-être livrer en dehors de votre pays ?
-                            </label>
-                        </div>
-                    </div>
-
-                    <div class="form-group">
-                        <div class="ps-checkbox">
-                            {{ form.is_active }}
-                            <label for="{{ form.is_active.id_for_label }}">
-                                Ce produit est-il disponible ?
-                            </label>
-                        </div>
-                    </div>
-
-                    <div class="ps-form__bottom pt-2">
-                        <a href="{{ seller_product_list }}" class="ps-btn ps-btn--gray">
-                        Annuler</a>
-                        <button class="ps-btn">Valider</button>
-                    </div>
-                </div>
-            </figure>
+            <select id="{{ form.category.id_for_label }}" name="{{ form.category.name }}" class="form-select shadow-none rounded-0 mb-4" aria-label="Catégories">
+                {% for node, structure in category|tree_info:"ancestors" %}
+                    {% if node.is_child_node %}
+                        <option value="{{ node.pk }}">
+                            {{ structure.ancestors|tree_path }} :: {{ node }}
+                        </option>
+                    {% else %}
+                        <option value="{{ node.pk }}">
+                            {{ node }}
+                        </option>
+                    {% endif %}
+                {% endfor %}
+            </select>
         </div>
+
+        <div class="col-12 col-lg-6">
+            <div class="form-group mb-4">
+                <label for="{{ form.name.id_for_label }}">
+                    {{ form.name.label }}
+                </label>
+                {{ form.name }}
+            </div>
+        </div>
+
+        <div class="col-12 col-lg-6">
+            <div class="form-group mb-4">
+                <label for="{{ form.price.id_for_label }}">
+                    {{ form.price.label }}
+                </label>
+                {{ form.price }}
+            </div>
+        </div>
+
+        <div class="col-12 col-lg-12">
+            <div class="form-group mb-3">
+                <label for="{{ form.description.id_for_label }}">
+                    {{ form.description.label }}
+                </label>
+                {{ form.description }}
+            </div>
+        </div>
+
+        {{ formset.management_form }}
+        {% for form in formset %}
+            {{ form.non_form_errors }}
+            <div class="col-12 col-lg-6 mb-3">
+                {{ form.image }}
+            </div>
+        {% endfor %}
+
+        <div class="col-12 col-lg-12">
+            <div class="form-check form-switch">
+                {{ form.is_active }}
+                <label class="form-check-label" for="{{ form.is_active.id_for_label }}">
+                    {{ form.is_active.label }}
+                </label>
+            </div>
+        </div>
+
+        <div class="col-12 col-lg-12">
+            <div class="form-check form-switch">
+                {{ form.is_external }}
+                <label class="form-check-label" for="{{ form.is_external.id_for_label }}">
+                    {{ form.is_external.label }}
+                </label>
+            </div>
+        </div>
+
+        <button class="btn btn-md btn-block btn-secondary mt-4 fw-extrabold text-uppercase rounded-0" type="submit">
+            ajouter la produit
+        </button>
     </div>
-</div>
+</form>

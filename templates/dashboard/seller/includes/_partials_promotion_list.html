@@ -1,0 +1,137 @@
+<!-- pages/promotion/promotion_list.html -->
+
+{% extends "base.html" %}
+{% load humanize mptt_tags catalogue_tags pages_tags %}
+
+{% block content %}
+    {% url "home" as home_url %}    
+    
+    {% if request.resolver_match.url_name == 'product_list' %}
+        
+        {% include "includes/partials/_partials_breadcrumb.html" %}
+
+    {% elif request.resolver_match.url_name == 'category_detail' %}
+        <div class="ps-breadcrumb">
+            <div class="ps-container">
+                <ul class="breadcrumb">
+                   <li>
+                        <a class="text-capitalize" href="{{ home_url }}">
+                            <i class="fa fa-home fw-2x text-success"></i>
+                        </a>
+                    </li>
+                    {% if object.get_ancestors %}
+                        <li>
+                            <a href="{{ object.parent.get_absolute_url }}">
+                                {{ object.parent.get_ancestors|tree_path|lower }}
+                            </a>
+                        </li>
+                    {% endif %}
+                    <li>{{ object.name|safe }}</li>
+                </ul>
+            </div>
+        </div>
+    {% endif %}
+
+    <div class="ps-page--shop pt-2">
+        <div class="container">
+
+            {% promotion_list 8 %}
+
+            <div class="ps-block--container-hightlight pb-4">
+                <div class="ps-section__header">
+                    <h3>Les meilleures offres super chaudes aujourd'hui</h3>
+                </div>
+                <div class="ps-section__content">
+                    <div class="row">
+                        {% for promo in promotion_list_object %}
+                            <div class="col-xl-3 col-lg-3 col-md-4 col-sm-6 col-6 ">
+                                {% include "catalogue/snippet/_snippet_product.html" with instance=promo.product %}
+                            </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+
+            {% if product_recommended %}
+                <div class="ps-block--container-hightlight pb-4">
+                    <div class="ps-section__header">
+                        <h3>Produits récommandés pour vous</h3>
+                    </div>
+                    <div class="ps-section__content">
+                        <div class="row">
+                            {% for product in product_recommended %}
+                                <div class="col-xl-3 col-lg-3 col-md-4 col-sm-6 col-6 ">
+                                    {% include "catalogue/snippet/_snippet_product.html" with instance=product %}
+                                </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+            {% endif %}
+
+            <div class="ps-layout--shop border-bottom">
+                <div class="ps-layout__left">
+                    {% include "catalogue/partials/_partials_sidebar.html" %}
+                </div>
+
+                <div class="ps-layout__right">
+                    <div class="ps-shopping ps-tab-root">
+                        <div class="ps-shopping__header">
+                            {% with count=promotion_list_object.count %}
+                                <p>
+                                    {% if request.resolver_match.url_name == 'search' %}
+                                        {{ page_title }}
+                                    {% elif request.resolver_match.url_name == 'category_detail' %}
+                                        <strong>{{ count|intcomma }}</strong> Produit{{ count|pluralize:'s' }}
+                                        trouvé{{ count|pluralize:', s' }} dans la catégorie <strong>"{{ object.name }}"</strong>
+                                    {% elif request.resolver_match.url_name == 'product_list' %}
+                                        <strong>{{ count|intcomma }}</strong> Produit{{ count|pluralize:' ,s' }}
+                                        trouvé{{ count|pluralize:'s' }}
+                                    {% endif %}
+                                </p>
+                            {% endwith %}
+
+                            <div class="ps-shopping__actions">
+                                <select class="ps-select" data-placeholder="Sort Items">
+                                    <option>Trier par nouveauté</option>
+                                    <option>Trier par popularité</option>
+                                    <option>Trier par note moyenne</option>
+                                    <option>Trier par prix: du plus bas au plus élevé</option>
+                                    <option>Trier par prix: du plus élevé au plus bas</option>
+                                </select>
+                                <div class="ps-shopping__view">
+                                    <ul class="ps-tab-list">
+                                        <li class="active"><a href="#tab-1"><i class="icon-grid"></i></a></li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="ps-tabs">
+                            <div class="ps-tab active" id="tab-1">
+                                <div class="ps-shopping-product">
+                                    <div class="row">
+                                        {% if promotion_list_object %}
+                                            {% for object in promotion_list_object|shuffle %}
+                                                {% if query or object %}
+                                                    <div class="col-xl-3 col-lg-3 col-md-4 col-6">
+                                                        {% include "catalogue/snippet/_snippet_product.html" with instance=object.product %}
+                                                    </div>
+                                                {% endif %}
+                                            {% endfor %}
+                                        {% else %}
+                                            <div class="col-12">
+                                                <p class="text-left">Il n'y aucun produit.</p>
+                                            </div>
+                                        {% endif %}
+                                    </div>
+                                    {% include "catalogue/partials/_partials_pagination.html" %}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock content %}

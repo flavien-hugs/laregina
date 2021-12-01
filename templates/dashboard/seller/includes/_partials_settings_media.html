@@ -1,0 +1,19 @@
+{% extends "dashboard/seller/includes/_partials_settings_store.html" %}
+
+{% load crispy_forms_tags %}
+
+{% block settings_title %}{{ page_title }}{% endblock settings_title %}
+
+{% block form_content %}
+    <form action="." method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+
+        {{ form.management_form }}
+
+        {{ form|crispy }}
+
+        <button class="btn btn-md btn-secondary text-uppercase rounded-0 mt-3" type="submit">
+            valider
+        </button>
+    </form>
+{% endblock form_content %}

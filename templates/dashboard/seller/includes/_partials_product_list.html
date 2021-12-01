@@ -1,65 +1,56 @@
 {% extends "dashboard/seller/base.html" %}
 {% load humanize %}
 
-{% block content %}
+{% block block_extra_breadcrumb %}
     {% url "seller:product_create" as seller_create_product %}
 
-    <div class="ps-main__wrapper">
-        <header class="header--dashboard mb-2">
-            <div class="header__left">
-                <h3>Produits</h3>
-                <p>Listes de vos produits en vente dans votre boutique.</p>
-            </div>
-        </header>
+    <div class="btn-toolbar mb-2 mb-md-0">
+        <a href="{{ seller_create_product }}" class="btn btn-sm btn-secondary d-inline-flex align-items-center">
+            <svg class="icon icon-xs me-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path></svg> Ajouter un nouveau produit
+        </a>
+    </div>
+{% endblock block_extra_breadcrumb %}
 
-        <section class="ps-items-listing">
-            <div class="ps-section__header simple">
-                <div class="ps-section__filter">
-                    <form class="ps-form--filter" action="#" method="get">
-                        <div class="ps-form__left">
-                            <div class="form-group">
-                                <input class="form-control" type="text" placeholder="Rechercher un produit...">
-                            </div>
-                        </div>
-                        <div class="ps-form__right">
-                            <button class="ps-btn ps-btn--gray">
-                                Chercher
-                            </button>
-                        </div>
-                    </form>
-                </div>
-
-                <div class="ps-section__actions">
-                    <a class="ps-btn success" href="{{ seller_create_product }}">
-                    <i class="icon icon-plus mr-2"></i>Ajouter un nouveau produit</a>
+{% block block_header_navbar %}
+    <div class="table-settings mb-4">
+        <div class="row justify-content-between align-items-center">
+            <div class="col-9 col-lg-8 d-md-flex">
+                <div class="input-group me-2 me-lg-3 fmxw-300">
+                    <span class="input-group-text">
+                        <svg class="icon icon-xs" x-description="Heroicon name: solid/search" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true"><path fill-rule="evenodd" d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z" clip-rule="evenodd"></path></svg>
+                    </span>
+                    <input type="text" class="form-control shadow-none" placeholder="Search users">
                 </div>
             </div>
-            
-            <div class="ps-section__content">
-                {% if object_list %}
-                    <div class="table-responsive">
-                        <table class="table ps-table">
-                            <thead>
-                                <tr>
-                                    <th>#</th>
-                                    <th>Nom</th>
-                                    <th>Prix</th>
-                                    <th>Date</th>
-                                    <th class="text-right">Modifier/Supprimmer</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {% for object in object_list %}
-                                    {% include "dashboard/seller/includes/_snippet_product_table.html" %}
-                                {% endfor %}
-                            </tbody>
-                        </table>
-                    </div>
-                    {% include "dashboard/seller/includes/_partials_pagination.html" %}
-                {% else %}
-                    {% include "dashboard/seller/includes/_partials_store_empty.html" %}
-                {% endif %}
-            </div>
-        </section>
+        </div>
+    </div>
+{% endblock block_header_navbar %}
+
+{% block content %}
+    <div class="card card-body shadow border-0 table-wrapper table-responsive">
+        {% if object_list %}
+            <table class="table user-table table-hover align-items-center">
+                <thead class="thead-light">
+                    <tr>
+                        <th class="border-bottom">#</th>
+                        <th class="border-bottom">produit</th>
+                        <th class="border-bottom">prix</th>
+                        <th class="border-bottom">date d'ajout</th>
+                        <th class="border-bottom">note</th>
+                        <th class="border-bottom">action</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    {% for object in object_list %}
+                        {% include "dashboard/seller/includes/_snippet_product_table.html" with object=object %}
+                    {% endfor %}
+                </tbody>
+            </table>
+
+            {% include "dashboard/seller/includes/_partials_pagination.html" %}
+        {% else %}
+            {% include "dashboard/seller/includes/_partials_store_empty.html" %}
+        {% endif %}
     </div>
 {% endblock content %}

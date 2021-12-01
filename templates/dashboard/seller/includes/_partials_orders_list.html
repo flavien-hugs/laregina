@@ -1,69 +1,55 @@
 {% extends "dashboard/seller/base.html" %}
-
 {% load humanize %}
 
+{% block block_extra_breadcrumb %}
+{% endblock block_extra_breadcrumb %}
+
+{% block block_header_navbar %}
+    <div class="table-settings mb-4">
+        <div class="row justify-content-between align-items-center">
+            <div class="col-9 col-lg-8 d-md-flex">
+                <div class="input-group me-2 me-lg-3 fmxw-300">
+                    <span class="input-group-text">
+                        <svg class="icon icon-xs" x-description="Heroicon name: solid/search" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true"><path fill-rule="evenodd" d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z" clip-rule="evenodd"></path></svg>
+                    </span>
+                    <input type="text" class="form-control shadow-none" placeholder="Search users">
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock block_header_navbar %}
+
 {% block content %}
-    <div class="ps-main__wrapper">
-        <header class="header--dashboard mb-2">
-            <div class="header__left">
-                <h3>Commandes</h3>
-                <p>Liste de vos commandes</p>
-            </div>
-        </header>
+    <div class="card card-body shadow border-0 table-wrapper table-responsive">
+        {% if object_list %}
+            <table class="table table-centered table-nowrap align-items-center mb-0">
+                <thead class="thead-light">
+                    <tr>
+                        <th class="border-bottom">id commande</th>
+                        <th class="border-bottom">coût total</th>
+                        <th class="border-bottom">date</th>
+                        <th class="border-bottom">status</th>
+                    </tr>
+                </thead>
 
-        <section class="ps-items-listing">
-            <div class="ps-section__header simple">
-                <div class="ps-section__filter">
-                    <form class="ps-form--filter" action="#" method="get">
-                        <div class="ps-form__left">
-                            <div class="form-group">
-                                <input class="form-control" type="text" placeholder="Rechercher une commande...">
-                            </div>
-                        </div>
-                        <div class="ps-form__right">
-                            <button class="ps-btn ps-btn--gray">Chercher</button>
-                        </div>
-                    </form>
-                </div>
-                <div class="ps-section__actions">
-                    <a class="ps-btn ps-btn--gray" href="#"><i class="icon icon-download2 mr-2"></i>Exporter</a>
-                </div>
-            </div>
+                <tbody>
+                    {% for object in object_list %}
+                        {% include "dashboard/seller/includes/_snippet_order_table.html" with object=object %}
+                    {% endfor %}
+                </tbody>
+            </table>
 
-            <div class="ps-section__content">
-                {% if object_list %}
-                    <div class="table-responsive">
-                        <table class="table ps-table">
-                            <thead>
-                                <tr>
-                                    <th>#</th>
-                                    <th>ID</th>
-                                    <th>Total</th>
-                                    <th>Date</th>
-                                    <th>Status</th>
-                                    <th></th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {% for object in object_list %}
-                                    {% include "dashboard/seller/includes/_snippet_order_table.html" %}
-                                {% endfor %}
-                            </tbody>
-                        </table>
-                    </div>
-                    {% include "dashboard/seller/includes/_partials_pagination.html" %}
-                {% else %}
-                    <div class="text-center py-2">
-                        <span class="d-flex justify-content-center">
-                            <img class="img-fluid" height="160" width="160"
-                            srcset="{{ STATIC_PREFIX }}img/emptycart.png"
-                            src="{{ STATIC_PREFIX }}img/emptycart.png" alt="empty-cart-{{ page_title }}">
-                        </span>
+            {% include "dashboard/seller/includes/_partials_pagination.html" %}
+        {% else %}
+            <div class="text-center py-2">
+                <span class="d-flex justify-content-center">
+                    <img class="img-fluid" height="160" width="160"
+                        src="{{ STATIC_PREFIX }}img/emptycart.png"
+                        alt="empty-cart-{{ page_title }}">
+                </span>
 
-                        <p class="font-weight-bold">Vous n'avez aucune commande pour l'instant.</p>
-                    </div>
-                {% endif %}
+                <p class="font-weight-bold">Vous n'avez aucune commande pour l'instant.</p>
             </div>
-        </section>
+        {% endif %}
     </div>
 {% endblock content %}

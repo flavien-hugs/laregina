@@ -1,12 +1,12 @@
 {% load humanize %}
-<tr>
-	<td>{{ forloop.counter }}</td>
-    <td>
-    	<a class="font-weight-bold text-success" href="{{ object.order.get_absolute_url }}">
-    		#{{ object.order.transaction_id }}
-    	</a>
-    </td>
-    <td>{{ object.order.total_order|intcomma }} Fr</td>
-	<td>{{ object.order.created_at|date }}</td>
-	<td>{{ object.order.status }}</td>
+
+<tr>	
+	<td>
+		<a href="{{ object.order.get_absolute_url }}">
+			<span>{{ object.order.get_order_id|safe }}</span>
+		</a>
+	</td>
+    <td><span>{{ object.order.total_order|intcomma }} Fr</span></td>
+	<td><span>{{ object.order.created_at|date:"SHORT_DATE_FORMAT" }}</span></td>
+	<td><span>{{ object.order.status|upper|safe }}</span></td>
 </tr>

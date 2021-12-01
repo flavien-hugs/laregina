@@ -1,117 +1,126 @@
 {% extends "dashboard/seller/base.html" %}
 {% load humanize %}
 
-{% block content %}
-    <div class="ps-main__wrapper">
-        <header class="header--dashboard">
-            <div class="header__left">
-                <h3>#{{ object.transaction_id }}</h3>
-                <p>Détail de la commande #{{ object.transaction_id }}</p>
-                <p>Status de la commande: <strong>{{ object.status }}</strong></p>
-            </div>
-        </header>
+{% block breadcrumb %}
+{% endblock breadcrumb %}
 
-        <section class="ps-dashboard">
-            <div class="ps-section__left">
-                <div class="row">
-                    <div class="col-md-6">
-                        <div class="ps-card ps-card--order-information ps-card--small">
-                            <div class="ps-card__header">
-                                <h4>Informations sur la livraison</h4>
-                            </div>
-                            <div class="ps-card__content">
-                                <h5>{{ object.get_full_name }}</h5>
-                                <p>
-                                    <strong>Adresse: </strong>
-                                    {{ object.get_shipping_delivery_for_seller }}
-                                </p>
-                            </div>
-                        </div>
+{% block block_header_navbar %}
+
+{% endblock block_header_navbar %}
+
+{% block content %}
+    <div class="row justify-content-center mt-4">
+        <div class="col-12 col-xl-10">
+            <div class="card shadow border-0 p-4 p-md-5 position-relative">
+                <div class="d-flex justify-content-between pb-4 pb-md-5 mb-4 mb-md-5 border-bottom border-light">
+                    <img
+                        class="image-md" 
+                        src="{{ request.user.get_logo_url }}" 
+                        alt="{{ request.user.store|slugify|safe }}" 
+                        width="80" height="80"
+                    >
+                    <div>
+                        <h4>{{ request.user.store }}</h4>
+                        <ul class="list-group simple-list">
+                            <li class="list-group-item fw-normal">
+                                {{ request.user.shipping_adress }}
+                            </li>
+                            <li class="list-group-item fw-normal">
+                                {{ request.user.shipping_city }}, {{ request.user.shipping_country.name }}
+                            </li>
+                            <li class="list-group-item fw-normal">
+                                <span class="fw-extrabold text-primary">
+                                    {{ request.user.email }}
+                                </span>
+                            </li>
+                        </ul>
                     </div>
                 </div>
 
-                <div class="ps-card ps-card--track-order">
-                    <div class="ps-card__content">
+                <div class="mb-4 text-center border-bottom">
+                    <h2 class="h1 fw-extrabold mb-0">Facture #{{ object.transaction_id }}</h2>
+                    <p class="badge badge-lg bg-success my-3">{{ object.status|upper|safe }}</p>
+                </div>
+
+                <div class="row justify-content-between mb-4 mb-md-4">
+                    <div class="col-sm">
+                        <h5>Information sur le client:</h5>
+                        <div>
+                            <ul class="list-group simple-list">
+                                <li class="list-group-item fw-extrabold">
+                                    {{ object.get_full_name|upper }}
+                                </li>
+                                <li class="list-group-item fw-normal">
+                                    {{ object.get_shipping_delivery_for_seller|safe }}
+                                </li>
+                                <li class="list-group-item fw-normal">
+                                    <span class="fw-extrabold text-primary">
+                                        {{ object.email|safe }}
+                                    </span>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="col-sm col-lg-5">
+                        <dl class="row text-sm-right">
+                            <dt class="col-6">Commandé le:</dt>
+                            <dd class="col-6">{{ object.date|date:"SHORT_DATE_FORMAT" }}</dd>
+                        </dl>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-12">
                         <div class="table-responsive">
-                            <table class="table ps-table">
-                                <thead>
+                            <table class="table mb-0">
+                                <thead class="bg-light border-top">
                                     <tr>
-                                        <th>Produit</th>
-                                        <th>Quantité</th>
-                                        <th>Prix</th>
-                                        <th>Total</th>
+                                        <th scope="row" class="border-0 text-left">produit</th>
+                                        <th scope="row" class="border-0">qté</th>
+                                        <th scope="row" class="border-0">prix</th>
+                                        <th scope="row" class="border-0">sous-total</th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    {% for object in object.order_items %}
+                                    {% for item in object.order_items %}
                                         <tr>
-                                            <td>
-                                                {{ object.get_product_name|truncatewords:'10' }}
-                                                &smid; <b>{{ object.get_store_name }}</b>
-                                            </td>
-                                            <td>{{ object.quantity }}</td>
-                                            <td>{{ object.get_product_price }}</td>
-                                            <td>{{ object.total|intcomma }} Fr</td>
+                                            <th scope="row" class="text-left fw-bold h6">
+                                                {{ item.get_product_name|safe }} &smid;
+                                                <b>{{ item.get_store_name|safe }}</b>
+                                            </th>
+                                            <td>{{ item.quantity|intcomma }}</td>
+                                            <td>{{ item.get_product_price }}</td>
+                                            <td>{{ item.total|intcomma }} Fr CFA</td>
                                         </tr>
                                     {% endfor %}
-
-                                    <tr>
-                                        <td colspan="3"><strong>Commission {{ title }}:</strong></td>
-                                        <td><strong>5% (-{{ object.get_cost|intcomma }})</strong></td>
-                                    </tr>
-
-                                    <tr>
-                                        <td colspan="3"><strong>Total:</strong></td>
-                                        <td><strong>{{ object.total_order|intcomma }} Fr</strong></td>
-                                    </tr>
                                 </tbody>
                             </table>
                         </div>
-                    </div>
-                </div>
-            </div>
 
-            <div class="ps-section__right">
-                <div class="ps-card ps-card--track-order">
-                    <div class="ps-card__header">
-                        <h4>Suivi de la commande</h4>
-                    </div>
-                    <div class="ps-card__content">
-                        <div class="ps-block--track-order">
-                            <div class="ps-block__header">
-                                <div class="row">
-                                    <div class="col-12">
-                                        <figure>
-                                            <figcaption>Numéro de suivi:</figcaption>
-                                            <p>#{{ object.transaction_id }}</p>
-                                        </figure>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="ps-block__content">
-                                <div class="ps-block__timeline">
-                                    <figure class="active">
-                                        <figcaption>Commande passée</figcaption>
-                                        <p>{{ object.date }}</p>
-                                    </figure>
-                                    <figure class="active">
-                                        <figcaption>Emballé</figcaption>
-                                        <p>Emballage estimé sous 24H</p>
-                                    </figure>
-                                    <figure class="active">
-                                        <figcaption>Expédié</figcaption>
-                                        <p>Expédition estimée sous 1 jour</p>
-                                    </figure>
-                                    <figure>
-                                        <figcaption>Livré</figcaption>
-                                        <p>Livraison estimée sous 02 jours</p>
-                                    </figure>
-                                </div>
+                        <div class="d-flex justify-content-end text-right mb-3 py-3">
+                            <div class="mt-4">
+                                <table class="table table-clear">
+                                    <tbody>
+                                        <tr>
+                                            <td class="left">
+                                                Commission <b>(5%)</b>
+                                            </td>
+                                            <td class="right">-{{ object.get_cost|intcomma }} Fr</td>
+                                        </tr>
+
+                                        <tr class="text-uppercase fw-extrabold">
+                                            <td class="left">total</td>
+                                            <td class="right">{{ object.total_order|intcomma }} fr cfa</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
                             </div>
                         </div>
+                        <span class="fw-extrabold">{{ email_info|safe }}</span>
                     </div>
                 </div>
             </div>
-        </section>
+        </div>
     </div>
 {% endblock content %}

@@ -1,18 +1,18 @@
-<div class="ps-section__content">
-    <div class="text-center py-2">
-        <span class="d-flex justify-content-center">
-            <img class="img-fluid" height="160px" width="160px" srcset="{{ STATIC_PREFIX }}img/emptycart.png" src="{{ STATIC_PREFIX }}img/emptycart.png" alt="empty-cart-{{ page_title }}">
-        </span>
+{% url "seller:product_create" as create_product_url %}
 
-        <p class="font-weight-bold">Vous n'avez aucun produit dans votre magasin en ligne.</p>
+<div class="text-center py-2">
+    <span class="d-flex justify-content-center">
+        <img src="{{ STATIC_PREFIX }}img/emptycart.png" height="160px" width="160px" alt="empty-cart-{{ page_title }}">
+    </span>
 
-        <p class="pt-4">
-            <a href="{% url "seller:product_create" %}" class="ps-btn">
-                <span class="text-uppercase font-weight-bold py-2">
-                    <i class="icon icon-plus mr-2"></i>
-                    Ajouter un nouveau produit
-                </span>
-            </a>
-        </a></p>
-    </div>
+    <p class="font-weight-bold">Vous n'avez aucun produit dans votre magasin en ligne.</p>
+
+    <p class="pt-4">
+        <a href="{{ create_product_url }}" class="btn btn-outline-gray-500 d-inline-flex align-items-center justify-content-center dashed-outline">
+            <span class="text-uppercase font-weight-bold py-2">
+                <svg class="icon icon-xs me-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path></svg>
+                Ajouter un nouveau produit
+            </span>
+        </a>
+    </p>
 </div>
