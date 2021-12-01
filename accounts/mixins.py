@@ -10,11 +10,10 @@ from django.contrib.auth.mixins import(
     UserPassesTestMixin
 )
 
+from pages.models import Promotion
 from catalogue.models import Product
 from catalogue.forms import ProductAdminForm
-from checkout.models import Order, OrderItem
-
-User = get_user_model()
+from checkout.models import Order, OrderItem 
 
 
 class RequestFormAttachMixin(object):
@@ -39,7 +38,7 @@ class NextUrlMixin(object):
 class CustomerWithOwnerMixin(LoginRequiredMixin):
     def get_form(self, *args, **kwargs):
         form = super().get_form(*args, **kwargs)
-        form.instance.user = User.objects.get(user=self.request.user)
+        form.instance.user = get_user_model().objects.get(user=self.request.user)
         return form
 
 
@@ -59,17 +58,22 @@ class SellerRequiredMixin(SellerTextRequiredMixin, object):
     account = None
 
     def get_account(self):
-        account = User.objects.filter(email=self.request.user)
+        account = get_user_model().objects.filter(email=self.request.user)
         if account.exists() and account.count() == 1:
             self.account = account.first()
             return account.first()
         return self.request.user
 
-    # liste des produits du magasin
     def get_product(self):
         account = self.get_account()
         object_list = Product.objects.filter(user=account).select_related("user")
         self.products = object_list
+        return object_list
+
+    def get_prompotion(self):
+        account = self.get_account()
+        object_list = Promotion.objects.filter(
+            user=account).select_related("user")
         return object_list
 
     def get_products_count(self):
@@ -78,7 +82,8 @@ class SellerRequiredMixin(SellerTextRequiredMixin, object):
 
     def get_order_items(self):
         account = self.get_account()
-        orders_item_list = OrderItem.objects.filter(product__user=account).select_related("order")
+        orders_item_list = OrderItem.objects.filter(
+            product__user=account).select_related("order")
         return orders_item_list
 
     def get_orders_count(self):

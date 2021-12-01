@@ -13,6 +13,7 @@ from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin
 
 from checkout.models import BaseOrderInfo
 from accounts.managers import UserManager
+from core.utils import upload_image_logo_path
 
 from allauth.account.models import EmailAddress
 from core.utils import vendor_unique_slug_generator
@@ -67,24 +68,10 @@ class User(BaseOrderInfo, AbstractBaseUser, PermissionsMixin):
         verbose_name='description de la boutique',
         **NULL_AND_BLANK
     )
-    facebook = models.URLField(
-        verbose_name='compte facebook',
-        max_length=250,
-        **NULL_AND_BLANK
-    )
-    twitter = models.URLField(
-        verbose_name='compte twitter',
-        max_length=250,
-        **NULL_AND_BLANK
-    )
-    linkedin = models.URLField(
-        verbose_name='compte linkedin',
-        max_length=250,
-        **NULL_AND_BLANK
-    )
-    instagramm = models.URLField(
-        verbose_name='compte instagram',
-        max_length=250,
+    logo = models.ImageField(
+        verbose_name="logo",
+        upload_to=upload_image_logo_path,
+        help_text="Ajouter le logo de votre boutique",
         **NULL_AND_BLANK
     )
     is_seller = models.BooleanField(
@@ -157,7 +144,7 @@ class User(BaseOrderInfo, AbstractBaseUser, PermissionsMixin):
     def formatted_phone(self, country=None):
         return phonenumbers.parse(self.phone, country)
 
-    @admin.display(description="account verified")
+    @admin.display(description="compte verifié")
     def account_verified(self):
         result = EmailAddress.objects.filter(email=self.email)
         if len(result):
@@ -177,6 +164,60 @@ class User(BaseOrderInfo, AbstractBaseUser, PermissionsMixin):
 
     def get_absolute_url(self):
         return reverse('vendor:store_detail_view', kwargs={'slug': self.slug})
+
+    def get_social_url(self):
+        return reverse('seller:rs_update', kwargs={"slug": self.slug})
+
+    def get_logo_url(self):
+        try:
+            logo = self.logo.url
+        except:
+            return 'https://via.placeholder.com/60'
+
+        if logo:
+            return self.logo.url
+        else:
+            return 'https://via.placeholder.com/60'
+        return self.logo.url
+
+    def get_social_profile(self):
+        return ProfileSocialMedia.objects.filter(user=self)
+
+
+class ProfileSocialMedia(models.Model):
+    user = models.ForeignKey(
+        to=User,
+        on_delete=models.PROTECT,
+        verbose_name="users"
+    )
+    facebook = models.URLField(
+        verbose_name='compte facebook',
+        max_length=250,
+        help_text="Copier at coller le lien facebook de votre page ici.",
+        **NULL_AND_BLANK
+    )
+    instagram = models.URLField(
+        verbose_name='compte instagram',
+        max_length=250,
+        help_text="Copier at coller le lien instagram de votre page ici.",
+        **NULL_AND_BLANK
+    )
+
+    class Meta:
+        app_label = 'accounts'
+        db_table = 'accounts_social_db'
+        index_together = (('user',),)
+        verbose_name_plural = 'profile reseaux sociaux'
+        indexes = [models.Index(fields=['id'], name='id_rs_index'),]
+
+    def __str__(self):
+        return self.user.get_fullname()
+
+    def get_facebook(self):
+        return self.facebook
+
+    def get_instagram(self):
+        return self.instagram
 
 
 class GuestCustomer(BaseOrderInfo):

@@ -3,9 +3,10 @@
 from django import forms
 from django.db import transaction
 from django.contrib.auth import get_user_model
+from django.forms.models import inlineformset_factory
 from django.contrib.auth.forms import UserCreationForm, UserChangeForm
 
-from accounts.models import GuestCustomer
+from accounts.models import ProfileSocialMedia, GuestCustomer
 
 from crispy_forms import bootstrap, layout
 from crispy_forms.helper import FormHelper
@@ -16,8 +17,6 @@ from django_countries.widgets import CountrySelectWidget
 
 from phonenumber_field.formfields import PhoneNumberField
 from phonenumber_field.widgets import PhoneNumberPrefixWidget
-
-User = get_user_model()
 
 
 class MarketLoginForm(LoginForm):
@@ -46,7 +45,7 @@ class MarketLoginForm(LoginForm):
 
 class MarketSignupForm(UserCreationForm):
     civility = forms.TypedChoiceField(
-        label="Civilité", choices=User.CIVILITY_CHOICES,
+        label="Civilité", choices=get_user_model().CIVILITY_CHOICES,
         initial='1', coerce=str, required=True,
     )
     shipping_first_name = forms.CharField(label='Nom', max_length=120,
@@ -145,7 +144,7 @@ class MarketSignupForm(UserCreationForm):
         )
 
     class Meta:
-        model = User
+        model = get_user_model()
         fields = [
             'email', 'civility',
             'shipping_first_name', 
@@ -211,7 +210,7 @@ class CustomerSignUpForm(forms.ModelForm):
 
 class MarketChangeForm(UserChangeForm):
     class Meta:
-        model = User
+        model = get_user_model()
         fields = [
             'civility',
             'shipping_first_name', 
@@ -233,53 +232,60 @@ class StoreUpdateForm(forms.ModelForm):
 
         self.helper.layout = layout.Layout(
             layout.Row(
-                layout.Column('civility', css_class='form-group col-md-2 mb-0'),
-                layout.Column('shipping_first_name', css_class='form-group col-md-5 mb-0'),
-                layout.Column('shipping_last_name', css_class='form-group col-md-5 mb-0'),
-                css_class='form-row'
+                layout.Column('civility', css_class='col-md-2'),
+                layout.Column('shipping_first_name', css_class='col-md-10'),
+                css_class='row mb-4'
             ),
 
             layout.Row(
-                layout.Column('store',  css_class='form-group col-md-4 mb-0'),
-                layout.Column('phone', css_class='form-group col-md-4 mb-0'),
-                layout.Column('phone_two', css_class='form-group col-md-4 mb-0'),
-                css_class='form-row'
+                layout.Column('shipping_last_name', css_class='col-md-12'),
+                css_class='row mb-4'
             ),
 
             layout.Row(
-                layout.Column('shipping_country', css_class='form-group col-md-4 mb-0'),
-                layout.Column('shipping_city', css_class='form-group col-md-4 mb-0'),
-                layout.Column('shipping_adress', css_class='form-group col-md-4 mb-0'),
-                css_class='form-row'
+                layout.Column('logo', css_class='col-md-12 mb-3'),
             ),
 
             layout.Row(
-                layout.Column('store_description', css_class='form-group col-md-12 mb-0'),
+                layout.Column('store', css_class='col-md-6'),
+                layout.Column('phone', css_class='col-md-6'),
+                css_class='row mb-4'
             ),
 
             layout.Row(
-                layout.Column('facebook', css_class='form-group col-md-6 mb-0'),
-                layout.Column('instagramm', css_class='form-group col-md-6 mb-0'),
-                css_class='form-row'
+                layout.Column('phone_two', css_class='col-md-12'),
+                css_class='row mb-4'
             ),
 
             layout.Row(
-                layout.Column('twitter', css_class='form-group col-md-6 mb-0'),
-                layout.Column('linkedin', css_class='form-group col-md-6 mb-0'),
-                css_class='form-row'
+                layout.Column('shipping_country', css_class='col-md-6'),
+                layout.Column('shipping_city', css_class='col-md-6'),
+                css_class='row mb-4'
+            ),
+
+            layout.Row(
+                layout.Column('shipping_adress', css_class='col-md-12'),
+                css_class='row mb-4'
+            ),
+
+            layout.Row(
+                layout.Column('store_description', css_class='col-md-12 mb-3'),
             ),
 
             bootstrap.FormActions(
                 layout.Submit(
                     'submit',
-                    'Mettre à jour',
-                    css_class='mt-4 ps-btn btn-block text-uppercase border-0'
+                    'mettre à jour votre compte',
+                    css_class='btn btn-secondary text-uppercase rounded-0'
                 ),
             ),
         )
 
+        for field in self.fields:
+            self.fields[field].widget.attrs['class'] = 'rounded-0 shadow-none'
+
     class Meta:
-        model = User
+        model = get_user_model()
         fields = [
             "civility",
             "shipping_first_name",
@@ -291,8 +297,29 @@ class StoreUpdateForm(forms.ModelForm):
             "shipping_city",
             "store_description",
             "shipping_adress",
-            "facebook",
-            "twitter",
-            "linkedin",
-            "instagramm"
+            "logo",
         ]
+
+class CustomInlineFormSet(forms.ModelForm):
+    class Meta:
+        model = ProfileSocialMedia
+        fields = [
+            "facebook",
+            "instagram"
+        ]
+
+    def __init__(self, *args, **kwargs):
+        super(CustomInlineFormSet, self).__init__(*args, **kwargs)
+        for field in self.fields:
+            self.fields[field].widget.attrs.update(
+                {'class': 'shadow-none rounded-0 mb-2'}
+            )
+
+
+SocialMediaForm = inlineformset_factory(
+    get_user_model(), ProfileSocialMedia,
+    fk_name='user', form=CustomInlineFormSet,
+    fields=['facebook', 'instagram'],
+    can_delete=False, extra=1, max_num=1
+)
+

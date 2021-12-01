@@ -3,66 +3,39 @@
 from django.urls import path, include
 from django.views.generic import TemplateView
 
+from pages import views
 from accounts.views import customer, seller
 
 
 urlpatterns = [
     path('customer/', include(([
-        path('dashboard/', TemplateView.as_view(
+        path(route='dashboard/', view=TemplateView.as_view(
             template_name='dashboard/customer/index.html'
         ), name='customer_dashboard'),
     ], 'accounts'), namespace='customer')),
 
-    path('dashboard/', include(([
-        path('fh/', seller.DashboardView.as_view(
-            extra_context={'page_description': "Tableau de bord"}
-        ), name='profile'),
+    path('dashboard/seller/0/me/', include(([
+        path(route='', view=seller.dashboard_view, name='profile'),
 
-        path('commande/', seller.OrderListView.as_view(
-            extra_context={
-                'page_title': 'Liste des vos commandes',
-                'page_description': "Liste des commandes"
-            }
-        ), name='order_list'),
+        path(route='commande/', view=seller.order_list_view, name='order_list'),
+        path(route='commande/<pk>/detail/', view=seller.order_detail_view, name='order_detail'),
 
-        path('commande/detail/<pk>/', seller.OrderDetailView.as_view(
-            extra_context={
-                'page_description': "Detail de la commande"
-            }, template_name='dashboard/seller/includes/_partials_orders_detail.html'
-        ), name='order_detail'),
+        path(route='produit/', view=seller.product_list_view, name='product_list'),
+        path(route='produit/add/', view=seller.product_create_view, name='product_create'),
+        path(route='produit/<slug>/update/', view=seller.product_update_view, name='product_update'),
+        path(route='produit/<slug>/delete/',view=seller.product_delete_view, name='product_delete'),
 
-        path('product/list/', seller.ProductListView.as_view(
-            extra_context={
-                'page_title': 'Liste de vos produit en vente',
-                'page_description': "Liste des produits"
-            },
-        ), name='product_list'),
+        path(route='parametre/<slug>/update/', view=seller.settings_view, name='update'),
+        path(route='parametre/<slug>/social/update/', view=seller.social_media_view, name='rs_update'),
 
-        path('create/product/', seller.ProductCreateView.as_view(
-            extra_context={
-                'page_title': 'Ajouter un nouveau produit',
-                'page_description': "Ajouter un nouveau produit"
-            },
-        ), name='product_create'),
-
-        path('update/product/<slug>/',
-            seller.ProductUpdateView.as_view(),
-            name='product_update'
-        ),
-
-        path('delete/product/<slug>/',
-            seller.ProductDeleteView.as_view(),
-            name='product_delete'
-        ),
-
-        path('settings/<slug>/', seller.SettingsUpdateView.as_view(
-            extra_context={'page_description': "Configuration"}
-        ), name='update'),
-
+        path(route='promotion/', view=views.promotion_list, name='promotion_list'),
+        path(route='promotion/add/', view=views.promotion_view, name='promotion_create'),
+        path(route='promotion/<slug>/update/', view=views.promotion_update, name='promotion_update'),
+        path(route='promotion/<slug>/delete/', view=views.promotion_delete, name='promotion_delete'),
     ], 'accounts'), namespace='seller')),
 
     path('boutique/', include(([
         path(route='', view=seller.store_list_view, name='store_list_view'),
-        path(route='<slug>/', view=seller.store_detail_view, name='store_detail_view'),
+        path(route='<slug>/detail/', view=seller.store_detail_view, name='store_detail_view'),
     ], 'accounts'), namespace='vendor')),
 ]

@@ -7,9 +7,17 @@ from django.utils.safestring import mark_safe
 from django.contrib.auth import get_user_model
 from django.contrib.auth.forms import UserChangeForm
 
+from accounts.models import ProfileSocialMedia
 from services.export_data_csv import export_to_csv
 
 admin.site.unregister(Group)
+
+
+class UserSocialProfile(admin.TabularInline):
+    extra = 1
+    max_num = 1
+    model = ProfileSocialMedia
+    show_change_link = True
 
 
 @admin.register(get_user_model())
@@ -18,7 +26,7 @@ class UserAdmin(admin.ModelAdmin):
     form = UserChangeForm
     date_hierarchy = 'date_joined'
     fieldsets = (
-        ('information sur boutique', {'fields':
+        ('information sur la boutique', {'fields':
             (   
                 ("store_id", "email"), 
                 ("store", "slug"),
@@ -41,13 +49,6 @@ class UserAdmin(admin.ModelAdmin):
             {
                 'classes': ('collapse',),
                 'fields': ["store_description"],
-            }
-        ),
-        (
-            'profile réseaux sociaux',
-            {
-                'classes': ('collapse',),
-                'fields': ["facebook", "twitter", "linkedin", "instagramm"],
             }
         ),
     )
@@ -86,7 +87,9 @@ class UserAdmin(admin.ModelAdmin):
     prepopulated_fields = {'slug': ('store',)}
     search_fields = ('email', 'user', 'store',)
     readonly_fields = ['store_id', 'show_vendor_url', 'last_login', 'date_joined']
+    
     actions = [export_to_csv]
+    inlines = [UserSocialProfile]
 
     @mark_safe
     @admin.display(description="Voir la boutique", empty_value="???")
