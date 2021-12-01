@@ -267,9 +267,10 @@ DEFAULT_HASHING_ALGORITHM = 'sha1'
 # Internationalization
 # https://docs.djangoproject.com/en/3.1/topics/i18n/
 
+USE_TZ = False
 TIME_ZONE = 'UTC'
 LANGUAGE_CODE = 'fr-fr'
-USE_I18N = USE_L10N = USE_TZ = True
+USE_I18N = USE_L10N = True
 DATE_INPUT_FORMATS = ('%d/%m/%Y', '%Y-%m-%d')
 
 # Static files (CSS, JavaScript, Images)
@@ -376,7 +377,7 @@ SUMMERNOTE_CONFIG = {
         'airMode': False,
 
         # Change editor size
-        'width': '790',
+        'width': '630',
         'height': '300',
 
         # Toolbar customization
@@ -409,3 +410,9 @@ SUMMERNOTE_CONFIG = {
         },
     },
 }
+
+# Django-compressor config
+# https://django-compressor.readthedocs.io/en/stable/settings/#settings
+
+COMPRESS_ENABLED = True
+COMPRESS_STORAGE = "compressor.storage.GzipCompressorFileStorage"

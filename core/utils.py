@@ -24,10 +24,16 @@ def get_filename_ext(filepath):
     name, ext = os.path.splitext(base_name)
     return name, ext
 
+def upload_image_logo_path(instance, filename):
+    new_filename = slugify(instance.user.store)
+    name, ext = get_filename_ext(filename)
+    final_filename = f"{new_filename}-{instance.id}{ext}"
+    return f"images/logo/{final_filename}"
+
 def upload_image_path(instance, filename):
     new_filename = slugify(instance.product.name)
     name, ext = get_filename_ext(filename)
-    final_filename = "{new_filename}-{instance.id}{ext}"
+    final_filename = f"{new_filename}-{instance.id}{ext}"
     return f"images/produit/{final_filename}"
 
 def upload_promotion_image_path(instance, filename):
