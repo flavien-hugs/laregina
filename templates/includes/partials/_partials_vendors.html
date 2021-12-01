@@ -5,7 +5,7 @@
     <article class="ps-block--category-room">
         <div class="ps-block__thumbnail">
             <a href="{{ object.get_absolute_url }}">
-                <img src="{{ STATIC_PREFIX }}img/favicon.ico" alt="{{ object.name }}">
+                <img src="{{ object.get_logo_url }}" alt="{{ object.name }}">
             </a>
         </div>
         <div class="ps-block__content">

@@ -27,7 +27,7 @@
                                     <article class="ps-block--category-room shadow-sm">
                                         <div class="ps-block__thumbnail">
                                             <a href="{{ vendor.get_absolute_url }}">
-                                                <img src="{% if vendor.cover %} {{ vendor.cover.url }}{% else %}{{ STATIC_PREFIX }}img/favicon.ico{% endif %}" alt="{{ object.name }}">
+                                                <img src="{{ vendor.get_logo_url }}" alt="{{ object.name }}">
                                             </a>
                                         </div>
                                         <div class="ps-block__content">
