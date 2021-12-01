@@ -35,12 +35,14 @@ collectstatic: ## Run collectstatic
 
 .PHONY: dumpdata
 dumpdata: ## dumpdata on database
-	$(MANAGE) dumpdata --indent=4 --format=json accounts.user > data/user_data.json
-	$(MANAGE) dumpdata --indent=4 --format=json category.category > data/category_data.json
-	$(MANAGE) dumpdata --indent=4 --format=json catalogue.product > data/product_data.json
+	$(MANAGE) dumpdata --indent=4 --natural-foreign --natural-primary -e contenttypes --format=json accounts.user > data/user_data.json
+	$(MANAGE) dumpdata --indent=4 --natural-foreign --natural-primary -e contenttypes --format=json accounts.profilesocialmedia > data/social_media_data.json
+	$(MANAGE) dumpdata --indent=4 --natural-foreign --natural-primary -e contenttypes --format=json category.category > data/category_data.json
+	$(MANAGE) dumpdata --indent=4 --natural-foreign --natural-primary -e contenttypes --format=json catalogue.product > data/product_data.json
+	$(MANAGE) dumpdata --indent=4 --natural-foreign --natural-primary -e contenttypes --format=json catalogue.productimage > data/product_image_data.json
+	$(MANAGE) dumpdata --indent=4 --natural-foreign --natural-primary -e contenttypes --format=json analytics.productview > data/analytics_data.json
+	$(MANAGE) dumpdata --indent=4 --natural-foreign --natural-primary -e contenttypes --format=json cart.cartitem > data/cart_data.json
 
 .PHONY: loaddata
 loaddata: ## Load default data
-	$(MANAGE) loaddata data/user_data.json
-	$(MANAGE) loaddata data/category_data.json
-	$(MANAGE) loaddata data/product_data.json*
+	$(MANAGE) loaddata data/*.json
