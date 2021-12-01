@@ -11,19 +11,23 @@ class ProductAdminForm(forms.ModelForm):
 
     class Meta:
         model = Product
-        exclude = ('user', 'quantity', 'slug', 'updated_at', 'created_at', 'timestamp')
+        exclude = ['user', 'quantity', 'slug', 'updated_at', 'created_at', 'timestamp']
 
         widgets = {'description': SummernoteWidget()}
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         for field in self.fields:
-            self.fields[field].widget.attrs['class'] = 'form-control'
+            self.fields[field].widget.attrs['class'] = 'form-control shadow-none rounded-0'
 
-            if self.fields['price']:
-                self.fields['price'].widget.attrs.update({'type': 'text'})
+            if self.fields['is_active'] and self.fields['is_external']:
+                self.fields['is_active'].widget.attrs.update(
+                    {'class': 'form-check-input shadow-none'}
+                )
+                self.fields['is_external'].widget.attrs.update(
+                    {'class': 'form-check-input shadow-none'}
+                )
 
-        self.fields['is_external'].widget.attrs['type'] = 'checkbox'
         self.fields['name'].widget.attrs['placeholder'] = 'Entrer le nom du produit'
         self.fields['price'].widget.attrs['placeholder'] = 'Entrer le prix de vente du produit'
         self.fields['keywords'].widget.attrs['placeholder'] = 'Ajouter quelques mots-clés (facultatif)'
@@ -48,7 +52,7 @@ class ProductImageForm(forms.ModelForm):
 
 
 ProductCreateFormSet = inlineformset_factory(
-    Product, ProductImage,
+    Product, ProductImage, form=ProductImageForm,
     fields=[
         'product',
         'image'
@@ -57,9 +61,9 @@ ProductCreateFormSet = inlineformset_factory(
         'timestamp',
         'updated',
     ],
-    can_delete=False,
-    extra=4
+    can_delete=False, extra=4, max_num=4
 )
+
 
 class ProductAddToCartForm(forms.Form):
     """ 

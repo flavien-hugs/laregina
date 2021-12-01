@@ -33,8 +33,8 @@ class Product(models.Model):
         help_text="magasin en charge de la vente."
     )
     category = TreeForeignKey(
-        Category,
-        models.CASCADE,
+        to=Category,
+        on_delete=models.PROTECT,
         verbose_name='catégorie',
         help_text="Selectionner la catégorie du produit."
     )
@@ -115,12 +115,14 @@ class Product(models.Model):
         
         if image:
             return image.image.url
+        else:
+            return 'https://via.placeholder.com/160'
         return image
 
     @admin.display(description="image du produit")
     def get_product_image(self):
         if self.productimage_set.first() is not None:
-            return mark_safe('<img src="{url}" height="50"/>'.format(url=self.get_image_url()))
+            return mark_safe(f"<img src='{self.get_image_url()}' height='50'/>")
         else:
             return "https://via.placeholder.com/50"
 
@@ -192,6 +194,13 @@ class Product(models.Model):
         items = OrderItem.objects.filter(Q(order__in=orders)).exclude(product=self)
         object_list = Product.objects.filter(orderitem__in=items).distinct()
         return object_list
+
+    def product_images(self):
+        return ProductImage.objects.filter(product=self)
+
+    def feebacks_products(self):
+        from reviews.models import ProductReview
+        return ProductReview.objects.filter(product=self)
 
 
 class ProductImage(models.Model):

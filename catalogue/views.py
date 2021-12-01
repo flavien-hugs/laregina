@@ -43,7 +43,7 @@ home_view = HomeView.as_view(template_name='index.html')
 
 class ProductListView(FilterMixin, PromotionMixin, generic.ListView):
     model = Product
-    paginate_by = 50
+    paginate_by = 20
     extra_context = {'page_title': 'Tous les produits'}
     template_name = "catalogue/product_list.html"
 
