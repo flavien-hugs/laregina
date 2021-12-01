@@ -1,6 +1,7 @@
 # pages.forms.py
 
 from django import forms
+from django.contrib.auth import get_user_model
 
 from catalogue.models import Product
 from pages.models import Contact, Promotion
@@ -95,21 +96,35 @@ class ContactForm(forms.ModelForm):
 
 class PromotionForm(forms.ModelForm):
 
+    product = forms.ModelChoiceField(
+        queryset=Product.objects.all(),
+        empty_label=None,
+        widget=forms.Select()
+    )
+
     class Meta:
         model = Promotion
         fields = [
             "name",
             "product",
-            "image"
+            "image",
+            "active"
         ]
 
-    def __init__(self, *args, **kwargs):
+    def __init__(self, user, *args, **kwargs):
         super(PromotionForm, self).__init__(*args, **kwargs)
-        forms.ModelForm.__init__(self, *args, **kwargs)
-        self.fields['product'].queryset = Product.objects.all()
+
+        self.fields['product'].queryset = Product.objects.filter(user=user)
 
         for field in self.fields:
-            self.fields[field].widget.attrs['class'] = 'form-control'
+            self.fields[field].widget.attrs['class'] = 'form-control shadow-none rounded-0'
+
+            if self.fields['active']:
+                self.fields['active'].widget.attrs.update(
+                    {'class': 'form-check-input shadow-none'}
+                )
 
             if self.fields['product']:
-                self.fields['product'].widget.attrs.update({'class': 'form-control custom-select'})
+                self.fields['product'].widget.attrs.update(
+                    {'class': 'form-control shadow-none rounded-0 custom-select'}
+                )

@@ -12,8 +12,7 @@ from pages import views
 
 app_name = 'pages'
 urlpatterns  = [
-    path('contact/', views.ContactView.as_view(), name='contact'),
-    path('promotion/', views.PromotionView.as_view(), name='promotion'),
+    path(route='contact/', view=views.contact_view, name='contact'),
 
     path('about-us/',
         cache_page(CACHE_TTL)(TemplateView.as_view(

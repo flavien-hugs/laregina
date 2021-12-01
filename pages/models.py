@@ -4,12 +4,14 @@ from PIL import Image
 
 from django.db import models
 from django.urls import reverse
+from django.contrib import admin
 from django.utils import timezone
 from django.dispatch import receiver
-
-from catalogue.models import Product
 from django.utils.safestring import mark_safe
-from core.utils import upload_promotion_image_path
+from django.contrib.auth import get_user_model
+
+from core import utils
+from catalogue.models import Product
 
 
 NULL_AND_BLANK = {'null': True, 'blank': True}
@@ -55,27 +57,43 @@ class Testimonial(models.Model):
 
 
 class Promotion(models.Model):
-    product = models.ManyToManyField(
+    user = models.ForeignKey(
+        to=get_user_model(),
+        on_delete=models.CASCADE,
+        verbose_name="store",
+        limit_choices_to={
+            'is_seller': True
+        },
+    )
+    product = models.ForeignKey(
         to=Product,
-        verbose_name='produit en promotions'
+        on_delete=models.CASCADE,
+        verbose_name='produit',
+        limit_choices_to={
+            'user__is_seller': True,
+            'is_active': True
+        },
+        help_text="Choisir un produit à mettre en promotion"
     )
     name = models.CharField(
         max_length=120,
-        verbose_name='titre de la promotion'
+        verbose_name='titre de la promotion',
+        help_text="Définir le titre de la promotion"
     )
     slug = models.SlugField(
         verbose_name='lien',
-        blank=True,
-
+        blank=True, unique=True,
+        help_text="lien auto-généré"
     )
     image = models.ImageField(
         verbose_name='image',
-        upload_to=upload_promotion_image_path,
+        upload_to=utils.upload_promotion_image_path,
         **NULL_AND_BLANK
     )
     active = models.BooleanField(
         verbose_name='promotion active ?',
-        default=False
+        default=False,
+        help_text="Cette promotion est active ?"
     )
     created_at = models.DateField(
         auto_now=True,
@@ -88,6 +106,7 @@ class Promotion(models.Model):
         ordering = ['-created_at',]
         get_latest_by = ['-created_at',]
         verbose_name_plural = 'promotions'
+        indexes = [models.Index(fields=['id'], name='id_promotion'),]
 
     def __str__(self):
         return f"{self.name}"
@@ -126,9 +145,28 @@ class Promotion(models.Model):
         else:
             return "https://via.placeholder.com/50"
 
+    @admin.display(description="boutique")
+    def get_store(self):
+        return self.user.store
+
+    def get_status(self):
+        if self.active:
+            return "Active"
+        return "Désactivé"
+
     def get_absolute_url(self):
         return reverse(
             'promotion:promotion_detail', kwargs={'slug': str(self.slug)}
+        )
+
+    def get_update_promo_url(self):
+        return reverse(
+            'seller:promotion_update', kwargs={'slug': str(self.slug)}
+        )
+
+    def get_delete_promo_url(self):
+        return reverse(
+            'seller:promotion_delete', kwargs={'slug': str(self.slug)}
         )
 
 
@@ -176,4 +214,4 @@ class Contact(models.Model):
 @receiver([models.signals.pre_save], sender=Promotion)
 def promotion_pre_save_receiver(sender, instance, *args, **kwargs):
     if not instance.slug:
-        instance.slug = unique_slug_generator(instance)
+        instance.slug = utils.unique_slug_generator(instance)

@@ -65,6 +65,7 @@ class PromotionAdmin(admin.ModelAdmin):
         ),
     )
     list_display = [
+        'get_store',
         'name',
         'show_image_tag',
         'created_at',
@@ -82,7 +83,7 @@ class PromotionAdmin(admin.ModelAdmin):
 
 
 @admin.register(models.Testimonial)
-class PromotionAdmin(admin.ModelAdmin):
+class TestimonialAdmin(admin.ModelAdmin):
     date_hierarchy = 'created_at'
     list_display = [
         'full_name',
