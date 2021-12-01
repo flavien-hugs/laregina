@@ -41,11 +41,9 @@
                 <div class="ps-section__content">
                     <div class="row">
                         {% for promo in promotion_list %}
-                            {% for promo in promo.product.all %}
-                                <div class="col-xl-3 col-lg-3 col-md-4 col-sm-6 col-6 ">
-                                    {% include "catalogue/snippet/_snippet_product.html" with instance=promo %}
-                                </div>
-                            {% endfor %}
+                            <div class="col-xl-3 col-lg-3 col-md-4 col-sm-6 col-6 ">
+                                {% include "catalogue/snippet/_snippet_product.html" with instance=promo.product %}
+                            </div>
                         {% endfor %}
                     </div>
                 </div>
