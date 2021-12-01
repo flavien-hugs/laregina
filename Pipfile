@@ -29,6 +29,7 @@ argon2-cffi = "*"
 django-3-jet = "*"
 django-compressor = "*"
 django-summernote = "*"
+qrcode = "*"
 
 [requires]
 python_version = "3.8"
