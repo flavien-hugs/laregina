@@ -15,9 +15,6 @@ from checkout.managers import OrderManager
 from django_countries.fields import CountryField
 from phonenumber_field.modelfields import PhoneNumberField
 
-# user manager
-User = settings.AUTH_USER_MODEL
-
 NULL_AND_BLANK = {'null': True, 'blank': True}
 UNIQUE_AND_DB_INDEX = {'null': False, 'unique': True, 'db_index': True}
 DECIMAFIELD_OPTION = {'default': 0, 'blank': True, 'max_digits': 50, 'decimal_places': 2}
@@ -75,17 +72,18 @@ class BaseOrderInfo(models.Model):
 
 class Order(BaseOrderInfo):
 
-    SHIPPED = 'Commande livrée'
-    CANCELLED = 'Commande annulée'
-    PROCESSED = 'Commande en cours de livraison'
-    SUBMITTED = 'Commande en cours de traitement'
+    SHIPPED = 'livrée'
+    CANCELLED = 'annulée'
+    PROCESSED = 'livraison en cours'
+    SUBMITTED = 'traitement en cours'
 
     ORDER_STATUS = (
-        (SUBMITTED, 'Commande en cours de traitement'),
-        (PROCESSED, 'Commande en cours de livraison'),
-        (SHIPPED, 'Commande livrée'),
-        (CANCELLED, 'Commande annulée'),
+        (SUBMITTED, 'traitement en cours'),
+        (PROCESSED, 'livraison en cours'),
+        (SHIPPED, 'livrée'),
+        (CANCELLED, 'annulée'),
     )
+
     status = models.CharField(
         verbose_name='status',
         max_length=120,
@@ -122,11 +120,11 @@ class Order(BaseOrderInfo):
         verbose_name_plural = 'commandes'
     
     def __str__(self):
-        return f'#{self.transaction_id}'
+        return f'#{self.transaction_id} - {self.status}'
 
     @admin.display(description="n° commande")
     def get_order_id(self):
-        return self.__str__()
+        return self.transaction_id
 
     @admin.display(description="nom")
     def get_short_name(self):
@@ -141,7 +139,7 @@ class Order(BaseOrderInfo):
         return f'{self.shipping_country.name}, {self.shipping_city}, {self.shipping_adress} | {self.phone}'
 
     def get_shipping_delivery_for_seller(self):
-        return f'{self.shipping_country.name}, {self.shipping_city}, {self.shipping_adress}'
+        return f'{self.shipping_city}, {self.shipping_country.name}'
 
     def save(self, *args, **kwargs):
         if self.transaction_id is None:
@@ -220,18 +218,19 @@ class Order(BaseOrderInfo):
 class OrderItem(models.Model):
     
     """
-    classe modèle pour le stockage de chaque instance
-    de produit commander dans chaque commande
+    classe modèle pour le stockage de chaque
+    instance de produit commander dans chaque
+    commande
     """
 
     order = models.ForeignKey(
-        Order,
-        models.CASCADE,
+        to=Order,
+        on_delete=models.CASCADE,
         verbose_name='commande'
     )
     product = models.ForeignKey(
-        Product,
-        models.CASCADE,
+        to=Product,
+        on_delete=models.CASCADE,
         verbose_name='produit'
     )
     quantity = models.IntegerField(
@@ -240,11 +239,13 @@ class OrderItem(models.Model):
     )
     date_updated = models.DateTimeField(
         verbose_name='derniere modification',
-        auto_now_add=True
+        auto_now=True,
+        auto_now_add=False
     )
     date_created = models.DateTimeField(
         verbose_name='date ajout',
-        auto_now_add=True
+        auto_now=True,
+        auto_now_add=False
     )
 
     class Meta:
@@ -254,35 +255,31 @@ class OrderItem(models.Model):
         verbose_name_plural = 'panier'
 
     def __str__(self):
-        return '{product_name}'.format(
-            product_name=self.product.name
-        )
+        return self.product.name
 
     @property
     def total(self):
         return self.quantity * self.product.price
 
+    @admin.display(description="prix unitaire")
     def get_product_price(self):
-        return '{product_price}'.format(product_price=str(self.product.price))
-    get_product_price.short_description='prix unitaire'
+        return self.product.price
 
+    @admin.display(description="produit")
     def get_product_name(self):
-        return '{product_name}'.format(product_name=str(self.product.name))
-    get_product_name.short_description='produit'
+        return self.product.name
 
+    @admin.display(description="N° de téléphone")
     def get_phone_number(self):
-        return '{phone}'.format(phone=str(self.product.user.phone))
-    get_phone_number.short_description='N° de téléphone'
+        return self.product.user.phone
 
+    @admin.display(description="contact boutique")
     def get_store_product(self):
-        return '{product_store} | {store_phone}'.format(
-            product_store=str(self.product.user.store),
-            store_phone=self.get_phone_number())
-    get_store_product.short_description='contact boutique'
+        return f'{self.product.user.store} | {self.get_phone_number()}'
 
+    @admin.display(description="boutique")
     def get_store_name(self):
-        return '{store_name}'.format(store_name=str(self.product.user.store))
-    get_store_name.short_description='boutique'
+        return self.product.user.store
 
     def get_absolute_url(self):
         return self.product.get_absolute_url()

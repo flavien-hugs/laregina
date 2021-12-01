@@ -11,7 +11,8 @@ class OrderItemStackedInline(admin.StackedInline):
     list_display = [
         'get_store_product',
         'get_product_name',
-        ('get_product_price', 'quantity',),
+        'get_product_price',
+        'quantity',
         'total',
     ]
     readonly_fields = [
@@ -22,7 +23,10 @@ class OrderItemStackedInline(admin.StackedInline):
         'total'
     ]
     exclude = ['product']
-    extra = 0
+    extra = 1
+    max_num = 1
+    show_change_link = True
+    verbose_name = "commandes"
 
 
 @admin.register(Order)
@@ -45,6 +49,7 @@ class OrderAdmin(admin.ModelAdmin):
         'get_order_payment',
         'get_order_rest_payment',
         'get_order_total',
+        'get_cost',
         'date', 'status',
     ]
     list_filter = [
@@ -53,35 +58,26 @@ class OrderAdmin(admin.ModelAdmin):
     ]
     search_fields = [
         'email',
-        'full_name',
         'transaction_id',
-        'ip_address',
-        'shipping_country',
-        'shipping_city',
         'phone',
     ]
 
     fieldsets = (
-        ('Status de la commande',
+        ('information sur la commande',
             {
                 'fields': (
                     ('status', 'email'),
-                )
-            }
-        ),
-        ('Information sur la commande',
-            {
-                'fields': (
-                    ('shipping_country', 'shipping_city'),
-                    ('shipping_adress', 'shipping_zip'),
-                    ('phone', 'phone_two'),
+                    'shipping_country', 'shipping_city',
+                    'shipping_adress', 'shipping_zip',
+                    'phone', 'phone_two',
                     'note', 'emailing',
                 )
             }
-        )
+        ),
     )
     list_per_page = 10
-    inlines = [OrderItemStackedInline,]
+    list_editable = ['status']
+    inlines = [OrderItemStackedInline]
     actions = [
         export_to_csv,
         'make_submitted',
@@ -89,7 +85,6 @@ class OrderAdmin(admin.ModelAdmin):
         'make_cancelled',
         'make_processed'
     ]
-    search_fields = ['created_at', 'transaction_id']
 
     @admin.display(description="commande en cours de traitement")
     def make_submitted(self, request, queryset):

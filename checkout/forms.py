@@ -38,6 +38,7 @@ class CheckoutForm(forms.ModelForm):
         self.fields['shipping_first_name'].widget.attrs['placeholder'] = 'Entrer votre nom'
         self.fields['phone'].widget.attrs['placeholder'] = 'Numéro de téléphone'
         self.fields['phone_two'].widget.attrs['placeholder'] = 'Numéro téléphone supplémentaire'
+        self.fields['shipping_country'].widget.attrs['placeholder'] = 'sélection un pays'
         self.fields['shipping_city'].widget.attrs['placeholder'] = 'Ville de résidence'
         self.fields['shipping_adress'].widget.attrs['placeholder'] = shipping_adress_text
         self.fields['shipping_zip'].widget.attrs['placeholder'] = 'Code postal'
