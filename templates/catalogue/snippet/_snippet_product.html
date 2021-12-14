@@ -5,8 +5,7 @@
 <div class="ps-product ps-product--inner">
     <div class="ps-product__thumbnail">
         <a href="{{ instance.get_absolute_url }}">
-            <img width="150" height="150" src="{% if instance.get_image_url %}{{ instance.get_image_url }}{% else %}
-            {{ STATIC_PREFIX }}img/empty_image.svg{% endif %}" alt="{{ instance.name }}">                 
+            <img width="150" height="150" src="{{ instance.get_image_url }}" alt="{{ instance.name|slugify }}">                 
         </a>
     </div>
 

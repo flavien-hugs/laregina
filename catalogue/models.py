@@ -116,7 +116,7 @@ class Product(models.Model):
         if image:
             return image.image.url
         else:
-            return 'https://via.placeholder.com/160'
+            return 'https://via.placeholder.com/150'
         return image
 
     @admin.display(description="image du produit")
