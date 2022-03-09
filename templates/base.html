@@ -1,54 +1,58 @@
 {% spaceless %}
-    <!DOCTYPE html>
-    <html lang="fr">
-        <head>
-            {% load static %}{% get_static_prefix as STATIC_PREFIX %}
+<!DOCTYPE html>
+<html lang="fr">
 
-            {% include "includes/meta.html" %}
+<head>
+    {% load static %}{% get_static_prefix as STATIC_PREFIX %}
 
-            {% include "includes/assets/css.html" %}
+    {% include "includes/meta.html" %}
 
-            <title>
-                {% block title %}
-                    {% if page_title %}
-                        {{ page_title }}
-                    {% else %}
-                        {{ desc }}
-                    {% endif %}
-                {% endblock title %} &smid; {{ title }}
-            </title>
+    {% include "includes/assets/css.html" %}
 
-        </head>
+    <title>
+        {% block title %}
+        {% if page_title %}
+        {{ page_title|capfirst|safe }}
 
-        <body class="d-flex flex-column">
-            {% url 'home' as home %}
+        {% else %}
+        {{ desc }}
+        {% endif %}
+        {% endblock title %} &smid; {{ title }}
+    </title>
 
-            <div class="flex-grow-1 flex-shrink-0">
-                <main class="ps-page--single">
-                    {% if request.resolver_match.url_name == 'account_signup' or request.resolver_match.url_name == 'account_login' %} 
-                        <header class="header sticky-top">
-                            <nav class="navbar navbar-expand-lg navbar-inverse py-4" style="background-color:#fcb800;">
-                                <div class="container">
-                                    <a class="ps-logo navbar-brand" href="{% url 'home' as home %}">
-                                        <img src="{{ STATIC_PREFIX }}img/logo.png" alt="{{ title }}">
-                                    </a>
-                                </div>
-                            </nav>
-                        </header>
-                    {% else %}
-                        {% include "includes/partials/_partials_header.html" %}
-                    {% endif %}
+</head>
 
-                    {% block content %}
-                    {% endblock content %}
-                </main>
+<body class="d-flex flex-column">
+    {% url 'home' as home %}
 
-                <!-- mise en cache du header pendant 120ms -->
-                {% include "includes/partials/_partials_footer.html" %}
-            </div>
+    <div class="flex-grow-1 flex-shrink-0">
+        <main class="ps-page--single">
+            {% if request.resolver_match.url_name == 'account_signup' or request.resolver_match.url_name == 'account_login' %}
+            <header class="header sticky-top">
+                <nav class="navbar navbar-expand-lg navbar-inverse py-4" style="background-color:#fcb800;">
+                    <div class="container">
+                        <a class="ps-logo navbar-brand" href="{% url 'home' as home %}">
+                            <img src="{{ STATIC_PREFIX }}img/logo.png" alt="{{ title }}">
+                        </a>
+                    </div>
+                </nav>
+            </header>
+            {% else %}
+            {% include "includes/partials/_partials_header.html" %}
+            {% endif %}
 
-            {% include "includes/assets/javascript.html" %}
-            {% block others_javascript %}{% endblock others_javascript %}
-        </body>
-    </html>
+            {% block content %}
+            {% endblock content %}
+        </main>
+
+        <!-- mise en cache du header pendant 120ms -->
+        {% include "includes/partials/_partials_footer.html" %}
+    </div>
+
+    {% include "includes/assets/javascript.html" %}
+    {% block others_javascript %}
+    {% endblock others_javascript %}
+</body>
+
+</html>
 {% endspaceless %}
