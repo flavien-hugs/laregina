@@ -20,14 +20,14 @@ from xhtml2pdf import pisa
 
 @csrf_exempt
 def show_checkout(request, template='checkout/checkout.html'):
-    
+
     """
     checkout form page to collect user shipping and billing information
     """
-    
+
     if cart.is_empty(request):
         return HttpResponseRedirect(reverse('cart:cart'))
-    
+
     if request.method == 'POST':
         postdata = request.POST.copy()
         form = CheckoutForm(postdata)
@@ -37,7 +37,7 @@ def show_checkout(request, template='checkout/checkout.html'):
             print(order_id)
             if order_id:
                 request.session['order_id'] = order_id
-                sucess_url = reverse('checkout:order_success') 
+                sucess_url = reverse('checkout:order_success')
             return HttpResponseRedirect(sucess_url)
     else:
         if request.user.is_authenticated:
@@ -65,7 +65,7 @@ def order_success_view(request, template='checkout/checkout_success.html'):
     else:
         cart_url = reverse('cart:cart')
         return HttpResponseRedirect(cart_url)
-    
+
     context = {
         'page_title': 'Commande validée',
         'object': Order.objects.filter(transaction_id=order_id)[0],

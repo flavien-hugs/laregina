@@ -6,4 +6,4 @@ from django.apps import AppConfig
 class CheckoutConfig(AppConfig):
     label = 'checkout'
     name = 'checkout'
-    verbose_name = 'commande'
+    verbose_name = 'commandes'

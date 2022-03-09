@@ -4,6 +4,7 @@ import decimal
 import random
 import string
 import datetime
+
 from django.db import models
 from django.urls import reverse
 from django.contrib import admin
@@ -11,66 +12,12 @@ from django.contrib import admin
 from core import settings
 from catalogue.models import Product
 from checkout.managers import OrderManager
-
-from django_countries.fields import CountryField
-from phonenumber_field.modelfields import PhoneNumberField
+from helpers.models import BaseOrderInfo, BaseTimeStampModel
 
 NULL_AND_BLANK = {'null': True, 'blank': True}
-UNIQUE_AND_DB_INDEX = {'null': False, 'unique': True, 'db_index': True}
-DECIMAFIELD_OPTION = {'default': 0, 'blank': True, 'max_digits': 50, 'decimal_places': 2}
 
 
-class BaseOrderInfo(models.Model):
-
-    class Meta:
-        abstract = True
-
-    email = models.EmailField(
-        verbose_name='adresse de messagerie',
-        max_length=50
-    )
-    shipping_first_name = models.CharField(
-        verbose_name='nom de famille',
-        max_length=50
-    )
-    shipping_last_name = models.CharField(
-        verbose_name='prénom',
-        max_length=50
-    )
-    phone = PhoneNumberField('numéro de téléphone')
-
-    phone_two = PhoneNumberField(
-        verbose_name='téléphone supplémentaire (facultatif)',
-        blank=True
-    )
-    shipping_city = models.CharField(
-        verbose_name='ville',
-        max_length=50
-    )
-    shipping_country = CountryField(
-        blank_label='sélection un pays',
-        verbose_name='pays/région',
-        multiple=False
-    )
-    shipping_adress = models.CharField(
-        verbose_name='situation géographique',
-        max_length=50
-    )
-    shipping_zip = models.CharField(
-        verbose_name='adresse postal (facultatif)',
-        max_length=10,
-        **NULL_AND_BLANK
-    )
-    note = models.TextField(
-        verbose_name='note de commande (facultatif)',
-        max_length=120,
-        **NULL_AND_BLANK
-    )
-    created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
-
-
-class Order(BaseOrderInfo):
+class Order(BaseOrderInfo, BaseTimeStampModel):
 
     SHIPPED = 'livrée'
     CANCELLED = 'annulée'
@@ -118,7 +65,7 @@ class Order(BaseOrderInfo):
 
     class Meta:
         verbose_name_plural = 'commandes'
-    
+
     def __str__(self):
         return f'#{self.transaction_id} - {self.status}'
 
@@ -207,7 +154,7 @@ class Order(BaseOrderInfo):
         for item in orders:
             total += item.total_order()
         return total
-    
+
     def get_absolute_url(self):
         return reverse('seller:order_detail', kwargs={'pk': int(self.id)})
 
@@ -216,21 +163,17 @@ class Order(BaseOrderInfo):
 
 
 class OrderItem(models.Model):
-    
-    """
-    classe modèle pour le stockage de chaque
-    instance de produit commander dans chaque
-    commande
-    """
 
     order = models.ForeignKey(
         to=Order,
         on_delete=models.CASCADE,
+        related_name="orders",
         verbose_name='commande'
     )
     product = models.ForeignKey(
         to=Product,
         on_delete=models.CASCADE,
+        related_name="products",
         verbose_name='produit'
     )
     quantity = models.IntegerField(
