@@ -1,14 +1,17 @@
-{% load cache %}
+{% load compress %}
 
+<link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/noUiSlider/14.6.2/nouislider.min.css">
+<link rel="preload" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css">
+
+{% compress css %}
     <link rel="stylesheet" href="{{ STATIC_PREFIX }}css/plugins/fontawesome.min.css">
     <link rel="stylesheet" href="{{ STATIC_PREFIX }}fonts/linearicons/demo.css">
-    <link rel="preload" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css">
     <link rel="stylesheet" href="{{ STATIC_PREFIX }}css/plugins/owl.carousel.min.css">
     <link rel="stylesheet" href="{{ STATIC_PREFIX }}css/plugins/owl.theme.default.min.css">
     <link rel="stylesheet" href="{{ STATIC_PREFIX }}css∕plugins/slick.css">
-    <link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/noUiSlider/14.6.2/nouislider.min.css">
     <link rel="stylesheet" href="{{ STATIC_PREFIX }}css/plugins/fontawesomestars.css">
     <link rel="stylesheet" href="{{ STATIC_PREFIX }}css/plugins/select2.min.css">
 
     <link rel="preload" as="style" href="{{ STATIC_PREFIX }}css/style.css" onload="this.rel='stylesheet'">
     <link rel="preload" as="style" href="{{ STATIC_PREFIX }}css/autopart.css" onload="this.rel='stylesheet'">
+{% endcompress css %}
