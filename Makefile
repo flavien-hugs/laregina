@@ -26,6 +26,13 @@ migrate: ## Make and run migrations
 	$(MANAGE) makemigrations
 	$(MANAGE) migrate
 
+.PHONY: createsuperuser
+createsuperuser: ## Run the Django server
+	$(MANAGE) createsuperuser --email="unsta.inc@pm.me"
+
+changepassword: ## Change password superuser
+	$(MANAGE) changepassword unsta.inc@pm.me
+
 .PHONY: test
 test: ## Run test
 	$(MANAGE) test src --verbosity=0 --parallel --failfast
@@ -35,13 +42,11 @@ collectstatic: ## Run collectstatic
 
 .PHONY: dumpdata
 dumpdata: ## dumpdata on database
-	$(MANAGE) dumpdata --indent=4 --natural-foreign --natural-primary -e contenttypes --format=json accounts.user > data/user_data.json
-	$(MANAGE) dumpdata --indent=4 --natural-foreign --natural-primary -e contenttypes --format=json accounts.profilesocialmedia > data/social_media_data.json
-	$(MANAGE) dumpdata --indent=4 --natural-foreign --natural-primary -e contenttypes --format=json category.category > data/category_data.json
-	$(MANAGE) dumpdata --indent=4 --natural-foreign --natural-primary -e contenttypes --format=json catalogue.product > data/product_data.json
-	$(MANAGE) dumpdata --indent=4 --natural-foreign --natural-primary -e contenttypes --format=json catalogue.productimage > data/product_image_data.json
-	$(MANAGE) dumpdata --indent=4 --natural-foreign --natural-primary -e contenttypes --format=json analytics.productview > data/analytics_data.json
-	$(MANAGE) dumpdata --indent=4 --natural-foreign --natural-primary -e contenttypes --format=json cart.cartitem > data/cart_data.json
+	$(MANAGE) dumpdata --indent=4 --natural-foreign --natural-primary -e contenttypes --format=json accounts.user > data/users_data.json
+	$(MANAGE) dumpdata --indent=4 --natural-foreign --natural-primary -e contenttypes --format=json category.category > data/categories_data.json
+	$(MANAGE) dumpdata --indent=4 --natural-foreign --natural-primary -e contenttypes --format=json catalogue.product > data/products_data.json
+	$(MANAGE) dumpdata --indent=4 --natural-foreign --natural-primary -e contenttypes --format=json catalogue.productimage > data/products_image_data.json
+	$(MANAGE) dumpdata --indent=4 --natural-foreign --natural-primary -e contenttypes --format=json checkout.order > data/orders_data.json
 
 .PHONY: loaddata
 loaddata: ## Load default data
