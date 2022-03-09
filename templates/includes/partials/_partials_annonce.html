@@ -1,0 +1,15 @@
+{% if annonce_object_list %}
+    <section class="container my-3">
+        <div class="row">
+            {% for object in annonce_object_list %}
+                <div class="col-xl-6 col-lg-6 col-sm-12 col-12 pl-0 {% if forloop.last %}pr-0{% endif %}">
+                    <div class="ps-block">
+                        <div class="ps-block__thumbnail">
+                            <img class="img-fluid" src="{{ object.get_image_url }}" alt="{{ object.name|slugify }}">
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    </section>
+{% endif %}
