@@ -5,6 +5,7 @@ import os
 from pathlib import Path
 from django.contrib.messages import constants as messages
 
+import pyzstd
 from decouple import config
 
 
@@ -97,6 +98,7 @@ AUTHENTICATION_BACKENDS = [
 
 # Les utilisateurs connectés sont redirigés ici s'ils
 # consultent les pages de connexion/inscription
+
 LOGOUT_URL = 'home'
 LOGIN_URL = 'account_login'
 LOGIN_REDIRECT_URL = 'seller:profile'
@@ -105,6 +107,7 @@ SIGNUP_CUSTOMER_URL = 'customer_signup'
 # Configuration django-allauth
 # https://django-allauth.readthedocs.io/en/latest/configuration.html
 
+ACCOUNT_LOGOUT_ON_GET = True
 ACCOUNT_UNIQUE_EMAIL = True
 ACCOUNT_LOGOUT_ON_GET = True
 ACCOUNT_EMAIL_REQUIRED = True
@@ -118,7 +121,6 @@ ACCOUNT_USER_MODEL_USERNAME_FIELD = None
 ACCOUNT_LOGOUT_REDIRECT_URL = LOGOUT_URL
 ACCOUNT_EMAIL_CONFIRMATION_EXPIRE_DAYS = 7
 ACCOUNT_AUTHENTICATED_LOGIN_REDIRECTS = True
-# ACCOUNT_DEFAULT_HTTP_PROTOCOL = ''
 ACCOUNT_EMAIL_CONFIRMATION_ANONYMOUS_REDIRECT_URL = LOGIN_URL
 ACCOUNT_EMAIL_CONFIRMATION_AUTHENTICATED_REDIRECT_URL = LOGIN_REDIRECT_URL
 ACCOUNT_EMAIL_SUBJECT_PREFIX = "LaRegina Deals <no-reply@laregina.deals>"
@@ -141,13 +143,11 @@ DEFAULT_FROM_EMAIL = SERVER_EMAIL = 'hello@laregina.com'
 
 # Pour le développement, envoyer tous les courriers électroniques
 # à la console au lieu de les envoyer
+
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 
 # https://docs.djangoproject.com/fr/3.0/ref/settings/
 # Let's Encrypt ssl/tls https
-
-CACHE_TTL = 60 * 15
-CACHE_TIMEOUT = 60 * 60
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -187,9 +187,9 @@ TEMPLATES = [
                 'django.contrib.messages.context_processors.messages',
 
                 # Custom context processors
-                'core.context.context',
-                'core.context.category',
-                'core.context.cart_items',
+                'helpers.context.context',
+                'helpers.context.category',
+                'helpers.context.cart_items',
                 'accounts.context.profile',
             ],
 
@@ -202,12 +202,14 @@ TEMPLATES = [
 WSGI_APPLICATION = 'core.wsgi.application'
 
 # https://docs.djangoproject.com/en/dev/ref/settings/#secure-browser-xss-filter
-SECURE_BROWSER_XSS_FILTER = True
 
-# https://docs.djangoproject.com/en/dev/ref/settings/#x-frame-options
-X_FRAME_OPTIONS = "SAMEORIGINE"
+CSRF_COOKIE_HTTPONLY = True
+SESSION_COOKIE_HTTPONLY = True
+SECURE_BROWSER_XSS_FILTER = True
+X_FRAME_OPTIONS = "SAMEORIGIN"
 
 # See: http://django-crispy-forms.readthedocs.io/en/latest/install.html#template-packs
+
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
 
 # Database
@@ -377,7 +379,7 @@ SUMMERNOTE_CONFIG = {
         'airMode': False,
 
         # Change editor size
-        'width': '630',
+        'width': '100%',
         'height': '300',
 
         # Toolbar customization
@@ -416,3 +418,55 @@ SUMMERNOTE_CONFIG = {
 
 COMPRESS_ENABLED = True
 COMPRESS_STORAGE = "compressor.storage.GzipCompressorFileStorage"
+
+
+# Configure as cache backend
+# https://pypi.org/project/django-redis/
+
+CACHE_TTL = 60 * 15
+CACHE_TIMEOUT = 60 * 60
+
+CACHES = {
+    "default": {
+        "BACKEND": "django_redis.cache.RedisCache",
+        "LOCATION": "redis://127.0.0.1:6379/1",
+        "OPTIONS": {
+            "CLIENT_CLASS": "django_redis.client.DefaultClient",
+            "COMPRESSOR": "django_redis.compressors.zstd.ZStdCompressor",
+            "CONNECTION_POOL_KWARGS": {
+                "max_connections": 100,
+                "retry_on_timeout": True
+            },
+            "PICKLE_VERSION": -1,
+            "IGNORE_EXCEPTIONS": True,
+            "SOCKET_CONNECT_TIMEOUT": 5,
+            "SOCKET_TIMEOUT": 5,
+        }
+    }
+}
+
+DJANGO_REDIS_IGNORE_EXCEPTIONS = True
+DJANGO_REDIS_LOG_IGNORED_EXCEPTIONS = True
+
+
+# Django-compressor config
+# https://django-compressor.readthedocs.io/en/stable/settings/#settings
+
+COMPRESS_ENABLED = True
+COMPRESS_URL = STATIC_URL
+COMPRESS_OUTPUT_DIR = "cache"
+COMPRESS_STORAGE = "compressor.storage.GzipCompressorFileStorage"
+COMPRESS_CSS_FILTERS = [
+    "compressor.filters.css_default.CssAbsoluteFilter",
+    "compressor.filters.cssmin.CSSMinFilter",
+]
+COMPRESS_JS_FILTERS = ["compressor.filters.jsmin.JSMinFilter"]
+COMPRESS_REBUILD_TIMEOUT = 5400
+COMPRESS_PRECOMPILERS = (
+    ("text/less", "/usr/local/bin/lessc {infile} {outfile}"),
+    ("text/x-sass", "/usr/local/bin/sass {infile} {outfile}"),
+    ("text/x-scss", "/usr/local/bin/sass {infile} {outfile}"),
+)
+COMPRESS_OFFLINE_CONTEXT = {
+    "STATIC_URL": "STATIC_URL",
+}
