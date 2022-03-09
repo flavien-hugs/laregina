@@ -16,22 +16,14 @@
                         {% full_tree_for_model category.Category as category %}
 
                         {% recursetree category %}
-                        <li class="{% if not node.is_leaf_instance %}menu-item-has-children has-mega-menu{% endif %}">
-                            <a href="{{ node.get_absolute_url }}">{{ node.name|safe }}</a>
-                        </li>
+                            <li class="{% if not node.is_leaf_instance %}menu-item-has-children has-mega-menu{% endif %}">
+                                <a href="{{ node.get_absolute_url }}">{{ node.name|safe }}</a>
+                            </li>
                         {% endrecursetree category %}
                     </ul>
                 </div>
 
-                <div class="ps-section__center">
-                    <div class="ps-carousel--dots owl-slider" data-owl-auto="true" data-owl-loop="true" data-owl-speed="5000" data-owl-gap="0" data-owl-nav="false" data-owl-dots="true" data-owl-item="1" data-owl-item-xs="1" data-owl-item-sm="1" data-owl-item-md="1" data-owl-item-lg="1" data-owl-duration="1000" data-owl-mousedrag="on">
-                        {% for promo in promotion_list %}
-                            <div class="ps-banner bg--cover" data-background="{{ promo.get_image_url }}">
-                                <a href="{{ promo.get_absolute_url }}" class="ps-banner__overlay"></a>
-                            </div>
-                        {% endfor %}
-                    </div>
-                </div>
+                {% hero_slider_list 5 %}
 
                 <div class="ps-section__right">
                     <aside class="widget widget_product widget_features bg-white p-4">
@@ -49,47 +41,19 @@
             </div>
         </section>
 
-        {% product_recent_list 80 %}
+        {% product_sales_flash 20 %}
 
-        <section class="container py-3 mb-3">
+        {% best_selling_products 20 %}
+
+        <section class="container my-3">
             <div class="row">
-                {% for pmt in promotion_list|slice:2 %}
-                    <div class="col-xl-6 col-lg-6 col-12">
-                        <a class="ps-collection" href="{{ pmt.get_absolute_url }}">
-                            <img src="{{ pmt.get_image_url }}" alt="{{ pmt.name }}">
-                        </a>
-                    </div>
-                {% endfor %}
-            </div>
-        </section>
-
-        <section class="ps-deal-of-day container bg-white py-3 mb-3">
-            <div class="ps-section__header mb-2">
-                <h3 class="text-muted font-weight-bold">Ils nous ont réjoint</h3>
-                <a class="font-weight-bolder" href="{{ store_list_view }}">Voir plus</a>
-            </div>
-
-            <div class="ps-section__content">
-                <div class="ps-carousel--nav owl-slider" data-owl-auto="true" data-owl-loop="true" data-owl-speed="10000" data-owl-gap="30" data-owl-nav="false" data-owl-dots="false" data-owl-item="5" data-owl-item-xs="2" data-owl-item-sm="3" data-owl-item-md="4" data-owl-item-lg="4" data-owl-item-xl="5" data-owl-duration="1000" data-owl-mousedrag="on">
-                    {% vendor_recent 50 %}
-                </div>
-            </div>
-        </section>
-
-        <section class="container py-3 mb-3">
-            <div class="row">
-                {% for cat in category|slice:"1:5"|shuffle %}
-                    <div class="col-xl-3 col-lg-3 col-md-4 col-sm-6 col-6">
-                        <div class="ps-block--category-room">
+                {% for cat in category|slice:2|shuffle %}
+                    <div class="col-xl-6 col-lg-6 col-sm-12 col-12 pl-0 {% if forloop.last %}pr-0{% endif %}">
+                        <div class="ps-block">
                             <div class="ps-block__thumbnail">
                                 <a href="{{ cat.get_absolute_url }}">
-                                    <img class="img-fluid w-25" height="80" src="{{ cat.get_image_url }}" alt="{{ cat.name }}">
+                                    <img class="img-fluid" src="{{ cat.get_image_url }}" alt="{{ cat.name }}">
                                 </a>
-                            </div>
-                            <div class="ps-block__content">
-                                <a class="font-weight-bold" href="{{ object.get_absolute_url }}">
-                                    {{ cat.name }}
-                                </a>  
                             </div>
                         </div>
                     </div>
@@ -97,14 +61,61 @@
             </div>
         </section>
 
-        <!-- product recently viewed -->
+        {% product_nouvelle_arrivages 20 %}
+
+        <section class="container my-3">
+            <div class="row">
+                {% for cat in category|slice:"2:4"|shuffle %}
+                    <div class="col-xl-6 col-lg-6 col-sm-12 col-12 pl-0 {% if forloop.last %}pr-0{% endif %}">
+                        <div class="ps-block">
+                            <div class="ps-block__thumbnail">
+                                <a href="{{ cat.get_absolute_url }}">
+                                    <img class="img-fluid" src="{{ cat.get_image_url }}" alt="{{ cat.name }}">
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        </section>
+
+        {% product_destockages 20 %}
+
+        {% publicity_list 2 %}
+
+        <section class="ps-deal-of-day container bg-white py-5 mb-3">
+            <div class="ps-section__header mb-2">
+                <h3>Ils nous ont réjoint</h3>
+                <a class="font-weight-bolder" href="{{ store_list_view }}">Voir plus</a>
+            </div>
+
+            <div class="ps-section__content pt-4">
+                <div class="ps-carousel--nav owl-slider" data-owl-auto="true" data-owl-loop="true" data-owl-speed="5000" data-owl-gap="30" data-owl-nav="true" data-owl-dots="false" data-owl-item="5" data-owl-item-xs="2" data-owl-item-sm="3" data-owl-item-md="4" data-owl-item-lg="4"data-owl-item-xl="5" data-owl-duration="1000" data-owl-mousedrag="on">
+                    {% vendor_recent 50 %}
+                </div>
+            </div>
+        </section>
+
+        <section class="container bg-white py-5 mb-3">
+            <h4>
+                Bienvenue sur {{ title }}, votre boutique de vente qui à votre disposition vos articles de première nécessité !
+            </h4>
+
+            <p>Profitez de votre supermarché qui vous propose tout ce dont vous avez besoin pour vivre quotidiennement à l’aise !</p>
+
+            <figure>
+                <figcaption><strong>{{ title }}</strong></figcaption>
+                <p>vous propose une variété de produits large choix de produits de haute qualité. Ce qui fait la force de {{ title }}, c’est d’abord l’excellent rapport qualité/prix de ses appareils mobiles : Téléphones &amp; Tablettes, Télévisions ainsi que les appareils électroménagers tels que les réfrigérateurs et congélateurs, des climatiseurs, et bien plus encore. Retrouvez la liste de nos meilleures marques et boutiques officielles en faisant un tour sur notre site de vêtements en ligne, des chaussures, des produits de beauté et l'univers des meilleurs maquillages femme à moindre coût prix pas cher.</p>
+            </figure>
+        </section>
+
         {% if recently_viewed %}
-            <section class="container bg-white py-3 mb-3">
-                <div class="ps-section__header pb-4">
-                    <h3 class="text-muted font-weight-bold">Vus récemment</h3>
+            <section class="ps-deal-of-day container bg-white py-4 mt-3">
+                <div class="ps-section__header  mb-2">
+                    <h3>Vus récemment</h3>
                 </div>
 
-                <div class="ps-section__content">
+                <div class="ps-section__content ps-section__content pt-4">
                     <div class="ps-carousel--nav owl-slider" data-owl-auto="true" data-owl-loop="true" data-owl-speed="5000" data-owl-gap="30" data-owl-nav="false" data-owl-dots="false" data-owl-item="5" data-owl-item-xs="2" data-owl-item-sm="3" data-owl-item-md="4" data-owl-item-lg="4" data-owl-item-xl="5" data-owl-duration="1000" data-owl-mousedrag="on">
                         {% for instance in recently_viewed|slice:'0:25' %}
                             {% include "catalogue/snippet/_snippet_product.html" with instance=instance %}
@@ -113,19 +124,6 @@
                 </div>
             </section>
         {% endif %}
-
-        <section class="container bg-white py-3 mb-3">
-            <h4>
-                Bienvenue sur {{ title }}, votre boutique de vente qui à votre disposition vos articles de première nécessité !
-            </h4>
-            
-            <p>Profitez de votre supermarché qui vous propose tout ce dont vous avez besoin pour vivre quotidiennement à l’aise !</p>
-
-            <figure>
-                <figcaption><strong>{{ title }}</strong></figcaption>
-                <p>vous propose une variété de produits large choix de produits de haute qualité. Ce qui fait la force de {{ title }}, c’est d’abord l’excellent rapport qualité/prix de ses appareils mobiles : Téléphones &amp; Tablettes, Télévisions ainsi que les appareils électroménagers tels que les réfrigérateurs et congélateurs, des climatiseurs, et bien plus encore. Retrouvez la liste de nos meilleures marques et boutiques officielles en faisant un tour sur notre site de vêtements en ligne, des chaussures, des produits de beauté et l'univers des meilleurs maquillages femme à moindre coût prix pas cher.</p>
-            </figure>
-        </section>
 
         <!-- user testimonial -->
         {% testimonial_list 5 %}
