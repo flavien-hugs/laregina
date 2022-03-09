@@ -1,0 +1,32 @@
+[
+{
+    "model": "accounts.user",
+    "fields": {
+        "password": "argon2$argon2id$v=19$m=102400,t=2,p=8$bVB1V3A3NXNVaW9kUVpDb2JXTUpqMA$TQ6rUcbvEmixZS+1P2tEOKUcP2rEYvTXaZn1hEbw4YY",
+        "slug": "unsta-inc",
+        "shipping_first_name": "Flavien",
+        "shipping_last_name": "HUGS",
+        "phone": "+2250151571396",
+        "phone_two": "",
+        "shipping_city": "Bouaké",
+        "shipping_country": "CI",
+        "shipping_adress": "Air france 2",
+        "shipping_zip": null,
+        "note": null,
+        "civility": "M.",
+        "store_id": "LRG-070322587265",
+        "email": "unsta.inc@pm.me",
+        "store": "Unsta Inc",
+        "store_description": "",
+        "logo": "",
+        "is_seller": true,
+        "is_staff": true,
+        "is_superuser": true,
+        "is_active": true,
+        "last_login": "2022-03-08T17:34:13.942",
+        "date_joined": "2022-03-07T20:10:01.114",
+        "groups": [],
+        "user_permissions": []
+    }
+}
+]
