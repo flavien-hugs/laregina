@@ -5,11 +5,14 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/noUiSlider/14.6.2/nouislider.min.css">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/css/select2.min.css">
 
-    <link rel="stylesheet" href="{{ STATIC_PREFIX }}css/plugins/fontawesome.min.css">
-    <link rel="stylesheet" href="{{ STATIC_PREFIX }}fonts/linearicons/demo.css">
-    <link rel="stylesheet" href="{{ STATIC_PREFIX }}css/plugins/owl.carousel.min.css">
-    <link rel="stylesheet" href="{{ STATIC_PREFIX }}css/plugins/owl.theme.default.min.css">
-    <link rel="stylesheet" href="{{ STATIC_PREFIX }}css/plugins/fontawesomestars.css">
+{% compress css %}
 
-    <link rel="stylesheet" href="{{ STATIC_PREFIX }}css/style.css">
-    <link rel="stylesheet" href="{{ STATIC_PREFIX }}css/autopart.css">
+<link rel="stylesheet" href="{{ STATIC_PREFIX }}css/plugins/fontawesome.min.css">
+<link rel="stylesheet" href="{{ STATIC_PREFIX }}fonts/linearicons/demo.css">
+<link rel="stylesheet" href="{{ STATIC_PREFIX }}css/plugins/owl.carousel.min.css">
+<link rel="stylesheet" href="{{ STATIC_PREFIX }}css/plugins/owl.theme.default.min.css">
+<link rel="stylesheet" href="{{ STATIC_PREFIX }}css/plugins/fontawesomestars.css">
+
+<link rel="stylesheet" href="{{ STATIC_PREFIX }}css/style.css">
+<link rel="stylesheet" href="{{ STATIC_PREFIX }}css/autopart.css">
+{% endcompress css %}
