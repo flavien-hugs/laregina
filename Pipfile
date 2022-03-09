@@ -5,13 +5,14 @@ verify_ssl = true
 
 [dev-packages]
 flake8 = "*"
+coverage = "*"
 
 [packages]
-django = "*"
+django = "==3.2.12"
 gunicorn = "*"
 django-mptt = "*"
 django-countries = "*"
-whitenoise = "*"
+whitenoise = {extras = ["brotl"], version = "*"}
 python-decouple = "*"
 dj-database-url = "*"
 django-redis = "*"
@@ -24,12 +25,15 @@ pillow = "*"
 django-admin-thumbnails = "*"
 mailchimp = "*"
 mysqlclient = "*"
-xhtml2pdf = "*"
 argon2-cffi = "*"
 django-3-jet = "*"
 django-compressor = "*"
 django-summernote = "*"
 qrcode = "*"
+django-imagekit = "*"
+xhtml2pdf = "*"
+reportlab = "==3.6.6"
+pyzstd = "*"
 
 [requires]
 python_version = "3.8"
