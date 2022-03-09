@@ -6,6 +6,7 @@ from services.export_data_csv import export_to_csv
 
 from pages import models, forms
 
+
 @admin.register(models.Contact)
 class ContactAdmin(admin.ModelAdmin):
     date_hierarchy = 'timestamp'
@@ -39,47 +40,92 @@ class ContactAdmin(admin.ModelAdmin):
     actions = [export_to_csv]
 
 
-@admin.register(models.Promotion)
-class PromotionAdmin(admin.ModelAdmin):
-    form = forms.PromotionForm
+class PromotionStackedInline(admin.StackedInline):
+    model = models.Promotion
+    extra = 0
+    fieldsets = (
+        (
+            'Produit dans cette promotions', {
+                'classes': ('collapse',),
+                'fields':
+                (
+                    "user",
+                    "campaign",
+                    "product",
+                    "activate_at"
+                )
+            }
+        ),
+    )
+    list_display = [
+        'user',
+        "campaign",
+        "product",
+        'created_at',
+    ]
+    list_filter = [
+        'user', 'campaign'
+    ]
+    list_per_page = 10
+    verbose_name_plural = "Promotions"
+    list_display_links = ('user', 'campaign',)
+    empty_value_display = '-empty-'
+
+
+@admin.register(models.Campaign)
+class CampaignAdmin(admin.ModelAdmin):
     date_hierarchy = 'created_at'
     fieldsets = (
         (
             'produit en promotions', {
             'classes': ('collapse',),
             'fields':
-                (   
-                    "product",
-                    ("name", "slug"),
-                )
-            }
-        ),
-        (
-            'cover de la promotion', {
-            'classes': ('collapse',),
-            'fields':
                 (
-                    "image", "active",
+                    "name",
+                    "parent",
+                    "image",
                 )
             }
         ),
     )
     list_display = [
-        'get_store',
         'name',
-        'show_image_tag',
+        "parent",
         'created_at',
     ]
     list_filter = [
-        'product',
-        'active'
+        'name',
     ]
     list_per_page = 10
-    search_fields = ['name']
-    actions = [export_to_csv]
     list_display_links = ('name',)
     empty_value_display = '-empty-'
-    prepopulated_fields = {'slug': ('name',),}
+    inlines = [PromotionStackedInline]
+
+
+@admin.register(models.Pub)
+class PubAdmin(admin.ModelAdmin):
+    date_hierarchy = 'created_at'
+    list_display = [
+        'name',
+        'is_active',
+        'date',
+    ]
+    fieldsets = (
+        (
+            'Publicité', {
+            'classes': ('collapse',),
+            'fields':
+                (
+                    "name",
+                    "video",
+                    "is_active"
+                )
+            }
+        ),
+    )
+    list_per_page = 10
+    empty_value_display = '-empty-'
+    list_display_links = ('name',)
 
 
 @admin.register(models.Testimonial)

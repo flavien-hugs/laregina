@@ -1,23 +1,44 @@
 # pages.models.py
 
-from PIL import Image
-
 from django.db import models
 from django.urls import reverse
 from django.contrib import admin
 from django.utils import timezone
 from django.dispatch import receiver
+from django.utils.text import slugify
 from django.utils.safestring import mark_safe
 from django.contrib.auth import get_user_model
+from django.core.validators import FileExtensionValidator
 
-from core import utils
 from catalogue.models import Product
+from pages.managers import PageModelManager
+
+from helpers.models import BaseTimeStampModel, ModelSlugMixin
+from helpers.utils import(
+    upload_promotion_image_path,
+    upload_campign_image_path,
+    unique_slug_generator
+)
+
+from imagekit.models import ImageSpecField
+from imagekit.processors import ResizeToFill, Adjust
+
+
+validate_video = [
+    FileExtensionValidator(
+        allowed_extensions=[
+            'mp4', 'webm', 'flv', 'mov',
+            'ogv' ,'3gp' ,'3g2' ,'wmv' ,
+            'mpeg' ,'flv' ,'mkv' ,'avi'
+        ]
+    )
+]
 
 
 NULL_AND_BLANK = {'null': True, 'blank': True}
 
 
-class Testimonial(models.Model):
+class Testimonial(BaseTimeStampModel):
     full_name = models.CharField(
         max_length=120,
         verbose_name='nom & prénoms',
@@ -38,10 +59,14 @@ class Testimonial(models.Model):
         upload_to='testimonial_image/',
         **NULL_AND_BLANK
     )
-    created_at = models.DateField(
-        auto_now=True,
-        auto_now_add=False,
-        verbose_name='date',
+    formatted_image = ImageSpecField(
+        source='image',
+        processors=[
+            Adjust(contrast=1.2, sharpness=1.1),
+            ResizeToFill(92, 91)
+        ],
+        format='JPEG',
+        options={'quality': 90}
     )
     activate_at = models.BooleanField(
         default=False,
@@ -49,14 +74,90 @@ class Testimonial(models.Model):
         help_text='rendre visible cet témoignage ?'
     )
 
+    objects = PageModelManager()
+
     class Meta:
         db_table = 'testimonial_db'
-        ordering = ['-created_at',]
-        get_latest_by = ['-created_at',]
+        ordering = ['-created_at', ]
+        get_latest_by = ['-created_at', ]
         verbose_name_plural = 'Témoignage'
 
+    def get_image_url(self):
+        if self.formatted_image:
+            return self.formatted_image.url
+        return "https://via.placeholder.com/92x91"
 
-class Promotion(models.Model):
+
+class Campaign(ModelSlugMixin, BaseTimeStampModel):
+
+    DESTOCKAGE = "Destockage"
+    VENTE_FLASH = "Vente Flash"
+    NOUVELLE_ARRIVAGE = "Nouvelle Arrivage"
+
+    OPTION_PROMOTION_CHOICES = (
+        (DESTOCKAGE, 'Destockage'),
+        (VENTE_FLASH, 'Vente Flash'),
+        (NOUVELLE_ARRIVAGE, 'Nouvelle Arrivage')
+    )
+    parent = models.CharField(
+        max_length=120,
+        verbose_name='titre de la campagne',
+        **NULL_AND_BLANK
+    )
+    name = models.CharField(
+        max_length=120,
+        default=VENTE_FLASH,
+        verbose_name='campagne',
+        choices=OPTION_PROMOTION_CHOICES,
+        **NULL_AND_BLANK
+    )
+    image = models.ImageField(
+        verbose_name='image',
+        upload_to=upload_campign_image_path,
+    )
+    formatted_image = ImageSpecField(
+        source='image',
+        processors=[
+            Adjust(contrast=1.2, sharpness=1.1),
+            ResizeToFill(680, 210)
+        ],
+        format='JPEG',
+        options={'quality': 90}
+    )
+
+    objects = PageModelManager()
+
+    class Meta:
+        db_table = 'campaign_db'
+        ordering = ['-created_at']
+        get_latest_by = ['-created_at']
+        verbose_name_plural = 'Campagnes'
+        indexes = [models.Index(fields=['id'])]
+
+    def __str__(self):
+        return f"{self.name}"
+
+    def get_image_url(self):
+        if self.formatted_image:
+            return self.formatted_image.url
+        return "https://via.placeholder.com/680x380"
+
+    def show_image_tag(self):
+        if self.image is not None:
+            return mark_safe(f'<img src="{self.get_image_url()}" height="50"/>')
+        return "https://via.placeholder.com/50x50"
+
+    def campaigns(self):
+        products = Product.objects.all()
+        campaign = Promotion.objects.filter(
+            campaign=self,
+            promotions_products__in=products
+        )
+        return campaign
+
+
+class Promotion(ModelSlugMixin, BaseTimeStampModel):
+
     user = models.ForeignKey(
         to=get_user_model(),
         on_delete=models.CASCADE,
@@ -65,92 +166,60 @@ class Promotion(models.Model):
             'is_seller': True
         },
     )
+    campaign = models.ForeignKey(
+        to=Campaign,
+        on_delete=models.PROTECT,
+        verbose_name='campagne',
+        related_name="campaigns"
+    )
     product = models.ForeignKey(
         to=Product,
         on_delete=models.CASCADE,
-        verbose_name='produit',
-        limit_choices_to={
-            'user__is_seller': True,
-            'is_active': True
-        },
+        verbose_name='produits',
+        related_name="promotions_products",
         help_text="Choisir un produit à mettre en promotion"
     )
-    name = models.CharField(
-        max_length=120,
-        verbose_name='titre de la promotion',
-        help_text="Définir le titre de la promotion"
-    )
-    slug = models.SlugField(
-        verbose_name='lien',
-        blank=True, unique=True,
-        help_text="lien auto-généré"
-    )
-    image = models.ImageField(
-        verbose_name='image',
-        upload_to=utils.upload_promotion_image_path,
-        **NULL_AND_BLANK
-    )
-    active = models.BooleanField(
+    activate_at = models.BooleanField(
         verbose_name='promotion active ?',
         default=False,
         help_text="Cette promotion est active ?"
     )
-    created_at = models.DateField(
-        auto_now=True,
-        auto_now_add=False,
-        verbose_name='date de creation',
-    )
 
     class Meta:
         db_table = 'promotion_db'
-        ordering = ['-created_at',]
-        get_latest_by = ['-created_at',]
+        ordering = ['-created_at']
+        get_latest_by = ['-created_at']
         verbose_name_plural = 'promotions'
-        indexes = [models.Index(fields=['id'], name='id_promotion'),]
+        indexes = [models.Index(fields=['id'], name='id_promotion')]
+
+    def _get_unique_slug(self):
+        slug = slugify(self.campaign.name)
+        unique_slug = slug
+        num = 1
+        while Promotion.objects.filter(slug=unique_slug).exists():
+            unique_slug = f"{slug}-{num}"
+            num += 1
+        return unique_slug
+
+    def save(self, *args, **kwargs):
+        if not self.slug:
+            self.slug = self._get_unique_slug()
+        super().save(*args, **kwargs)
 
     def __str__(self):
-        return f"{self.name}"
-
-    def has_changed(instance, field):
-        """
-        Returns true if a field has changed in a model
-        May be used in a model.save() method.
-        """
-        if instance.pk is not None:
-            return True
-        Klass = instance.__class__
-        old = Klass.objects.filter(pk=instance.pk).exists()
-        return not getattr(instance, field) == old
-
-    def save(self, *args, **kwargs): 
-        super().save(*args, **kwargs)
-        if self.has_changed('image'):
-            img = Image.open(self.image.path)
-            if img.height > 399 and img.width > 1650: 
-                output_size = (399, 1650) 
-                img.thumbnail(output_size)
-                img.convert('RGB') 
-                img.save(self.image.path)
-
-    def get_image_url(self):
-        if self.image:
-            return self.image.url
-        else:
-            return "https://via.placeholder.com/180"
-        return self.image
-
-    def show_image_tag(self):
-        if self.image is not None:
-            return mark_safe(f'<img src="{self.get_image_url()}" height="50"/>')
-        else:
-            return "https://via.placeholder.com/50"
+        return f"{self.campaign.name}"
 
     @admin.display(description="boutique")
     def get_store(self):
         return self.user.store
 
+    def get_image_url(self):
+        if self.campaign.formatted_image:
+            return self.campaign.formatted_image.url
+        return "https://via.placeholder.com/680x380"
+
     def get_status(self):
-        if self.active:
+        if self.activate_at:
             return "Active"
         return "Désactivé"
 
@@ -168,6 +237,37 @@ class Promotion(models.Model):
         return reverse(
             'seller:promotion_delete', kwargs={'slug': str(self.slug)}
         )
+
+
+class Pub(ModelSlugMixin, BaseTimeStampModel):
+
+    name = models.CharField(
+        max_length=225,
+    	verbose_name="Titre",
+    	help_text="Saisir le titre de la publicité",
+        **NULL_AND_BLANK
+    )
+    video = models.FileField(
+        upload_to='videos/',
+        validators=validate_video
+    )
+    is_active = models.BooleanField(
+        default=False,
+        verbose_name="actif/inactif ?"
+    )
+
+    class Meta:
+        db_table = 'pub_db'
+        ordering = ['-created_at']
+        get_latest_by = ['-created_at']
+        verbose_name_plural = 'Publicités'
+        indexes = [models.Index(fields=['id'])]
+
+    def __str__(self):
+        return str(self.name.title())
+
+    def get_video_url(self):
+        return self.video.url
 
 
 class Contact(models.Model):
@@ -206,12 +306,25 @@ class Contact(models.Model):
 
     class Meta:
         db_table = 'contact_db'
-        ordering = ['-timestamp',]
-        get_latest_by = ['-timestamp',]
+        ordering = ['-timestamp', ]
+        get_latest_by = ['-timestamp', ]
         verbose_name_plural = 'messages'
 
 
-@receiver([models.signals.pre_save], sender=Promotion)
+@receiver([models.signals.pre_save], sender=Pub)
+@receiver([models.signals.pre_save], sender=Campaign)
 def promotion_pre_save_receiver(sender, instance, *args, **kwargs):
     if not instance.slug:
-        instance.slug = utils.unique_slug_generator(instance)
+        instance.slug = unique_slug_generator(instance)
+
+
+@receiver([models.signals.pre_save], sender=Campaign)
+def delete_old_image(sender, instance, *args, **kwargs):
+    if instance.pk:
+        try:
+            Klass = instance.__class__
+            old_image = Klass.objects.get(pk=instance.pk).image
+            if old_image and old_image.url != instance.image.url:
+                old_image.delete(save=False)
+        except:
+            pass

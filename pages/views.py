@@ -84,14 +84,21 @@ class PromotionListView(
 promotion_list = PromotionListView.as_view()
 
 
-class PromotionDetailView(mixins.PromotionMixin, generic.DetailView):
-    model = models.Promotion
+class PromotionDetailView(
+    mixins.PromotionMixin, generic.DetailView,
+    generic.list.MultipleObjectMixin
+):
     paginate_by = 25
+    slug_field = "slug"
+    slug_url_kwarg = "slug"
+    queryset = models.Campaign.objects.published()
     template_name = "dashboard/seller/includes/_partials_promotion_list.html"
 
     def get_context_data(self, *args, **kwargs):
         kwargs["page_title"] = self.object.name
-        kwargs['promotion_list_object'] = self.get_promotions_list()
+        promotions = models.Promotion.objects.filter(campaign=self.object)
+
+        kwargs['object_list'] = promotions
         kwargs['product_recommended'] = utils.get_recently_viewed(self.request)
         return super().get_context_data(*args, **kwargs)
 
@@ -115,13 +122,13 @@ def promotion_update_view(
         msg = f'Mise à jour de la promotion "{obj.product.name}" effectuée avec succes !'
         messages.success(request, msg)
         return redirect("seller:promotion_list")
- 
+
     context = {
         'form': form,
         'page_title': 'mise à jour de la promotion',
         'subtitle': 'mise à jour promotion',
     }
- 
+
     return render(request, template, context)
 
 

@@ -4,7 +4,7 @@ from django import forms
 from django.contrib.auth import get_user_model
 
 from catalogue.models import Product
-from pages.models import Contact, Promotion
+from pages.models import Contact, Campaign, Promotion
 
 
 OBJECT_TYPES = (
@@ -96,19 +96,24 @@ class ContactForm(forms.ModelForm):
 
 class PromotionForm(forms.ModelForm):
 
-    product = forms.ModelChoiceField(
-        queryset=Product.objects.all(),
+    campaign = forms.ModelChoiceField(
         empty_label=None,
+        queryset=Campaign.objects.all(),
+        widget=forms.Select()
+    )
+
+    product = forms.ModelChoiceField(
+        empty_label=None,
+        queryset=Product.objects.all(),
         widget=forms.Select()
     )
 
     class Meta:
         model = Promotion
         fields = [
-            "name",
+            "campaign",
             "product",
-            "image",
-            "active"
+            "activate_at"
         ]
 
     def __init__(self, user, *args, **kwargs):
@@ -119,8 +124,8 @@ class PromotionForm(forms.ModelForm):
         for field in self.fields:
             self.fields[field].widget.attrs['class'] = 'form-control shadow-none rounded-0'
 
-            if self.fields['active']:
-                self.fields['active'].widget.attrs.update(
+            if self.fields['activate_at']:
+                self.fields['activate_at'].widget.attrs.update(
                     {'class': 'form-check-input shadow-none'}
                 )
 

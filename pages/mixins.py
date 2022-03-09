@@ -1,9 +1,10 @@
 # pages.mixins.py
 
-from pages.models import Promotion
+from pages.models import Campaign
+from catalogue.models import Product
 
 
 class PromotionMixin(object):
 
 	def get_promotions_list(self):
-		return Promotion.objects.filter(active=True)
+		return Campaign.objects.published()
