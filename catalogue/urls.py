@@ -12,7 +12,7 @@ urlpatterns = [
         path(route='ps-<slug>/', view=catalogue_views.show_product, name='product_detail'),
     ], 'catalogue'), namespace='catalogue')),
 
-    path('', include(([
+    path('prm-', include(([
         path(route='<slug>/', view=pages_views.promotion_detail, name='promotion_detail'),
     ], 'catalogue'), namespace='promotion')),
 ]
