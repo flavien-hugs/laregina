@@ -2,10 +2,10 @@
 {% get_static_prefix as STATIC_PREFIX %}
 
 {% for object in object_vendor_recent %}
-    <article class="ps-block--category-room">
+    <article class="ps-block text-center">
         <div class="ps-block__thumbnail">
             <a href="{{ object.get_absolute_url }}">
-                <img src="{{ object.get_logo_url }}" alt="{{ object.name }}">
+                <img src="{{ object.get_logo_url }}" alt="{{ object.name|slugify }}">
             </a>
         </div>
         <div class="ps-block__content">

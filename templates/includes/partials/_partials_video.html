@@ -1,0 +1,13 @@
+{% if video_object_list %}
+    <section class="container py-3 mb-2">
+        <div class="row">
+            {% for object in video_object_list %}
+                <div class="col-xl-6 col-lg-6 col-sm-12 col-12 pl-0 {% if forloop.last %}pr-0{% endif %}">
+                    <video class="embed-responsive embed-responsive-16by9 embed-responsive-item" controls="controls">
+                        <source src="{{ object.get_video_url }}" type="video/mp4">
+                    </video>
+                </div>
+            {% endfor %}
+        </div>
+    </section>
+{% endif %}
