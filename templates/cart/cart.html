@@ -60,6 +60,7 @@
                                                     {% csrf_token %}
                                                     <div class="form-group--number">
                                                         <input id="quantity" class="form-control" name="quantity" type="number" value="{{ object.quantity }}">
+                                                        
                                                         <input type='hidden' name='item_id' value='{{ object.id }}'>
                                                     </div>
 
