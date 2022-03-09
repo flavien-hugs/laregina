@@ -6,16 +6,16 @@ from reviews.models import ProductReview
 
 
 class ProductReviewForm(forms.ModelForm):
-    
+
     """
     Classe de formulaire pour soumettre une nouvelle
     un avis utilisateur
     """
 
-    name = forms.EmailField(
+    name = forms.CharField(
         max_length=180,
         required=True,
-        widget=forms.EmailInput(attrs={
+        widget=forms.TextInput(attrs={
             "placeholder": "Votre nom & prénoms *"
         }),
     )
@@ -40,7 +40,7 @@ class ProductReviewForm(forms.ModelForm):
 
     rating = forms.CheckboxSelectMultiple()
 
-    
+
     class Meta:
         model = ProductReview
         fields = ['name', 'rating', 'email', 'content']
