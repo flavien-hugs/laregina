@@ -120,7 +120,7 @@ def product_nouvelle_arrivages(count=20):
         key=lambda x: random.random()
     )
     context = {
-        'header_text': "Nouvelles Arrivages",
+        'header_text': "Nouveautés",
         'object_promotion_list': nouvelle_arrivages
     }
     return context
