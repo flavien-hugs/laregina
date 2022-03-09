@@ -6,19 +6,8 @@ from django.contrib.auth.models import BaseUserManager
 
 
 class UserManager(BaseUserManager):
-    """
-    Définir un gestionnaire de modèle pour Modèle d'utilisateur
-    sans champ de nom d'utilisateur.
-    """
-
-    # use_in_migrations = True
 
     def _create_user(self, email, password, is_seller, **extra_fields):
-        
-        """
-        Créer et enregistrer un utilisateur avec l'adresse électronique 
-        et le mot de passe donnés
-        """
 
         if not email:
             raise ValueError("Les utilisateurs doivent disposer d'une adresse électronique.")
@@ -40,20 +29,14 @@ class UserManager(BaseUserManager):
 
 
     def create_user(self, email, password=None, **extra_fields):
-        """
-        Créez et enregistrez un utilisateur régulier avec l'adresse
-        électronique et le mot de passe donnés.
-        """
+
         extra_fields.setdefault('is_staff', False)
         extra_fields.setdefault('is_superuser', False)
         return self._create_user(email, password, False, **extra_fields)
 
 
     def create_superuser(self, email, password, **extra_fields):
-        """
-        Créez et enregistrez un SuperUser avec l'adresse électronique
-        et le mot de passe donnés.
-        """
+
         extra_fields.setdefault('is_staff', True)
         extra_fields.setdefault('is_superuser', True)
 

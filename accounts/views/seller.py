@@ -82,10 +82,8 @@ store_detail_view = StoreDetailView.as_view()
 
 
 class SettingsUpdateView(
-    SellerRequiredMixin,
-    CashTotalSeller,
-    SuccessMessageMixin,
-    generic.UpdateView
+    SellerRequiredMixin, CashTotalSeller,
+    SuccessMessageMixin, generic.UpdateView
 ):
     slug_field = "slug"
     slug_url_kwarg = "slug"
@@ -213,7 +211,7 @@ product_list_view = ProductListView.as_view()
 class ProductCreateView(
     ProductEditMixin, CashTotalSeller, generic.CreateView
 ):
-    
+
     template_name = 'dashboard/seller/includes/_partials_product_create.html'
 
     def get_object(self, *args, **kwargs):
@@ -270,7 +268,7 @@ class ProductUpdateView(
     ProductEditMixin, CashTotalSeller,
     generic.UpdateView
 ):
-    
+
     template_name = 'dashboard/seller/includes/_partials_product_create.html'
 
     def get_context_data(self, **kwargs):

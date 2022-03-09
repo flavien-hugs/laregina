@@ -8,26 +8,32 @@ from django.db import models
 from django.urls import reverse
 from django.contrib import admin
 from django.dispatch import receiver
-from django.utils.text import slugify
 from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin
 
-from checkout.models import BaseOrderInfo
 from accounts.managers import UserManager
-from core.utils import upload_image_logo_path
+from helpers.utils import(
+    upload_image_logo_path, vendor_unique_slug_generator
+)
+
+from helpers.models import(
+    BaseOrderInfo, ModelSlugMixin, BaseTimeStampModel
+)
 
 from allauth.account.models import EmailAddress
-from core.utils import vendor_unique_slug_generator
 
 import phonenumbers
-from django_countries.fields import CountryField
-from phonenumber_field.modelfields import PhoneNumberField
+
+from imagekit.models import ImageSpecField
+from imagekit.processors import ResizeToFill, Adjust
 
 
 NULL_AND_BLANK = {'null': True, 'blank': True}
 UNIQUE_AND_DB_INDEX = {'null': False, 'unique': True, 'db_index': True}
 
 
-class User(BaseOrderInfo, AbstractBaseUser, PermissionsMixin):
+class User(
+    BaseOrderInfo, ModelSlugMixin, AbstractBaseUser,
+    PermissionsMixin):
 
     CIVILITY_CHOICES = (
         ('M.', 'M.'),
@@ -70,9 +76,19 @@ class User(BaseOrderInfo, AbstractBaseUser, PermissionsMixin):
     )
     logo = models.ImageField(
         verbose_name="logo",
+        default="static/img/default.jpeg",
         upload_to=upload_image_logo_path,
         help_text="Ajouter le logo de votre boutique",
         **NULL_AND_BLANK
+    )
+    formatted_logo = ImageSpecField(
+        source='logo',
+        processors=[
+            Adjust(contrast=1.2, sharpness=1.1),
+            ResizeToFill(150, 150)
+        ],
+        format='JPEG',
+        options={'quality': 90}
     )
     is_seller = models.BooleanField(
         default=False,
@@ -98,11 +114,6 @@ class User(BaseOrderInfo, AbstractBaseUser, PermissionsMixin):
         auto_now_add=True,
         verbose_name="date d'inscription",
     )
-    slug = models.SlugField(
-        blank=True,
-        verbose_name="URL de la boutique",
-        help_text="lien vers la boutique"
-    )
 
     USERNAME_FIELD = 'email'
     EMAIL_FIELD = 'email'
@@ -117,7 +128,6 @@ class User(BaseOrderInfo, AbstractBaseUser, PermissionsMixin):
         ordering = ('-date_joined', '-last_login')
         get_latest_by = ('-date_joined', '-last_login')
         verbose_name_plural = 'boutiques'
-
         indexes = [models.Index(fields=['id'], name='id_index'),]
 
 
@@ -136,8 +146,8 @@ class User(BaseOrderInfo, AbstractBaseUser, PermissionsMixin):
         self.store_id = 'LRG-{}'.format(today + ''.join(random_carac))
 
     def get_fullname(self):
-        if self.civility and self.shipping_first_name:
-            full_name = f"{self.civility} {self.shipping_first_name}"
+        if self.shipping_last_name and self.shipping_first_name:
+            full_name = f"{self.shipping_last_name} {self.shipping_first_name}"
             return full_name.strip()
         return self.email
 
@@ -169,22 +179,15 @@ class User(BaseOrderInfo, AbstractBaseUser, PermissionsMixin):
         return reverse('seller:rs_update', kwargs={"slug": self.slug})
 
     def get_logo_url(self):
-        try:
-            logo = self.logo.url
-        except:
-            return 'https://via.placeholder.com/60'
-
-        if logo:
-            return self.logo.url
-        else:
-            return 'https://via.placeholder.com/60'
-        return self.logo.url
+        if self.logo:
+            logo = self.formatted_logo.url
+        return "/static/img/default.jpeg"
 
     def get_social_profile(self):
         return ProfileSocialMedia.objects.filter(user=self)
 
 
-class ProfileSocialMedia(models.Model):
+class ProfileSocialMedia(BaseTimeStampModel):
     user = models.ForeignKey(
         to=User,
         on_delete=models.PROTECT,
@@ -220,7 +223,8 @@ class ProfileSocialMedia(models.Model):
         return self.instagram
 
 
-class GuestCustomer(BaseOrderInfo):
+class GuestCustomer(BaseOrderInfo, BaseTimeStampModel):
+
     email = models.EmailField(
         unique=True,
         max_length=254,
@@ -230,7 +234,6 @@ class GuestCustomer(BaseOrderInfo):
         }
     )
     active = models.BooleanField(default=True)
-    created_at = models.DateTimeField(auto_now_add=True)
 
     class Meta:
         app_label = 'accounts'
@@ -244,11 +247,8 @@ class GuestCustomer(BaseOrderInfo):
         return '{email}({created})'.format(email=self.email, created=self.active)
 
     def get_fullname(self):
-        if self.shipping_first_name and self.shipping_last_name:
-            full_name = '{shipping_last_name} {shipping_first_name}'.format(
-                shipping_last_name=self.shipping_last_name,
-                shipping_first_name=self.shipping_first_name
-            )
+        if self.shipping_last_name and self.shipping_first_name:
+            full_name = f"{self.shipping_last_name} {self.shipping_first_name}"
             return full_name.strip()
         return self.email
 
@@ -257,3 +257,15 @@ class GuestCustomer(BaseOrderInfo):
 def vendor_pre_save_receiver(sender, instance, *args, **kwargs):
     if not instance.slug:
         instance.slug = vendor_unique_slug_generator(instance)
+
+
+@receiver([models.signals.pre_save], sender=User)
+def delete_old_image(sender, instance, *args, **kwargs):
+    if instance.pk:
+        try:
+            Klass = instance.__class__
+            old_image = Klass.objects.get(pk=instance.pk).logo
+            if old_image and old_image.url != instance.logo.url:
+                old_image.delete(save=False)
+        except:
+            pass

@@ -35,7 +35,7 @@ urlpatterns = [
     ], 'accounts'), namespace='seller')),
 
     path('boutique/', include(([
-        path(route='', view=seller.store_list_view, name='store_list_view'),
+        path(route='all/', view=seller.store_list_view, name='store_list_view'),
         path(route='<slug>/detail/', view=seller.store_detail_view, name='store_detail_view'),
     ], 'accounts'), namespace='vendor')),
 ]
