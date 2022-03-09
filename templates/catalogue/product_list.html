@@ -2,73 +2,69 @@
 {% load mptt_tags pages_tags %}
 
 {% block content %}
-    {% url "home" as home_url %}    
-    
-    {% if request.resolver_match.url_name == 'product_list' %}
-        
-        {% include "includes/partials/_partials_breadcrumb.html" %}
+{% url "home" as home_url %}
 
-    {% elif request.resolver_match.url_name == 'category_detail' %}
-        <div class="ps-breadcrumb">
-            <div class="ps-container">
-                <ul class="breadcrumb">
-                   <li>
-                        <a class="text-capitalize" href="{{ home_url }}">
-                            <i class="fa fa-home fw-2x text-success"></i>
-                        </a>
-                    </li>
-                    {% if object.get_ancestors %}
-                        <li>
-                            <a href="{{ object.parent.get_absolute_url }}">
-                                {{ object.parent.get_ancestors|tree_path|lower }}
-                            </a>
-                        </li>
-                    {% endif %}
-                    <li>{{ object.name|safe }}</li>
-                </ul>
-            </div>
-        </div>
-    {% endif %}
+{% if request.resolver_match.url_name == 'product_list' %}
 
-    <div class="ps-page--shop pt-2">
-        <div class="container">
-            {% promotion_list 8 %}
+{% include "includes/partials/_partials_breadcrumb.html" %}
 
-            <div class="ps-block--container-hightlight pb-4">
-                <div class="ps-section__header">
-                    <h3>Les meilleures offres super chaudes aujourd'hui</h3>
-                </div>
-                <div class="ps-section__content">
-                    <div class="row">
-                        {% for promo in promotion_list %}
-                            <div class="col-xl-3 col-lg-3 col-md-4 col-sm-6 col-6 ">
-                                {% include "catalogue/snippet/_snippet_product.html" with instance=promo.product %}
-                            </div>
-                        {% endfor %}
-                    </div>
-                </div>
-            </div>
-
-            {% if product_recommended %}
-                <div class="ps-block--container-hightlight pb-4">
-                    <div class="ps-section__header">
-                        <h3>Produits récommandés pour vous</h3>
-                    </div>
-                    <div class="ps-section__content">
-                        <div class="row">
-                            {% for product in product_recommended %}
-                                <div class="col-xl-3 col-lg-3 col-md-4 col-sm-6 col-6 ">
-                                    {% include "catalogue/snippet/_snippet_product.html" with instance=product %}
-                                </div>
-                            {% endfor %}
-                        </div>
-                    </div>
-                </div>
+{% elif request.resolver_match.url_name == 'category_detail' %}
+<div class="ps-breadcrumb">
+    <div class="ps-container">
+        <ul class="breadcrumb">
+            <li>
+                <a class="text-capitalize" href="{{ home_url }}">
+                    <i class="fa fa-home fw-2x text-success"></i>
+                </a>
+            </li>
+            {% if object.category.parent %}
+            <li>
+                <a href="{{ object.category.parent.get_absolute_url }}">
+                    {{ object.category.get_ancestors|tree_path|lower }}
+                </a>
+            </li>
+            {% endif %}
+            {% if object.category.name %}
+            <li>
+                <a href="{{ object.category.get_absolute_url }}">
+                    {{ object.category.name|lower }}
+                </a>
+            </li>
             {% endif %}
 
-            <div class="ps-layout--shop border-bottom">
-                {% include "catalogue/partials/_partials_shop.html" %}
+            <li>{{ object.name|capfirst|striptags|safe }}</li>
+        </ul>
+    </div>
+</div>
+{% endif %}
+
+<div class="ps-page--shop pt-2">
+    <div class="container">
+
+        {% promotion_list 8 %}
+
+        {% if product_recommended %}
+        <div class="ps-block--container-hightlight pb-4">
+            <div class="ps-section__header">
+                <h3>Produits récommandés pour vous</h3>
+            </div>
+            <div class="ps-section__content">
+                <div class="row">
+                    {% for product in product_recommended %}
+                    <div class="col-xl-3 col-lg-3 col-md-4 col-sm-6 col-6 ">
+                        {% include "catalogue/snippet/_snippet_product.html" with instance=product %}
+                    </div>
+                    {% endfor %}
+                </div>
             </div>
         </div>
+        {% endif %}
+
+        {% publicity_list 2 %}
+
+        <div class="ps-layout--shop border-bottom">
+            {% include "catalogue/partials/_partials_shop.html" %}
+        </div>
     </div>
+</div>
 {% endblock content %}
