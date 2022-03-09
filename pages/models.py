@@ -128,7 +128,6 @@ class Campaign(ModelSlugMixin, BaseTimeStampModel):
     objects = PageModelManager()
 
     class Meta:
-        db_table = 'campaign_db'
         ordering = ['-created_at']
         get_latest_by = ['-created_at']
         verbose_name_plural = 'Campagnes'
@@ -257,10 +256,9 @@ class Pub(ModelSlugMixin, BaseTimeStampModel):
     )
 
     class Meta:
-        db_table = 'pub_db'
         ordering = ['-created_at']
         get_latest_by = ['-created_at']
-        verbose_name_plural = 'Publicités'
+        verbose_name_plural = 'Pubs Vidéos'
         indexes = [models.Index(fields=['id'])]
 
     def __str__(self):
@@ -268,6 +266,45 @@ class Pub(ModelSlugMixin, BaseTimeStampModel):
 
     def get_video_url(self):
         return self.video.url
+
+
+class Annonce(BaseTimeStampModel):
+
+    name = models.CharField(
+        max_length=225,
+    	verbose_name="Titre",
+    	help_text="Saisir le titre de la publicité",
+    )
+    image = models.ImageField(
+        verbose_name='image',
+        upload_to=upload_campign_image_path,
+    )
+    formatted_image = ImageSpecField(
+        source='image',
+        processors=[
+            Adjust(contrast=1.2, sharpness=1.1),
+            ResizeToFill(530, 285)
+        ],
+        format='JPEG',
+        options={'quality': 90}
+    )
+    is_active = models.BooleanField(
+        default=False,
+        verbose_name="actif/inactif ?"
+    )
+
+    class Meta:
+        db_table = 'annonce_db'
+        ordering = ['-created_at']
+        get_latest_by = ['-created_at']
+        verbose_name_plural = 'Annonces'
+        indexes = [models.Index(fields=['id'])]
+
+    def __str__(self):
+        return self.name
+
+    def get_image_url(self):
+        return self.image.url
 
 
 class Contact(models.Model):
@@ -319,6 +356,7 @@ def promotion_pre_save_receiver(sender, instance, *args, **kwargs):
 
 
 @receiver([models.signals.pre_save], sender=Campaign)
+@receiver([models.signals.pre_save], sender=Annonce)
 def delete_old_image(sender, instance, *args, **kwargs):
     if instance.pk:
         try:

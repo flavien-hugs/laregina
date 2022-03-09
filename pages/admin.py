@@ -128,6 +128,32 @@ class PubAdmin(admin.ModelAdmin):
     list_display_links = ('name',)
 
 
+@admin.register(models.Annonce)
+class AnnonceAdmin(admin.ModelAdmin):
+    date_hierarchy = 'created_at'
+    list_display = [
+        'name',
+        'is_active',
+        'date',
+    ]
+    fieldsets = (
+        (
+            'Publicité', {
+                'classes': ('collapse',),
+                'fields':
+                (
+                    "name",
+                    "image",
+                    "is_active"
+                )
+            }
+        ),
+    )
+    list_per_page = 10
+    empty_value_display = '-empty-'
+    list_display_links = ('name',)
+
+
 @admin.register(models.Testimonial)
 class TestimonialAdmin(admin.ModelAdmin):
     date_hierarchy = 'created_at'
