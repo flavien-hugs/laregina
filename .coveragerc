@@ -1,0 +1,14 @@
+[run]
+    source = .
+    include = *.py
+    omit=
+        *.html
+        */__init__.py
+        */logs/*
+        */static/*
+        */templates/*
+        */migrations/*
+        */staticfiles/*
+
+[report]
+precision = 2
