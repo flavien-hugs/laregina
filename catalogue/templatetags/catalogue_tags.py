@@ -2,11 +2,14 @@
 
 import locale
 import random
+from itertools import chain
+
 from django import template
 from django.contrib.auth import get_user_model
 
 from cart import cart
 from catalogue.models import Product
+from pages.models import Campaign, Promotion
 
 register = template.Library()
 
@@ -41,7 +44,14 @@ def items(request):
     item_in_cart = cart.get_cart_items(request)
     return item_in_cart
 
-# lister les articles dans le panier
+
+@register.inclusion_tag("includes/partials/_partials_hero_slider.html")
+def hero_slider_list(count=5):
+    promotions = Promotion.objects.all()[:count]
+    object_list = sorted(chain(promotions), key=lambda x: random.random())
+    context = {'object_list': object_list}
+    return context
+
 @register.inclusion_tag('cart/snippet/_snippet_cart_items.html')
 def shopcart_items(items, request):
     return {
@@ -63,6 +73,57 @@ def product_recent_list(count=80):
     context = {'object_product_recent': product_list}
     return context
 
+
+@register.inclusion_tag("includes/partials/_partials_products_selling.html")
+def best_selling_products(count=20):
+    products = Product.objects.all()
+    products_selling = sorted(products[:count], key=lambda x: random.random())
+    context = {
+        'header_text': "Les plus vendus",
+        'selling_products': products_selling
+    }
+    return context
+
+
+@register.inclusion_tag("includes/partials/_partials_sales_flash.html")
+def product_sales_flash(count=20):
+    products = Product.objects.all()
+    sales_flash = sorted(
+        Campaign.objects.ventes_flash()[:count],
+        key=lambda x: random.random()
+    )
+    context = {
+        'header_text': "Ventes Flash",
+        'object_promotion_list': sales_flash
+    }
+    return context
+
+@register.inclusion_tag("includes/partials/_partials_sales_flash.html")
+def product_destockages(count=20):
+    products = Product.objects.all()
+    destockages = sorted(
+        Campaign.objects.destockages()[:count],
+        key=lambda x: random.random()
+    )
+    context = {
+        'header_text': "Déstockages",
+        'object_promotion_list': destockages
+    }
+    return context
+
+
+@register.inclusion_tag("includes/partials/_partials_sales_flash.html")
+def product_nouvelle_arrivages(count=20):
+    products = Product.objects.all()
+    nouvelle_arrivages = sorted(
+        Campaign.objects.nouvelle_arrivages()[:count],
+        key=lambda x: random.random()
+    )
+    context = {
+        'header_text': "Nouvelles Arrivages",
+        'object_promotion_list': nouvelle_arrivages
+    }
+    return context
 
 @register.inclusion_tag("includes/partials/_partials_vendors.html")
 def vendor_recent(count=50):

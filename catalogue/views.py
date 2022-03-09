@@ -24,6 +24,8 @@ from reviews.models import ProductReview
 from catalogue.filters import FilterMixin
 from reviews.forms import ProductReviewForm
 
+from pages.models import Promotion
+
 
 class HomeView(PromotionMixin, generic.TemplateView):
 
@@ -137,7 +139,6 @@ def show_product(request, slug, template="catalogue/product_detail.html"):
         'page_title': p.name,
         'object': p,
         'category': Category.objects.all(),
-        'product_image': ProductImage.objects.filter(product_id=p.id),
 
         'form': form,
         'review_form': ProductReviewForm(),
