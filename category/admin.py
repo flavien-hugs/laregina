@@ -19,7 +19,7 @@ class CategoryAdmin(DraggableMPTTAdmin):
         ('catégorie', {'fields':
             (   
                 "parent", 
-                ("name", "slug"),
+                "name",
                 "image",
                 "is_active",
             )}
@@ -33,7 +33,6 @@ class CategoryAdmin(DraggableMPTTAdmin):
 
     list_per_page = 20
     list_display_links = ('id', 'indented_title',)
-    prepopulated_fields = {'slug': ('name',)}
 
     def get_queryset(self, request):
         qs = super().get_queryset(request)

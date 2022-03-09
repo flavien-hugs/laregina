@@ -2,44 +2,54 @@
 
 from django.db import models
 from django.urls import reverse
+from django.contrib import admin
 from django.dispatch import receiver
 
+from imagekit.models import ImageSpecField
+from imagekit.processors import ResizeToFill, Adjust
 from mptt.models import MPTTModel, TreeForeignKey
-from core.utils import upload_promotion_image_path, unique_slug_generator
 
+from helpers.models import BaseTimeStampModel, ModelSlugMixin
+from helpers.utils import upload_promotion_image_path, unique_slug_generator
+
+
+NULL_AND_BLANK = {'null': True, 'blank': True}
 
 class ActiveCategoryManager(models.Manager):
+
     def get_queryset(self):
         return super().get_queryset().filter(is_active=True)
 
 
-class Category(MPTTModel):
+class Category(MPTTModel, ModelSlugMixin, BaseTimeStampModel):
     parent = TreeForeignKey(
         to='self',
+        db_index=True,
         related_name='children',
         on_delete=models.SET_NULL,
-        db_index=True, blank=True, null=True,
         verbose_name='catégorie principale',
+        **NULL_AND_BLANK
     )
     name = models.CharField(
-        max_length=120,
-        db_index=True,
+        max_length=120, db_index=True,
         verbose_name='sous-catégorie',
+        help_text="Définir le nom de cette catégorie.",
     )
     image = models.ImageField(
-        verbose_name='cover catégorie',
+        verbose_name='image',
         upload_to=upload_promotion_image_path,
-        null=True, blank=True,
-        help_text="Taille: 300x300px"
+        help_text="Ajouter une image à cette catégorie.",
+        **NULL_AND_BLANK
     )
-    slug = models.SlugField(
-        verbose_name='lien',
-        db_index=True, unique=True,
-        blank=True, null=True
-
+    formatted_image = ImageSpecField(
+        source='image',
+        processors=[
+            Adjust(contrast=1.2, sharpness=1.1),
+            ResizeToFill(530, 285)
+        ],
+        format='JPEG',
+        options={'quality': 90}
     )
-    created_at = models.DateTimeField(auto_now_add=True, auto_now=False)
-    updated_at = models.DateTimeField(auto_now_add=False, auto_now=True)
     is_active = models.BooleanField(verbose_name='active', default=True)
 
     active = ActiveCategoryManager()
@@ -66,19 +76,30 @@ class Category(MPTTModel):
         return slug
 
     def __str__(self):
-        return self.name
+        full_path = [self.name]
+        k = self.parent
+        while k is not None:
+            full_path.append(k.name)
+            k = k.parent
+        return ' / '.join(full_path[::-1])
+
+    @admin.display(description="catégorie")
+    def categorie_name(self):
+        return self.name.lower()
 
     def get_image_url(self):
         if self.image:
-            return self.image.url
-        else:
-            return "https://via.placeholder.com/150"
-        return self.image
+            return self.formatted_image.url
+        return "static/img/categories/1.jpg"
 
     def get_products_in_category(self):
         from catalogue.models import Product
         products = Product.objects.filter(category=self)
         return products
+
+    @admin.display(description="nombre de produits")
+    def products_count(self):
+        return len(self.get_products_in_category())
 
     def get_absolute_url(self):
         return reverse('category:category_detail', kwargs={'slug': str(self.slug)})
@@ -92,3 +113,15 @@ class Category(MPTTModel):
 def category_pre_save_receiver(sender, instance, *args, **kwargs):
     if not instance.slug:
         instance.slug = unique_slug_generator(instance)
+
+
+@receiver([models.signals.pre_save], sender=Category)
+def delete_old_image(sender, instance, *args, **kwargs):
+    if instance.pk:
+        try:
+            Klass = instance.__class__
+            old_image = Klass.objects.get(pk=instance.pk).image
+            if old_image and old_image.url != instance.image.url:
+                old_image.delete(save=False)
+        except:
+            pass
