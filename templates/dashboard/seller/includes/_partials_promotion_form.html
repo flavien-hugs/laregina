@@ -2,90 +2,80 @@
 {% load crispy_forms_tags %}
 
 {% block block_extra_breadcrumb %}
-    {% url "seller:promotion_list" as promotion_list_url %}
+{% url "seller:promotion_list" as promotion_list_url %}
 
-    <div class="btn-toolbar mb-2 mb-md-0">
-        <a href="{{ promotion_list_url }}" class="btn btn-sm btn-secondary d-inline-flex align-items-center">
-            <svg class="icon icon-sm" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z" clip-rule="evenodd"></path></svg> retour
-        </a>
-    </div>
+<div class="btn-toolbar mb-2 mb-md-0">
+    <a href="{{ promotion_list_url }}" class="btn btn-sm btn-secondary d-inline-flex align-items-center">
+        <svg class="icon icon-sm" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+            <path fill-rule="evenodd" d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+        </svg> retour
+    </a>
+</div>
 {% endblock block_extra_breadcrumb %}
 
 {% block block_header_navbar %}
 {% endblock block_header_navbar %}
 
 {% block content %}
-    <div class="row justify-content-center">
-        <div class="col-12 col-xl-8">
-            <div class="card border-0 shadow mb-4">
-                <div class="card-header mx-lg-4 p-0 py-3 py-lg-4 mb-4 mb-md-0">
-                    <h3 class="h5 mb-0 fw-extrabold">
-                        {{ page_title|capfirst }}
-                    </h3>
-                </div>
+<div class="row justify-content-center">
+    <div class="col-12 col-xl-8">
+        <div class="card border-0 shadow mb-4">
+            <div class="card-header mx-lg-4 p-0 py-3 py-lg-4 mb-4 mb-md-0">
+                <h3 class="h5 mb-0 fw-extrabold">
+                    {{ page_title|capfirst }}
+                </h3>
+            </div>
 
-                <form class="card-body" action="#" method="post" enctype="multipart/form-data">
-                    {% csrf_token %}
+            <form class="card-body" action="#" method="post" enctype="multipart/form-data">
+                {% csrf_token %}
 
-                    <div class="row">
-                        <div class="col-12 col-lg-12">
-                            <div class="form-group mb-4">
-                                <label for="{{ form.name.id_for_label }}">
-                                    {{ form.name.label }}
-                                </label>
-                                {{ form.name }}
-                                <small id="{{ form.name.id_for_label }}" class="form-text text-muted">
-                                    {{ form.name.help_text }}
-                                </small>
-                            </div>
-                        </div>
-
-                        <div class="col-12 col-lg-12">
-                            <div class="form-group mb-4">
-                                <label for="{{ form.product.id_for_label }}">
-                                    Selectionnez les produits
-                                </label>
-                                {{ form.product }}
-                                <small id="{{ form.product.id_for_label }}" class="form-text text-muted">
-                                    Choisir les produits à mettre en promotion
-                                </small>
-                            </div>
-                        </div>
-
-                        <div class="col-12 col-lg-12 mb-3">
-                            <div class="form-group mb-3">
-                                <label for="{{ form.image.id_for_label }}">
-                                    {{ form.image.label }}
-                                </label>
-                                {{ form.image }}
-                                <small id="{{ form.image.id_for_label }}" class="form-text text-muted">
-                                    {{ form.image.help_text }}
-                                </small>
-                            </div>
-
-                            <span class="text-danger font-weight-bold">
-                                Pour une meilleur qualité de visibilté de votre promotion, veuillez uploader une image de dimension 680/410 pixel.
-                            </span>
-                        </div>
-
-                        <div class="col-12 col-lg-12">
-                            <div class="form-check form-switch">
-                                {{ form.active }}
-                                <label class="form-check-label" for="{{ form.active.id_for_label }}">
-                                    {{ form.active.label }}
-                                </label>
-                            </div>
-                            <small id="{{ form.active.id_for_label }}" class="form-text text-muted">
-                                {{ form.active.help_text }}
+                <div class="row">
+                    <div class="col-12 col-lg-12">
+                        <div class="form-group mb-4">
+                            <label for="{{ form.campaign.id_for_label }}">
+                                {{ form.campaign.label }}
+                            </label>
+                            {{ form.campaign }}
+                            <small id="{{ form.campaign.id_for_label }}" class="form-text text-muted">
+                                {{ form.campaign.help_text }}
                             </small>
                         </div>
-
-                        <button class="btn btn-md btn-block btn-secondary mt-4 fw-extrabold text-uppercase rounded-0" type="submit">
-                            valider la promotion
-                        </button>
                     </div>
-                </form>
-            </div>
+
+                    <div class="col-12 col-lg-12">
+                        <div class="form-group mb-4">
+                            <label for="{{ form.product.id_for_label }}">
+                                Selectionnez les produits
+                            </label>
+                            {{ form.product }}
+                            <small id="{{ form.product.id_for_label }}" class="form-text text-muted">
+                                Choisir les produits à mettre en promotion
+                            </small>
+                        </div>
+                    </div>
+
+                    <div class="col-12 col-lg-12">
+                        <div class="form-check form-switch">
+                            {{ form.activate_at }}
+
+                            <label class="form-check-label" for="{{ form.activate_at.id_for_label }}">
+
+                                {{ form.activate_at.label }}
+
+                            </label>
+                        </div>
+                        <small id="{{ form.active.id_for_label }}" class="form-text text-muted">
+                            {{ form.activate_at.help_text }}
+
+                        </small>
+                    </div>
+
+                    <button class="btn btn-md btn-block btn-secondary mt-4 fw-extrabold text-uppercase rounded-0" type="submit">
+                        valider la promotion
+                    </button>
+                </div>
+            </form>
         </div>
     </div>
+</div>
 {% endblock content %}

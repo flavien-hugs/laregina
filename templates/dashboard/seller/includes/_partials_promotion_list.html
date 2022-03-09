@@ -37,21 +37,6 @@
 
             {% promotion_list 8 %}
 
-            <div class="ps-block--container-hightlight pb-4">
-                <div class="ps-section__header">
-                    <h3>Les meilleures offres super chaudes aujourd'hui</h3>
-                </div>
-                <div class="ps-section__content">
-                    <div class="row">
-                        {% for promo in promotion_list_object %}
-                            <div class="col-xl-3 col-lg-3 col-md-4 col-sm-6 col-6 ">
-                                {% include "catalogue/snippet/_snippet_product.html" with instance=promo.product %}
-                            </div>
-                        {% endfor %}
-                    </div>
-                </div>
-            </div>
-
             {% if product_recommended %}
                 <div class="ps-block--container-hightlight pb-4">
                     <div class="ps-section__header">
@@ -77,7 +62,7 @@
                 <div class="ps-layout__right">
                     <div class="ps-shopping ps-tab-root">
                         <div class="ps-shopping__header">
-                            {% with count=promotion_list_object.count %}
+                            {% with count=object_list.count %}
                                 <p>
                                     {% if request.resolver_match.url_name == 'search' %}
                                         {{ page_title }}
@@ -87,6 +72,9 @@
                                     {% elif request.resolver_match.url_name == 'product_list' %}
                                         <strong>{{ count|intcomma }}</strong> Produit{{ count|pluralize:' ,s' }}
                                         trouvé{{ count|pluralize:'s' }}
+                                    {% else %}
+                                        <strong>{{ count|intcomma }}</strong> Produit{{ count|pluralize:'s' }}
+                                        trouvé{{ count|pluralize:', s' }}</strong>
                                     {% endif %}
                                 </p>
                             {% endwith %}
@@ -111,8 +99,8 @@
                             <div class="ps-tab active" id="tab-1">
                                 <div class="ps-shopping-product">
                                     <div class="row">
-                                        {% if promotion_list_object %}
-                                            {% for object in promotion_list_object|shuffle %}
+                                        {% if object_list %}
+                                            {% for object in object_list|shuffle %}
                                                 {% if query or object %}
                                                     <div class="col-xl-3 col-lg-3 col-md-4 col-6">
                                                         {% include "catalogue/snippet/_snippet_product.html" with instance=object.product %}
