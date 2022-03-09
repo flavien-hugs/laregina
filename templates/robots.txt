@@ -1,18 +1,9 @@
-# Public site
-# bot must follow this rules
-# Site scaping is permited IF the user-agent is clearly identify it as a bot and
-# the bot owner and is using less than 200 request per minute
-# Bot identification must have a owner url or contact if we need to contact them
-# Bots with fake user-agent will be blocked Bots trying to use too many IPs to
-# increase performance may also be blocked. If you need more than 200 RPM,
-# please contact the email techops at laregina.deals
-
 # Sitemap files
 Sitemap: https://www.laregina.deals/sitemap.xml
 
 
 User-agent: *
-Disallow: /admin/
+Disallow: /lrg-admin/
 Disallow: /dashboard/
 
 # site search
