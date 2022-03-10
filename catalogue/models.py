@@ -165,12 +165,6 @@ class Product(models.Model):
     def cache_key(self):
         return self.get_absolute_url()
 
-    def cross_sells(self):
-        from checkout.models import Order, OrderItem
-        orders = Order.objects.filter(orders__product=self)
-        order_items = OrderItem.objects.filter(models.Q(order__in=orders))
-        return order_items
-
     def product_images(self):
         return ProductImage.objects.filter(product=self)
 
@@ -189,6 +183,12 @@ class Product(models.Model):
         if self.images():
             return str(self.images().first().formatted_image.url)
         return "/static/img/default.jpeg"
+
+    def cross_sells(self):
+        from checkout.models import Order, OrderItem
+        orders = Order.objects.filter(orders__product=self)
+        order_items = OrderItem.objects.filter(models.Q(order__in=orders))
+        return order_items
 
     def feebacks_products(self):
         from reviews.models import ProductReview

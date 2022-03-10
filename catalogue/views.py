@@ -3,6 +3,7 @@
 import random
 from django.db.models import Q
 from django.urls import reverse
+from django.conf import settings
 from django.views import generic
 from django.utils import timezone
 from django.contrib import messages
@@ -16,9 +17,9 @@ from django.shortcuts import render, get_object_or_404, get_list_or_404
 from cart import cart
 from analytics import utils
 from category.models import Category
-from core.settings import CACHE_TIMEOUT
+
 from catalogue.forms import ProductAddToCartForm
-from catalogue.models import Product, ProductImage
+from catalogue.models import Product
 from pages.mixins import PromotionMixin
 from reviews.models import ProductReview
 from catalogue.filters import FilterMixin
@@ -32,6 +33,11 @@ class HomeView(PromotionMixin, generic.TemplateView):
     queryset = Category.objects.all()
 
     def get_context_data(self, **kwargs):
+        
+        kwargs['destockages'] = self.get_destockages()
+        kwargs['sales_flash'] = self.get_sales_flash()
+        kwargs['news_arrivals'] = self.get_news_arrivals()
+
         kwargs['promotion_list'] = self.get_promotions_list()[:6]
         kwargs['vendor_list'] = get_list_or_404(get_user_model())[0:8]
         kwargs['recently_viewed'] = utils.get_recently_viewed(request=self.request)
@@ -91,7 +97,7 @@ def show_product(request, slug, template="catalogue/product_detail.html"):
         p = get_object_or_404(Product, slug=slug)
         # stocker l'élément dans le cache
         # pour la prochaine fois
-        cache.set(product_cache_key, p, CACHE_TIMEOUT)
+        cache.set(product_cache_key, p, settings.CACHE_TIMEOUT)
 
     # évaluez la méthode HTTP, modifiez-la si nécessaire
     if request.method == 'POST':

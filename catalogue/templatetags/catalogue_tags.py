@@ -9,7 +9,7 @@ from django.contrib.auth import get_user_model
 
 from cart import cart
 from catalogue.models import Product
-from pages.models import Campaign, Promotion
+from pages.models import Annonce, Campaign, Promotion
 
 register = template.Library()
 
@@ -44,12 +44,11 @@ def items(request):
     item_in_cart = cart.get_cart_items(request)
     return item_in_cart
 
-
 @register.inclusion_tag("includes/partials/_partials_hero_slider.html")
 def hero_slider_list(count=5):
-    promotions = Promotion.objects.all()[:count]
-    object_list = sorted(chain(promotions), key=lambda x: random.random())
-    context = {'object_list': object_list}
+    annonces = Annonce.objects.all()[:count]
+    object_list = sorted(annonces, key=lambda x: random.random())
+    context = {'annonces': object_list}
     return context
 
 @register.inclusion_tag('cart/snippet/_snippet_cart_items.html')
@@ -66,9 +65,17 @@ def product_list(object_list, header_text):
         'header_text': header_text
     }
 
+@register.inclusion_tag("includes/partials/_partials_promotion_object.html")
+def product_promotion_object(object_list, header_text):
+    context = {
+        'object_list': object_list,
+        'header_text': header_text
+    }
+    return context
+
 
 @register.inclusion_tag("includes/partials/_partials_product_recent.html")
-def product_recent_list(count=80):
+def product_recent_list(count=20):
     product_list = sorted(Product.objects.product_recent()[:count], key=lambda x: random.random())
     context = {'object_product_recent': product_list}
     return context
@@ -79,49 +86,8 @@ def best_selling_products(count=20):
     products = Product.objects.all()
     products_selling = sorted(products[:count], key=lambda x: random.random())
     context = {
-        'header_text': "Les plus vendus",
+        'header_text': "Les plus demandés",
         'selling_products': products_selling
-    }
-    return context
-
-
-@register.inclusion_tag("includes/partials/_partials_sales_flash.html")
-def product_sales_flash(count=20):
-    products = Product.objects.all()
-    sales_flash = sorted(
-        Campaign.objects.ventes_flash()[:count],
-        key=lambda x: random.random()
-    )
-    context = {
-        'header_text': "Ventes Flash",
-        'object_promotion_list': sales_flash
-    }
-    return context
-
-@register.inclusion_tag("includes/partials/_partials_sales_flash.html")
-def product_destockages(count=20):
-    products = Product.objects.all()
-    destockages = sorted(
-        Campaign.objects.destockages()[:count],
-        key=lambda x: random.random()
-    )
-    context = {
-        'header_text': "Déstockages",
-        'object_promotion_list': destockages
-    }
-    return context
-
-
-@register.inclusion_tag("includes/partials/_partials_sales_flash.html")
-def product_nouvelle_arrivages(count=20):
-    products = Product.objects.all()
-    nouvelle_arrivages = sorted(
-        Campaign.objects.nouvelle_arrivages()[:count],
-        key=lambda x: random.random()
-    )
-    context = {
-        'header_text': "Nouveautés",
-        'object_promotion_list': nouvelle_arrivages
     }
     return context
 
