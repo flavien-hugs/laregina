@@ -8,7 +8,7 @@ from django import template
 from django.contrib.auth import get_user_model
 
 from cart import cart
-from catalogue.models import Product
+from checkout.models import Order
 from pages.models import Annonce, Campaign, Promotion
 
 register = template.Library()
@@ -83,11 +83,10 @@ def product_recent_list(count=20):
 
 @register.inclusion_tag("includes/partials/_partials_products_selling.html")
 def best_selling_products(count=20):
-    products = Product.objects.all()
-    products_selling = sorted(products[:count], key=lambda x: random.random())
+    orders = Order.objects.filter(status=Order.SHIPPED)[:count]
     context = {
         'header_text': "Les plus demandés",
-        'selling_products': products_selling
+        'selling_products': sorted(orders, key=lambda x: random.random())
     }
     return context
 
