@@ -18,13 +18,15 @@ from catalogue.views import home_view
 from checkout.views import TrackOrderView, download_invoice_view
 from core.sitemap import StaticViewSitemap, CategorySitemapView, ProductSitemapView
 
+from django_summernote.models import Attachment
+
+admin.site.unregister(Attachment)
+
 sitemaps = {
     'static': StaticViewSitemap,
     'category': CategorySitemapView,
     'product': ProductSitemapView,
 }
-
-admin.autodiscover()
 
 
 def handler404(request, exception, template_name='404.html'):
