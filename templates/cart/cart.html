@@ -1,5 +1,6 @@
 {% extends "base.html" %}
-{% load humanize catalogue_tags %}
+{% load humanize catalogue_tags pages_tags %}
+
 {% block css %}{% endblock css %}
 
 {% block content %}
@@ -111,6 +112,18 @@
                     </div>
                 {% else %}
                     {% include "cart/empty_cart.html" %}
+
+                    {% if get_news_arrivals %}
+                        {% product_promotion_object get_news_arrivals 'Nouveautés' %}
+                    {% endif %}
+
+                    {% if sales_flash %}
+                        {% product_promotion_object sales_flash 'Ventes Flash' %}
+                    {% endif %}
+
+                    {% if destockages %}
+                        {% product_promotion_object destockages 'Destockages' %}
+                    {% endif %}
                 {% endif %}
             </div>
         </div>
