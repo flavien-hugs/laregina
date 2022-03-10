@@ -16,6 +16,7 @@ class ContactAdmin(admin.ModelAdmin):
         'email',
         'phone',
         'subject',
+        'date'
     ]
 
     list_filter = [
@@ -61,7 +62,7 @@ class PromotionStackedInline(admin.StackedInline):
         'user',
         "campaign",
         "product",
-        'created_at',
+        'date',
     ]
     list_filter = [
         'user', 'campaign'
@@ -91,7 +92,7 @@ class CampaignAdmin(admin.ModelAdmin):
     list_display = [
         'name',
         "parent",
-        'created_at',
+        'date',
     ]
     list_filter = [
         'name',
@@ -160,9 +161,10 @@ class TestimonialAdmin(admin.ModelAdmin):
     list_display = [
         'full_name',
         'status_client',
-        'created_at',
+        'date',
     ]
     list_per_page = 10
     empty_value_display = '-empty-'
     list_display_links = ('full_name',)
     actions = [export_to_csv]
+    exclude = ['created_at']

@@ -84,28 +84,6 @@ class PromotionListView(
 promotion_list = PromotionListView.as_view()
 
 
-class PromotionDetailView(
-    mixins.PromotionMixin, generic.DetailView,
-    generic.list.MultipleObjectMixin
-):
-    paginate_by = 25
-    slug_field = "slug"
-    slug_url_kwarg = "slug"
-    queryset = models.Campaign.objects.published()
-    template_name = "dashboard/seller/includes/_partials_promotion_list.html"
-
-    def get_context_data(self, *args, **kwargs):
-        kwargs["page_title"] = self.object.name
-        promotions = models.Promotion.objects.filter(campaign=self.object)
-
-        kwargs['object_list'] = promotions
-        kwargs['product_recommended'] = utils.get_recently_viewed(self.request)
-        return super().get_context_data(*args, **kwargs)
-
-
-promotion_detail = PromotionDetailView.as_view()
-
-
 @login_required
 def promotion_update_view(
     request, slug,
@@ -136,8 +114,7 @@ promotion_update = promotion_update_view
 
 
 class PromotionDeleteView(
-    SellerRequiredMixin,
-    SuccessMessageMixin,
+    SellerRequiredMixin, SuccessMessageMixin,
     generic.DeleteView
 ):
     model = models.Promotion
@@ -150,3 +127,95 @@ class PromotionDeleteView(
 
 
 promotion_delete = PromotionDeleteView.as_view()
+
+
+class PromotionDetailView(
+    mixins.PromotionMixin, generic.DetailView,
+    generic.list.MultipleObjectMixin
+):
+    paginate_by = 25
+    slug_field = "slug"
+    slug_url_kwarg = "slug"
+    queryset = models.Campaign.objects.published()
+    template_name = "pages/promotion/_detail.html"
+
+    def get_context_data(self, *args, **kwargs):
+        kwargs["page_title"] = self.object.name
+
+        kwargs['destockages'] = self.get_destockages()
+        kwargs['sales_flash'] = self.get_sales_flash()
+        kwargs['news_arrivals'] = self.get_news_arrivals()
+
+        kwargs['object_list'] = models.Promotion.objects.filter(campaign=self.object)
+        kwargs['product_recommended'] = utils.get_recently_viewed(self.request)
+        return super().get_context_data(*args, **kwargs)
+
+
+promotion_detail = PromotionDetailView.as_view()
+
+
+class CampaignMixinObject(mixins.PromotionMixin, generic.ListView):
+
+    paginate_by = 20
+    template_name = "pages/promotion/_list.html"
+
+    def get_context_data(self, **kwargs):
+        kwargs["query"] = self.request.GET.get("q", None)
+        kwargs['promotion_list'] = self.get_promotions_list()
+        kwargs['product_recommended'] = utils.get_recently_viewed(self.request)
+
+        return super().get_context_data(**kwargs)
+
+
+class ProductOnSaleFlashListView(CampaignMixinObject):
+    extra_context = {'page_title': 'Ventes Flash'}
+    queryset = models.Campaign.objects.ventes_flash()
+
+    def get_context_data(self, **kwargs):
+        kwargs["query"] = self.request.GET.get("q", None)
+        kwargs['promotion_list'] = self.get_promotions_list()
+        kwargs['product_recommended'] = utils.get_recently_viewed(self.request)
+        
+        kwargs['destockages'] = self.get_destockages()
+        kwargs['news_arrivals'] = self.get_news_arrivals()
+
+        return super().get_context_data(**kwargs)
+
+
+sales_flash_list_view = ProductOnSaleFlashListView.as_view()
+
+
+class ProductOnDestockageListView(CampaignMixinObject):
+    extra_context = {'page_title': 'Déstockages'}
+    queryset = models.Campaign.objects.destockages()
+
+    def get_context_data(self, **kwargs):
+        kwargs["query"] = self.request.GET.get("q", None)
+        kwargs['promotion_list'] = self.get_promotions_list()
+        kwargs['product_recommended'] = utils.get_recently_viewed(self.request)
+
+        kwargs['sales_flash'] = self.get_sales_flash()
+        kwargs['news_arrivals'] = self.get_news_arrivals()
+
+        return super().get_context_data(**kwargs)
+
+
+destockage_list_view = ProductOnDestockageListView.as_view()
+
+
+class ProductOnDNewsArrivalListView(CampaignMixinObject):
+    extra_context = {'page_title': 'Nouveautés'}
+    queryset = models.Campaign.objects.nouvelle_arrivages()
+
+    def get_context_data(self, **kwargs):
+        kwargs["query"] = self.request.GET.get("q", None)
+        kwargs['promotion_list'] = self.get_promotions_list()
+        kwargs['product_recommended'] = utils.get_recently_viewed(self.request)
+        
+        kwargs['destockages'] = self.get_destockages()
+        kwargs['sales_flash'] = self.get_sales_flash()
+
+        return super().get_context_data(**kwargs)
+
+
+news_arrivals_list_view = ProductOnDNewsArrivalListView.as_view()

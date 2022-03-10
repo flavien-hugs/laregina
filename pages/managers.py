@@ -1,14 +1,14 @@
 # pages.managers.py
 
 from django.db import models
-from django.utils import timezone
+from django.utils.timezone import now
 
 
 class PageQuerySetMixin(models.QuerySet):
 
     def active(self):
         return self.filter(
-            created_at__lte=timezone.now()
+            created_at__lte=tnow
         )
 
     def vente_flash(self):

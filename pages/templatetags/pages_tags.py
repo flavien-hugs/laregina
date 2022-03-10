@@ -1,5 +1,8 @@
 # catalogue filters
 
+import random
+from itertools import chain
+
 from django import template
 
 from pages.models import(
@@ -10,9 +13,14 @@ register = template.Library()
 
 
 @register.inclusion_tag("includes/partials/_partials_video.html")
-def publicity_list(count=2):
+def publicity_list():
+    
+    movies = Pub.objects.filter(is_active=True).latest()
+    campaigns = Campaign.objects.published().latest()
+    
     return {
-    	'video_object_list': Pub.objects.filter(is_active=True)[:count]
+    	'movie': movies,
+        'campaign': campaigns
     }
 
 
@@ -29,9 +37,12 @@ def annonce_second_list():
     }
 
 @register.inclusion_tag("includes/partials/_partials_promotion_list.html")
-def promotion_list(count=8):
+def campaign_list():
     return {
-        'promotion_object_list': Campaign.objects.published()[:count]
+        'campaign_object_list': sorted(
+            Campaign.objects.published()[:2],
+            key=lambda x: random.random()
+        )
     }
 
 

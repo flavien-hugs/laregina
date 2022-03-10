@@ -119,7 +119,7 @@ class Campaign(ModelSlugMixin, BaseTimeStampModel):
         source='image',
         processors=[
             Adjust(contrast=1.2, sharpness=1.1),
-            ResizeToFill(680, 210)
+            ResizeToFill(1170, 399)
         ],
         format='JPEG',
         options={'quality': 90}
@@ -153,6 +153,11 @@ class Campaign(ModelSlugMixin, BaseTimeStampModel):
             promotions_products__in=products
         )
         return campaign
+    
+    def get_absolute_url(self):
+        return reverse(
+            'promotion:promotion_detail', kwargs={'slug': str(self.slug)}
+        )
 
 
 class Promotion(ModelSlugMixin, BaseTimeStampModel):
@@ -340,6 +345,10 @@ class Contact(models.Model):
 
     def __str__(self):
         return f"{self.full_name}: {self.email} - {self.phone}"
+
+    @admin.display(description="date d'ajout")
+    def date(self):
+        return self.timestamp.date()
 
     class Meta:
         db_table = 'contact_db'
