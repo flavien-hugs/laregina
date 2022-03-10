@@ -73,6 +73,9 @@ OTHERS_APPS = [
 
     'django_summernote',
     'compressor',
+
+    'dbbackup',
+    'django_crontab',
 ]
 
 LOCAL_APPS = [
@@ -470,3 +473,15 @@ COMPRESS_PRECOMPILERS = (
 COMPRESS_OFFLINE_CONTEXT = {
     "STATIC_URL": "STATIC_URL",
 }
+
+# Configuration
+# https://django-dbbackup.readthedocs.io/en/master/installation.html
+
+DBBACKUP_STORAGE = 'django.core.files.storage.FileSystemStorage'
+DBBACKUP_STORAGE_OPTIONS = {'location': BASE_DIR / 'db_backup'}
+
+# https://pypi.org/project/django-crontab/
+
+CRONJOBS = [
+    ('0 24 * * *', 'helpers.cron.create_backups_scheduled_job')
+]
