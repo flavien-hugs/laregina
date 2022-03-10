@@ -8,6 +8,7 @@ from django.views.decorators.csrf import csrf_exempt
 from cart import cart
 from core import settings
 from checkout import checkout
+from pages.models import Campaign
 
 from analytics.utils import get_recently_viewed, recommended_from_views
 
@@ -37,6 +38,9 @@ def shopcart(request, template="cart/cart.html"):
         'cart_items': cart.get_cart_items(request),
         'cart_subtotal': cart.cart_subtotal(request),
         'recently_viewed': get_recently_viewed(request),
+        'destockages': Campaign.objects.destockages()[:15],
+        'sales_flash': Campaign.objects.ventes_flash()[:15],
+        'news_arrivals': Campaign.objects.nouvelle_arrivages()[:15]
     }
 
     return render(request, template, context)
