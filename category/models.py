@@ -45,7 +45,7 @@ class Category(MPTTModel, ModelSlugMixin, BaseTimeStampModel):
         source='image',
         processors=[
             Adjust(contrast=1.2, sharpness=1.1),
-            ResizeToFill(530, 285)
+            ResizeToFill(1170, 399)
         ],
         format='JPEG',
         options={'quality': 90}
