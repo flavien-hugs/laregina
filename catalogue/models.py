@@ -165,17 +165,17 @@ class Product(models.Model):
     def cache_key(self):
         return self.get_absolute_url()
 
-    def product_images(self):
+    def images(self):
         return ProductImage.objects.filter(product=self)
 
     def get_image_url(self):
-        if self.product_images():
-            return str(self.product_images().first().formatted_image.url)
+        if self.images():
+            return str(self.images().first().formatted_image.url)
         return "/static/img/default.jpeg"
 
     @admin.display(description="image du produit")
     def get_product_image(self):
-        if self.product_images().first() is not None:
+        if self.images().first() is not None:
             return mark_safe(f"<img src='{self.get_image_url()}' height='50'/>")
         return "https://via.placeholder.com/50x50"
 
@@ -230,6 +230,11 @@ class ProductImage(models.Model):
 
     def __str__(self):
         return self.product.name.lower()
+
+    def get_image_url(self):
+        if self.image:
+            return self.formatted_image.url
+        return "/static/img/default.jpeg"
 
 
 @receiver([models.signals.pre_save], sender=Product)
