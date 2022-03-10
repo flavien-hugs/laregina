@@ -792,13 +792,6 @@
         });
     }
 
-    function select2Cofig() {
-        $('select.ps-select').select2({
-            placeholder: $(this).data('placeholder'),
-            minimumResultsForSearch: -1,
-        });
-    }
-
     function carouselNavigation() {
         var prevBtn = $('.ps-carousel__prev'),
             nextBtn = $('.ps-carousel__next');
@@ -850,9 +843,7 @@
         stickySidebar();
         accordion();
         progressBar();
-        select2Cofig();
         carouselNavigation();
-        $('[data-toggle="tooltip"]').tooltip();
         handleLiveSearch();
         $('.ps-product--quickview .ps-product__images').slick({
             slidesToShow: 1,
