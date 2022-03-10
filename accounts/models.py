@@ -183,6 +183,12 @@ class User(
             logo = self.formatted_logo.url
         return "/static/img/default.jpeg"
 
+    def orders(self):
+        from checkout.models import Order, OrderItem
+        order = Order.objects.filter(orders__product__user=self).filter(status=Order.SHIPPED)
+        order_item = OrderItem.objects.filter(models.Q(order__in=order))
+        return order_item
+
     def get_social_profile(self):
         return ProfileSocialMedia.objects.filter(user=self)
 
