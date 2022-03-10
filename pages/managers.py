@@ -8,7 +8,7 @@ class PageQuerySetMixin(models.QuerySet):
 
     def active(self):
         return self.filter(
-            created_at__lte=tnow
+            created_at__lte=now()
         )
 
     def vente_flash(self):
