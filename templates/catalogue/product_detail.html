@@ -27,7 +27,7 @@
             </li>
             {% endif %}
 
-            <li>{{ object.name|capfirst|striptags|safe }}</li>
+            <li>{{ object.name|capfirst|lower|safe }}</li>
         </ul>
     </div>
 </div>
@@ -53,9 +53,8 @@
                         {% include "catalogue/partials/_partials_product_image.html" with object=object %}
 
                         <div class="ps-product__info">
-                            <h1>{{ object.name }}</h1>
+                            <h1>{{ object.name|safe }}</h1>
                             <div class="ps-product__meta">
-                                <!-- <p>Marque: <a href="#">Sony</a></p>  -->
                                 <div class="ps-product__rating">
                                     <select class="ps-rating" data-read-only="true">
                                         <option value="1">1</option>
@@ -72,14 +71,10 @@
 
                             <div class="ps-product__desc">
                                 {% if object.user.store %}
-                                <p>Vendu par: <a href="{{ object.user.get_absolute_url }}">
+                                    <p>Vendu par: <a href="{{ object.user.get_absolute_url }}">
                                         <strong> {{ object.user.store }}</strong></a>
-                                </p>
+                                    </p>
                                 {% endif %}
-
-                                <ul class="ps-list--dot">
-                                    {{ object.description|truncatewords:'30'|safe }}
-                                </ul>
                             </div>
 
                             {% include "cart/snippet/form.html" with product=object %}
@@ -91,7 +86,7 @@
                                 <p class="categories">
                                     <strong> Catégorie{{ category.count|pluralize }}:</strong>
                                     <a href="{{ object.category.get_absolute_url }}">
-                                        {{ object.category.name }}
+                                        {{ object.category.name|safe }}
                                     </a>
                                 </p>
                             </div>
@@ -121,12 +116,12 @@
                             <div class="ps-tab" id="tab-2">
                                 {% if object.user.store %}
                                 <h4>{{ object.user.store|upper }}</h4>
-                                <p>{{ object.user.store_description }}</p>
+                                <p>{{ object.user.store_description|safe }}</p>
                                 <a href="{{ object.user.get_absolute_url }}">
                                     Voir le magasin de <strong>{{ object.user.store }}</strong>
                                 </a>
                                 {% else %}
-                                Produit vendu par l'entreprise.
+                                    Produit vendu par l'entreprise.
                                 {% endif %}
                             </div>
 
@@ -152,11 +147,11 @@
                 <!-- signup for vendor -->
                 <aside class="widget widget_sell-on-site">
                     {% if request.user.is_authenticated and request.user.is_buyer or not request.user.is_authenticated and not request.user.is_superuser and not request.user.is_seller %}
-                    <p>{% url "account_signup" as account_signup %}
-                        <i class="icon-store"></i> Vendre sur {{ title }} ?
-                        <a href="{{ account_signup }}" target="_blank">
-                            Inscrivez-vous maintenant</a>
-                    </p>
+                        <p>{% url "account_signup" as account_signup %}
+                            <i class="icon-store"></i> Vendre sur {{ title }} ?
+                            <a href="{{ account_signup }}" target="_blank">
+                                Inscrivez-vous maintenant</a>
+                        </p>
                     {% endif %}
                 </aside>
 
@@ -170,7 +165,7 @@
                 </aside>
             </div>
         </div>
-
+        
         {% best_selling_products 20 %}
 
         <!-- produit recommendé -->
