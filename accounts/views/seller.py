@@ -7,8 +7,8 @@ from django.http import HttpResponseRedirect
 from django.contrib.auth import get_user_model
 from django.contrib.messages.views import SuccessMessageMixin
 
-from core import settings
 from catalogue.models import Product
+from pages.mixins import PromotionMixin
 from checkout.models import Order, OrderItem
 from catalogue.forms import ProductCreateFormSet
 
@@ -49,8 +49,8 @@ class DashboardView(SellerRequiredMixin, CashTotalSeller, generic.DetailView):
 dashboard_view = DashboardView.as_view()
 
 
-class StoreListView(generic.ListView):
-    paginate_by = 180
+class StoreListView(PromotionMixin, generic.ListView):
+    paginate_by = 12
     context_object_name = 'vendor_list_object'
     queryset = get_user_model().objects.order_by('-date_joined')
     template_name = 'includes/partials/_partials_vendor_list.html'
@@ -62,18 +62,30 @@ class StoreListView(generic.ListView):
             '%a, %d %b %Y %H:%M:%S GMT')
         return response
 
+    def get_context_data(self, **kwargs):
+        kwargs['destockages'] = self.get_destockages()
+        kwargs['sales_flash'] = self.get_sales_flash()
+        kwargs['news_arrivals'] = self.get_news_arrivals()
+        return super().get_context_data(**kwargs)
+
 
 store_list_view = StoreListView.as_view(extra_context={'page_title': 'boutiques'})
 
 
-class StoreDetailView(generic.DetailView):
+class StoreDetailView(
+    PromotionMixin,
+    generic.DetailView,
+    generic.list.MultipleObjectMixin):
+
+    paginate_by = 12
     slug_field = "slug"
     slug_url_kwarg = "slug"
-    model = get_user_model()
+    queryset = get_user_model().objects.all()
     template_name='dashboard/seller/includes/_partials_vendor_store.html'
 
     def get_context_data(self, *args, **kwargs):
         kwargs['page_title'] = f'Boutique : {self.object.store}'
+        kwargs['sales_flash'] = self.get_sales_flash()
         kwargs['object_list'] = Product.objects.filter(user=self.object.id)
         return super().get_context_data(*args, **kwargs)
 
