@@ -41,9 +41,11 @@
 <div class="ps-page--shop pt-2">
     <div class="container">
         
-        <div class="ps-carousel--nav-inside py-3 mb-4">
-            <img class="w-100" src="{{ object.get_image_url }}" alt="{{ object.name|slugify }}">
-        </div>
+        {% if object.image %}
+            <div class="ps-carousel--nav-inside py-3 mb-4">
+                <img class="w-100" src="{{ object.get_image_url }}" alt="{{ object.name|slugify }}">
+            </div>
+        {% endif %}
 
         {% if get_news_arrivals %}
             {% product_promotion_object get_news_arrivals 'Nouveautés' %}
@@ -75,6 +77,8 @@
                 </div>
             </div>
         {% endif %}
+
+        {% best_selling_products 20 %}
 
         <div class="ps-layout--shop border-bottom mt-3">
             {% block _content_ %}
