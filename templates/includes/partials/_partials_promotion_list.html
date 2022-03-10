@@ -1,15 +1,15 @@
 <!-- includes/partials/_partials_promotion_list -->
 
 {% if campaign_object_list %}
-    <section class="container my-3">
-        <div class="row">
-            {% for object in campaign_object_list %}
-                <div class="col-xl-6 col-lg-6 col-sm-12 col-12 pl-0 {% if forloop.last %}pr-0{% endif %}">
-                    <a href="{{ object.get_absolute_url }}">
-						<img src="{{ object.get_image_url }}" alt="{{ object.name|slugify }}">
-					</a>
-                </div>
-            {% endfor %}
+    <section class="ps-deal-of-day my-3 pb-0">
+        <div class="container bg-white p-3">
+            <div class="row">
+                {% for object in campaign_object_list %}
+                    <article class="col-xl-6 col-lg-6 col-sm-12 col-12 mb-lg-0 mb-3">
+                        <img src="{{ object.get_image_url }}" alt="{{ object.name|slugify }}">
+                    </article>
+                {% endfor %}
+            </div>
         </div>
     </section>
 {% endif %}

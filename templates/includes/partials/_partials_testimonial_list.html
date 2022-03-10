@@ -10,7 +10,7 @@
 			<div class="ps-section__content">
 				<div class="ps-carousel--testimonials owl-slider" data-owl-auto="true" data-owl-loop="true" data-owl-speed="10000" data-owl-gap="30" data-owl-nav="false" data-owl-dots="true" data-owl-item="2" data-owl-item-xs="1" data-owl-item-sm="1" data-owl-item-md="1" data-owl-item-lg="2" data-owl-duration="1000" data-owl-mousedrag="on">
 					{% for object in testimonial_object_list %}
-						<div class="ps-block--testimonial">
+						<article class="ps-block--testimonial">
 							<div class="ps-block__header">
 								<img src="{{ object.get_image_url }}" alt="{{ object.full_name|slugify }}">
 							</div>
@@ -26,7 +26,7 @@
 									{{ object.message|truncatewords:24|safe }}
 								</p>
 							</div>
-						</div>
+						</article>
 					{% endfor %}
 				</div>
 			</div>

@@ -6,7 +6,7 @@
         <h3>De la même catégorie</h3>
         <div class="widget__content">
             {% for instance in related_product|slice:'0:2' %}
-                <div class="ps-product">
+                <article class="ps-product">
                     <div class="ps-product__thumbnail">
                         <a href="{{ instance.get_absolute_url }}">
                             <img src="{{ instance.get_image_url }}" alt="{{ instance.name }}">
@@ -43,7 +43,7 @@
                             </p>
                         </div>
                     </div>
-                </div>
+                </article>
             {% endfor %}
         </div>
     </aside>
