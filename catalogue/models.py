@@ -184,12 +184,6 @@ class Product(models.Model):
             return str(self.images().first().formatted_image.url)
         return "/static/img/default.jpeg"
 
-    def cross_sells(self):
-        from checkout.models import Order, OrderItem
-        orders = Order.objects.filter(orders__product=self)
-        order_items = OrderItem.objects.filter(models.Q(order__in=orders))
-        return order_items
-
     def feebacks_products(self):
         from reviews.models import ProductReview
         return ProductReview.objects.filter(product=self)
