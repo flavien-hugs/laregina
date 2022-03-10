@@ -33,14 +33,14 @@
 </div>
 
 {% if messages %}
-{% for message in messages %}
-<div class="alert alert-block {{ message.tags }} alert-dismissible font-weight-bold" role="alert">
-    {{ message|safe }}
-    <button class="close" type="button" data-dismiss="alert" aria-label="Close">
-        <span aria-hidden="true">&times;</span>
-    </button>
-</div>
-{% endfor %}
+    {% for message in messages %}
+        <div class="alert alert-block {{ message.tags }} alert-dismissible font-weight-bold" role="alert">
+            {{ message|safe }}
+            <button class="close" type="button" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+    {% endfor %}
 {% endif %}
 
 <div class="ps-page--product">
@@ -164,7 +164,7 @@
                 <aside>
                     <div>
                         {% for obj in object.cross_sells %}
-                        {{ obj.name }}
+                            {{ obj.name }}
                         {% endfor %}
                     </div>
                 </aside>
@@ -173,19 +173,19 @@
 
         <!-- produit recommendé -->
         {% if recommended_product %}
-        {% product_list recommended_product 'Produits récommandés pour vous' %}
+            {% product_list recommended_product 'Produits récommandés pour vous' %}
         {% endif %}
 
         <!-- produit similaire  -->
         {% if related_product %}
-        {% product_list related_product 'Produits de la même catégorie' %}
+            {% product_list related_product 'Produits de la même catégorie' %}
         {% endif %}
 
-        {% publicity_list 2 %}
+        {% publicity_list %}
 
         <!-- product recently viewed -->
         {% if recently_viewed %}
-        {% product_list recently_viewed 'Vus récemment' %}
+            {% product_list recently_viewed 'Vus récemment' %}
         {% endif %}
     </div>
 </div>

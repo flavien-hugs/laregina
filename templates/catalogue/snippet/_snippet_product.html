@@ -5,12 +5,12 @@
 <div class="ps-product ps-product--inner">
     <div class="ps-product__thumbnail">
         <a href="{{ instance.get_absolute_url }}">
-            <img width="150" height="150" src="{{ instance.get_image_url }}" alt="{{ instance.name|slugify }}">                 
+            <img src="{{ instance.get_image_url }}" alt="{{ instance.name|slugify }}">                 
         </a>
     </div>
 
     <div class="ps-product__container">
-        <a class="ps-product__vendor" href="{{ instance.user.get_absolute_url }}">
+        <a class="ps-product__vendor text-center" href="{{ instance.user.get_absolute_url }}">
         {{ instance.user.store|upper }}</a>
 
         <div class="ps-product__content">
