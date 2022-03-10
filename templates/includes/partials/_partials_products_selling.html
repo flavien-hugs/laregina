@@ -3,12 +3,11 @@
 		<div class="ps-section__header mb-2">
 			<h3>{{ header_text|capfirst|safe  }}</h3>
 		</div>
-
 		<div class="ps-section__content pt-4">
 			<div class="ps-carousel--nav owl-slider" data-owl-auto="true" data-owl-loop="true" data-owl-speed="5000" data-owl-gap="30" data-owl-nav="false" data-owl-dots="false" data-owl-item="5" data-owl-item-xs="2" data-owl-item-sm="3" data-owl-item-md="4" data-owl-item-lg="4"data-owl-item-xl="5" data-owl-duration="1000" data-owl-mousedrag="on">
-				{% for object in selling_products %}
-					{% for p in object.cross_sells.all %}
-						{% include "catalogue/snippet/_snippet_product.html" with instance=p.product %}
+				{% for sell in selling_products %}
+					{% for product in sell.order_items %}
+						{% include "catalogue/snippet/_snippet_product.html" with instance=product.product %}
 					{% endfor %}
 				{% endfor %}
 			</div>
