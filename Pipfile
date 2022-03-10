@@ -34,6 +34,8 @@ django-imagekit = "*"
 xhtml2pdf = "*"
 reportlab = "==3.6.6"
 pyzstd = "*"
+django-dbbackup = "*"
+django-crontab = "*"
 
 [requires]
 python_version = "3.8"

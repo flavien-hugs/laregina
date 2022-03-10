@@ -67,3 +67,4 @@ venv.bak/
 logs
 media
 .idea
+db_backup/
