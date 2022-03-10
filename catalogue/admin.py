@@ -75,14 +75,16 @@ class ProductAdmin(SummernoteModelAdmin):
     actions = [export_to_csv]
 
     @mark_safe
-    @admin.display(description="Product URL")
+    @admin.display(description="Voir le produit")
     def product_link(self, instance):
         if instance.slug:
             product_url = instance.get_absolute_url()
             link = f"""
-                <a title="view {instance.name} on website" target="_blank" href="{product_url}">
-                {product_url}</a>
+                <a title="view {instance.name} on website"
+                    target="_blank" href="{product_url}">
+                    Voir
+                </a>
             """
             return format_html(link)
         else:
-            return 'not product url'
+            return 'Aucun lien'
