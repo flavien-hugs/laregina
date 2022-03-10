@@ -1,14 +1,15 @@
 <!-- includes/partials/_partials_promotion_list -->
 
-{% if promotion_object_list %}
-	<div class="ps-shop-banner py-3">
-		<div class="ps-carousel--nav-inside owl-slider" data-owl-auto="true" data-owl-loop="true" data-owl-speed="5000" data-owl-gap="0" data-owl-nav="true" data-owl-dots="true" data-owl-item="1" data-owl-item-xs="1" data-owl-item-sm="1" data-owl-item-md="1" data-owl-item-lg="1" data-owl-duration="1000" data-owl-mousedrag="on">
-			{% for object in promotion_object_list %}
-				<a href="{{ object.get_absolute_url }}">
-					<img class="img-fluid" src="{{ object.get_image_url }}" alt="{{ object.name }}">
-				</a>
-			{% endfor %}
-		</div>
-	</div>
+{% if campaign_object_list %}
+    <section class="container my-3">
+        <div class="row">
+            {% for object in campaign_object_list %}
+                <div class="col-xl-6 col-lg-6 col-sm-12 col-12 pl-0 {% if forloop.last %}pr-0{% endif %}">
+                    <a href="{{ object.get_absolute_url }}">
+						<img src="{{ object.get_image_url }}" alt="{{ object.name|slugify }}">
+					</a>
+                </div>
+            {% endfor %}
+        </div>
+    </section>
 {% endif %}
-

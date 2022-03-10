@@ -1,6 +1,7 @@
 {% extends "index.html" %}
+{% load catalogue_tags pages_tags %}
 
-{% block title %} {{ page_title|capfirst }} {% endblock title %}
+{% block title %}{{ page_title|capfirst }} {% endblock title %}
 
 
 {% block content %}
@@ -10,10 +11,10 @@
     {% include "includes/partials/_partials_breadcrumb.html" %}
 
     <section class="ps-store-list pt-2 border-bottom">
-        <div class="container">
+        <div class="container mb-4">
             <div class="ps-section__wrapper">
                 <section class="ps-store-box">
-                    <div class="ps-section__header pb-lg-3 pb-3">
+                    <div class="ps-section__header pb-lg-3 pb-3 mb-4">
                         <p class="font-weight-bold">
                             {{ vendor_list_object.count }} boutique{{ vendor_list_object.count|pluralize:'s' }}
                             trouvé{{ vendor_list_object.count|pluralize }}
@@ -21,7 +22,7 @@
                     </div>
 
                     <div class="ps-section__content">
-                        <div class="row">
+                        <div class="row mb-4">
                             {% for vendor in vendor_list_object %}
                                 <div class="col-xl-3 col-lg-3 col-md-6 col-6">
                                     <article class="ps-block text-center shadow-sm">
@@ -44,9 +45,26 @@
                                 </div>
                             {% endfor %}
                         </div>
+                        {% include "catalogue/partials/_partials_pagination.html" %}
                     </div>
                 </section>
             </div>
+
+            {% if get_news_arrivals %}
+                {% product_promotion_object get_news_arrivals 'Nouveautés' %}
+            {% endif %}
+
+            {% publicity_list %}
+
+            {% if destockages %}
+                {% product_promotion_object destockages 'Destockages' %}
+            {% endif %}
+
+            {% annonce_list %}
+
+            {% if sales_flash %}
+                {% product_promotion_object sales_flash 'Ventes Flash' %}
+            {% endif %}
         </div>
     </section>
 {% endblock content %}

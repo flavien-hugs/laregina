@@ -1,6 +1,3 @@
-<!-- includes/partials/_partials_product_list -->
-{% load catalogue_tags %}
-
 <section class="ps-section--default border-bottom">
     <div class="ps-section__header mb-2">
         <h3 class="text-muted font-weight-bold">{{ header_text }}</h3>
@@ -8,7 +5,7 @@
     
     <div class="container py-5">
         <div class="row">
-            {% for instance in object_list|shuffle|slice:'0:6' %}
+            {% for instance in object_list|slice:'0:6' %}
                 <div class="col-xl-3 col-lg-3 col-md-4 col-sm-6 col-6">
                     {% include "catalogue/snippet/_snippet_product.html" with instance=instance %}
                 </div>

@@ -1,13 +1,23 @@
-{% if video_object_list %}
-    <section class="container py-3 mb-2">
-        <div class="row">
-            {% for object in video_object_list %}
-                <div class="col-xl-6 col-lg-6 col-sm-12 col-12 pl-0 {% if forloop.last %}pr-0{% endif %}">
-                    <video class="embed-responsive embed-responsive-16by9 embed-responsive-item" controls="controls">
-                        <source src="{{ object.get_video_url }}" type="video/mp4">
-                    </video>
-                </div>
-            {% endfor %}
+{% if movie or campaign %}
+    <section class="ps-deal-of-day container bg-white py-5">
+        <div class="ps-section__content">
+            <div class="row">
+                {% if movie %}
+                    <div class="col-xl-6 col-lg-6 col-sm-12 col-12">
+                        <video class="embed-responsive embed-responsive-4by3" controls="controls">
+                            <source src="{{ movie.get_video_url }}" type="video/mp4">
+                        </video>
+                    </div>
+                {% endif %}
+
+                {% if campaign %}
+                    <div class="col-xl-6 col-lg-6 col-sm-12 col-12 pl-0 {% if forloop.last %}pr-0{% endif %}">
+                        <a href="{{ campaign.get_absolute_url }}">
+                            <img src="{{ campaign.get_image_url }}" alt="{{ campaign.name|slugify }}">
+                        </a>
+                    </div>
+                {% endif %}
+            </div>
         </div>
     </section>
 {% endif %}
