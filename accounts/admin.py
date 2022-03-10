@@ -97,7 +97,11 @@ class UserAdmin(admin.ModelAdmin):
     def show_vendor_url(self, instance):
         if instance.is_seller:
             url = instance.get_absolute_url()
-            response = format_html(f"""<a target="_blank" href="{url}">{url}</a>""")
+            response = format_html(
+                f"""<a target="_blank" href="{url}">
+                Afficher
+                </a>"""
+            )
             return response
         else:
-            return "not url"
+            return "Aucun lien"
