@@ -158,11 +158,6 @@ def recommended_from_views(request):
 
 
 def get_recently_viewed(request):
-
-    """ 
-        obtenir les produits les plus
-        récemment consultés pour le client actuel
-    """
     from analytics.models import ProductView
     t_id = tracking_id(request)
     views = ProductView.objects.filter(

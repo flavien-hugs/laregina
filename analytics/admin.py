@@ -2,7 +2,7 @@
 
 from django.contrib import admin
 
-from analytics.models import ProductView 
+from analytics.models import ProductView
 from services.export_data_csv import export_to_csv
 
 
@@ -11,7 +11,6 @@ class AnalyticsAdmin(admin.ModelAdmin):
     date_hierarchy = 'date_viewed'
 
     list_display = [
-        'user',
         'ip_address',
         'product',
         'date_viewed',
