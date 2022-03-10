@@ -5,10 +5,10 @@
     <figure>
         <div class="ps-wrapper">
             <div class="ps-product__gallery" data-arrow="true">
-                {% for object in object.product_images.all %}
+                {% for obj in object.images.all %}
                     <div class="item">
-                        <a href="{{ object.image }}">
-                            <img loading="lazy" src="{% if object.image.url %} {{ object.image.url }} {% else %} {{ STATIC_PREFIX }}img/empty_image.svg{% endif %}" alt="{{ object.product.name }}">
+                        <a href="{{ obj.image }}">
+                            <img src="{{ obj.image.url }}" alt="{{ obj.product.name|slugify }}">
                         </a>
                     </div>
                 {% endfor %}
@@ -17,9 +17,9 @@
     </figure>
 
     <div class="ps-product__variants" data-item="4" data-md="4" data-sm="4" data-arrow="false">
-        {% for obj in object.product_images.all %}
+        {% for obj in object.images.all %}
             <div class="item">
-                <img src="{% if obj.image.url %} {{ obj.image.url }} {% else %} {{ STATIC_PREFIX }}img/empty_image.svg{% endif %}" alt="{{ obj.product.name }}">
+                <img src="{{ obj.image.url }}" alt="{{ obj.product.name|slugify }}">
             </div>
         {% endfor %}
     </div>
