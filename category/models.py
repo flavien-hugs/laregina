@@ -61,6 +61,7 @@ class Category(MPTTModel, ModelSlugMixin, BaseTimeStampModel):
         db_table = 'category_db'
         verbose_name_plural = 'catégories'
         unique_together = (('parent', 'slug',))
+        indexes = [models.Index(fields=['id'])]
 
     def get_slug_list(self):
         try:
