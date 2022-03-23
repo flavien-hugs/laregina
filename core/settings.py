@@ -416,13 +416,6 @@ SUMMERNOTE_CONFIG = {
     },
 }
 
-# Django-compressor config
-# https://django-compressor.readthedocs.io/en/stable/settings/#settings
-
-COMPRESS_ENABLED = True
-COMPRESS_STORAGE = "compressor.storage.GzipCompressorFileStorage"
-
-
 # Configure as cache backend
 # https://pypi.org/project/django-redis/
 
