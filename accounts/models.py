@@ -32,8 +32,9 @@ UNIQUE_AND_DB_INDEX = {'null': False, 'unique': True, 'db_index': True}
 
 
 class User(
-    BaseOrderInfo, ModelSlugMixin, AbstractBaseUser,
-    PermissionsMixin):
+    BaseOrderInfo, ModelSlugMixin,
+    AbstractBaseUser, PermissionsMixin
+):
 
     CIVILITY_CHOICES = (
         ('M.', 'M.'),
