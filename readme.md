@@ -5,7 +5,7 @@
 [![Python Version](https://img.shields.io/badge/Python-3.6-brightgreen.svg)](https://www.python.com)
 
 
-![LaRegina Deals](https://github.com/flavien-hugs/cgicmkp/blob/master/screenshort.png "screenshot description")
+![LaRegina Deals](https://github.com/flavien-hugs/cgicmkp/blob/main/screenshort.png "screenshot description")
 
 LaRegina une plateforme de marché numérique.
 
