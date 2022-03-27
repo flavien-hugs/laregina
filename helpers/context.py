@@ -1,6 +1,6 @@
 # core/context.py
 
-from core import settings
+from django.conf import settings
 
 
 # HEAD META
