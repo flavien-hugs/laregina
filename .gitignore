@@ -57,6 +57,7 @@ db.sqlite3
 
 # Environments
 .env
+.ENV
 .venv
 env/
 venv/
@@ -64,7 +65,7 @@ ENV/
 env.bak/
 venv.bak/
 .vscode
-
+logs/*
 Pipfile.lock
 *.sqlite3
 *.lock
@@ -75,4 +76,4 @@ local/
 staticfiles
 debug
 */migrations/*.py
-*/db_backup/*.dump
+db_backup/*.dump
