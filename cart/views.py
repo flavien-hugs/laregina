@@ -1,12 +1,12 @@
 # cart.views.py
 
+from django.conf import settings
 from django.contrib import messages
 from django.shortcuts import render
 from django.http import HttpResponseRedirect
 from django.views.decorators.csrf import csrf_exempt
 
 from cart import cart
-from core import settings
 from checkout import checkout
 from pages.models import Campaign
 
