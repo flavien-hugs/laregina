@@ -36,7 +36,7 @@ class CartItem(models.Model):
         verbose_name_plural = 'panier'
 
     def __str__(self):
-        return "{product}".format(product=self.product)
+        return f"{self.product}"
 
     def total(self):
         return self.quantity * self.product.price
@@ -46,20 +46,16 @@ class CartItem(models.Model):
         return self.product.price
 
     def get_shop_name(self):
-        return '{}'.format(self.product.user.store)
+        return f'{self.product.user.store}'
     get_shop_name.short_description='magasin'
 
     def get_product_name(self):
-        return '{}'.format(str(self.product.name))
+        return f'{str(self.product.name)}'
     get_product_name.short_description='nom du produit'
 
     def get_absolute_url(self):
         return self.product.get_absolute_url()
 
     def augment_quantity(self, quantity):
-        """
-        called when a POST request comes in for a Product
-        instance already in the shopping cart
-        """
         self.quantity = self.quantity + int(quantity)
         self.save()
