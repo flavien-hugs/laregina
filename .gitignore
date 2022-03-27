@@ -24,8 +24,6 @@ wheels/
 .installed.cfg
 *.egg
 MANIFEST
-staticfiles/
-*/migrations/*
 
 # PyInstaller
 #  Usually these files are written by a python script from a template
@@ -49,11 +47,13 @@ coverage.xml
 .hypothesis/
 .pytest_cache/
 
+# Translations
+*.mo
+*.pot
+
 # Django stuff:
-*.log
-Pipfile.lock
 local_settings.py
-*.sqlite3
+db.sqlite3
 
 # Environments
 .env
@@ -64,7 +64,15 @@ ENV/
 env.bak/
 venv.bak/
 .vscode
-logs
-media
+
+Pipfile.lock
+*.sqlite3
+*.lock
+logs/*.log
+media/
+local/
 .idea
-db_backup/
+staticfiles
+debug
+*/migrations/*.py
+*/db_backup/*.dump
