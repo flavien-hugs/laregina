@@ -136,18 +136,14 @@ ACCOUNT_FORMS = {
 # La valeur d'affichage de l'utilisateur est le nom du profil associé
 ACCOUNT_USER_DISPLAY = lambda user: user.shipping_first_name
 
-EMAIL_PORT = 587
-EMAIL_USE_TLS = True
-EMAIL_HOST = 'smtp-relay.sendinblue.com'
-EMAIL_HOST_USER = 'flavienhgs@gmail.com'
-EMAIL_HOST_PASSWORD = config('EMAIL_HOST_PASSWORD')
-SENDGRID_API_KEY = config('SENDGRID_API_KEY', default='')
-DEFAULT_FROM_EMAIL = SERVER_EMAIL = 'hello@laregina.com'
-
-# Pour le développement, envoyer tous les courriers électroniques
-# à la console au lieu de les envoyer
-
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = config('EMAIL_HOST')
+EMAIL_PORT = config('EMAIL_PORT')
+EMAIL_USE_TLS = config('EMAIL_USE_TLS')
+EMAIL_HOST_USER = config('EMAIL_HOST_USER')
+EMAIL_HOST_PASSWORD = config('EMAIL_HOST_PASSWORD')
+DEFAULT_FROM_EMAIL = SERVER_EMAIL = 'no-reply@laregina.deals'
+
 
 # https://docs.djangoproject.com/fr/3.0/ref/settings/
 # Let's Encrypt ssl/tls https
