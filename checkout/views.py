@@ -34,7 +34,6 @@ def show_checkout(request, template='checkout/checkout.html'):
         if form.is_valid():
             response = checkout.process(request)
             order_id = response.get('order_id', 0)
-            print(order_id)
             if order_id:
                 request.session['order_id'] = order_id
                 sucess_url = reverse('checkout:order_success')
