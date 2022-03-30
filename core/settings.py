@@ -136,7 +136,6 @@ ACCOUNT_FORMS = {
 # La valeur d'affichage de l'utilisateur est le nom du profil associé
 ACCOUNT_USER_DISPLAY = lambda user: user.shipping_first_name
 
-EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = config('EMAIL_HOST')
 EMAIL_PORT = config('EMAIL_PORT')
 EMAIL_USE_TLS = config('EMAIL_USE_TLS')
