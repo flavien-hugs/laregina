@@ -9,10 +9,8 @@
             Vous êtes sur le point de vendre sur <a href="{{ site_domain }}" class="font-weight-bold text-primary">{{ site_name }}</a> et atteindre des centaines des clients !
 
             Pour continuer votre inscription,
-            vérifiez votre adresse email en cliquant sur le lien :
-            <a class="btn btn-block btn-shadow" href="{{ activate_url }}" target="_blank">
-                <span class="text-uppercase font-weight-bold">
-            Confirmer votre adresse électronique</span></a>
+            vérifiez votre adresse email en cliquant sur le lien : {{ activate_url }}
+            pour confirmer votre adresse électronique
         {% endwith %}
     {% endautoescape %}
 {% endblock content %}
