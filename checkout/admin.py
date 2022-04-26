@@ -20,11 +20,13 @@ class OrderItemStackedInline(admin.StackedInline):
         'get_product_name',
         'get_product_price',
         'quantity',
-        'total'
+        'total',
+        'date_updated',
+        'date_created'
     ]
-    exclude = ['product']
+    exclude = ['product', 'created_at']
     extra = 1
-    max_num = 1
+    max_num = 0
     show_change_link = True
     verbose_name = "commandes"
 
