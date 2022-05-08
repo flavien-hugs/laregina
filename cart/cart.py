@@ -1,6 +1,7 @@
 # cart.cart.py
 
 import random
+import string
 from decimal import Decimal
 from django.db.models import Max
 from django.conf import settings
@@ -27,7 +28,7 @@ def _cart_id(request):
 def _generate_cart_id():
 
     cart_id = ''
-    characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz1234567890!@#$%^&*()'
+    characters = string.ascii_letters + string.ascii_lowercase + string.digits
     cart_id_length = 50
     for y in range(cart_id_length):
         cart_id += characters[random.randint(0, len(characters)-1)]
@@ -95,10 +96,9 @@ def cart_subtotal(request):
 
     cart_total = Decimal('0')
     cart_products = get_cart_items(request)
-    delivery_fee = int('1500')
     for cart_item in cart_products:
         cart_total += cart_item.product.price * cart_item.quantity
-    return int(cart_total) + delivery_fee
+    return int(cart_total)
 
 
 def cart_distinct_item_count(request):
@@ -116,7 +116,7 @@ def empty_cart(request):
 
 
 def remove_old_cart_items():
-    
+
     print("Enlever les anciennes commandes")
     remove_before = datetime.now() + timedelta(days=-settings.SESSION_COOKIE_DAYS)
     cart_ids = []
