@@ -19,7 +19,8 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = config('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = TEMPLATE_DEBUG = config('DEBUG', default=True, cast=bool)
+DEBUG = True
+TEMPLATE_DEBUG = DEBUG
 DEFAULT_CHARSET = 'UTF-8'
 SITE_DESCRIPTION = ""
 INDEX_DESCRIPTION = "Vente et achat en ligne Informatiques, Électromenager, Habillement et mode, Téléphones, TV, Jeux Vidéos"
