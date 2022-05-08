@@ -86,11 +86,13 @@
                                     {% endfor %}
 
                                     <tr class="bg-light">
-                                        <td class="font-weight-bold" colspan="4">
-                                        <h3>Total</h3><small>(+ Frais de livraison 1500 Fr)</small></td>
+                                        <td class="font-weight-bold" rowspan="3" colspan="4">
+                                            <h3>Total</h3><small>(Livraison gratuite)</small>
+                                        </td>
                                         <td data-label='Sous-total'>
-                                        <h3><span class="font-weight-bold" style="color:#f30">
-                                        {{ cart_subtotal|intcomma }} Fr</span></h3></td>
+                                            <h3><span class="font-weight-bold" style="color:#f30">
+                                            {{ cart_subtotal|intcomma }} Fr</span></h3>
+                                        </td>
                                     </tr>
                                 </tbody>
                             </table>
