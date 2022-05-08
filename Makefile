@@ -20,7 +20,7 @@ install: venv ## Install or update dependencies
 	pipenv sync
 
 freeze: ## Pin current dependencies
-	pipenv lock -r > requirements.txt
+	pipenv run pip freeze > requirements.txt
 
 migrate: ## Make and run migrations
 	$(MANAGE) makemigrations
