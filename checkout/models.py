@@ -108,7 +108,7 @@ class Order(BaseOrderInfo, BaseTimeStampModel):
         total = decimal.Decimal('0')
         for item in self.order_items():
             total += item.total
-        total = total + 1500
+        total = total
         return total
 
     @admin.display(description="montant réglé")
@@ -133,7 +133,7 @@ class Order(BaseOrderInfo, BaseTimeStampModel):
 
     @admin.display(description="cash du vendeur")
     def total_seller_order(self):
-        total_se_ = self.get_order_total() - 1500
+        total_se_ = self.get_order_total()
         return total_se_
 
     @admin.display(description="commission")
