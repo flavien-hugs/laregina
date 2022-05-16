@@ -39,11 +39,11 @@ class CartItem(models.Model):
         return f"{self.product}"
 
     def total(self):
-        return self.quantity * self.product.price
+        return self.quantity * self.product.get_product_price()
 
     @property
     def price(self):
-        return self.product.price
+        return self.product.get_product_price()
 
     def get_shop_name(self):
         return f'{self.product.user.store}'

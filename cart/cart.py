@@ -97,7 +97,7 @@ def cart_subtotal(request):
     cart_total = Decimal('0')
     cart_products = get_cart_items(request)
     for cart_item in cart_products:
-        cart_total += cart_item.product.price * cart_item.quantity
+        cart_total += cart_item.product.get_product_price() * cart_item.quantity
     return int(cart_total)
 
 
