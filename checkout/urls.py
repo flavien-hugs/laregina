@@ -9,5 +9,5 @@ from checkout import views
 app_name = 'checkout'
 urlpatterns = [
     path('', views.show_checkout, name='checkout'),
-    path('commande/success/', views.order_success_view, name='order_success'),
+    path('commande/success/<order_id>', views.order_success_view, name='order_success'),
 ]
