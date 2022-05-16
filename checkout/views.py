@@ -1,11 +1,11 @@
 # checkout.views.py
 
 from django.template import Context
-from django.shortcuts import render
 from django.views.generic import ListView
 from django.urls import reverse, reverse_lazy
 from django.template.loader import get_template
 from django.views.decorators.csrf import csrf_exempt
+from django.shortcuts import render, get_object_or_404
 from django.http import HttpResponse, HttpResponseRedirect
 
 from cart import cart
@@ -35,8 +35,11 @@ def show_checkout(request, template='checkout/checkout.html'):
             response = checkout.process(request)
             order_id = response.get('order_id', 0)
             if order_id:
-                request.session['order_id'] = order_id
-                sucess_url = reverse('checkout:order_success')
+                request.session['order_id'] = str(order_id)
+                sucess_url = reverse(
+                    'checkout:order_success',
+                    kwargs={"order_id": order_id}
+                )
             return HttpResponseRedirect(sucess_url)
     else:
         if request.user.is_authenticated:
@@ -54,21 +57,17 @@ def show_checkout(request, template='checkout/checkout.html'):
     return render(request, template, context)
 
 
-def order_success_view(request, template='checkout/checkout_success.html'):
+def order_success_view(request, order_id, template='checkout/checkout_success.html'):
 
-    order_id = request.session.get('order_id', '')
+    order_id = request.session.get('order_id')
 
-    if order_id:
-        order = Order.objects.filter(transaction_id=order_id)[0]
-        order_items = OrderItem.objects.filter(order=order)
-    else:
-        cart_url = reverse('cart:cart')
-        return HttpResponseRedirect(cart_url)
-
+    order = get_object_or_404(Order, transaction_id=order_id)
+    order_items = OrderItem.objects.filter(order=order)
+    checkout.send_sms_order(order_id)
     context = {
+        'object': order,
+        'order_items':order_items,
         'page_title': 'Commande validée',
-        'object': Order.objects.filter(transaction_id=order_id)[0],
-        'order_items': OrderItem.objects.filter(order=order),
         'CINETPAY_API_KEY': settings.CINETPAY_API_KEY,
         'CINETPAY_SITE_ID': settings.CINETPAY_SITE_ID,
     }
