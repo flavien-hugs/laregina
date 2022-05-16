@@ -36,6 +36,7 @@ reportlab = "==3.6.6"
 pyzstd = "*"
 django-dbbackup = "*"
 django-crontab = "*"
+requests = "*"
 
 [requires]
 python_version = "3.8"
