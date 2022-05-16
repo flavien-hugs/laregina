@@ -25,7 +25,7 @@
                                 <p>
                                     <strong>Vendu par:</strong> {{ obj.product.user.store }}
                                 </p>
-                                <small>{{ obj.quantity }} x {{ obj.price }}</small>
+                                <small>{{ obj.quantity }} x {{ obj.get_product_price }}</small>
                             </div>
                         </article>
                     {% endfor %}
