@@ -5,10 +5,15 @@ from django.contrib import messages
 from django.urls import reverse_lazy
 from django.http import HttpResponseRedirect
 from django.contrib.auth import get_user_model
+from django.contrib.auth.decorators import login_required
 from django.contrib.messages.views import SuccessMessageMixin
+from django.shortcuts import render, redirect, get_object_or_404
 
 from catalogue.models import Product
 from pages.mixins import PromotionMixin
+
+from voucher.models import Voucher
+from voucher.forms import VoucherCreateForm
 from checkout.models import Order, OrderItem
 from catalogue.forms import ProductCreateFormSet
 
@@ -313,3 +318,99 @@ class ProductDeleteView(
 
 
 product_delete_view = ProductDeleteView.as_view()
+
+
+@login_required
+def voucher_create_view(
+    request,
+    template="dashboard/seller/includes/_partials_voucher_create.html"
+):
+
+    if request.method == 'POST':
+        form = VoucherCreateForm(
+            request.user,
+            request.POST or None
+        )
+        if form.is_valid():
+            voucher = form.save(commit=False)
+            voucher.user = request.user
+            voucher.save()
+            messages.success(
+                request, "La réduction a été appliqué avec success !"
+            )
+            return redirect('seller:voucher_list')
+        else:
+            messages.error(
+                request, "Vérifier les informations fournies !"
+            )
+    else:
+        form = VoucherCreateForm(request.user)
+
+    context = {
+        'form': form,
+        'page_title': 'appliquer un pourcentage de réduction',
+        'subtitle': 'appliquer un pourcentage',
+    }
+    return render(request, template, context)
+
+
+voucher_create_view = voucher_create_view
+
+
+def voucher_update_view(
+    request, pk,
+    template="dashboard/seller/includes/_partials_voucher_create.html"
+):
+    obj = get_object_or_404(Voucher, pk=pk)
+    form = VoucherCreateForm(
+        request.user,
+        request.POST or None,
+        instance=obj
+    )
+    if form.is_valid():
+        form.save()
+        msg = f'Mise à jour de "{obj}" effectuée avec succes !'
+        messages.success(request, msg)
+        return redirect("seller:voucher_list")
+
+    context = {
+        'form': form,
+        'page_title': f'mise à jour des {obj}',
+        'subtitle': f'mise à jour des {obj}'
+    }
+
+    return render(request, template, context)
+
+
+voucher_update_view = voucher_update_view
+
+
+class VoucherDeleteView(SuccessMessageMixin, generic.DeleteView):
+    model = Voucher
+    form_class = VoucherCreateForm
+    success_message = 'Suppression effectuée avec succes !'
+    success_url = reverse_lazy('seller:voucher_list')
+
+    def form_valid(self, form):
+        return HttpResponseRedirect(self.get_success_url())
+
+
+voucher_delete_view = VoucherDeleteView.as_view()
+
+
+class VoucherListView(
+    SellerRequiredMixin, generic.ListView
+):
+    model = Voucher
+    paginate_by = 10
+    extra_context = {
+        "subtitle": "listes des réductions",
+        "page_title": "listes de vos réductions"
+    }
+    template_name = "dashboard/seller/includes/_partials_voucher_list.html"
+
+    def get_queryset(self):
+        return self.model.objects.all()
+
+
+voucher_list_view = VoucherListView.as_view()
