@@ -3,10 +3,12 @@
 {% url "account_logout" as logout %}
 {% url 'seller:profile' as dashbord_url %}
 {% url "seller:order_list" as seller_order_list %}
+{% url "seller:voucher_list" as voucher_list_url %}
+{% url "seller:voucher_create" as voucher_create_url %}
 {% url "seller:product_list" as seller_product_list %}
 {% url "seller:promotion_list" as promotion_list_url %}
-{% url "seller:promotion_create" as promotion_create_url %}
 {% url "seller:product_create" as seller_product_create %}
+{% url "seller:promotion_create" as promotion_create_url %}
 
 <nav class="navbar navbar-dark navbar-theme-primary px-4 col-12 d-lg-none">
     <div class="d-flex align-items-center">
@@ -181,6 +183,49 @@
                                 <span class="sidebar-text-contracted">A</span>
                                 <span class="sidebar-text fw-extrabold">
                                 Faire une promo</span>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </li>
+
+            <li class="nav-item">
+                <span class="nav-link d-flex justify-content-between align-items-center" data-bs-toggle="collapse" data-bs-target="#submenu-reductions">
+                    <span>
+                        <span class="sidebar-icon">
+                            <svg class="icon icon-xs me-2" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M3 4a1 1 0 011-1h12a1 1 0 011 1v2a1 1 0 01-1 1H4a1 1 0 01-1-1V4zM3 10a1 1 0 011-1h6a1 1 0 011 1v6a1 1 0 01-1 1H4a1 1 0 01-1-1v-6zM14 9a1 1 0 00-1 1v6a1 1 0 001 1h2a1 1 0 001-1v-6a1 1 0 00-1-1h-2z"></path></svg>
+                        </span>
+                        <span class="sidebar-text fw-extrabold">Réductions</span>
+                    </span>
+
+                    <span class="link-arrow">
+                        <svg class="icon icon-sm" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd"></path></svg>
+                    </span>
+                </span>
+
+                <div
+                    class="multi-level collapse {% if request.resolver_match.url_name == 'voucher_list' or request.resolver_match.url_name == 'voucher_create' or request.resolver_match.url_name == 'voucher_update' %}show{% endif %}"
+                    role="list" id="submenu-reductions"
+                    aria-expanded="false"
+                >
+                    <ul class="flex-column nav">
+                        <li 
+                            class="nav-item {% if request.resolver_match.url_name == 'voucher_list' %}active{% endif %}"
+                        >
+                            <a href="{{ voucher_list_url }}" class="nav-link">
+                                <span class="sidebar-text-contracted">L</span>
+                                <span class="sidebar-text fw-extrabold">
+                                Liste des réductions</span>
+                            </a>
+                        </li>
+
+                        <li 
+                            class="nav-item {% if request.resolver_match.url_name == 'voucher_create' %}active{% endif %}"
+                        >
+                            <a href="{{ voucher_create_url }}" class="nav-link">
+                                <span class="sidebar-text-contracted">R</span>
+                                <span class="sidebar-text fw-extrabold">
+                                Faire une réduction</span>
                             </a>
                         </li>
                     </ul>

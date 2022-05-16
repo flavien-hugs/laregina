@@ -3,11 +3,12 @@
 
 {% block block_extra_breadcrumb %}
     
-    {% url "seller:promotion_create" as promotion_create_url %}
+    {% url "seller:voucher_create" as voucher_create_url %}
 
     <div class="btn-toolbar mb-2 mb-md-0">
-        <a href="{{ promotion_create_url }}" class="btn btn-sm btn-secondary d-inline-flex align-items-center">
-            <svg class="icon icon-xs me-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path></svg> Faire une promotion
+        <a href="{{ voucher_create_url }}" class="btn btn-sm btn-secondary d-inline-flex align-items-center border-none">
+            <svg class="icon icon-xs me-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path></svg>
+            Appliquer une réduction sur certains produits
         </a>
     </div>
 {% endblock block_extra_breadcrumb %}
@@ -34,7 +35,8 @@
                 <thead class="thead-light">
                     <tr>
                         <th class="border-bottom">id</th>
-                        <th class="border-bottom">produit</th>
+                        <th class="border-bottom">Pourcentage</th>
+                        <th class="border-bottom">Nombre de produits</th>
                         <th class="border-bottom">date</th>
                         <th class="border-bottom">status</th>
                         <th class="border-bottom">action</th>
@@ -46,18 +48,14 @@
                         <tr>
                             <td><span class="text-primary fw-bold">{{ forloop.counter }}</span></td>
                             <td>
-                                <a target="_blank" href="{{ object.product.get_absolute_url }}" class="d-flex align-items-center">
-                                    <img
-                                    src="{{ object.product.get_image_url }}"
-                                    class="avatar rounded-circle me-3"
-                                    alt="{{ object.product.name|slugify }}"
-                                    >
-                                    <div class="d-block">
-                                        <span class="fw-bold">{{ object.product.name|capfirst|safe }}</span>
-                                        <div class="small text-gray">
-                                        PROMO: {{ object.campaign.name|safe }}</div>
-                                    </div>
+                                <a href="{{ object.get_update_voucher_url }}" class="d-flex align-items-center">
+                                    {{ object|capfirst }}
                                 </a>
+                            </td>
+                            <td>
+                                <span>
+                                    {{ object.get_products_count }}
+                                </span>
                             </td>
                             <td><span>{{ object.created_at|date:"SHORT_DATE_FORMAT" }}</span></td>
                             <td>
@@ -79,20 +77,16 @@
                                     </button>
 
                                     <div class="dropdown-menu dashboard-dropdown dropdown-menu-start mt-2 py-1" style="">
-                                        <a class="dropdown-item d-flex align-items-center" href="{{ object.get_absolute_url }}">
-                                            <svg class="dropdown-icon text-gray-400 me-2" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M10 12a2 2 0 100-4 2 2 0 000 4z"></path><path fill-rule="evenodd" d="M.458 10C1.732 5.943 5.522 3 10 3s8.268 2.943 9.542 7c-1.274 4.057-5.064 7-9.542 7S1.732 14.057.458 10zM14 10a4 4 0 11-8 0 4 4 0 018 0z" clip-rule="evenodd"></path></svg>
-                                            Detail
-                                        </a>
 
                                         <a 
                                             class="dropdown-item d-flex align-items-center"
-                                            href="{{ object.get_update_promo_url }}"
+                                            href="{{ object.get_update_voucher_url }}"
                                         >
                                             <svg class="icon icon-xs me-2" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M17.414 2.586a2 2 0 00-2.828 0L7 10.172V13h2.828l7.586-7.586a2 2 0 000-2.828z"></path><path fill-rule="evenodd" d="M2 6a2 2 0 012-2h4a1 1 0 010 2H4v10h10v-4a1 1 0 112 0v4a2 2 0 01-2 2H4a2 2 0 01-2-2V6z" clip-rule="evenodd"></path></svg>
                                             Modifier
                                         </a>
                                         
-                                        <form method="post" action="{{ object.get_delete_promo_url }}">
+                                        <form method="post" action="{{ object.get_delete_voucher_url }}">
                                             {% csrf_token %}
                                             <button class="dropdown-item d-flex align-items-center">
                                                 <svg class="dropdown-icon text-danger me-2" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z" clip-rule="evenodd"></path></svg> Suppimer
@@ -108,7 +102,9 @@
 
             {% include "dashboard/seller/includes/_partials_pagination.html" %}
         {% else %}
-        {% url "seller:promotion_create" as create_promotion %}
+            
+            {% url "seller:voucher_create" as voucher_create_url %}
+
             <div class="text-center py-2">
                 <span class="d-flex justify-content-center">
                     <img class="img-fluid" height="160" width="160"
@@ -116,12 +112,14 @@
                         alt="empty-cart-{{ page_title }}">
                 </span>
 
-                <p class="font-weight-bold">Vous n'avez aucune promotion en cours.</p>
+                <p class="font-weight-bold">
+                    Vous n'avez aucune réduction en cours.
+                </p>
 
-                <a href="{{ create_promotion }}" class="btn btn-outline-gray-500 d-inline-flex align-items-center justify-content-center dashed-outline">
+                <a href="{{ voucher_create_url }}" class="btn btn-outline-gray-500 d-inline-flex align-items-center justify-content-center dashed-outline">
                     <span class="text-uppercase font-weight-bold py-2">
                         <svg class="icon icon-xs me-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path></svg>
-                        faire une promotion
+                        appliquer une réduction sur certains produits
                     </span>
                 </a>
             </div>
