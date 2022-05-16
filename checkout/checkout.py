@@ -1,7 +1,9 @@
 # checkout.checkout.py
 
-import urllib
+import requests
+
 from django.urls import reverse
+from django.conf import settings
 
 from cart import cart
 from checkout.forms import CheckoutForm
@@ -55,3 +57,20 @@ def create_order(request):
         # tout est prêt, videz le chariot
         cart.empty_cart(request)
     return order
+
+
+SENDER_ID = settings.SENDER_ID
+SMS_API_KEY = settings.SMS_API_KEY
+
+
+def send_sms_order(order_id):
+
+    order = Order.objects.get(transaction_id=order_id)
+    order_transaction_id = order.transaction_id
+    destinataire = order.phone
+    message = f"Bonjour, votre commande {order_transaction_id} a été validée avec succès. Merci pour votre achat sur laregina.deals."
+
+    SEND_SMS_URL = f"https://sms.lws.fr/sms/api?action=send-sms&api_key={SMS_API_KEY}&to={destinataire}&from={SENDER_ID}&sms={message}"
+
+    response = requests.post(SEND_SMS_URL)
+    return response
