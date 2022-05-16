@@ -17,6 +17,7 @@ from mptt.models import TreeForeignKey
 from helpers.utils import(
     upload_image_path, unique_slug_generator
 )
+from helpers.models import BaseTimeStampModel
 
 from imagekit.models import ImageSpecField
 from imagekit.processors import ResizeToFill, Adjust
@@ -25,10 +26,10 @@ User = settings.AUTH_USER_MODEL
 
 NULL_AND_BLANK = {'null': True, 'blank': True}
 UNIQUE_AND_DB_INDEX = {'null': False, 'unique': True, 'db_index': True}
-DECIMAFIELD_OPTION = {'default': 0, 'max_digits': 50, 'decimal_places': 0}
+DECIMAFIELD_OPTION = {'max_digits': 50, 'decimal_places': 0}
 
 
-class Product(models.Model):
+class Product(BaseTimeStampModel):
     user = models.ForeignKey(
         to=User,
         on_delete=models.CASCADE,
@@ -53,6 +54,7 @@ class Product(models.Model):
         help_text="quantité de produit"
     )
     price = models.DecimalField(
+        default=0,
         verbose_name='prix de vente',
         help_text="Le prix du produit",
         **DECIMAFIELD_OPTION,
@@ -81,16 +83,6 @@ class Product(models.Model):
         blank=True, unique=True,
         help_text='Unique value for product page URL, created automatically from name.'
     )
-    created_at = models.DateTimeField(
-        auto_now_add=True,
-        verbose_name="date de création",
-        help_text="date d'ajout automatique du produit"
-    )
-    updated_at = models.DateTimeField(
-        auto_now_add=True,
-        verbose_name='date de mise à jour',
-        help_text="date de mise à jour automatique du produit."
-    )
     timestamp = models.DateTimeField(auto_now_add=True)
 
     objects = CatalogueManager()
@@ -107,9 +99,42 @@ class Product(models.Model):
     def __str__(self):
         return self.name
 
+    def get_admin_url(self):
+        info = (self._meta.app_label, self._meta.model_name)
+        return reverse('admin:%s_%s_change' % info, args=(self.pk,))
+
+    def product_price(self):
+        if (
+            self.get_price() is not None
+            and self.get_price() < self.price
+        ):
+            return self.get_price()
+        else:
+            return self.price
+
     @admin.display(description="prix du produit")
     def get_product_price(self):
-        return self.price
+        return self.product_price()
+
+    def get_discount_products(self):
+        from voucher.models import Voucher
+        products = Voucher.objects.filter(products=self)
+        return products
+
+    @admin.display(description="% de réduction", empty_value="00")
+    def get_vouchers(self):
+        for obj in self.get_discount_products():
+            voucher = obj.discount
+            return voucher
+
+    @admin.display(description="prix réduit", empty_value="00")
+    def get_vouchers_price(self):
+        prices = [((obj.discount * self.price)/100) for obj in self.get_discount_products()]
+        return prices
+
+    def get_price(self):
+        for obj in self.get_vouchers_price():
+            return obj
 
     @admin.display(description="description du produit")
     def get_product_description(self):
