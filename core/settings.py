@@ -87,6 +87,7 @@ LOCAL_APPS = [
     'reviews.apps.ReviewsConfig',
     'cart.apps.CartConfig',
     'checkout.apps.CheckoutConfig',
+    'voucher.apps.VoucherConfig',
     'analytics.apps.AnalyticsConfig',
     'pages.apps.PagesConfig',
     'caching',
@@ -474,3 +475,6 @@ DBBACKUP_STORAGE_OPTIONS = {'location': BASE_DIR / 'db_backup'}
 CRONJOBS = [
     ('0 24 * * *', 'helpers.cron.create_backups_scheduled_job')
 ]
+
+SENDER_ID = config('SENDER_ID')
+SMS_API_KEY = config('SMS_API_KEY')
