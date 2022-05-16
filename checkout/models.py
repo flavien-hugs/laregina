@@ -202,11 +202,11 @@ class OrderItem(models.Model):
 
     @property
     def total(self):
-        return self.quantity * self.product.price
+        return self.quantity * self.get_product_price()
 
     @admin.display(description="prix unitaire")
     def get_product_price(self):
-        return self.product.price
+        return self.product.get_product_price()
 
     @admin.display(description="produit")
     def get_product_name(self):
