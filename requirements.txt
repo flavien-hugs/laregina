@@ -57,7 +57,7 @@ pyHanko==0.13.1
 pyhanko-certvalidator==0.19.5
 PyJWT==2.4.0
 pyparsing==3.0.9
-PyPDF2==1.26.0
+PyPDF2==1.27.5
 PyPDF3==1.0.6
 python-bidi==0.4.2
 python-decouple==3.6
