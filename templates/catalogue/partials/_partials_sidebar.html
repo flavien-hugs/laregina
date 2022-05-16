@@ -16,14 +16,14 @@
             <a href="{{ node.get_absolute_url }}">{{ node.name|safe }}</a>
 
             {% if not node.is_leaf_node and node.children.all %}
-            <span class="sub-toggle"><i class="fa fa-angle-down"></i></span>
-            
-            <ul class="sub-menu">
-                {% for children in node.children.all %}
-                <li><a href="{{ children.get_absolute_url }}">
-                {{ children.name }}</a></li>
-                {% endfor %} 
-            </ul>
+                <span class="sub-toggle"><i class="fa fa-angle-down"></i></span>
+                
+                <ul class="sub-menu">
+                    {% for children in node.children.all %}
+                        <li><a href="{{ children.get_absolute_url }}">
+                        {{ children.name }}</a></li>
+                    {% endfor %} 
+                </ul>
             {% endif %}
         </li>
         {% endrecursetree %}

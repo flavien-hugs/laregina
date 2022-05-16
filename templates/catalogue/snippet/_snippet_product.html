@@ -7,6 +7,11 @@
         <a href="{{ instance.get_absolute_url }}">
             <img src="{{ instance.get_image_url }}" alt="{{ instance.name|slugify }}">
         </a>
+        {% if instance.get_vouchers %}
+            <div class="ps-product__badge">
+                -{{ instance.get_vouchers }}%
+            </div>
+        {% endif %}
     </div>
 
     <div class="ps-product__container">
@@ -55,7 +60,14 @@
                     <span>{{ instance.avaregereview }}</span>
                 </div>
             {% endif %}
-            <span class="ps-product__price font-weight-bold">{{ instance.price|intcomma }} Fr</span>
+            <p class="ps-product__price sale">
+                {% if instance.get_vouchers %}
+                    {{ instance.get_product_price|intcomma }} Fr
+                    <del>{{ instance.price|intcomma }} Fr</del>
+                {% else %}
+                    {{ instance.price|intcomma }} Fr
+                {% endif %}
+            </p>
         </div>
     </div>
 </div>

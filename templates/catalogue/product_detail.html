@@ -13,18 +13,18 @@
                 </a>
             </li>
             {% if object.category.parent %}
-            <li>
-                <a href="{{ object.category.parent.get_absolute_url }}">
-                    {{ object.category.get_ancestors|tree_path|lower }}
-                </a>
-            </li>
+                <li>
+                    <a href="{{ object.category.parent.get_absolute_url }}">
+                        {{ object.category.get_ancestors|tree_path|lower }}
+                    </a>
+                </li>
             {% endif %}
             {% if object.category.name %}
-            <li>
-                <a href="{{ object.category.get_absolute_url }}">
-                    {{ object.category.name|lower }}
-                </a>
-            </li>
+                <li>
+                    <a href="{{ object.category.get_absolute_url }}">
+                        {{ object.category.name|lower }}
+                    </a>
+                </li>
             {% endif %}
 
             <li>{{ object.name|capfirst|lower|safe }}</li>
@@ -66,8 +66,15 @@
                                     <span>({{ object.countreview|safe }} avis)</span>
                                 </div>
                             </div>
-
-                            <h4 class="ps-product__price">{{ object.price|intcomma }} Fr</h4>
+                            <h4 class="ps-product__price sale">
+                                {% if object.get_vouchers %}
+                                    {{ object.get_product_price|intcomma }} Fr
+                                    <del> {{ object.price|intcomma }} Fr</del>
+                                    <small> ( -{{ object.get_vouchers }}%)</small>
+                                {% else %}
+                                    {{ object.price|intcomma }} Fr
+                                {% endif %}
+                            </h4>
 
                             <div class="ps-product__desc">
                                 {% if object.user.store %}
@@ -115,11 +122,11 @@
 
                             <div class="ps-tab" id="tab-2">
                                 {% if object.user.store %}
-                                <h4>{{ object.user.store|upper }}</h4>
-                                <p>{{ object.user.store_description|safe }}</p>
-                                <a href="{{ object.user.get_absolute_url }}">
-                                    Voir le magasin de <strong>{{ object.user.store }}</strong>
-                                </a>
+                                    <h4>{{ object.user.store|upper }}</h4>
+                                    <p>{{ object.user.store_description|safe }}</p>
+                                    <a href="{{ object.user.get_absolute_url }}">
+                                        Voir le magasin de <strong>{{ object.user.store }}</strong>
+                                    </a>
                                 {% else %}
                                     Produit vendu par l'entreprise.
                                 {% endif %}
