@@ -37,7 +37,7 @@
                             {% csrf_token %}
                             <div class="ps-product__shopping">
                                 <span class="ps-product__price">
-                                    <span>{{ object.price|intcomma }} Fr</span>
+                                    <span>{{ object.get_product_price|intcomma }} Fr</span>
                                 </span>
 
                                 <a href="{{ cart }}" class="ps-btn text-uppercase">
