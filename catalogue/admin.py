@@ -24,7 +24,7 @@ class ProductAdmin(SummernoteModelAdmin):
     date_hierarchy = 'created_at'
     fieldsets = (
         ('information sur le produit', {'fields':
-            (   
+            (
                 "user",
                 "category",
                 ("name", "price"),
@@ -46,12 +46,10 @@ class ProductAdmin(SummernoteModelAdmin):
         'get_product_shop',
     )
     list_display = [
-        'get_product_shop',
-        'name',
-        'get_product_price',
-        'avaregereview',
-        'product_link',
-        'is_active',
+        'get_product_shop', 'name',
+        'price', 'get_vouchers',
+        'get_vouchers_price', 'avaregereview',
+        'product_link', 'is_active',
         'get_product_image',
     ]
     list_filter = [
