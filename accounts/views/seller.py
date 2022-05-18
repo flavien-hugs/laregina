@@ -326,6 +326,7 @@ def voucher_create_view(
     template="dashboard/seller/includes/_partials_voucher_create.html"
 ):
 
+    form = VoucherCreateForm(request.user)
     if request.method == 'POST':
         form = VoucherCreateForm(
             request.user,
@@ -342,9 +343,7 @@ def voucher_create_view(
         else:
             messages.error(
                 request, "Vérifier les informations fournies !"
-            )
-    else:
-        form = VoucherCreateForm(request.user)
+            )        
 
     context = {
         'form': form,
@@ -363,8 +362,7 @@ def voucher_update_view(
 ):
     obj = get_object_or_404(Voucher, pk=pk)
     form = VoucherCreateForm(
-        request.user,
-        request.POST or None,
+        request.user, request.POST or None,
         instance=obj
     )
     if form.is_valid():
