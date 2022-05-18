@@ -12,7 +12,7 @@ class VoucherCreateForm(forms.ModelForm):
         required=True,
         label="Choisir les produits",
         queryset=Product.objects.all(),
-        widget=forms.SelectMultiple()
+        widget=forms.SelectMultiple
     )
 
     class Meta:
@@ -30,16 +30,8 @@ class VoucherCreateForm(forms.ModelForm):
     def __init__(self, user, *args, **kwargs):
         super(VoucherCreateForm, self).__init__(*args, **kwargs)
 
-        products = Product.objects.all().filter(user=user)
-        vouchers = Voucher.objects.filter(user=user)
-        product = [obj.pk for obj in vouchers]
-
-        if 'product' in products:
-            print(product)
-
-        products_exists_in_voucher = products.exclude(voucher__in=product)
-
-        self.fields['products'].queryset = products
+        self.fields['products'].queryset = Product.objects.filter(user=user)
+        
         for field in self.fields:
             self.fields[field].widget.attrs.update(
                 {'class': 'form-control shadow-none'}
