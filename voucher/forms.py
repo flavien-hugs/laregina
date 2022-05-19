@@ -30,7 +30,9 @@ class VoucherCreateForm(forms.ModelForm):
     def __init__(self, user, *args, **kwargs):
         super(VoucherCreateForm, self).__init__(*args, **kwargs)
 
-        self.fields['products'].queryset = Product.objects.filter(user=user)
+        products_list = Product.objects.filter(user=user)
+
+        self.fields['products'].queryset = products_list
         
         for field in self.fields:
             self.fields[field].widget.attrs.update(
