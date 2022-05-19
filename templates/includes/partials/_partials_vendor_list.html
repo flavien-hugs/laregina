@@ -26,14 +26,14 @@
                             {% for vendor in vendor_list_object %}
                                 <div class="col-xl-3 col-lg-3 col-md-6 col-6">
                                     <article class="ps-block text-center shadow-sm">
-                                        <div class="ps-block__thumbnail">
+                                        <div class="ps-block__thumbnail mb-3">
                                             <a href="{{ vendor.get_absolute_url }}">
                                                 <img src="{{ vendor.get_logo_url }}" alt="{{ object.name }}">
                                             </a>
                                         </div>
                                         <div class="ps-block__content">
                                               
-                                            <h3 class="font-weight-bold">{{ vendor.store|safe }}</h3>
+                                            <h1 class="h5 font-weight-bold text-center">{{ vendor.store|safe }}</h1>
 
                                             <div class="ps-block__author mt-xl-3 mt-sm-1">
                                                 <a class="ps-btn ps-btn--fullwidth" href="{{ vendor.get_absolute_url }}">
