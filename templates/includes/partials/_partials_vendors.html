@@ -3,13 +3,13 @@
 
 {% for object in object_vendor_recent %}
     <article class="ps-block text-center">
-        <div class="ps-block__thumbnail">
+        <div class="ps-block__thumbnail mb-2">
             <a href="{{ object.get_absolute_url }}">
                 <img src="{{ object.get_logo_url }}" alt="{{ object.name|slugify }}">
             </a>
         </div>
-        <div class="ps-block__content">
-            <a class="font-weight-bold" href="{{ object.get_absolute_url }}">
+        <div class="ps-block__content text-center">
+            <a class="h5 font-weight-bold" href="{{ object.get_absolute_url }}">
                 {{ object.store|capfirst }}
             </a>
         </div>
