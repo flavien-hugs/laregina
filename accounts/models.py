@@ -181,7 +181,7 @@ class User(
 
     def get_logo_url(self):
         if self.logo:
-            logo = self.formatted_logo.url
+            return self.formatted_logo.url
         return "/static/img/default.jpeg"
 
     def orders(self):
