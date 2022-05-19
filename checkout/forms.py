@@ -7,7 +7,7 @@ from django_countries.widgets import CountrySelectWidget
 
 
 class CheckoutForm(forms.ModelForm):
-    
+
     """
     classe de formulaire de paiement
     pour recueillir les informations d'expédition
@@ -36,8 +36,8 @@ class CheckoutForm(forms.ModelForm):
         self.fields['email'].widget.attrs['placeholder'] = 'Entrer votre adresse email'
         self.fields['shipping_last_name'].widget.attrs['placeholder'] = 'Entrer votre prénom'
         self.fields['shipping_first_name'].widget.attrs['placeholder'] = 'Entrer votre nom'
-        self.fields['phone'].widget.attrs['placeholder'] = 'Numéro de téléphone'
-        self.fields['phone_two'].widget.attrs['placeholder'] = 'Numéro téléphone supplémentaire'
+        self.fields['phone'].widget.attrs['placeholder'] = 'Exemple: +225xxxxxxxxx'
+        self.fields['phone_two'].widget.attrs['placeholder'] = 'Exemple: +225xxxxxxxxx'
         self.fields['shipping_country'].widget.attrs['placeholder'] = 'sélection un pays'
         self.fields['shipping_city'].widget.attrs['placeholder'] = 'Ville de résidence'
         self.fields['shipping_adress'].widget.attrs['placeholder'] = shipping_adress_text
