@@ -27,8 +27,6 @@
             </div>
 
             <form class="card-body" method="POST">
-                {% csrf_token %}
-
                 <div class="row">
                     <div class="col-12 col-lg-12">
                         <div class="form-group mb-4">
@@ -67,6 +65,7 @@
                         </small>
                     </div>
 
+                    {% csrf_token %}
                     <button class="btn btn-md btn-block btn-secondary mt-4 fw-extrabold text-uppercase rounded-0" type="submit">
                         valider la réduction
                     </button>
