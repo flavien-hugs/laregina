@@ -326,16 +326,15 @@ def voucher_create_view(
     template="dashboard/seller/includes/_partials_voucher_create.html"
 ):
 
-    form = VoucherCreateForm(request.user)
+    user = request.user
     if request.method == 'POST':
-        form = VoucherCreateForm(
-            request.user,
-            request.POST or None
-        )
+        form = VoucherCreateForm(user, request.POST or None)
         if form.is_valid():
             voucher = form.save(commit=False)
-            voucher.user = request.user
+            product = form.cleaned_data.get('products')
+            voucher.user = user
             voucher.save()
+            voucher.products.add(*product)
             messages.success(
                 request, "La réduction a été appliqué avec success !"
             )
@@ -343,7 +342,9 @@ def voucher_create_view(
         else:
             messages.error(
                 request, "Vérifier les informations fournies !"
-            )        
+            )
+    else:
+        form = VoucherCreateForm(request.user)
 
     context = {
         'form': form,
@@ -356,13 +357,15 @@ def voucher_create_view(
 voucher_create_view = voucher_create_view
 
 
+@login_required
 def voucher_update_view(
     request, pk,
     template="dashboard/seller/includes/_partials_voucher_create.html"
 ):
+    user = request.user
     obj = get_object_or_404(Voucher, pk=pk)
     form = VoucherCreateForm(
-        request.user, request.POST or None,
+        user, request.POST or None,
         instance=obj
     )
     if form.is_valid():
