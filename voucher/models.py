@@ -39,8 +39,6 @@ class Voucher(BaseTimeStampModel):
         verbose_name="valide oui/non ?"
     )
 
-    objects = VoucherManager()
-
     class Meta:
         ordering = ['-created_at']
         verbose_name_plural = "réductions produits"
