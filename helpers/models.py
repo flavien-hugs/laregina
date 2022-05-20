@@ -1,6 +1,5 @@
 # common.models.py
 
-
 from django.db import models
 from django.contrib import admin
 from django.utils import timezone
@@ -9,18 +8,17 @@ from django.core.validators import RegexValidator
 from django_countries.fields import CountryField
 from phonenumber_field.modelfields import PhoneNumberField
 
-
 NULL_AND_BLANK = {'null': True, 'blank': True}
 
 
 class BaseTimeStampModel(models.Model):
 
     created_at = models.DateTimeField(
-        db_index=True,
         default=timezone.now,
+        editable=False,
         verbose_name="date de création"
     )
-    updated_at = models.DateTimeField(auto_now=True)
+    updated_at = models.DateTimeField(editable=False, auto_now=True)
 
     class Meta:
         abstract = True
@@ -107,3 +105,44 @@ class BaseOrderInfo(models.Model):
 
     class Meta:
         abstract = True
+
+
+class ApplyDiscountModel(models.Model):
+    user = models.ForeignKey(
+        to='accounts.User',
+        on_delete=models.CASCADE,
+        verbose_name="store",
+        limit_choices_to={
+            'is_seller': True
+        },
+    )
+    products = models.ManyToManyField(
+        to="catalogue.Product",
+        verbose_name="produits",
+        help_text="Choisir des produits"
+    )
+    is_active = models.BooleanField(
+        verbose_name='Activé/Désactivé',
+        default=False,
+        help_text="Activé/Désactivé ?"
+    )
+
+    class Meta:
+        abstract = True
+
+    @admin.display(description="boutique")
+    def get_store(self):
+        return self.user.store
+
+    def get_status(self):
+        if self.is_active:
+            return "Active"
+        return "Désactivé"
+
+    @admin.display(description="produits")
+    def get_products(self):
+        return self.products.all()
+
+    @admin.display(description="nombre de produits")
+    def get_products_count(self):
+        return len(self.get_products())
