@@ -19,7 +19,6 @@ class ObjectViewed(models.Model):
 
     class Meta:
         abstract = True
-        db_table = 'analiytics_db'
         ordering = ('-date_viewed', '-time_viewed')
         get_latest_by = ('-date_viewed', '-time_viewed')
         verbose_name_plural = 'statistiques'
