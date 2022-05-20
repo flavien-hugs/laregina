@@ -35,9 +35,12 @@
                     <div class="ps-shopping-product">
                         <div class="row">
                             {% for obj in object_list %}
-                                <div class="col-xl-3 col-lg-3 col-md-4 col-6">
-                                    {% include "catalogue/snippet/_snippet_product.html" with instance=obj.product %}
-                                </div>
+                                {% for obj in obj.get_products %}
+                                    <div class="col-xl-3 col-lg-3 col-md-4 col-6">
+                                        {% include "catalogue/snippet/_snippet_product.html" with instance=obj %}
+                                    </div>
+                                {% empty %}
+                                {% endfor %}
                             {% empty %}
                                 <div class="col-12">
                                     <p class="text-left">Il n'y aucun produit.</p>
