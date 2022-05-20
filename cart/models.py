@@ -29,11 +29,10 @@ class CartItem(models.Model):
     )
 
     class Meta:
-        db_table = 'cart_items_db'
-        index_together = (('cart_id',),)
         ordering = ('-created_at', '-updated_at', '-cart_id')
         get_latest_by = ('-created_at', '-updated_at', '-cart_id')
         verbose_name_plural = 'panier'
+        indexes = [models.Index(fields=['id'],)]
 
     def __str__(self):
         return f"{self.product}"
