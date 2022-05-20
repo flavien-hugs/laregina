@@ -96,12 +96,12 @@ class Campaign(BaseTimeStampModel, ModelSlugMixin):
 
     DESTOCKAGE = "Destockage"
     VENTE_FLASH = "Vente Flash"
-    NOUVELLE_ARRIVAGE = "Nouvelle Arrivage"
+    NOUVELLE_ARRIVAGE = "Nouvel Arrivage"
 
     OPTION_PROMOTION_CHOICES = (
         (DESTOCKAGE, 'Destockage'),
         (VENTE_FLASH, 'Vente Flash'),
-        (NOUVELLE_ARRIVAGE, 'Nouvelle Arrivage')
+        (NOUVELLE_ARRIVAGE, 'Nouvel Arrivage')
     )
     parent = models.CharField(
         max_length=120,
