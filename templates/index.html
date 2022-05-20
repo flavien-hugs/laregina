@@ -43,52 +43,25 @@
     
     {% best_selling_products 20 %}
 
-    {% campaign_list %}
+    {% if promotions.exists %}
+        {% for object in promotions %}
+            {% if object.get_products.exists %}
+                <section class="ps-deal-of-day container bg-white mt-3 pb-3">
+                    <div class="ps-section__header py-4 mb-3">
+                        <h3>{{ object.campaign.name }}</h3>
+                        <a class="font-weight-bolder" href="{{ object.campaign.get_absolute_url }}">Voir plus</a>
+                    </div>
 
-    {% if sales_flash %}
-
-        {% url "promotion:promotion_sales_flash_list" as sales_flash_list %}
-        
-        <section class="ps-deal-of-day container bg-white mt-3 pb-3">
-            <div class="ps-section__header py-4 mb-3">
-                <h3>Ventes Flash</h3>
-                <a class="font-weight-bolder" href="{{ sales_flash_list }}">Voir plus</a>
-            </div>
-
-            <div class="ps-section__content pt-4">
-                <div class="ps-carousel--nav owl-slider" data-owl-auto="true" data-owl-loop="true" data-owl-speed="6000" data-owl-gap="30" data-owl-nav="false" data-owl-dots="false" data-owl-item="5" data-owl-item-xs="2" data-owl-item-sm="3" data-owl-item-md="4" data-owl-item-lg="4" data-owl-item-xl="5" data-owl-duration="1000" data-owl-mousedrag="on">
-                    {% for object in sales_flash %}
-                        {% for instance in object.campaigns.all %}
-                            {% include "catalogue/snippet/_snippet_product.html" with instance=instance.product %}
-                        {% endfor %}
-                    {% endfor %}
-                </div>
-            </div>
-        </section>
-
-    {% endif %}
-
-    {% if news_arrivals %}
-
-        {% url "promotion:promotion_news_arrival_list" as news_arrival_list %}
-        
-        <section class="ps-deal-of-day container bg-white mt-3 pb-3">
-            <div class="ps-section__header py-4 mb-3">
-                <h3>Nouveautés</h3>
-                <a class="font-weight-bolder" href="{{ news_arrival_list }}">Voir plus</a>
-            </div>
-
-            <div class="ps-section__content pt-4">
-                <div class="ps-carousel--nav owl-slider" data-owl-auto="true" data-owl-loop="true" data-owl-speed="5000" data-owl-gap="30" data-owl-nav="false" data-owl-dots="false" data-owl-item="5" data-owl-item-xs="2" data-owl-item-sm="3" data-owl-item-md="4" data-owl-item-lg="4" data-owl-item-xl="5" data-owl-duration="1000" data-owl-mousedrag="on">
-                    {% for object in news_arrivals %}
-                        {% for instance in object.campaigns.all %}
-                            {% include "catalogue/snippet/_snippet_product.html" with instance=instance.product %}
-                        {% endfor %}
-                    {% endfor %}
-                </div>
-            </div>
-        </section>
-
+                    <div class="ps-section__content pt-4">
+                        <div class="ps-carousel--nav owl-slider" data-owl-auto="true" data-owl-loop="true" data-owl-speed="5000" data-owl-gap="30" data-owl-nav="false" data-owl-dots="false" data-owl-item="5" data-owl-item-xs="2" data-owl-item-sm="3" data-owl-item-md="4" data-owl-item-lg="4" data-owl-item-xl="5" data-owl-duration="1000" data-owl-mousedrag="on">
+                            {% for instance in object.get_products %}
+                                {% include "catalogue/snippet/_snippet_product.html" with instance=instance %}
+                            {% endfor %}
+                        </div>
+                    </div>
+                </section>
+            {% endif %}
+        {% endfor %}
     {% endif %}
     
     <section class="ps-deal-of-day container bg-white p-3 my-3">
@@ -105,28 +78,7 @@
         </div>
     </section>
 
-    {% if destockages %}
-
-        {% url "promotion:promotion_destockage_list" as destockage_list %}
-        
-        <section class="ps-deal-of-day container bg-white mt-3 pb-3">
-            <div class="ps-section__header py-4 mb-3">
-                <h3>Déstockages</h3>
-                <a class="font-weight-bolder" href="{{ destockage_list }}">Voir plus</a>
-            </div>
-
-            <div class="ps-section__content pt-4">
-                <div class="ps-carousel--nav owl-slider" data-owl-auto="true" data-owl-loop="true" data-owl-speed="7000" data-owl-gap="30" data-owl-nav="false" data-owl-dots="false" data-owl-item="5" data-owl-item-xs="2" data-owl-item-sm="3" data-owl-item-md="4" data-owl-item-lg="4" data-owl-item-xl="5" data-owl-duration="1000" data-owl-mousedrag="on">
-                    {% for object in destockages %}
-                        {% for instance in object.campaigns.all %}
-                            {% include "catalogue/snippet/_snippet_product.html" with instance=instance.product %}
-                        {% endfor %}
-                    {% endfor %}
-                </div>
-            </div>
-        </section>
-
-    {% endif %}
+    {% campaign_list %}
 
     <section class="ps-deal-of-day container bg-white p-3 my-3">
         <div class="ps-section__content">
