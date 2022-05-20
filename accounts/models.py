@@ -123,13 +123,10 @@ class User(
     objects = UserManager()
 
     class Meta:
-        app_label = 'accounts'
-        db_table = 'accounts_db'
-        index_together = (('email',),)
         ordering = ('-date_joined', '-last_login')
         get_latest_by = ('-date_joined', '-last_login')
         verbose_name_plural = 'boutiques'
-        indexes = [models.Index(fields=['id'], name='id_index'),]
+        indexes = [models.Index(fields=['id']),]
 
 
     def __str__(self):
@@ -214,11 +211,8 @@ class ProfileSocialMedia(BaseTimeStampModel):
     )
 
     class Meta:
-        app_label = 'accounts'
-        db_table = 'accounts_social_db'
-        index_together = (('user',),)
         verbose_name_plural = 'profile reseaux sociaux'
-        indexes = [models.Index(fields=['id'], name='id_rs_index'),]
+        indexes = [models.Index(fields=['id'],),]
 
     def __str__(self):
         return self.user.get_fullname()
@@ -243,12 +237,10 @@ class GuestCustomer(BaseOrderInfo, BaseTimeStampModel):
     active = models.BooleanField(default=True)
 
     class Meta:
-        app_label = 'accounts'
-        db_table = 'accounts_buyer_db'
-        index_together = (('email',),)
         ordering = ('-created_at', '-active')
         get_latest_by = ('-created_at', '-active')
         verbose_name_plural = 'acheteur(s)'
+        indexes = [models.Index(fields=['id'],)]
 
     def __str__(self):
         return '{email}({created})'.format(email=self.email, created=self.active)

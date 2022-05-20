@@ -70,7 +70,7 @@ class SellerRequiredMixin(SellerTextRequiredMixin, object):
         self.products = object_list
         return object_list
 
-    def get_prompotion(self):
+    def get_promotion(self):
         account = self.get_account()
         object_list = Promotion.objects.filter(
             user=account).select_related("user")
