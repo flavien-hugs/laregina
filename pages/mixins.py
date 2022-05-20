@@ -2,13 +2,16 @@
 
 import random
 
-from pages.models import Campaign
+from pages.models import Campaign, Promotion
 
 
 class PromotionMixin(object):
 
 	def get_promotions_list(self):
 		return Campaign.objects.published()
+
+	def promotions(self):
+		return Promotion.objects.all()
 
 	def get_destockages(self):
 	    destockages = sorted(

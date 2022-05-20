@@ -43,13 +43,24 @@ def promotion_create_view(
     template="dashboard/seller/includes/_partials_promotion_form.html"
 ):
     if request.method == 'POST':
-        form = forms.PromotionForm(request.user, request.POST or None, request.FILES)
+        form = forms.PromotionForm(
+            request.user, request.POST or None,
+            request.FILES
+        )
         if form.is_valid():
-            product = form.save(commit=False)
-            product.user = request.user
-            product.save()
-            messages.success(request, "Votre promotion a été ajouté avec success !")
+            promotion = form.save(commit=False)
+            promotion.user = request.user
+            product = form.cleaned_data.get('products')
+            promotion.save()
+            promotion.products.add(*product)
+            messages.success(
+                request, "Votre promotion a été ajouté avec success !"
+            )
             return redirect('seller:promotion_list')
+        else:
+            messages.error(
+                request, "Vérifier les informations fournies !"
+            )
     else:
         form = forms.PromotionForm(request.user)
 
@@ -73,7 +84,7 @@ class PromotionListView(
     template_name = "dashboard/seller/includes/_partials_promotion.html"
 
     def get_queryset(self):
-        return self.get_prompotion()
+        return self.get_promotion()
 
     def get_context_data(self, *args, **kwargs):
         kwargs["subtitle"] = "promotions"
@@ -97,7 +108,7 @@ def promotion_update_view(
     )
     if form.is_valid():
         form.save()
-        msg = f'Mise à jour de la promotion "{obj.product.name}" effectuée avec succes !'
+        msg = f'Mise à jour de la promotion "{obj.campaign.name}" effectuée avec succes !'
         messages.success(request, msg)
         return redirect("seller:promotion_list")
 
@@ -135,18 +146,20 @@ class PromotionDetailView(
 ):
     paginate_by = 25
     slug_field = "slug"
+    model = models.Promotion
     slug_url_kwarg = "slug"
-    queryset = models.Campaign.objects.published()
     template_name = "pages/promotion/_detail.html"
 
-    def get_context_data(self, *args, **kwargs):
-        kwargs["page_title"] = self.object.name
+    def get_queryset(self):
+        return self.model.objects.all()
 
+    def get_context_data(self, *args, **kwargs):
+        kwargs["page_title"] = self.object.campaign.name
+
+        kwargs['object_list'] = self.get_queryset()
         kwargs['destockages'] = self.get_destockages()
         kwargs['sales_flash'] = self.get_sales_flash()
         kwargs['news_arrivals'] = self.get_news_arrivals()
-
-        kwargs['object_list'] = models.Promotion.objects.filter(campaign=self.object)
         kwargs['product_recommended'] = utils.get_recently_viewed(self.request)
         return super().get_context_data(*args, **kwargs)
 
@@ -175,7 +188,7 @@ class ProductOnSaleFlashListView(CampaignMixinObject):
         kwargs["query"] = self.request.GET.get("q", None)
         kwargs['promotion_list'] = self.get_promotions_list()
         kwargs['product_recommended'] = utils.get_recently_viewed(self.request)
-        
+
         kwargs['destockages'] = self.get_destockages()
         kwargs['news_arrivals'] = self.get_news_arrivals()
 
@@ -211,7 +224,7 @@ class ProductOnDNewsArrivalListView(CampaignMixinObject):
         kwargs["query"] = self.request.GET.get("q", None)
         kwargs['promotion_list'] = self.get_promotions_list()
         kwargs['product_recommended'] = utils.get_recently_viewed(self.request)
-        
+
         kwargs['destockages'] = self.get_destockages()
         kwargs['sales_flash'] = self.get_sales_flash()
 

@@ -1,5 +1,8 @@
 # pages.models.py
 
+from django.core.validators import(
+    MinValueValidator, MaxValueValidator
+)
 from django.db import models
 from django.urls import reverse
 from django.contrib import admin
@@ -7,17 +10,18 @@ from django.utils import timezone
 from django.dispatch import receiver
 from django.utils.text import slugify
 from django.utils.safestring import mark_safe
-from django.contrib.auth import get_user_model
 from django.core.validators import FileExtensionValidator
 
 from catalogue.models import Product
 from pages.managers import PageModelManager
-
-from helpers.models import BaseTimeStampModel, ModelSlugMixin
 from helpers.utils import(
     upload_promotion_image_path,
     upload_campign_image_path,
     unique_slug_generator
+)
+from helpers.models import(
+    BaseTimeStampModel, ModelSlugMixin,
+    ApplyDiscountModel
 )
 
 from imagekit.models import ImageSpecField
@@ -33,8 +37,7 @@ validate_video = [
         ]
     )
 ]
-
-
+validators = [MinValueValidator(0), MaxValueValidator(100)]
 NULL_AND_BLANK = {'null': True, 'blank': True}
 
 
@@ -80,7 +83,8 @@ class Testimonial(BaseTimeStampModel):
         db_table = 'testimonial_db'
         ordering = ['-created_at', ]
         get_latest_by = ['-created_at', ]
-        verbose_name_plural = 'Témoignage'
+        verbose_name_plural = 'Témoignages'
+        indexes = [models.Index(fields=['id'],)]
 
     def get_image_url(self):
         if self.formatted_image:
@@ -88,7 +92,7 @@ class Testimonial(BaseTimeStampModel):
         return "https://via.placeholder.com/92x91"
 
 
-class Campaign(ModelSlugMixin, BaseTimeStampModel):
+class Campaign(BaseTimeStampModel, ModelSlugMixin):
 
     DESTOCKAGE = "Destockage"
     VENTE_FLASH = "Vente Flash"
@@ -109,6 +113,11 @@ class Campaign(ModelSlugMixin, BaseTimeStampModel):
         default=VENTE_FLASH,
         verbose_name='campagne',
         choices=OPTION_PROMOTION_CHOICES,
+        **NULL_AND_BLANK
+    )
+    discount = models.IntegerField(
+        verbose_name="pourcentage de réduction",
+        validators=validators,
         **NULL_AND_BLANK
     )
     image = models.ImageField(
@@ -134,7 +143,7 @@ class Campaign(ModelSlugMixin, BaseTimeStampModel):
         indexes = [models.Index(fields=['id'])]
 
     def __str__(self):
-        return f"{self.name}"
+        return f"{self.name} (-{self.discount}%)"
 
     def get_image_url(self):
         if self.formatted_image:
@@ -146,47 +155,34 @@ class Campaign(ModelSlugMixin, BaseTimeStampModel):
             return mark_safe(f'<img src="{self.get_image_url()}" height="50"/>')
         return "https://via.placeholder.com/50x50"
 
-    def campaigns(self):
-        products = Product.objects.all()
-        campaign = Promotion.objects.filter(
-            campaign=self,
-            promotions_products__in=products
-        )
+    def get_campaigns(self):
+        campaign = Promotion.objects.filter(campaign=self)
         return campaign
-    
+
+    @admin.display(description="total promos")
+    def get_campaigns_count(self):
+        return self.get_campaigns().count()
+
+    @admin.display(description="% de réduction")
+    def get_vouchers(self) -> str:
+        if self.discount:
+            return f"{self.discount}%"
+        return "00"
+
     def get_absolute_url(self):
         return reverse(
-            'promotion:promotion_detail', kwargs={'slug': str(self.slug)}
+            'promotion:promotion_detail',
+            kwargs={'slug': str(self.slug)}
         )
 
 
-class Promotion(ModelSlugMixin, BaseTimeStampModel):
+class Promotion(ModelSlugMixin, ApplyDiscountModel, BaseTimeStampModel):
 
-    user = models.ForeignKey(
-        to=get_user_model(),
-        on_delete=models.CASCADE,
-        verbose_name="store",
-        limit_choices_to={
-            'is_seller': True
-        },
-    )
     campaign = models.ForeignKey(
         to=Campaign,
         on_delete=models.PROTECT,
         verbose_name='campagne',
         related_name="campaigns"
-    )
-    product = models.ForeignKey(
-        to=Product,
-        on_delete=models.CASCADE,
-        verbose_name='produits',
-        related_name="promotions_products",
-        help_text="Choisir un produit à mettre en promotion"
-    )
-    activate_at = models.BooleanField(
-        verbose_name='promotion active ?',
-        default=False,
-        help_text="Cette promotion est active ?"
     )
 
     class Meta:
@@ -194,7 +190,7 @@ class Promotion(ModelSlugMixin, BaseTimeStampModel):
         ordering = ['-created_at']
         get_latest_by = ['-created_at']
         verbose_name_plural = 'promotions'
-        indexes = [models.Index(fields=['id'], name='id_promotion')]
+        indexes = [models.Index(fields=['id'],)]
 
     def _get_unique_slug(self):
         slug = slugify(self.campaign.name)
@@ -213,33 +209,38 @@ class Promotion(ModelSlugMixin, BaseTimeStampModel):
     def __str__(self):
         return f"{self.campaign.name}"
 
-    @admin.display(description="boutique")
-    def get_store(self):
-        return self.user.store
+    @property
+    def discount(self):
+        return self.campaign.discount
 
     def get_image_url(self):
         if self.campaign.formatted_image:
             return self.campaign.formatted_image.url
         return "https://via.placeholder.com/680x380"
 
-    def get_status(self):
-        if self.activate_at:
-            return "Active"
-        return "Désactivé"
+    @admin.display(description="prix réduit")
+    def get_price(self):
+        single_product_price = [
+            ((obj.price * self.campaign.discount)/100) for obj in self.get_products()
+        ]
+        return single_product_price
 
     def get_absolute_url(self):
         return reverse(
-            'promotion:promotion_detail', kwargs={'slug': str(self.slug)}
+            'promotion:promotion_detail',
+            kwargs={'slug': str(self.slug)}
         )
 
     def get_update_promo_url(self):
         return reverse(
-            'seller:promotion_update', kwargs={'slug': str(self.slug)}
+            'seller:promotion_update',
+            kwargs={'slug': str(self.slug)}
         )
 
     def get_delete_promo_url(self):
         return reverse(
-            'seller:promotion_delete', kwargs={'slug': str(self.slug)}
+            'seller:promotion_delete',
+            kwargs={'slug': str(self.slug)}
         )
 
 
@@ -247,8 +248,8 @@ class Pub(ModelSlugMixin, BaseTimeStampModel):
 
     name = models.CharField(
         max_length=225,
-    	verbose_name="Titre",
-    	help_text="Saisir le titre de la publicité",
+        verbose_name="Titre",
+        help_text="Saisir le titre de la publicité",
         **NULL_AND_BLANK
     )
     video = models.FileField(
@@ -277,8 +278,8 @@ class Annonce(BaseTimeStampModel):
 
     name = models.CharField(
         max_length=225,
-    	verbose_name="Titre",
-    	help_text="Saisir le titre de la publicité",
+        verbose_name="Titre",
+        help_text="Saisir le titre de la publicité",
     )
     image = models.ImageField(
         verbose_name='image',
@@ -340,6 +341,7 @@ class Contact(models.Model):
     )
     timestamp = models.DateTimeField(
         verbose_name="date",
+        editable=False,
         default=timezone.now
     )
 
@@ -352,9 +354,10 @@ class Contact(models.Model):
 
     class Meta:
         db_table = 'contact_db'
-        ordering = ['-timestamp', ]
+        ordering = ['-timestamp',]
         get_latest_by = ['-timestamp', ]
         verbose_name_plural = 'messages'
+        indexes = [models.Index(fields=['id'])]
 
 
 @receiver([models.signals.pre_save], sender=Pub)

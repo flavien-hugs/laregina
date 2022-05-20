@@ -14,10 +14,10 @@ register = template.Library()
 
 @register.inclusion_tag("includes/partials/_partials_video.html")
 def publicity_list():
-    
-    movies = Pub.objects.filter(is_active=True).latest()
-    campaigns = Campaign.objects.published().latest()
-    
+
+    movies = Pub.objects.filter(is_active=True)
+    campaigns = Campaign.objects.published()
+
     return {
     	'movie': movies,
         'campaign': campaigns

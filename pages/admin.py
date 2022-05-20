@@ -52,16 +52,16 @@ class PromotionStackedInline(admin.StackedInline):
                 (
                     "user",
                     "campaign",
-                    "product",
-                    "activate_at"
+                    "products",
+                    "is_active"
                 )
             }
         ),
     )
     list_display = [
         'user',
-        "campaign",
-        "product",
+        "campaign", "products",
+        "get_products_count",
         'date',
     ]
     list_filter = [
@@ -84,21 +84,21 @@ class CampaignAdmin(admin.ModelAdmin):
                 (
                     "name",
                     "parent",
+                    "discount",
                     "image",
                 )
             }
         ),
     )
     list_display = [
-        'name',
+        '__str__',
         "parent",
+        "get_vouchers",
+        "get_campaigns_count",
         'date',
     ]
-    list_filter = [
-        'name',
-    ]
     list_per_page = 10
-    list_display_links = ('name',)
+    list_display_links = ('__str__',)
     empty_value_display = '-empty-'
     inlines = [PromotionStackedInline]
 

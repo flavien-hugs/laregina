@@ -101,35 +101,36 @@ class PromotionForm(forms.ModelForm):
         queryset=Campaign.objects.all(),
         widget=forms.Select()
     )
-
-    product = forms.ModelChoiceField(
-        empty_label=None,
+    products = forms.ModelMultipleChoiceField(
+        required=True,
+        label="Choisir les produits",
         queryset=Product.objects.all(),
-        widget=forms.Select()
+        widget=forms.SelectMultiple
     )
 
     class Meta:
         model = Promotion
         fields = [
             "campaign",
-            "product",
-            "activate_at"
+            "products",
+            "is_active"
         ]
 
     def __init__(self, user, *args, **kwargs):
         super(PromotionForm, self).__init__(*args, **kwargs)
 
-        self.fields['product'].queryset = Product.objects.filter(user=user)
+        products_list = Product.objects.filter(user=user)
+        self.fields['products'].queryset = products_list
 
         for field in self.fields:
             self.fields[field].widget.attrs['class'] = 'form-control shadow-none rounded-0'
 
-            if self.fields['activate_at']:
-                self.fields['activate_at'].widget.attrs.update(
+            if self.fields['is_active']:
+                self.fields['is_active'].widget.attrs.update(
                     {'class': 'form-check-input shadow-none'}
                 )
 
-            if self.fields['product']:
-                self.fields['product'].widget.attrs.update(
+            if self.fields['products']:
+                self.fields['products'].widget.attrs.update(
                     {'class': 'form-control shadow-none rounded-0 custom-select'}
                 )
