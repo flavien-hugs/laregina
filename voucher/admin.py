@@ -28,13 +28,13 @@ class VoucherAdmin(admin.ModelAdmin):
         ),
     )
     list_display = (
-        "user",
+        "get_store",
         "get_discount",
         "get_products_count",
         "is_active",
     )
     list_display_links = (
-        "user",
+        "get_store",
     )
     list_editable = (
         "is_active",
