@@ -50,20 +50,12 @@
                 </section>
             </div>
 
-            {% if get_news_arrivals %}
-                {% product_promotion_object get_news_arrivals 'Nouveautés' %}
-            {% endif %}
-
-            {% publicity_list %}
-
-            {% if destockages %}
-                {% product_promotion_object destockages 'Destockages' %}
-            {% endif %}
-
-            {% annonce_list %}
-
-            {% if sales_flash %}
-                {% product_promotion_object sales_flash 'Ventes Flash' %}
+            {% if promotions.exists %}
+                {% for object in promotions %}
+                    {% if object.get_products.exists %}
+                        {% product_promotion_object object.get_products object.campaign.name %}
+                    {% endif %}
+                {% endfor %}
             {% endif %}
         </div>
     </section>
