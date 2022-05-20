@@ -124,8 +124,12 @@
 
                 {% annonce_list %}
                 
-                {% if sales_flash %}
-                    {% product_promotion_object sales_flash 'Ventes Flash' %}
+                {% if promotions.exists %}
+                    {% for object in promotions %}
+                        {% if object.get_products.exists %}
+                            {% product_promotion_object object.get_products object.campaign.name %}
+                        {% endif %}
+                    {% endfor %}
                 {% endif %}
 
                 {% publicity_list %}

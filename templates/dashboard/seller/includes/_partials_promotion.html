@@ -34,7 +34,9 @@
                 <thead class="thead-light">
                     <tr>
                         <th class="border-bottom">id</th>
-                        <th class="border-bottom">produit</th>
+                        <th class="border-bottom">Campagne</th>
+                        <th class="border-bottom">pourcentage</th>
+                        <th class="border-bottom">Nb de produits</th>
                         <th class="border-bottom">date</th>
                         <th class="border-bottom">status</th>
                         <th class="border-bottom">action</th>
@@ -46,19 +48,19 @@
                         <tr>
                             <td><span class="text-primary fw-bold">{{ forloop.counter }}</span></td>
                             <td>
-                                <a target="_blank" href="{{ object.product.get_absolute_url }}" class="d-flex align-items-center">
+                                <a target="_blank" href="{{ object.get_update_promo_url }}" class="d-flex align-items-center">
                                     <img
-                                    src="{{ object.product.get_image_url }}"
+                                    src="{{ object.get_image_url }}"
                                     class="avatar rounded-circle me-3"
-                                    alt="{{ object.product.name|slugify }}"
+                                    alt="{{ object.campaign.name|slugify }}"
                                     >
                                     <div class="d-block">
-                                        <span class="fw-bold">{{ object.product.name|capfirst|safe }}</span>
-                                        <div class="small text-gray">
-                                        PROMO: {{ object.campaign.name|safe }}</div>
+                                        <span class="fw-bold">PROMO: {{ object.campaign.name|capfirst|safe }}</span>
                                     </div>
                                 </a>
                             </td>
+                            <td><span>{{ object.discount }}%</span></td>
+                            <td><span>{{ object.get_products_count }}</span></td>
                             <td><span>{{ object.created_at|date:"SHORT_DATE_FORMAT" }}</span></td>
                             <td>
                                 <span class="d-fle align-items-center">

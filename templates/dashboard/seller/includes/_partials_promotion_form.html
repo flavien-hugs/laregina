@@ -44,11 +44,11 @@
 
                     <div class="col-12 col-lg-12">
                         <div class="form-group mb-4">
-                            <label for="{{ form.product.id_for_label }}">
+                            <label for="{{ form.products.id_for_label }}">
                                 Selectionnez les produits
                             </label>
-                            {{ form.product }}
-                            <small id="{{ form.product.id_for_label }}" class="form-text text-muted">
+                            {{ form.products }}
+                            <small id="{{ form.products.id_for_label }}" class="form-text text-muted">
                                 Choisir les produits à mettre en promotion
                             </small>
                         </div>
@@ -56,16 +56,16 @@
 
                     <div class="col-12 col-lg-12">
                         <div class="form-check form-switch">
-                            {{ form.activate_at }}
+                            {{ form.is_active }}
 
-                            <label class="form-check-label" for="{{ form.activate_at.id_for_label }}">
+                            <label class="form-check-label" for="{{ form.is_active.id_for_label }}">
 
-                                {{ form.activate_at.label }}
+                                {{ form.is_active.label }}
 
                             </label>
                         </div>
-                        <small id="{{ form.active.id_for_label }}" class="form-text text-muted">
-                            {{ form.activate_at.help_text }}
+                        <small id="{{ form.is_active.id_for_label }}" class="form-text text-muted">
+                            {{ form.is_active.help_text }}
 
                         </small>
                     </div>
