@@ -27,6 +27,7 @@ class CategoryDetailView(
         kwargs['object_list'] = Product.objects.filter(category__in=category)
         kwargs['product_recommended'] = utils.get_recently_viewed(self.request)
 
+        kwargs['promotions'] = self.promotions()
         kwargs['destockages'] = self.get_destockages()
         kwargs['sales_flash'] = self.get_sales_flash()
         kwargs['news_arrivals'] = self.get_news_arrivals()

@@ -9,11 +9,14 @@ from imagekit.models import ImageSpecField
 from imagekit.processors import ResizeToFill, Adjust
 from mptt.models import MPTTModel, TreeForeignKey
 
-from helpers.models import BaseTimeStampModel, ModelSlugMixin
-from helpers.utils import upload_promotion_image_path, unique_slug_generator
-
+from helpers.utils import (
+    upload_promotion_image_path,
+    unique_slug_generator
+)
+from helpers.models import ModelSlugMixin, BaseTimeStampModel
 
 NULL_AND_BLANK = {'null': True, 'blank': True}
+
 
 class ActiveCategoryManager(models.Manager):
 
