@@ -1,5 +1,7 @@
 # catalogue.models.py
 
+from itertools import chain
+
 from django.db import models
 from datetime import datetime
 from django.urls import reverse
@@ -33,7 +35,7 @@ class Product(BaseTimeStampModel):
     user = models.ForeignKey(
         to=User,
         on_delete=models.CASCADE,
-        limit_choices_to={'is_seller': True,},
+        limit_choices_to={'is_seller': True, },
         verbose_name='vendeur',
         help_text="magasin en charge de la vente."
     )
@@ -99,6 +101,10 @@ class Product(BaseTimeStampModel):
     def __str__(self):
         return self.name
 
+    def get_price(self):
+        for obj in self.get_vouchers_price():
+            return obj
+
     def get_admin_url(self):
         info = (self._meta.app_label, self._meta.model_name)
         return reverse('admin:%s_%s_change' % info, args=(self.pk,))
@@ -108,7 +114,8 @@ class Product(BaseTimeStampModel):
             self.get_price() is not None
             and self.get_price() < self.price
         ):
-            return self.get_price()
+            new_price = self.price - self.get_price()
+            return new_price
         else:
             return self.price
 
@@ -118,8 +125,13 @@ class Product(BaseTimeStampModel):
 
     def get_discount_products(self):
         from voucher.models import Voucher
+        from pages.models import Promotion
+
         products = Voucher.objects.filter(products=self)
-        return products
+        promotions = Promotion.objects.filter(products=self)
+        objects_list = chain(promotions, products)
+
+        return objects_list
 
     @admin.display(description="% de réduction", empty_value="00")
     def get_vouchers(self):
@@ -129,12 +141,9 @@ class Product(BaseTimeStampModel):
 
     @admin.display(description="prix réduit", empty_value="00")
     def get_vouchers_price(self):
-        prices = [((obj.discount * self.price)/100) for obj in self.get_discount_products()]
+        prices = [((obj.discount * self.price)/100)
+                  for obj in self.get_discount_products()]
         return prices
-
-    def get_price(self):
-        for obj in self.get_vouchers_price():
-            return obj
 
     @admin.display(description="description du produit")
     def get_product_description(self):
@@ -147,7 +156,8 @@ class Product(BaseTimeStampModel):
     @admin.display(description="score du produit")
     def avaregereview(self):
         from reviews.models import ProductReview
-        reviews = ProductReview.objects.filter(product=self).aggregate(avarage=Avg('rating'))
+        reviews = ProductReview.objects.filter(
+            product=self).aggregate(avarage=Avg('rating'))
         avg = 0
         if reviews["avarage"] is not None:
             avg = "%.1f" % float(reviews["avarage"])
@@ -160,7 +170,8 @@ class Product(BaseTimeStampModel):
     @admin.display(description="nombre de commentaire sur le produit")
     def countreview(self):
         from reviews.models import ProductReview
-        reviews = ProductReview.objects.filter(product=self).aggregate(count=Count('id'))
+        reviews = ProductReview.objects.filter(
+            product=self).aggregate(count=Count('id'))
         cnt = 0
         if reviews["count"] is not None:
             cnt = int(reviews["count"])

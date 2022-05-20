@@ -34,6 +34,7 @@ class HomeView(PromotionMixin, generic.TemplateView):
 
     def get_context_data(self, **kwargs):
         
+        kwargs['promotions'] = self.promotions()
         kwargs['destockages'] = self.get_destockages()
         kwargs['sales_flash'] = self.get_sales_flash()
         kwargs['news_arrivals'] = self.get_news_arrivals()
@@ -57,6 +58,7 @@ class ProductListView(FilterMixin, PromotionMixin, generic.ListView):
 
     def get_context_data(self, *args, **kwargs):
         kwargs["query"] = self.request.GET.get("q", None)
+        kwargs['promotions'] = self.promotions()
         kwargs['promotion_list'] = self.get_promotions_list()
         kwargs['product_recommended'] = utils.get_recently_viewed(self.request)
         return super().get_context_data(*args, **kwargs)
