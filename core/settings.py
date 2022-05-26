@@ -44,7 +44,6 @@ ALLOWED_HOSTS = []
 
 # See: https://docs.djangoproject.com/en/1.11/ref/settings/#installed-apps
 INSTALLED_APPS = [
-
     'django.contrib.auth',
     'django.contrib.sites',
 
@@ -58,7 +57,6 @@ INSTALLED_APPS = [
 ]
 
 OTHERS_APPS = [
-    'jet.dashboard',
     'jet',
     'django.contrib.admin',
 
@@ -323,6 +321,7 @@ PHONENUMBER_DB_FORMAT = "NATIONAL"
 
 CINETPAY_API_KEY = config('CINETPAY_API_KEY')
 CINETPAY_SITE_ID = config('CINETPAY_SITE_ID')
+CINETPAY_TRANS_ID = config('CINETPAY_TRANS_ID')
 
 # Mailchimp Configuration
 
