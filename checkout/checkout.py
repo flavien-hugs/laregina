@@ -14,11 +14,12 @@ from analytics.utils import get_client_ip
 def get_checkout_url(request):
     return reverse('checkout:checkout')
 
-
 def process(request):
 
     order = create_order(request)
     context = {
+        'order': order,
+        'payment': order.payment,
         'order_id': order.transaction_id,
     }
     return context
@@ -59,11 +60,10 @@ def create_order(request):
     return order
 
 
-SENDER_ID = settings.SENDER_ID
-SMS_API_KEY = settings.SMS_API_KEY
-
-
 def send_sms_order(order_id):
+
+    SENDER_ID = settings.SENDER_ID
+    SMS_API_KEY = settings.SMS_API_KEY
 
     order = Order.objects.get(transaction_id=order_id)
     order_transaction_id = order.transaction_id
@@ -73,5 +73,4 @@ def send_sms_order(order_id):
     SEND_SMS_URL = f"https://sms.lws.fr/sms/api?action=send-sms&api_key={SMS_API_KEY}&to={destinataire}&from={SENDER_ID}&sms={message}"
 
     response = requests.post(SEND_SMS_URL)
-    print(response.status_code)
     return response

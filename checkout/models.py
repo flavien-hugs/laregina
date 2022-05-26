@@ -31,11 +31,26 @@ class Order(BaseOrderInfo, BaseTimeStampModel):
         (CANCELLED, 'annulée'),
     )
 
+
+    NOW_PAYMENT = 1
+    DELIVERY_PAYMENT = 0
+    DEFAULT_PAYMENT = NOW_PAYMENT
+
+    TYPES_PAYMENT_CHOICES = (
+        (NOW_PAYMENT, 'PAYER CASH'),
+        (DELIVERY_PAYMENT, 'PAYER À LA LIVRAISON')
+    )
+
     status = models.CharField(
         verbose_name='status',
         max_length=120,
         choices=ORDER_STATUS,
         default=SUBMITTED
+    )
+    payment = models.PositiveIntegerField(
+        default=DEFAULT_PAYMENT,
+        choices=TYPES_PAYMENT_CHOICES,
+        verbose_name="Type de paiment"
     )
     transaction_id = models.CharField(
         verbose_name='id de la commande',
@@ -65,6 +80,7 @@ class Order(BaseOrderInfo, BaseTimeStampModel):
 
     class Meta:
         verbose_name_plural = 'commandes'
+        indexes = [models.Index(fields=['id'])]
 
     def __str__(self):
         return f'#{self.transaction_id} - {self.status}'
@@ -97,7 +113,7 @@ class Order(BaseOrderInfo, BaseTimeStampModel):
         today = datetime.date.today().strftime('%d%m%y')
         carac = string.digits
         random_carac = [random.choice(carac) for _ in range(nb_carac)]
-        self.transaction_id = 'LC-{}'.format(today + ''.join(random_carac))
+        self.transaction_id = '{}'.format(today + ''.join(random_carac))
 
     def order_items(self):
         order_items = OrderItem.objects.filter(order=self)
@@ -108,7 +124,6 @@ class Order(BaseOrderInfo, BaseTimeStampModel):
         total = decimal.Decimal('0')
         for item in self.order_items():
             total += item.total
-        total = total
         return total
 
     @admin.display(description="montant réglé")
@@ -162,6 +177,13 @@ class Order(BaseOrderInfo, BaseTimeStampModel):
         return reverse('checkout:order_success', kwargs={'pk': int(self.transaction_id)})
 
 
+class OrderCashOnDelivery(Order):
+
+    class Meta:
+        proxy = True
+        verbose_name_plural = "Commandes impayées"
+
+
 class OrderItem(models.Model):
 
     order = models.ForeignKey(
@@ -196,6 +218,7 @@ class OrderItem(models.Model):
         ordering = ['-date_created', '-date_updated']
         get_latest_by = ['-date_created', '-date_updated']
         verbose_name_plural = 'panier'
+        indexes = [models.Index(fields=['id'])]
 
     def __str__(self):
         return self.product.name

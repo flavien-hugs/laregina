@@ -2,14 +2,15 @@
 
 from django.contrib import admin
 
-from checkout.models import Order, OrderItem
 from services.export_data_csv import export_to_csv
+from checkout.models import Order, OrderItem, OrderCashOnDelivery
 
 
 class OrderItemStackedInline(admin.StackedInline):
     model = OrderItem
     list_display = [
         'get_store_product',
+        'payment',
         'get_product_name',
         'get_product_price',
         'quantity',
@@ -31,13 +32,12 @@ class OrderItemStackedInline(admin.StackedInline):
     verbose_name = "commandes"
 
 
-@admin.register(Order)
-class OrderAdmin(admin.ModelAdmin):
-    model = Order
+class ExtraOrderAdmin(object):
     date_hierarchy = 'created_at'
     fk_name = "product"
     readonly_fields = [
         'email',
+        'payment',
         'shipping_country',
         'shipping_city',
         'shipping_adress',
@@ -47,6 +47,7 @@ class OrderAdmin(admin.ModelAdmin):
     ]
     list_display = [
         'get_order_id',
+        'payment',
         'get_shipping_delivery',
         'get_order_payment',
         'get_order_rest_payment',
@@ -56,10 +57,12 @@ class OrderAdmin(admin.ModelAdmin):
     ]
     list_filter = [
         'status',
+        'payment',
         'date',
     ]
     search_fields = [
         'email',
+        'payment',
         'transaction_id',
         'phone',
     ]
@@ -103,3 +106,25 @@ class OrderAdmin(admin.ModelAdmin):
     @admin.display(description="commande en cours de livraison")
     def make_processed(self, request, queryset):
         queryset.update(status='PROCESSED')
+
+
+@admin.register(Order)
+class OrderPayedAdmin(ExtraOrderAdmin, admin.ModelAdmin):
+
+    model = Order
+
+    def get_queryset(self, request):
+        qs = super().get_queryset(request)
+        orders_cash = qs.filter(payment=1)
+        return  orders_cash
+
+
+@admin.register(OrderCashOnDelivery)
+class OrderCashOnDeliveryAdmin(ExtraOrderAdmin, admin.ModelAdmin):
+
+    model = OrderCashOnDelivery
+
+    def get_queryset(self, request):
+        qs = super().get_queryset(request)
+        orders_cash_on_delivery = qs.filter(payment=0)
+        return  orders_cash_on_delivery

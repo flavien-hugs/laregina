@@ -1,12 +1,13 @@
 # checkout.views.py
 
+from django.conf import settings
 from django.template import Context
 from django.views.generic import ListView
 from django.urls import reverse, reverse_lazy
 from django.template.loader import get_template
 from django.views.decorators.csrf import csrf_exempt
-from django.shortcuts import render, get_object_or_404
 from django.http import HttpResponse, HttpResponseRedirect
+from django.shortcuts import render, redirect, get_object_or_404
 
 from cart import cart
 from core import settings
@@ -15,15 +16,20 @@ from checkout.forms import CheckoutForm
 from checkout.models import Order, OrderItem
 
 import io
+import requests
 from xhtml2pdf import pisa
+
+
+from cinetpay_sdk.s_d_k import Cinetpay
+
+apikey =  settings.CINETPAY_API_KEY
+site_id =  settings.CINETPAY_SITE_ID
+
+client = Cinetpay(apikey,site_id)
 
 
 @csrf_exempt
 def show_checkout(request, template='checkout/checkout.html'):
-
-    """
-    checkout form page to collect user shipping and billing information
-    """
 
     if cart.is_empty(request):
         return HttpResponseRedirect(reverse('cart:cart'))
@@ -34,13 +40,48 @@ def show_checkout(request, template='checkout/checkout.html'):
         if form.is_valid():
             response = checkout.process(request)
             order_id = response.get('order_id', 0)
-            if order_id:
-                request.session['order_id'] = str(order_id)
-                sucess_url = reverse(
-                    'checkout:order_success',
-                    kwargs={"order_id": order_id}
-                )
-            return HttpResponseRedirect(sucess_url)
+            payment = response.get('payment')
+
+            if payment == 0:
+                if order_id:
+                    request.session['order_id'] = str(order_id)
+
+                    sucess_url = reverse(
+                        'checkout:order_success',
+                        kwargs={"order_id": order_id}
+                    )
+                return HttpResponseRedirect(sucess_url)
+
+            if payment == 1:
+
+                order = response.get('order')
+
+                amount = order.get_order_total()
+                transaction_id = order.transaction_id
+                customer_name = order.get_short_name()
+
+                NOTIFY_URL = "{% url  'cart:cart' %}"
+                RETURN_URL = "{ % url 'checkout:order_success' order_id=order.transaction_id % }"
+
+                data = {
+                    'amount' : amount,
+                    'currency' : "XOF",
+                    'transaction_id': transaction_id,
+                    'description' : "Finaliser votre achat",
+                    'return_url': RETURN_URL,
+                    'customer_name' : customer_name,
+                    'notify_url': NOTIFY_URL,
+                    'customer_surname' : customer_name,
+                }
+
+                response = client.PaymentInitialization(data)
+
+                print("get_payment_code: ", response['code'])
+                print("get_payment_message: ", response['message'])
+                print("get_payment_data: ", response['data'])
+
+                PAYMENT_URL = response['data']['payment_url']
+                return HttpResponseRedirect(PAYMENT_URL)
     else:
         if request.user.is_authenticated:
             form = CheckoutForm(instance=request.user)
@@ -57,7 +98,10 @@ def show_checkout(request, template='checkout/checkout.html'):
     return render(request, template, context)
 
 
-def order_success_view(request, order_id, template='checkout/checkout_success.html'):
+def order_success_view(
+    request, order_id,
+    template='checkout/checkout_success.html'
+):
 
     order_id = request.session.get('order_id')
 
@@ -67,9 +111,7 @@ def order_success_view(request, order_id, template='checkout/checkout_success.ht
     context = {
         'object': order,
         'order_items':order_items,
-        'page_title': 'Commande validée',
-        'CINETPAY_API_KEY': settings.CINETPAY_API_KEY,
-        'CINETPAY_SITE_ID': settings.CINETPAY_SITE_ID,
+        'page_title': 'Commande validée'
     }
 
     return render(request, template, context)
