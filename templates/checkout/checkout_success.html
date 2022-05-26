@@ -3,138 +3,97 @@
 
 
 {% block content %}
-	{% url 'order_tracking' as order_tracking %}
-	{% url 'catalogue:product_list' as product_list %}
-	{% url 'download_invoice' object.id as print_invoice %}
+{% url 'order_tracking' as order_tracking %}
+{% url 'catalogue:product_list' as product_list %}
+{% url 'download_invoice' object.id as print_invoice %}
 
-	{% include "includes/partials/_partials_breadcrumb.html" %}
+{% include "includes/partials/_partials_breadcrumb.html" %}
 
-	<section class="ps-section--account ps-checkout">
-		<div class="container">
-			<div class="row justify-content-center">
-				<div class="col-lg-8">
-					<div class="ps-section__header">
-						<h4 class="text-success">Commande validée ! &smid; N° commande 
-						{{ object.get_order_id }}</h4>
+<section class="ps-section--account ps-checkout">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-8">
+                <div class="ps-section__header">
+                    <h4 class="text-success">
+                        Commande validée ! &smid; N° commande
+                        {{ object.get_order_id }}
+                    </h4>
 
-						{% if object.get_order_total > 10000 %}
-							<p class="text-justify text-success">
-								Votre commande (<strong>{{ object.get_order_total|intcomma }} Fr</strong>) est supérieur à 10 000 Fr,
-								Vous allez devoir payer les <b>50%</b> du coût total avant la livraison de votre
-								commande. <strong>Veuillez descendre juste en bas pour payer.</strong>
-							</p>
-						{% elif object.get_order_total <= 10000 %}
-							<p class="text-justify text-success">
-								Votre commande (<strong>{{ object.get_order_total|intcomma }} Fr</strong>).
-								Vous pouvez regler la totalité de votre commande avant livraison.
-								<strong>Veuillez descendre juste en bas pour payer.</strong>
-							</p>
-						{% endif %}
+                    <div class="ps-block--payment-method mb-0">
+                        <span class='font-weight-bold'>
+                            NB: Veuillez garder ce numéro ({{ object.transaction_id  }})
+                            pour le retrait de votre commande.
+                        </span>
+                    </div>
+                </div>
 
-						<div class="ps-block--payment-method mb-0">
-							<span class='font-weight-bold'>
-								NB: Veuillez garder ce numéro ({{ object.transaction_id  }}) 
-								pour le retrait de votre commande.
-							</span>
-						</div>
-					</div>
+                <div class="ps-section__content card p-4">
+                    <div class="row">
+                        <div class="col-md-4 col-12">
+                            <figure class="ps-block--invoice">
+                                <figcaption>Nom &amp; prénom</figcaption>
+                                <div class="ps-block__content">
+                                    <strong>{{ object.get_full_name|upper }}</strong>
+                                    <p>
+                                        <strong>Email:</strong>:
+                                        {{ object.email }}
+                                    </p>
+                                    <p><strong>Téléphone</strong>: {{ object.phone }}</p>
+                                </div>
+                            </figure>
+                        </div>
 
-					<div class="ps-section__content card p-4">
-						<div class="row">
-							<div class="col-md-4 col-12">
-								<figure class="ps-block--invoice">
-									<figcaption>Nom &amp; prénom</figcaption>
-									<div class="ps-block__content">
-										<strong>{{ object.get_full_name|upper }}</strong>
-										<p>
-											<strong>Email:</strong>:
-											{{ object.email }}
-										</p>
-										<p><strong>Téléphone</strong>: {{ object.phone }}</p>
-									</div>
-								</figure>
-							</div>
+                        <div class="col-md-4 col-12">
+                            <figure class="ps-block--invoice">
+                                <figcaption>Adresse de livraison</figcaption>
+                                <div class="ps-block__content">
+                                    <p>{{ object.get_shipping_delivery|linebreaksbr }}</p>
+                                </div>
+                            </figure>
+                        </div>
 
-							<div class="col-md-4 col-12">
-								<figure class="ps-block--invoice">
-									<figcaption>Adresse de livraison</figcaption>
-									<div class="ps-block__content">
-										<p>{{ object.get_shipping_delivery|linebreaksbr }}</p>
-									</div>
-								</figure>
-							</div>
+                        <div class="col-md-4 col-12">
+                            <figure class="ps-block--invoice">
+                                <figcaption>Moyen de paiement</figcaption>
+                                <div class="ps-block__content">
+                                    <p>
+                                        <strong>Methode: </strong>
+                                        {{ object.get_payment_display }}
+                                    </p>
+                                    <p>
+                                        <strong>Total</strong>:
+                                        {{ object.get_order_total|intcomma }} Fr
+                                    </p>
+                                </div>
+                            </figure>
+                        </div>
+                    </div>
+                </div>
 
-							<div class="col-md-4 col-12">
-								<figure class="ps-block--invoice">
-									<figcaption>Paiement</figcaption>
-									<div class="ps-block__content">
-										<p>
-											<strong>Methode:</strong>
-											Paiement à la livraison
-										</p>
-										<p>
-											<strong>Total</strong>:
-											{{ object.get_order_total|intcomma }} Fr
-										</p>
-									</div>
-								</figure>
-							</div>
-						</div>
-					</div>
+                <p class="text-muted py-3">
+                    <span>Votre commande vous sera livrée dans 07 jours maximum.</span>
+                    <span>Merci pour votre commande.</span>
+                </p>
 
-					{% if object.get_order_total > 10000 %}
-						<div class="form-group">
-							<div class="ps-checkbox">
-								<p class="text-justify text-success">
-									Votre commande (<strong>{{ object.get_order_total|intcomma }} Fr</strong>) est supérieur à 10 000 Fr,
-									Vous allez devoir payer les <b>50%</b> du coût total avant la livraison de votre
-									commande. Coût = <strong>{{ object.get_order_payment|intcomma }} Fr CFA</strong>
-								</p>
-							</div>
-							{% include "includes/partials/_partials_payment.html" %}
-						</div>
-					{% elif object.get_order_total <= 10000 %}
-						<div class="form-group">
-							<div class="ps-checkbox">
-								<p class="text-justify text-success">
-									Votre commande (<strong>{{ object.get_order_total|intcomma }} Fr</strong>).
-									Vous pouvez regler la totalité de votre commande avant livraison.
-									Coût = <strong>{{ object.get_order_total|intcomma }} Fr CFA</strong>
-								</p>
-							</div>
-							{% include "includes/partials/_partials_payment.html" %}
-						</div>
-					{% endif %}
+                <div class="ps-section__footer mt-3">
+                    <div class="row">
+                        <div class="col-4 float-left">
+                            <a class="ps-btn ps-btn--sm text-uppercase font-weight-normal" href="{{ product_list }}">Continuer vos achats
+                                <i class="icon-arrow-right"></i></a>
+                        </div>
 
-                    <p class="text-muted py-3">
-                    	<span>Votre commande vous sera livrée dans 07 jours maximum. </span>
-                    	<span>Merci pour votre commande. Veuillez cliquer
-                        <a class="text-primary font-weight-bold" href="{{ tracking_order }}"><u>ICI</u></a>
-                    	pour vérifier l'état de votre commande.</span>
-                    </p>
+                        <div class="col-4">
+                            <a class="btn ps-btn--sm text-uppercase font-weight-normal" href="{{ print_invoice }}"><i class="icon-printer"></i>
+                                Imprimer le réçu.</a>
+                        </div>
 
-                    <div class="ps-section__footer mt-3">
-						<div class="row">
-							<div class="col-4 float-left">
-								<a class="ps-btn ps-btn--sm text-uppercase font-weight-normal"
-								href="{{ product_list }}">Continuer vos achats
-								<i class="icon-arrow-right"></i></a>
-							</div>
-
-							<div class="col-4">
-								<a class="btn ps-btn--sm text-uppercase font-weight-normal"
-								href="{{ print_invoice }}"><i class="icon-printer"></i>
-								Imprimer le réçu.</a>
-							</div>
-
-							<div class="col-4 float-right">
-								<a class="ps-btn ps-btn--sm text-uppercase font-weight-normal"
-								href="{{ order_tracking }}">suivre votre commande</a>
-							</div>
-						</div>
-					</div>
-				</div>
-	    	</div>
-    	</div>
-    </section>
+                        <div class="col-4 float-right">
+                            <a class="ps-btn ps-btn--sm text-uppercase font-weight-normal" href="{{ order_tracking }}">suivre votre commande</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
 {% endblock content %}
