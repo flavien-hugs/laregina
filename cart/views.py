@@ -37,10 +37,7 @@ def shopcart(request, template="cart/cart.html"):
         'page_title': 'Panier',
         'cart_items': cart.get_cart_items(request),
         'cart_subtotal': cart.cart_subtotal(request),
-        'recently_viewed': get_recently_viewed(request),
-        'destockages': Campaign.objects.destockages()[:15],
-        'sales_flash': Campaign.objects.ventes_flash()[:15],
-        'news_arrivals': Campaign.objects.nouvelle_arrivages()[:15]
+        'recently_viewed': get_recently_viewed(request)
     }
 
     return render(request, template, context)
