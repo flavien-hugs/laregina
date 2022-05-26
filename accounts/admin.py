@@ -105,3 +105,8 @@ class UserAdmin(admin.ModelAdmin):
             return response
         else:
             return "Aucun lien"
+
+    def get_queryset(self, request):
+        qs = super().get_queryset(request)
+        vendors = qs.filter(is_seller=True)
+        return  vendors
