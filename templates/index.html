@@ -13,13 +13,36 @@
         <div class="container px-0">
             <div class="ps-section__left">
                 <ul class="menu--dropdown">
+                    
                     {% full_tree_for_model category.Category as categories %}
 
                     {% recursetree categories %}
-                        <li class="{% if not node.is_leaf_instance %}menu-item-has-children has-mega-menu{% endif %}">
+                        <li {% if node.children.exists %}class="menu-item-has-children has-mega-menu"{% endif %}>
+
                             <a href="{{ node.get_absolute_url }}">{{ node.name|safe }}</a>
+
+                            {% if node.children.all %}
+                                <span class="sub-toggle"></span>
+                                <div class="mega-menu">
+                                    {% for object in node.children.all %}
+                                        <div class="mega-menu__column">
+                                            <h4>
+                                                {{ object.name|safe }}
+                                                <span class="sub-toggle"></span>
+                                            </h4>
+                                            {% if object.children.exists %}
+                                                <ul class="mega-menu__list">
+                                                    {% for obj in object.children.all %}
+                                                        <li><a href="{{ obj.get_absolute_url }}">{{ obj.name }}</a></li>
+                                                    {% endfor %}
+                                                </ul>
+                                            {% endif %}
+                                        </div>
+                                    {% endfor %}
+                                </div>
+                            {% endif %}
                         </li>
-                    {% endrecursetree categories %}
+                    {% endrecursetree %}
                 </ul>
             </div>
 
