@@ -50,7 +50,7 @@ class UserAdmin(admin.ModelAdmin):
             'description de la boutique',
             {
                 'classes': ('collapse',),
-                'fields': ["store_description"],
+                'fields': ["store_description", "logo"],
             }
         ),
     )
@@ -68,6 +68,7 @@ class UserAdmin(admin.ModelAdmin):
         ),
     )
     list_display = (
+        "get_vendor_logo",
         "store_id",
         "store",
         "email",
@@ -83,7 +84,6 @@ class UserAdmin(admin.ModelAdmin):
     list_per_page = 10
     list_display_links = (
         'store_id',
-        'store',
         'email',
     )
     search_fields = ('email', 'user', 'store',)
