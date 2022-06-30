@@ -57,7 +57,7 @@ dashboard_view = DashboardView.as_view()
 class StoreListView(PromotionMixin, generic.ListView):
     paginate_by = 12
     context_object_name = 'vendor_list_object'
-    queryset = get_user_model().objects.order_by('-date_joined')
+    queryset = get_user_model().objects.order_by('-date_joined').exclude(is_superuser=True)
     template_name = 'includes/partials/_partials_vendor_list.html'
 
     def head(self, *args, **kwargs):
