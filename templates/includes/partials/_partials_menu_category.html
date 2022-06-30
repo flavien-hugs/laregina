@@ -1,27 +1,30 @@
 {% load mptt_tags %}
 
-{% recursetree category %}
-    <li {% if not node.is_leaf_instance %}class="menu-item-has-children has-mega-menu"{% endif %}>
-        <a href="{{ node.get_absolute_url }}">
-            {{ node.name|safe }}
-        </a>
+{% full_tree_for_model category.Category as categories %}
 
-        {% if not node.is_leaf_node and node.children.all %}
+{% recursetree categories %}
+    <li {% if node.children.exists %}class="menu-item-has-children has-mega-menu"{% endif %}>
+
+        <a href="{{ node.get_absolute_url }}">{{ node.name|safe }}</a>
+
+        {% if node.children.all %}
+            <span class="sub-toggle"></span>
             <div class="mega-menu">
-                {% for children in node.children.all %}
+                {% for object in node.children.all %}
                     <div class="mega-menu__column">
                         <h4>
-                            {{ children }}
+                            {{ object.name|safe }}
                             <span class="sub-toggle"></span>
                         </h4>
-                        
-                        {% for obj in children.children.all %}
+                        {% if object.children.exists %}
                             <ul class="mega-menu__list">
-                                <li><a href="{{ obj.get_absolute_url }}">{{ obj.name }}</a></li>
+                                {% for obj in object.children.all %}
+                                    <li><a href="{{ obj.get_absolute_url }}">{{ obj.name }}</a></li>
+                                {% endfor %}
                             </ul>
-                        {% endfor %}
+                        {% endif %}
                     </div>
-                {% endfor %} 
+                {% endfor %}
             </div>
         {% endif %}
     </li>
