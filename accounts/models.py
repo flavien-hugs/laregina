@@ -8,6 +8,7 @@ from django.db import models
 from django.urls import reverse
 from django.contrib import admin
 from django.dispatch import receiver
+from django.utils.safestring import mark_safe
 from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin
 
 from accounts.managers import UserManager
@@ -16,7 +17,7 @@ from helpers.utils import(
 )
 
 from helpers.models import(
-    BaseOrderInfo, ModelSlugMixin, BaseTimeStampModel
+    BaseTimeStampModel, BaseOrderInfo, ModelSlugMixin
 )
 
 from allauth.account.models import EmailAddress
@@ -32,9 +33,8 @@ UNIQUE_AND_DB_INDEX = {'null': False, 'unique': True, 'db_index': True}
 
 
 class User(
-    BaseOrderInfo, ModelSlugMixin,
-    AbstractBaseUser, PermissionsMixin
-):
+    BaseOrderInfo, ModelSlugMixin, BaseTimeStampModel,
+    AbstractBaseUser, PermissionsMixin):
 
     CIVILITY_CHOICES = (
         ('M.', 'M.'),
@@ -77,19 +77,16 @@ class User(
     )
     logo = models.ImageField(
         verbose_name="logo",
-        default="static/img/default.jpeg",
         upload_to=upload_image_logo_path,
         help_text="Ajouter le logo de votre boutique",
+
         **NULL_AND_BLANK
     )
     formatted_logo = ImageSpecField(
         source='logo',
-        processors=[
-            Adjust(contrast=1.2, sharpness=1.1),
-            ResizeToFill(150, 150)
-        ],
-        format='JPEG',
-        options={'quality': 90}
+        processors=[ResizeToFill(150, 150)],
+        format='PNG',
+        options={'quality': 100}
     )
     is_seller = models.BooleanField(
         default=False,
@@ -123,10 +120,13 @@ class User(
     objects = UserManager()
 
     class Meta:
+        app_label = 'accounts'
+        db_table = 'accounts_db'
+        index_together = (('email',),)
         ordering = ('-date_joined', '-last_login')
         get_latest_by = ('-date_joined', '-last_login')
         verbose_name_plural = 'boutiques'
-        indexes = [models.Index(fields=['id']),]
+        indexes = [models.Index(fields=['id'], name='id_index'),]
 
 
     def __str__(self):
@@ -175,6 +175,12 @@ class User(
 
     def get_social_url(self):
         return reverse('seller:rs_update', kwargs={"slug": self.slug})
+    
+    @admin.display(description="logo")
+    def get_vendor_logo(self):
+        if self.logo:
+            return mark_safe(f"<img src='{self.formatted_logo.url}' width='50' height='50'/>")
+        return mark_safe("<img src='/static/img/default.jpeg' height='50'/>")
 
     def get_logo_url(self):
         if self.logo:
@@ -211,8 +217,11 @@ class ProfileSocialMedia(BaseTimeStampModel):
     )
 
     class Meta:
+        app_label = 'accounts'
+        db_table = 'accounts_social_db'
+        index_together = (('user',),)
         verbose_name_plural = 'profile reseaux sociaux'
-        indexes = [models.Index(fields=['id'],),]
+        indexes = [models.Index(fields=['id'], name='id_rs_index'),]
 
     def __str__(self):
         return self.user.get_fullname()
@@ -237,10 +246,12 @@ class GuestCustomer(BaseOrderInfo, BaseTimeStampModel):
     active = models.BooleanField(default=True)
 
     class Meta:
+        app_label = 'accounts'
+        db_table = 'accounts_buyer_db'
+        index_together = (('email',),)
         ordering = ('-created_at', '-active')
         get_latest_by = ('-created_at', '-active')
         verbose_name_plural = 'acheteur(s)'
-        indexes = [models.Index(fields=['id'],)]
 
     def __str__(self):
         return '{email}({created})'.format(email=self.email, created=self.active)
