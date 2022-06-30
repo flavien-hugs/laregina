@@ -28,7 +28,7 @@ def get_filename_ext(filepath):
 
 
 def upload_image_logo_path(instance, filename):
-    new_filename = slugify(instance.user.store)
+    new_filename = slugify(instance.store)
     name, ext = get_filename_ext(filename)
     final_filename = f"{new_filename}-{instance.id}{ext}"
     return f"images/logo/{final_filename}"
