@@ -1,11 +1,11 @@
-## [LaRegina Deals](https://github.com/flavien-hugs/cgicmkp) - Plateforme de commerce electronique multi-vendeur.
+## [LaRegina Deals](https://github.com/flavien-hugs/laregina) - Plateforme de commerce electronique multi-vendeur.
 
 [![LaRegina](https://img.shields.io/badge/LaRegina-build-orange.svg)]()
 [![Django Version](https://img.shields.io/badge/Django-Version3-success.svg)](http://www.djangoproject.com)
 [![Python Version](https://img.shields.io/badge/Python-3.6-brightgreen.svg)](https://www.python.com)
 
 
-![LaRegina Deals](https://github.com/flavien-hugs/cgicmkp/blob/main/screenshort.png "screenshot description")
+![LaRegina Deals](https://github.com/flavien-hugs/laregina/blob/main/screenshort.png "screenshot description")
 
 LaRegina une plateforme de marché numérique.
 
@@ -25,7 +25,7 @@ Les demandes d'extraction avec corrections et améliorations sont cependant les 
 
 ### Installation and implementation of the project
 
-    - git clone https://github.com/flavien-hugs/cgicmkp/
+    - git clone https://github.com/flavien-hugs/laregina/
     - cd cgicmkp
     - make install
     - make migrate
