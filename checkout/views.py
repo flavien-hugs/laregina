@@ -19,7 +19,6 @@ import io
 import requests
 from xhtml2pdf import pisa
 
-
 from cinetpay_sdk.s_d_k import Cinetpay
 
 apikey =  settings.CINETPAY_API_KEY
