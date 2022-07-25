@@ -7,7 +7,9 @@
 
     {% include "includes/meta.html" %}
 
-    {% include "includes/assets/css.html" %}
+    {% block stylesheet %}
+        {% include "includes/assets/css.html" %}
+    {% endblock stylesheet %}
 
     <title>
         {% block title %}
@@ -24,6 +26,10 @@
 
 <body class="d-flex flex-column">
     {% url 'home' as home %}
+
+    {% block header_top %}
+        
+    {% endblock header_top %}
 
     <div class="flex-grow-1 flex-shrink-0">
         <main class="ps-page--single">
@@ -49,7 +55,10 @@
         {% include "includes/partials/_partials_footer.html" %}
     </div>
 
-    {% include "includes/assets/javascript.html" %}
+    {% block javascript %}
+        {% include "includes/assets/javascript.html" %}
+    {% endblock javascript %}
+
     {% block others_javascript %}
     {% endblock others_javascript %}
 </body>
