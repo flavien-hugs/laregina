@@ -175,16 +175,16 @@ class User(
 
     def get_social_url(self):
         return reverse('seller:rs_update', kwargs={"slug": self.slug})
-    
+
     @admin.display(description="logo")
     def get_vendor_logo(self):
         if self.logo:
-            return mark_safe(f"<img src='{self.formatted_logo.url}' width='50' height='50'/>")
+            return mark_safe(f"<img src='{self.logo.url}' width='50' height='50'/>")
         return mark_safe("<img src='/static/img/default.jpeg' height='50'/>")
 
     def get_logo_url(self):
         if self.logo:
-            return self.formatted_logo.url
+            return self.logo.url
         return "/static/img/default.jpeg"
 
     def orders(self):
