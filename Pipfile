@@ -8,7 +8,7 @@ flake8 = "*"
 coverage = "*"
 
 [packages]
-django = "==3.2.12"
+django = "==3.2.14"
 gunicorn = "*"
 django-mptt = "*"
 django-countries = "*"
