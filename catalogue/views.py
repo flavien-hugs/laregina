@@ -18,22 +18,22 @@ from cart import cart
 from analytics import utils
 from category.models import Category
 
-from catalogue.forms import ProductAddToCartForm
+from pages.models import Promotion
 from catalogue.models import Product
 from pages.mixins import PromotionMixin
 from reviews.models import ProductReview
 from catalogue.filters import FilterMixin
 from reviews.forms import ProductReviewForm
-
-from pages.models import Promotion
+from catalogue.forms import ProductAddToCartForm
 
 
 class HomeView(PromotionMixin, generic.TemplateView):
 
+    template_name = 'index.html'
     queryset = Category.objects.all()
 
     def get_context_data(self, **kwargs):
-        
+
         kwargs['promotions'] = self.promotions()
         kwargs['destockages'] = self.get_destockages()
         kwargs['sales_flash'] = self.get_sales_flash()
@@ -44,10 +44,32 @@ class HomeView(PromotionMixin, generic.TemplateView):
         kwargs['recently_viewed'] = utils.get_recently_viewed(request=self.request)
         kwargs['category_list'] =  self.queryset.get_ancestors(include_self=False)
 
+        supermarket = self.queryset.get(pk=7).get_descendants(include_self=True)
+        kwargs['supermarkets'] = Product.objects.filter(category__in=supermarket)[:15]
+
         return super(HomeView, self).get_context_data(**kwargs)
 
 
-home_view = HomeView.as_view(template_name='index.html')
+home_view = HomeView.as_view()
+
+
+class MarketView(PromotionMixin, generic.TemplateView):
+
+    template_name = 'market.html'
+    queryset = Category.objects.all()
+
+    def get_context_data(self, **kwargs):
+
+        supermarket = self.queryset.get(pk=22).get_descendants(include_self=True)
+
+        kwargs['categories'] = supermarket.get_ancestors(include_self=False)
+        kwargs['products'] = Product.objects.filter(category__in=supermarket)[:15]
+        kwargs['recently_viewed'] = utils.get_recently_viewed(request=self.request)
+
+        return super(MarketView, self).get_context_data(**kwargs)
+
+
+market_view = MarketView.as_view()
 
 
 class ProductListView(FilterMixin, PromotionMixin, generic.ListView):
