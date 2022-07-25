@@ -1,4 +1,4 @@
-# app tags
+# core.templatetags.apptags.py
 
 from django import template
 
