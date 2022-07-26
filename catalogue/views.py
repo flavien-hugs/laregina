@@ -2,7 +2,6 @@
 
 import random
 from django.db.models import Q
-from django.urls import reverse
 from django.conf import settings
 from django.views import generic
 from django.utils import timezone
@@ -10,9 +9,10 @@ from django.contrib import messages
 from django.core.cache import cache
 from django.utils.safestring import mark_safe
 from django.contrib.auth import get_user_model
+from django.urls import reverse, reverse_lazy
 from django.views.decorators.csrf import csrf_exempt
 from django.http import HttpResponseRedirect, HttpResponse
-from django.shortcuts import render, get_object_or_404, get_list_or_404
+from django.shortcuts import render, redirect, get_object_or_404, get_list_or_404
 
 from cart import cart
 from analytics import utils
@@ -27,20 +27,17 @@ from pages.models import Promotion, HomePage
 from catalogue.forms import ProductAddToCartForm
 
 
-class TemplateChoises:
-    if HomePage.objects.filter(page=0):
-        template_name = "index.html"
-    elif HomePage.objects.filter(page=1):
-        template_name = "market.html"
-    elif HomePage.objects.filter(page=2):
-        template_name = "combine.html"
-    else:
-        template_name = "index.html"
+class HomeView(PromotionMixin, generic.TemplateView):
 
-
-class HomeView(TemplateChoises, PromotionMixin, generic.TemplateView):
-
+    template_name = "index.html"
     queryset = Category.objects.all()
+
+    def dispatch(self, request, *args, **kwargs):
+        if HomePage.objects.filter(page=1):
+            return HttpResponseRedirect(reverse_lazy("market"))
+        elif HomePage.objects.filter(page=2):
+            return HttpResponseRedirect(reverse_lazy("allmarket"))
+        return super().dispatch(request, *args, **kwargs)
 
     def get_context_data(self, **kwargs):
         kwargs['promotions'] = self.promotions()
@@ -66,10 +63,17 @@ class HomeView(TemplateChoises, PromotionMixin, generic.TemplateView):
 home_view = HomeView.as_view()
 
 
-class MarketView(PromotionMixin, generic.TemplateView):
+class HomeTwoView(PromotionMixin, generic.TemplateView):
 
     template_name = 'market.html'
     queryset = Category.objects.all()
+
+    def dispatch(self, request, *args, **kwargs):
+        if HomePage.objects.filter(page=0):
+            return HttpResponseRedirect(reverse_lazy("home"))
+        elif HomePage.objects.filter(page=2):
+            return HttpResponseRedirect(reverse_lazy("allmarket"))
+        return super().dispatch(request, *args, **kwargs)
 
     def get_context_data(self, **kwargs):
 
@@ -79,10 +83,39 @@ class MarketView(PromotionMixin, generic.TemplateView):
         kwargs['products'] = Product.objects.filter(category__in=supermarket)[:15]
         kwargs['recently_viewed'] = utils.get_recently_viewed(request=self.request)
 
-        return super(MarketView, self).get_context_data(**kwargs)
+        return super(HomeTwoView, self).get_context_data(**kwargs)
 
 
-market_view = MarketView.as_view()
+market_view = HomeTwoView.as_view()
+
+
+class HomeThirdView(PromotionMixin, generic.TemplateView):
+
+    template_name = "combine.html"
+    queryset = Category.objects.all()
+
+    def dispatch(self, request, *args, **kwargs):
+        if HomePage.objects.filter(page=0):
+            return HttpResponseRedirect(reverse_lazy("home"))
+        elif HomePage.objects.filter(page=1):
+            return HttpResponseRedirect(reverse_lazy("market"))
+        return super().dispatch(request, *args, **kwargs)
+
+    def get_context_data(self, **kwargs):
+
+        supermarket = self.queryset.get(
+            pk=22).get_descendants(include_self=True)
+
+        kwargs['categories'] = supermarket.get_ancestors(include_self=False)
+        kwargs['products'] = Product.objects.filter(
+            category__in=supermarket)[:15]
+        kwargs['recently_viewed'] = utils.get_recently_viewed(
+            request=self.request)
+
+        return super(HomeThirdView, self).get_context_data(**kwargs)
+
+
+combine_view = HomeThirdView.as_view()
 
 
 class ProductListView(FilterMixin, PromotionMixin, generic.ListView):
