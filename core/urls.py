@@ -14,8 +14,9 @@ from django.conf.urls.static import static
 from django.views.generic import TemplateView
 
 from search.views import search_view
-from catalogue.views import home_view, market_view, combine_view
 from checkout.views import TrackOrderView, download_invoice_view
+
+from catalogue.views import home_view, market_view, combine_view, home_market_view
 from core.sitemap import StaticViewSitemap, CategorySitemapView, ProductSitemapView
 
 from django_summernote.models import Attachment
@@ -45,6 +46,7 @@ def handler500(request, template_name='500.html'):
 urlpatterns = [
     path(route='', view=home_view, name='home'),
     path(route='m/', view=market_view, name='market'),
+    path(route='monmarche/', view=home_market_view, name='homemarket'),
     path(route='e/', view=combine_view, name='allmarket'),
     path(route='search/', view=search_view, name="search"),
     path('', include('catalogue.urls')),

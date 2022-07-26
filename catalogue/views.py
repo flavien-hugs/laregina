@@ -27,17 +27,9 @@ from pages.models import Promotion, HomePage
 from catalogue.forms import ProductAddToCartForm
 
 
-class HomeView(PromotionMixin, generic.TemplateView):
+class ExtraContextData:
 
-    template_name = "index.html"
     queryset = Category.objects.all()
-
-    def dispatch(self, request, *args, **kwargs):
-        if HomePage.objects.filter(page=1):
-            return HttpResponseRedirect(reverse_lazy("market"))
-        elif HomePage.objects.filter(page=2):
-            return HttpResponseRedirect(reverse_lazy("allmarket"))
-        return super().dispatch(request, *args, **kwargs)
 
     def get_context_data(self, **kwargs):
         kwargs['promotions'] = self.promotions()
@@ -47,26 +39,51 @@ class HomeView(PromotionMixin, generic.TemplateView):
 
         kwargs['promotion_list'] = self.get_promotions_list()[:6]
         kwargs['vendor_list'] = get_list_or_404(get_user_model())[0:8]
-        kwargs['recently_viewed'] = utils.get_recently_viewed(request=self.request)
-        kwargs['category_list'] =  self.queryset.get_ancestors(include_self=False)
+        kwargs['recently_viewed'] = utils.get_recently_viewed(
+            request=self.request)
+        kwargs['category_list'] = self.queryset.get_ancestors(
+            include_self=False)
 
-        supermarket = self.queryset.get(pk=7).get_descendants(include_self=True)
-        kwargs['supermarkets'] = Product.objects.filter(category__in=supermarket)[:15]
+        supermarket = self.queryset.get(
+            pk=7).get_descendants(include_self=True)
+        kwargs['supermarkets'] = Product.objects.filter(
+            category__in=supermarket)[:15]
 
-        supermarkets = self.queryset.get(pk=22).get_descendants(include_self=True)
+        supermarkets = self.queryset.get(
+            pk=22).get_descendants(include_self=True)
         kwargs['categories'] = supermarkets.get_ancestors(include_self=False)
-        kwargs['products'] = Product.objects.filter(category__in=supermarkets)[:15]
+        kwargs['products'] = Product.objects.filter(
+            category__in=supermarkets)[:15]
 
-        return super(HomeView, self).get_context_data(**kwargs)
+        return super().get_context_data(**kwargs)
+
+
+class HomeView(ExtraContextData, PromotionMixin, generic.TemplateView):
+
+    template_name = "index.html"
+
+    def dispatch(self, request, *args, **kwargs):
+        if HomePage.objects.filter(page=1):
+            return HttpResponseRedirect(reverse_lazy("market"))
+        elif HomePage.objects.filter(page=2):
+            return HttpResponseRedirect(reverse_lazy("allmarket"))
+        return super().dispatch(request, *args, **kwargs)
 
 
 home_view = HomeView.as_view()
 
 
-class HomeTwoView(PromotionMixin, generic.TemplateView):
+class HomeMarketView(ExtraContextData, PromotionMixin, generic.TemplateView):
+
+    template_name = "market.html"
+
+
+home_market_view = HomeMarketView.as_view()
+
+
+class HomeTwoView(ExtraContextData, PromotionMixin, generic.TemplateView):
 
     template_name = 'market.html'
-    queryset = Category.objects.all()
 
     def dispatch(self, request, *args, **kwargs):
         if HomePage.objects.filter(page=0):
@@ -75,24 +92,13 @@ class HomeTwoView(PromotionMixin, generic.TemplateView):
             return HttpResponseRedirect(reverse_lazy("allmarket"))
         return super().dispatch(request, *args, **kwargs)
 
-    def get_context_data(self, **kwargs):
-
-        supermarket = self.queryset.get(pk=22).get_descendants(include_self=True)
-
-        kwargs['categories'] = supermarket.get_ancestors(include_self=False)
-        kwargs['products'] = Product.objects.filter(category__in=supermarket)[:15]
-        kwargs['recently_viewed'] = utils.get_recently_viewed(request=self.request)
-
-        return super(HomeTwoView, self).get_context_data(**kwargs)
-
 
 market_view = HomeTwoView.as_view()
 
 
-class HomeThirdView(PromotionMixin, generic.TemplateView):
+class HomeThirdView(ExtraContextData, PromotionMixin, generic.TemplateView):
 
     template_name = "combine.html"
-    queryset = Category.objects.all()
 
     def dispatch(self, request, *args, **kwargs):
         if HomePage.objects.filter(page=0):
@@ -100,19 +106,6 @@ class HomeThirdView(PromotionMixin, generic.TemplateView):
         elif HomePage.objects.filter(page=1):
             return HttpResponseRedirect(reverse_lazy("market"))
         return super().dispatch(request, *args, **kwargs)
-
-    def get_context_data(self, **kwargs):
-
-        supermarket = self.queryset.get(
-            pk=22).get_descendants(include_self=True)
-
-        kwargs['categories'] = supermarket.get_ancestors(include_self=False)
-        kwargs['products'] = Product.objects.filter(
-            category__in=supermarket)[:15]
-        kwargs['recently_viewed'] = utils.get_recently_viewed(
-            request=self.request)
-
-        return super(HomeThirdView, self).get_context_data(**kwargs)
 
 
 combine_view = HomeThirdView.as_view()
