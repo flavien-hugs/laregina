@@ -41,6 +41,33 @@ validators = [MinValueValidator(0), MaxValueValidator(100)]
 NULL_AND_BLANK = {'null': True, 'blank': True}
 
 
+class HomePage(BaseTimeStampModel):
+
+    ELECT = 0
+    MARKET = 1
+    COMBIN = 2
+    DEFAULT_PAGE = ELECT
+
+    PAGE_CHOICES = (
+        (ELECT, "Page par défaut"),
+        (MARKET, "Page Supermarché"),
+        (COMBIN, "Page Combinée"),
+    )
+
+    page = models.PositiveIntegerField(
+        verbose_name='Page',
+        choices=PAGE_CHOICES,
+        default=DEFAULT_PAGE
+    )
+
+    class Meta:
+        verbose_name_plural = "Accueil page"
+        indexes = [models.Index(fields=['id'],)]
+
+    def __str__(self) -> str:
+        return f"Page active pour le {self.page}"
+
+
 class Testimonial(BaseTimeStampModel):
     full_name = models.CharField(
         max_length=120,
@@ -85,6 +112,9 @@ class Testimonial(BaseTimeStampModel):
         get_latest_by = ['-created_at', ]
         verbose_name_plural = 'Témoignages'
         indexes = [models.Index(fields=['id'],)]
+
+    def __str__(self) -> str:
+        return self.full_name
 
     def get_image_url(self):
         if self.formatted_image:

@@ -7,6 +7,16 @@ from services.export_data_csv import export_to_csv
 from pages import models, forms
 
 
+@admin.register(models.HomePage)
+class HomePageAdmin(admin.ModelAdmin):
+    actions = None
+    list_display = ['id', 'page', 'date']
+    empty_value_display = '-empty-'
+    list_display_links = ['id']
+    list_editable = ["page"]
+    readonly_fields = ['page']
+
+
 @admin.register(models.Contact)
 class ContactAdmin(admin.ModelAdmin):
     date_hierarchy = 'timestamp'
