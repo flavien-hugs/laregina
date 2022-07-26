@@ -203,7 +203,6 @@ WSGI_APPLICATION = 'core.wsgi.application'
 
 CSRF_COOKIE_HTTPONLY = True
 SESSION_COOKIE_HTTPONLY = True
-SECURE_BROWSER_XSS_FILTER = True
 X_FRAME_OPTIONS = "SAMEORIGIN"
 
 # See: http://django-crispy-forms.readthedocs.io/en/latest/install.html#template-packs
