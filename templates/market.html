@@ -68,10 +68,9 @@
 
         {% for object in categories %}
 	        {% if object.get_products_in_category.exists %}
-		        <section class="ps-deal-of-day container bg-white mt-3 pb-3">
+		        <section class="ps-deal-of-day container bg-white mt-2 pb-2">
 		        	<div class="ps-section__header py-4 mb-3">
 		        		<h3>{{ object.name }}</h3>
-		        		<a class="font-weight-bolder" href="{{ object.get_absolute_url }}">Voir plus</a>
 		        	</div>
 
 		        	<div class="ps-section__content pt-4">
@@ -84,6 +83,71 @@
 		        </section>
 	        {% endif %}
         {% endfor %}
+        
+        {% if sococes.exists %}
+	        <section class="ps-deal-of-day container bg-white mt-2 pb-2">
+	        	<div class="ps-section__header py-4 mb-3">
+	        		<h3>Produits SOCOCE Bouaké</h3>
+	        	</div>
+
+	        	<div class="ps-section__content pt-4">
+	        		<div class="ps-carousel--nav owl-slider" data-owl-auto="true" data-owl-loop="true" data-owl-speed="5000" data-owl-gap="30" data-owl-nav="false" data-owl-dots="false" data-owl-item="5" data-owl-item-xs="2" data-owl-item-sm="3" data-owl-item-md="4" data-owl-item-lg="4" data-owl-item-xl="5" data-owl-duration="1000" data-owl-mousedrag="on">
+	        			{% for instance in sococes %}
+	        				{% include "catalogue/snippet/_snippet_product.html" with instance=instance %}
+	        			{% endfor %}
+	        		</div>
+	        	</div>
+	        </section>
+        {% endif%}
+
+        {% if bestprices.exists %}
+	        <section class="ps-deal-of-day container bg-white mt-2 pb-2">
+	        	<div class="ps-section__header py-4 mb-3">
+	        		<h3>Produits des magasins Bon Prix Bouaké</h3>
+	        	</div>
+
+	        	<div class="ps-section__content pt-4">
+	        		<div class="ps-carousel--nav owl-slider" data-owl-auto="true" data-owl-loop="true" data-owl-speed="5000" data-owl-gap="30" data-owl-nav="false" data-owl-dots="false" data-owl-item="5" data-owl-item-xs="2" data-owl-item-sm="3" data-owl-item-md="4" data-owl-item-lg="4" data-owl-item-xl="5" data-owl-duration="1000" data-owl-mousedrag="on">
+	        			{% for instance in bestprices %}
+	        				{% include "catalogue/snippet/_snippet_product.html" with instance=instance %}
+	        			{% endfor %}
+	        		</div>
+	        	</div>
+	        </section>
+        {% endif%}
+
+        {% if greatmarket.exists %}
+	        <section class="ps-deal-of-day container bg-white mt-2 pb-2">
+	        	<div class="ps-section__header py-4 mb-3">
+	        		<h3>Produits Grand Marché Bouaké</h3>
+	        	</div>
+
+	        	<div class="ps-section__content pt-4">
+	        		<div class="ps-carousel--nav owl-slider" data-owl-auto="true" data-owl-loop="true" data-owl-speed="5000" data-owl-gap="30" data-owl-nav="false" data-owl-dots="false" data-owl-item="5" data-owl-item-xs="2" data-owl-item-sm="3" data-owl-item-md="4" data-owl-item-lg="4" data-owl-item-xl="5" data-owl-duration="1000" data-owl-mousedrag="on">
+	        			{% for instance in greatmarket %}
+	        				{% include "catalogue/snippet/_snippet_product.html" with instance=instance %}
+	        			{% endfor %}
+	        		</div>
+	        	</div>
+	        </section>
+        {% endif%}
+
+        {% if sococedetails.exists %}
+	        <section class="ps-deal-of-day container bg-white mt-2 pb-2">
+	        	<div class="ps-section__header py-4 mb-3">
+	        		<h3>Vente au détail des produits SOCOCE Bouaké</h3>
+	        		<a class="font-weight-bolder" href="{{ object.get_absolute_url }}">Voir plus</a>
+	        	</div>
+
+	        	<div class="ps-section__content pt-4">
+	        		<div class="ps-carousel--nav owl-slider" data-owl-auto="true" data-owl-loop="true" data-owl-speed="5000" data-owl-gap="30" data-owl-nav="false" data-owl-dots="false" data-owl-item="5" data-owl-item-xs="2" data-owl-item-sm="3" data-owl-item-md="4" data-owl-item-lg="4" data-owl-item-xl="5" data-owl-duration="1000" data-owl-mousedrag="on">
+	        			{% for instance in sococedetails %}
+	        				{% include "catalogue/snippet/_snippet_product.html" with instance=instance %}
+	        			{% endfor %}
+	        		</div>
+	        	</div>
+	        </section>
+        {% endif%}
 
 		{% if recently_viewed %}
 			<section class="ps-deal-of-day container bg-white py-4 mt-3">
@@ -94,7 +158,7 @@
 				<div class="ps-section__content pt-4">
 					<div class="ps-carousel--nav owl-slider" data-owl-auto="true" data-owl-loop="true" data-owl-speed="5000" data-owl-gap="30" data-owl-nav="false" data-owl-dots="false" data-owl-item="5" data-owl-item-xs="2" data-owl-item-sm="3" data-owl-item-md="4" data-owl-item-lg="4" data-owl-item-xl="5" data-owl-duration="1000" data-owl-mousedrag="on">
 						{% for instance in recently_viewed|slice:'0:25' %}
-						{% include "catalogue/snippet/_snippet_product.html" with instance=instance %}
+						    {% include "catalogue/snippet/_snippet_product.html" with instance=instance %}
 						{% endfor %}
 					</div>
 				</div>

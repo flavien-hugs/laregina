@@ -77,6 +77,20 @@ class HomeMarketView(ExtraContextData, PromotionMixin, generic.TemplateView):
 
     template_name = "market.html"
 
+    def get_context_data(self, **kwargs):
+
+        sococe = self.queryset.get(pk=24).get_descendants(include_self=True)
+        bonprix = self.queryset.get(pk=26).get_descendants(include_self=True)
+        greatmarket = self.queryset.get(pk=23).get_descendants(include_self=True)
+        sococe_details = self.queryset.get(pk=25).get_descendants(include_self=True)
+
+        kwargs['sococes'] = Product.objects.filter(category__in=sococe)[:15]
+        kwargs['bestprices'] = Product.objects.filter(category__in=bonprix)[:15]
+        kwargs['greatmarket'] = Product.objects.filter(category__in=greatmarket)[:15]
+        kwargs['sococedetails'] = Product.objects.filter(category__in=sococe_details)[:15]
+
+        return super().get_context_data(**kwargs)
+
 
 home_market_view = HomeMarketView.as_view()
 
