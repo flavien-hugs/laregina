@@ -73,4 +73,5 @@ def send_sms_order(order_id):
     SEND_SMS_URL = f"https://sms.lws.fr/sms/api?action=send-sms&api_key={SMS_API_KEY}&to={destinataire}&from={SENDER_ID}&sms={message}"
 
     response = requests.post(SEND_SMS_URL)
+    print(response)
     return response

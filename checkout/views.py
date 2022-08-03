@@ -10,7 +10,6 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render, redirect, get_object_or_404
 
 from cart import cart
-from core import settings
 from checkout import checkout
 from checkout.forms import CheckoutForm
 from checkout.models import Order, OrderItem
@@ -60,7 +59,7 @@ def show_checkout(request, template='checkout/checkout.html'):
                 customer_name = order.get_short_name()
 
                 NOTIFY_URL = "{% url  'cart:cart' %}"
-                RETURN_URL = "{ % url 'checkout:order_success' order_id=order.transaction_id % }"
+                RETURN_URL = "{% url 'checkout:order_success' order_id=order.transaction_id %}"
 
                 data = {
                     'amount' : amount,
@@ -74,10 +73,6 @@ def show_checkout(request, template='checkout/checkout.html'):
                 }
 
                 response = client.PaymentInitialization(data)
-
-                print("get_payment_code: ", response['code'])
-                print("get_payment_message: ", response['message'])
-                print("get_payment_data: ", response['data'])
 
                 PAYMENT_URL = response['data']['payment_url']
                 return HttpResponseRedirect(PAYMENT_URL)
