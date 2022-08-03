@@ -11,12 +11,6 @@ ALLOWED_HOSTS = [
     'www.laregina.deals'
 ]
 
-MEDIA_URL = '/media/'
-STATIC_URL = '/static/'
-MEDIA_ROOT = '/home/c1581337c/public_html/media'
-STATIC_ROOT = '/home/c1581337c/public_html/static'
-STATICFILES_DIRS = [BASE_DIR / 'assets']
-
 # Parse database configuration from $DATABASE_URL
 # Change 'default' database configuration with
 # $DATABASE_URL. pwd=__unstainc@@ bdd=c1581337c_laregina_deals_db
