@@ -73,13 +73,11 @@ def product_promotion_object(object_list, header_text):
     }
     return context
 
-
 @register.inclusion_tag("includes/partials/_partials_product_recent.html")
 def product_recent_list(count=20):
     product_list = sorted(Product.objects.product_recent()[:count], key=lambda x: random.random())
     context = {'object_product_recent': product_list}
     return context
-
 
 @register.inclusion_tag("includes/partials/_partials_products_selling.html")
 def best_selling_products(count=20):
