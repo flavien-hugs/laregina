@@ -12989,10 +12989,6 @@ html:not([dir="rtl"]) .noUi-horizontal .noUi-handle {
     }
 }
 
-.ps-shopping-product {
-    min-height: 80vh;
-}
-
 @media (max-width: 1199px) {
     .ps-shopping-product .ps-product {
         margin-bottom: 30px;
