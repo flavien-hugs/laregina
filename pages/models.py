@@ -237,7 +237,7 @@ class Promotion(ModelSlugMixin, ApplyDiscountModel, BaseTimeStampModel):
         super().save(*args, **kwargs)
 
     def __str__(self):
-        return f"{self.campaign.name}"
+        return self.campaign.name
 
     @property
     def discount(self):

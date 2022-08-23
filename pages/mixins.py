@@ -11,7 +11,7 @@ class PromotionMixin(object):
 		return Campaign.objects.published()
 
 	def promotions(self):
-		return Promotion.objects.all()
+		return Campaign.objects.ventes_flash()
 
 	def get_destockages(self):
 	    destockages = sorted(
