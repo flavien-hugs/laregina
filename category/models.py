@@ -109,7 +109,7 @@ class Category(MPTTModel, ModelSlugMixin, BaseTimeStampModel):
         from pages.models import Promotion
         products = self.get_products_in_category()
         promotions = Promotion.objects.filter(products__in=products)
-        return promotions
+        return (promotions).distinct()
 
     def get_absolute_url(self):
         return reverse('category:category_detail', kwargs={'slug': str(self.slug)})
