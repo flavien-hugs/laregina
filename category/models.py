@@ -72,7 +72,7 @@ class Category(MPTTModel, ModelSlugMixin, BaseTimeStampModel):
         except:
             ancestors = []
         else:
-            ancestors = [ i.slug for i in ancestors]
+            ancestors = [i.slug for i in ancestors]
         slug = []
 
         for i in range(len(ancestors)):
@@ -104,6 +104,12 @@ class Category(MPTTModel, ModelSlugMixin, BaseTimeStampModel):
     @admin.display(description="nombre de produits")
     def products_count(self):
         return len(self.get_products_in_category())
+
+    def promotions_category(self):
+        from pages.models import Promotion
+        products = self.get_products_in_category()
+        promotions = Promotion.objects.filter(products__in=products)
+        return promotions
 
     def get_absolute_url(self):
         return reverse('category:category_detail', kwargs={'slug': str(self.slug)})

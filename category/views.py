@@ -20,19 +20,10 @@ class CategoryDetailView(
     template_name = "category/category_detail.html"
 
     def get_context_data(self, **kwargs):
-
-        category = self.get_object().get_descendants(include_self=True)
-
         kwargs['category'] = self.queryset
-        kwargs['object_list'] = Product.objects.filter(category__in=category)
+        kwargs['page_title'] = self.object.name
+        kwargs['object_list'] = self.get_object().get_products_in_category()
         kwargs['product_recommended'] = utils.get_recently_viewed(self.request)
-
-        kwargs['promotions'] = self.promotions()
-        kwargs['destockages'] = self.get_destockages()
-        kwargs['sales_flash'] = self.get_sales_flash()
-        kwargs['news_arrivals'] = self.get_news_arrivals()
-
-        kwargs['page_title'] = f"{self.object.name}"
         return super().get_context_data(**kwargs)
 
 
