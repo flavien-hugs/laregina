@@ -17,7 +17,7 @@ validators = [MinValueValidator(0), MaxValueValidator(100)]
 
 
 class Voucher(BaseTimeStampModel, ApplyDiscountModel):
-    
+
     discount = models.IntegerField(
         verbose_name="pourcentage de réduction",
         validators=validators
@@ -33,10 +33,10 @@ class Voucher(BaseTimeStampModel, ApplyDiscountModel):
 
     @admin.display(description="prix réduit")
     def get_price(self):
-        single_product_price = [
+        product_price = [
             ((obj.price * self.discount)/100) for obj in self.get_products()
         ]
-        return single_product_price
+        return product_price
 
     @admin.display(description="% de réduction")
     def get_discount(self) -> str:
