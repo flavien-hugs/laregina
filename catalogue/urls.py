@@ -8,7 +8,7 @@ from catalogue import views as catalogue_views
 
 urlpatterns = [
     path('', include(([
-        path(route='produit/', view=catalogue_views.ProductListView.as_view(), name='product_list'),
+        path(route='produit/', view=catalogue_views.product_list_view, name='product_list'),
         path(route='ps-<slug>/', view=catalogue_views.show_product, name='product_detail'),
     ], 'catalogue'), namespace='catalogue')),
 

@@ -156,6 +156,9 @@ class ProductListView(FilterMixin, PromotionMixin, generic.ListView):
         return qs
 
 
+product_list_view = ProductListView.as_view()
+
+
 @csrf_exempt
 def show_product(request, slug, template="catalogue/product_detail.html"):
 
@@ -202,7 +205,7 @@ def show_product(request, slug, template="catalogue/product_detail.html"):
         form = ProductAddToCartForm(request=request, label_suffix=':')
 
     # affiche les produits similaires
-    related_product = sorted(Product.objects.get_related(
+    related_product = sorted(Product.objects.get_category_related(
         instance=p)[:15], key=lambda x: random.random())
 
     # affiche les produits recommendés

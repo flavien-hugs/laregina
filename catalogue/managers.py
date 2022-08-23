@@ -43,7 +43,7 @@ class CatalogueManager(models.Manager):
     def search(self):
         return self.get_queryset().product_recent_add().search(query)
 
-    def get_related(self, instance):
+    def get_category_related(self, instance):
         product = self.get_queryset().filter(category=instance.category)
         return (product).exclude(id=instance.id).distinct()
 

@@ -116,8 +116,7 @@ class Product(BaseTimeStampModel):
         ):
             new_price = self.price - self.get_price()
             return new_price
-        else:
-            return self.price
+        return self.price
 
     @admin.display(description="prix du produit")
     def get_product_price(self):
@@ -141,9 +140,10 @@ class Product(BaseTimeStampModel):
 
     @admin.display(description="prix réduit", empty_value="00")
     def get_vouchers_price(self):
-        prices = [((obj.discount * self.price)/100)
-                  for obj in self.get_discount_products()]
-        return prices
+        if self.get_discount_products():
+            discount = [((obj.discount * self.price)/100) for obj in self.get_discount_products()]
+            return discount
+        return None
 
     @admin.display(description="description du produit")
     def get_product_description(self):
@@ -207,7 +207,7 @@ class Product(BaseTimeStampModel):
     def get_image_url(self):
         if self.images():
             return str(self.images().first().formatted_image.url)
-        return "/static/img/default.jpeg"
+        return "https://via.placeholder.com/300x300"
 
     @admin.display(description="image du produit")
     def get_product_image(self):
@@ -218,7 +218,7 @@ class Product(BaseTimeStampModel):
     def product_image_url(self):
         if self.images():
             return str(self.images().first().formatted_image.url)
-        return "/static/img/default.jpeg"
+        return "https://via.placeholder.com/300x300"
 
     def feebacks_products(self):
         from reviews.models import ProductReview
