@@ -3,7 +3,11 @@
 from django.contrib import admin
 
 from services.export_data_csv import export_to_csv
-from checkout.models import Order, OrderItem, OrderCashOnDelivery
+from checkout.models import(
+    Order, OrderItem,
+    OrderCashOnDelivery,
+    OrderShipped, OrderCancelled
+)
 
 
 class OrderItemStackedInline(admin.StackedInline):
@@ -107,6 +111,9 @@ class ExtraOrderAdmin(object):
     def make_processed(self, request, queryset):
         queryset.update(status='PROCESSED')
 
+    def has_add_permission(self, request):
+        return False
+
 
 @admin.register(Order)
 class OrderPayedAdmin(ExtraOrderAdmin, admin.ModelAdmin):
@@ -128,3 +135,25 @@ class OrderCashOnDeliveryAdmin(ExtraOrderAdmin, admin.ModelAdmin):
         qs = super().get_queryset(request)
         orders_cash_on_delivery = qs.filter(payment=0)
         return  orders_cash_on_delivery
+
+
+@admin.register(OrderShipped)
+class OrderCancelledAdmin(ExtraOrderAdmin, admin.ModelAdmin):
+
+    model = OrderShipped
+
+    def get_queryset(self, request):
+        qs = super().get_queryset(request)
+        orders = qs.filter(status=Order.SHIPPED)
+        return orders
+
+
+@admin.register(OrderCancelled)
+class OrderShippedAdmin(ExtraOrderAdmin, admin.ModelAdmin):
+
+    model = OrderCancelled
+
+    def get_queryset(self, request):
+        qs = super().get_queryset(request)
+        orders = qs.filter(status=Order.CANCELLED)
+        return orders

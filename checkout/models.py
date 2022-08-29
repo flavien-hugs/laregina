@@ -79,7 +79,7 @@ class Order(BaseOrderInfo, BaseTimeStampModel):
     objects = OrderManager()
 
     class Meta:
-        verbose_name_plural = 'commandes'
+        verbose_name_plural = 'Payer Cash'
         indexes = [models.Index(fields=['id'])]
 
     def __str__(self):
@@ -181,7 +181,19 @@ class OrderCashOnDelivery(Order):
 
     class Meta:
         proxy = True
-        verbose_name_plural = "Commandes impayées"
+        verbose_name_plural = "Payer à la livraison"
+
+
+class OrderShipped(Order):
+    class Meta:
+        proxy = True
+        verbose_name_plural = "Commandes livrées"
+
+
+class OrderCancelled(Order):
+    class Meta:
+        proxy = True
+        verbose_name_plural = "Commandes annulées"
 
 
 class OrderItem(models.Model):
