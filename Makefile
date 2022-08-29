@@ -31,7 +31,7 @@ createsuperuser: ## Run the Django server
 	$(MANAGE) createsuperuser --email="unsta.inc@pm.me"
 
 changepassword: ## Change password superuser
-	$(MANAGE) changepassword flavienhugs@gmail.com
+	$(MANAGE) changepassword unsta.inc@pm.me
 
 .PHONY: test
 test: ## Run test
