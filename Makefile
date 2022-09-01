@@ -47,17 +47,10 @@ dumpdata: ## dumpdata on database
 	$(MANAGE) dumpdata --indent=4 --natural-foreign --natural-primary -e contenttypes --format=json catalogue.product > data/products.json
 	$(MANAGE) dumpdata --indent=4 --natural-foreign --natural-primary -e contenttypes --format=json checkout.order > data/orders.json
 	$(MANAGE) dumpdata --indent=4 --natural-foreign --natural-primary -e contenttypes --format=json voucher.voucher > data/vouchers.json
-	$(MANAGE) dumpdata --indent=4 --natural-foreign --natural-primary -e contenttypes --format=json search.searchterm > data/search.json
-	$(MANAGE) dumpdata --indent=4 --natural-foreign --natural-primary -e contenttypes --format=json reviews.productreview > data/reviews.json
-	$(MANAGE) dumpdata --indent=4 --natural-foreign --natural-primary -e contenttypes --format=json pages > data/pages.json
 
 .PHONY: loaddata
 loaddata: ## Load default data
-	$(MANAGE) loaddata data/users.json
-	$(MANAGE) loaddata data/categories.json
-	$(MANAGE) loaddata data/products.json
-	$(MANAGE) loaddata data/vouchers.json
-	$(MANAGE) loaddata data/orders.json
+	$(MANAGE) loaddata data/*.json
 
 .PHONY: crontabadd
 crontabadd: ## Add all defined jobs from CRONJOB to crontab
