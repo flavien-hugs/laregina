@@ -50,6 +50,9 @@ class ContactAdmin(admin.ModelAdmin):
     )
     actions = [export_to_csv]
 
+    def has_add_permission(self, request):
+        return False
+
 
 class PromotionStackedInline(admin.StackedInline):
     model = models.Promotion
