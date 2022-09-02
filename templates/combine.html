@@ -28,26 +28,28 @@
     {% url "pages:contact" as contact %}
     {% url "vendor:store_list_view" as store_list_view %}
 
-    <div id="page-wrapper" class="pb-4">
+    <div id="page-wrapper">
         <section class="ps-home-banner">
             <div class="container px-0">
-                <div class="ps-section__left">
+                <div class="ps-section__left" role="menu">
                     <ul class="menu--dropdown">
                         
                         {% full_tree_for_model category.Category as categories %}
 
                         {% recursetree categories %}
-                            <li {% if node.children.exists %}class="menu-item-has-children has-mega-menu"{% endif %}>
+                            <li role="menuitem" class="{% if node.children.exists %}menu-item-has-children has-mega-menu{% endif %}">
 
-                                <a href="{{ node.get_absolute_url }}">{{ node.name|safe }}</a>
+                                <a href="{{ node.get_absolute_url }}">
+                                    <span>{{ node.name|safe }}</span>
+                                </a>
 
-                                {% if node.children.all %}
+                                {% if node.children.exists %}
                                     <span class="sub-toggle"></span>
-                                    <div class="mega-menu">
+                                    <div class="mega-menu" role="menu">
                                         {% for object in node.children.all %}
                                             <div class="mega-menu__column">
                                                 <h4>
-                                                    {{ object.name|safe }}
+                                                    <a href="{{ object.get_absolute_url }}">{{ object.name|safe }}</a>
                                                     <span class="sub-toggle"></span>
                                                 </h4>
                                                 {% if object.children.exists %}
