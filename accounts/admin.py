@@ -108,7 +108,7 @@ class UserAdmin(admin.ModelAdmin):
 
     def get_queryset(self, request):
         qs = super().get_queryset(request)
-        vendors = qs.filter(is_seller=True)
+        vendors = qs.exclude(is_superuser=True)
         return  vendors
 
     def has_add_permission(self, request):
