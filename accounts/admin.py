@@ -110,3 +110,6 @@ class UserAdmin(admin.ModelAdmin):
         qs = super().get_queryset(request)
         vendors = qs.filter(is_seller=True)
         return  vendors
+
+    def has_add_permission(self, request):
+        return False

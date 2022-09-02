@@ -20,8 +20,6 @@ from helpers.models import(
     BaseTimeStampModel, BaseOrderInfo, ModelSlugMixin
 )
 
-from allauth.account.models import EmailAddress
-
 import phonenumbers
 
 from imagekit.models import ImageSpecField
@@ -154,6 +152,7 @@ class User(
 
     @admin.display(description="compte verifié")
     def account_verified(self):
+        from allauth.account.models import EmailAddress
         result = EmailAddress.objects.filter(email=self.email)
         if len(result):
             return result[0].verified
