@@ -39,21 +39,17 @@ class ExtraContextData:
 
         kwargs['promotion_list'] = self.get_promotions_list()[:6]
         kwargs['vendor_list'] = get_list_or_404(get_user_model())[0:8]
-        kwargs['recently_viewed'] = utils.get_recently_viewed(
-            request=self.request)
-        kwargs['category_list'] = self.queryset.get_ancestors(
-            include_self=False)
+        kwargs['recently_viewed'] = utils.get_recently_viewed(request=self.request)
+        kwargs['category_list'] = self.queryset
 
         supermarket = self.queryset.get(
             pk=7).get_descendants(include_self=True)
         kwargs['supermarkets'] = Product.objects.filter(
             category__in=supermarket)[:15]
 
-        supermarkets = self.queryset.get(
-            pk=22).get_descendants(include_self=True)
+        supermarkets = self.queryset.get(pk=22).get_descendants(include_self=True)
         kwargs['categories'] = supermarkets.get_ancestors(include_self=False)
-        kwargs['products'] = Product.objects.filter(
-            category__in=supermarkets)[:15]
+        kwargs['products'] = Product.objects.filter(category__in=supermarkets)[:15]
 
         return super().get_context_data(**kwargs)
 
@@ -147,6 +143,7 @@ class ProductListView(FilterMixin, PromotionMixin, generic.ListView):
                 | Q(description__icontains=query)
                 | Q(price__icontains=query)
                 | Q(keywords__icontains=query)
+                | Q(category__slug__icontains=query)
             )
             try:
                 query_two = self.model.objects.filter(Q(price=query))
@@ -222,8 +219,8 @@ def show_product(request, slug, template="catalogue/product_detail.html"):
     utils.log_product_view(request, p)
 
     context = {
-        'page_title': p.name,
         'object': p,
+        'page_title': p.name,
         'category': Category.objects.all(),
 
         'form': form,
