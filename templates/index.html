@@ -51,10 +51,12 @@
                                 {% if node.children.exists %}
                                     <span class="sub-toggle"></span>
                                     <div class="mega-menu" role="menu">
-                                        {% for object in node.children.all %}
+                                        {% for object in node.children.all|slice:"0:4" %}
                                             <div class="mega-menu__column">
                                                 <h4>
-                                                    <a href="{{ object.get_absolute_url }}">{{ object.name|safe }}</a>
+                                                    <a href="{{ object.get_absolute_url }}">
+                                                        {{ object.name|safe }}
+                                                    </a>
                                                     <span class="sub-toggle"></span>
                                                 </h4>
                                                 {% if object.children.exists %}
