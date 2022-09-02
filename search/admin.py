@@ -29,3 +29,6 @@ class SearchTermAdmin(admin.ModelAdmin):
         'time_search_at'
     )
     actions = [export_to_csv]
+
+    def has_add_permission(self, request):
+        return False
