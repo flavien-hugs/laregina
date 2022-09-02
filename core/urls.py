@@ -19,9 +19,11 @@ from checkout.views import TrackOrderView, download_invoice_view
 from catalogue.views import home_view, market_view, combine_view, home_market_view
 from core.sitemap import StaticViewSitemap, CategorySitemapView, ProductSitemapView
 
+from allauth.account.models import EmailAddress
 from django_summernote.models import Attachment
 
 admin.site.unregister(Attachment)
+admin.site.unregister(EmailAddress)
 
 sitemaps = {
     'static': StaticViewSitemap,
