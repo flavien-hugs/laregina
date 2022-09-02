@@ -7,6 +7,7 @@ from django.dispatch import receiver
 
 from imagekit.models import ImageSpecField
 from imagekit.processors import ResizeToFill, Adjust
+
 from mptt.models import MPTTModel, TreeForeignKey
 
 from helpers.utils import (
@@ -18,7 +19,7 @@ from helpers.models import ModelSlugMixin, BaseTimeStampModel
 NULL_AND_BLANK = {'null': True, 'blank': True}
 
 
-class ActiveCategoryManager(models.Manager):
+class CategoryManager(models.Manager):
 
     def get_queryset(self):
         return super().get_queryset().filter(is_active=True)
@@ -55,7 +56,7 @@ class Category(MPTTModel, ModelSlugMixin, BaseTimeStampModel):
     )
     is_active = models.BooleanField(verbose_name='active', default=True)
 
-    active = ActiveCategoryManager()
+    objects = CategoryManager()
 
     class MPTTMeta:
         order_insertion_by = ['name']
@@ -72,11 +73,11 @@ class Category(MPTTModel, ModelSlugMixin, BaseTimeStampModel):
         except:
             ancestors = []
         else:
-            ancestors = [i.slug for i in ancestors]
+            ancestors = [item.slug for item in ancestors]
         slug = []
 
-        for i in range(len(ancestors)):
-            slug.append('/'.join(ancestors[:i+1]))
+        for item in range(len(ancestors)):
+            slug.append('/'.join(ancestors[:item+1]))
         return slug
 
     def __str__(self):
