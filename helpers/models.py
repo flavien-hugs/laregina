@@ -31,7 +31,6 @@ class BaseTimeStampModel(models.Model):
 class ModelSlugMixin(models.Model):
 
     slug = models.SlugField(
-        editable=False,
         max_length=225, unique=True,
         verbose_name="URL de la boutique",
         help_text='Automatiquement formé à partir du nom.',
