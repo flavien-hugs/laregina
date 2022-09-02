@@ -28,3 +28,6 @@ class ProductReviewAdmin(admin.ModelAdmin):
 
     def approve_comments(self, request, queryset):
         queryset.update(is_approved=True)
+
+    def has_add_permission(self, request):
+        return False
