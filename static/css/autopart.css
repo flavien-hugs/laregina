@@ -1,235 +1,247 @@
-
-.menu--autopart > li > a {
-  text-transform: uppercase;
-  font-weight: 600;
+.menu--autopart>li>a {
+    text-transform: uppercase;
+    font-weight: 600;
 }
 
 .header--autopart .ps-form--quick-search button {
-  background-color: #dd2400;
-  color: #ffffff;
+    background-color: #dd2400;
+    color: #ffffff;
 }
 
 .header--autopart .ps-form--quick-search button:hover {
-  cursor: pointer;
+    cursor: pointer;
 }
 
 .header--autopart .menu--product-categories .menu__toggle span {
-  display: none;
+    display: none;
 }
 
 .header--autopart .menu--product-categories .menu__content {
-  left: auto;
-  right: -10px;
-  padding-top: 0;
+    left: auto;
+    right: -10px;
+    padding-top: 0;
 }
 
 .header--autopart .menu--product-categories .menu__content:before {
-  content: '';
-  display: inline-block;
-  position: absolute;
-  top: -7px;
-  right: 30px;
-  width: 16px;
-  height: 16px;
-  border-left: 1px solid #e1e1e1;
-  border-top: 1px solid #e1e1e1;
-  background-color: #ffffff;
-  transform: rotate(45deg);
-  transform-origin: 50% 50%;
+    content: '';
+    display: inline-block;
+    position: absolute;
+    top: -7px;
+    right: 30px;
+    width: 16px;
+    height: 16px;
+    border-left: 1px solid #e1e1e1;
+    border-top: 1px solid #e1e1e1;
+    background-color: #ffffff;
+    transform: rotate(45deg);
+    transform-origin: 50% 50%;
 }
 
-.header--autopart .menu--product-categories .menu--dropdown > li:hover {
-  background-color: #fff;
+.header--autopart .menu--product-categories .menu--dropdown>li:hover {
+    background-color: #fff;
 }
 
-.header--autopart .menu--product-categories .menu--dropdown > li:hover a {
-  color: #dd2400;
+.header--autopart .menu--product-categories .menu--dropdown>li:hover a {
+    color: #dd2400;
 }
 
 .header--autopart .menu--product-categories:hover .menu__content {
-  transform: translateY(25px);
+    transform: translateY(25px);
 }
 
 .header--autopart .header__extra span {
-  background-color: #dd2400;
+    background-color: #dd2400;
 }
 
 .header--autopart .header__extra span i {
-  color: #ffffff;
+    color: #ffffff;
 }
 
-.header--autopart .header__extra:hover > i {
-  color: #dd2400;
+.header--autopart .header__extra:hover>i {
+    color: #dd2400;
 }
 
 .header--autopart .header__extra:hover span {
-  color: #dd2400;
+    color: #dd2400;
 }
 
-.header--autopart .menu > li > a {
-  padding: 15px 20px;
-  font-weight: 600;
-  color: #000;
-  text-transform: uppercase;
+.header--autopart .menu>li>a {
+    padding: 15px 20px;
+    font-weight: 600;
+    color: #000;
+    text-transform: uppercase;
 }
 
-.header--autopart .menu > li > a:hover {
-  color: #dd2400;
+.header--autopart .menu>li>a:hover {
+    color: #dd2400;
 }
 
-.header--autopart .menu > li:first-child > a {
-  padding-left: 0;
+.header--autopart .menu>li:first-child>a {
+    padding-left: 0;
 }
 
 .header--autopart .navigation {
-  background-color: #fff;
-  border-top: 1px solid #ccc;
+    background-color: #fff;
+    border-top: 1px solid #ccc;
 }
 
 .header--autopart.header--sticky .menu--product-categories .menu__toggle span {
-  display: block;
+    display: block;
 }
 
 .header--autopart.header--sticky .menu--product-categories .menu__content:before {
-  right: auto;
-  left: 55px;
+    right: auto;
+    left: 55px;
 }
 
 .header--autopart.header--sticky .menu--product-categories:hover .menu__content {
-  transform: translateY(15px);
+    transform: translateY(15px);
 }
 
 .header--autopart.header--sticky .header__top {
-  position: relative;
+    position: relative;
 }
 
 .header--autopart.header--sticky .header__content {
-  position: fixed;
-  top: 0;
-  width: 100%;
-  z-index: 1000;
-  border-bottom: 1px solid #ccc;
-  padding: 10px 0;
-  background-color: #ffffff;
+    position: fixed;
+    top: 0;
+    width: 100%;
+    z-index: 1000;
+    border-bottom: 1px solid #ccc;
+    padding: 10px 0;
+    background-color: #ffffff;
 }
 
 @media (max-width: 1199px) {
-  .header--autopart {
-    display: none;
-  }
+    .header--autopart {
+        display: none;
+    }
 }
 
 .header--mobile.autopart {
-  background-color: #fff;
+    background-color: #fff;
 }
 
 .header--mobile.autopart .ps-cart--mini {
-  text-align: left;
+    text-align: left;
 }
 
 .header--mobile.autopart .ps-search--mobile {
-  background-color: #dd2400;
+    background-color: #dd2400;
 }
 
 .header--mobile.autopart.header--sticky .navigation--mobile {
-  background-color: #ffffff;
+    background-color: #ffffff;
 }
 
-.navigation--list .navigation__item.active i, .navigation--list .navigation__item.active span, .navigation--list .navigation__item:focus i, .navigation--list .navigation__item:focus span, .navigation--list .navigation__item:active i, .navigation--list .navigation__item:active span, .navigation--list .navigation__item:hover i, .navigation--list .navigation__item:hover span {
-  color: #dd2400;
+.navigation--list .navigation__item.active i,
+.navigation--list .navigation__item.active span,
+.navigation--list .navigation__item:focus i,
+.navigation--list .navigation__item:focus span,
+.navigation--list .navigation__item:active i,
+.navigation--list .navigation__item:active span,
+.navigation--list .navigation__item:hover i,
+.navigation--list .navigation__item:hover span {
+    color: #dd2400;
 }
 
 .ps-panel--sidebar .ps-panel__header {
-  background-color: #dd2400;
+    background-color: #dd2400;
 }
 
 .ps-banner--autopart {
-  position: relative;
+    position: relative;
 }
 
 .ps-banner--autopart h4 {
-  margin-bottom: 20px;
-  font-weight: 600;
-  color: #0098ce;
-  font-size: 18px;
-  text-transform: uppercase;
-  line-height: 20px;
+    margin-bottom: 20px;
+    font-weight: 600;
+    color: #0098ce;
+    font-size: 18px;
+    text-transform: uppercase;
+    line-height: 20px;
 }
 
 .ps-banner--autopart h3 {
-  font-size: 60px;
-  line-height: 58px;
-  font-weight: 700;
+    font-size: 60px;
+    line-height: 58px;
+    font-weight: 700;
 }
 
 .ps-banner--autopart p {
-  margin-bottom: 0;
-  font-size: 16px;
-  color: #666;
+    margin-bottom: 0;
+    font-size: 16px;
+    color: #666;
 }
 
 .ps-banner--autopart p strong {
-  color: #000;
-  font-weight: 500;
+    color: #000;
+    font-weight: 500;
 }
 
 .ps-banner--autopart .ps-btn {
-  margin-top: 20px;
-  padding: 12px 24px;
+    margin-top: 20px;
+    padding: 12px 24px;
 }
 
 .ps-banner--autopart .ps-banner__content {
-  max-width: 1200px;
-  width: 100%;
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  padding-left: 140px;
+    max-width: 1200px;
+    width: 100%;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    padding-left: 140px;
 }
 
 @media (max-width: 1680px) {
-  .ps-banner--autopart h4 {
-    margin-bottom: 10px;
-  }
-  .ps-banner--autopart h3 {
-    font-size: 40px;
-    line-height: 1.2em;
-  }
+    .ps-banner--autopart h4 {
+        margin-bottom: 10px;
+    }
+
+    .ps-banner--autopart h3 {
+        font-size: 40px;
+        line-height: 1.2em;
+    }
 }
 
 @media (max-width: 1366px) {
-  .ps-banner--autopart h4 {
-    margin-bottom: 10px;
-    font-size: 16px;
-  }
-  .ps-banner--autopart h3 {
-    font-size: 40px;
-  }
-  .ps-banner--autopart h3 br {
-    display: none;
-  }
+    .ps-banner--autopart h4 {
+        margin-bottom: 10px;
+        font-size: 16px;
+    }
+
+    .ps-banner--autopart h3 {
+        font-size: 40px;
+    }
+
+    .ps-banner--autopart h3 br {
+        display: none;
+    }
 }
 
 @media (max-width: 1199px) {
-  .ps-banner--autopart {
-    min-height: 400px;
-  }
-  .ps-banner--autopart img {
-    display: none;
-    visibility: hidden;
-    opacity: 0;
-  }
-  .ps-banner--autopart .ps-banner__content {
-    padding: 0 30px;
-  }
+    .ps-banner--autopart {
+        min-height: 400px;
+    }
+
+    .ps-banner--autopart img {
+        display: none;
+        visibility: hidden;
+        opacity: 0;
+    }
+
+    .ps-banner--autopart .ps-banner__content {
+        padding: 0 30px;
+    }
 }
 
 @media (max-width: 479px) {
-  .ps-banner--autopart h3 {
-    font-size: 24px;
-  }
-  .ps-banner--autopart p {
-    font-size: 12px;
-  }
+    .ps-banner--autopart h3 {
+        font-size: 24px;
+    }
+
+    .ps-banner--autopart p {
+        font-size: 12px;
+    }
 }

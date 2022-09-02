@@ -14897,13 +14897,19 @@ html:not([dir="rtl"]) .noUi-horizontal .noUi-handle {
 }
 
 #page-wrapper {
+    padding: 20px 0;
     background-color: #eee;
 }
 
-#page-wrapper .ps-home-banner {
+#page-wrapper .ps-home-banner ul,
+#homepage-5 .ps-home-banner ol {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+#page-wrapper .ps-home-banner .container {
     display: flex;
-    margin-bottom: 20px;
-    padding-top: 20px;
     flex-flow: row nowrap;
     justify-content: space-between;
 }
@@ -14948,17 +14954,13 @@ html:not([dir="rtl"]) .noUi-horizontal .noUi-handle {
 }
 
 #page-wrapper .ps-home-banner .ps-section__left {
+    position: relative;
     background-color: #fff;
 }
 
 #page-wrapper .ps-home-banner .ps-section__left,
 #page-wrapper .ps-home-banner .ps-section__right {
     max-width: 250px;
-}
-
-#page-wrapper .ps-home-banner .container {
-    display: flex;
-    flex-flow: row nowrap;
 }
 
 #page-wrapper .ps-home-banner .ps-section__left .menu--dropdown {
@@ -15607,23 +15609,22 @@ html:not([dir="rtl"]) .noUi-horizontal .noUi-handle {
     display: flex;
     flex-flow: row nowrap;
     justify-content: space-between;
-    padding: 15px 30px 10px;
+    padding: 8px;
     background-color: #fff;
-    transition: all 0.4s ease;
-    border: 1px solid #ccc;
+    transition: all 0.2s ease;
 }
 
 .mega-menu>* {
     width: 100%;
-    padding: 10px 15px;
+    padding: 8px;
 }
 
-.mega-menu h4 {
-    margin: 0;
-    margin-bottom: 10px;
-    font-size: 16px;
-    font-weight: 600;
-    color: #000;
+.mega-menu h4>a {
+    font-size: 1.2rem;
+    font-weight: 500;
+    padding: 0 4px;
+    white-space: nowrap;
+    text-transform: uppercase;
 }
 
 .mega-menu .mega-menu__column {
@@ -15634,13 +15635,19 @@ html:not([dir="rtl"]) .noUi-horizontal .noUi-handle {
     background-color: transparent;
 }
 
+.mega-menu .mega-menu__list li:first-child {
+    border-top: 1px solid #ededed;
+}
+
 .mega-menu .mega-menu__list li a {
     display: block;
-    color: #000;
+    color: #282828;
     line-height: 20px;
     padding: 5px 0;
-    font-size: 14px;
+    font-size: 1.3rem;
+    padding-top: 8px;
     background-color: transparent;
+
 }
 
 .mega-menu .mega-menu__list li a.has-badge {
@@ -15889,8 +15896,8 @@ html:not([dir="rtl"]) .noUi-horizontal .noUi-handle {
     border-left: none;
 }
 
-.menu--dropdown>li:hover {
-    background-color: #fcb800;
+.menu--dropdown>li>a:hover {
+    color: #fcb800;
 }
 
 .menu--dropdown>li:hover.has-mega-menu .mega-menu {
