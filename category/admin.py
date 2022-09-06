@@ -23,6 +23,7 @@ class CategoryAdmin(DraggableMPTTAdmin):
     )
     list_per_page = 10
     list_display = (
+        "id",
         "tree_actions",
         'indented_title',
         "products_count",
