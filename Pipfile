@@ -37,6 +37,7 @@ pyzstd = "*"
 django-dbbackup = "*"
 django-crontab = "*"
 requests = "*"
+python-dotenv = "*"
 
 [requires]
 python_version = "3.8"
