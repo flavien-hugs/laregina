@@ -46,18 +46,16 @@ class ProductAdmin(SummernoteModelAdmin):
         'get_product_shop',
     )
     list_display = [
-        'get_product_shop', 'name',
-        'price', 'get_vouchers',
-        'get_vouchers_price', 'avaregereview',
-        'product_link', 'is_active',
-        'get_product_image',
+        'get_product_shop', 'category', 'name',
+        'price', 'get_vouchers', 'get_vouchers_price',
+        'product_link', 'is_active', 'get_product_image',
     ]
     list_filter = [
         'user__store',
-        'created_at',
-        'is_active',
+        'category'
     ]
     list_editable = (
+        'category',
         "is_active",
     )
     readonly_fields = [
