@@ -192,6 +192,12 @@ class User(
         order_item = OrderItem.objects.filter(models.Q(order__in=order))
         return order_item
 
+    @admin.display(description="nombre de produits")
+    def products(self):
+        from catalogue.models import Product
+        products = Product.objects.filter(user=self)
+        return products.count()
+
     def get_social_profile(self):
         return ProfileSocialMedia.objects.filter(user=self)
 

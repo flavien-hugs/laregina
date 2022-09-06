@@ -24,7 +24,6 @@ class UserSocialProfile(admin.TabularInline):
 
 @admin.register(get_user_model())
 class UserAdmin(admin.ModelAdmin):
-    model = get_user_model()
     form = UserChangeForm
     date_hierarchy = 'date_joined'
     fieldsets = (
@@ -72,9 +71,8 @@ class UserAdmin(admin.ModelAdmin):
         "store_id",
         "store",
         "email",
+        "products",
         "last_login",
-        "date_joined",
-        "account_verified",
         "show_vendor_url"
     )
     list_filter = (
@@ -86,7 +84,6 @@ class UserAdmin(admin.ModelAdmin):
         'store_id',
         'email',
     )
-    search_fields = ('email', 'user', 'store',)
     readonly_fields = ['store_id', 'show_vendor_url', 'last_login', 'date_joined']
 
     actions = [export_to_csv]

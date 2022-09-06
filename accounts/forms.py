@@ -56,10 +56,15 @@ class MarketSignupForm(UserCreationForm):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
+        for field in self.fields:
+            self.fields[field].widget.attrs.update(
+                {'class': 'form-control'}
+            )
+
         self.helper = FormHelper(self)
+        self.helper.form_method = 'POST'
         self.helper.form_id = 'signup_form_ajax'
         self.helper.form_class = 'signup_form_ajax'
-        self.helper.form_method = 'POST'
 
         self.helper.layout = layout.Layout(
             layout.Row(
@@ -71,67 +76,52 @@ class MarketSignupForm(UserCreationForm):
 
             layout.Row(
                 layout.Column(
-                    bootstrap.PrependedText(
-                        'email', '',
-                        placeholder='Entrez votre adresse email',
-                    ),
+                    'email',
+                    placeholder='Entrez votre adresse email',
                     css_class='form-group col-md-6 mb-0'
                 ),
 
                 layout.Column(
-                    bootstrap.PrependedText(
-                        'store', '', 
-                        placeholder='Entrez le nom du votre magasin',
-                    ),
+                    'store',
+                    placeholder='Entrez le nom du votre magasin',
                     css_class='form-group col-md-6 mb-0'
                 ),
             ),
 
             layout.Row(
                 layout.Column(
-                    bootstrap.PrependedText(
-                        'shipping_country', '',
-                        placeholder='',
-                        css_class='custom-select'
-                    ),
+                    'shipping_country',
                     css_class='form-group col-md-6 mb-0'
                 ),
-
                 layout.Column(
-                    bootstrap.PrependedText(
-                        'shipping_city', '', 
-                        placeholder='Situation du magasin',
-                    ),
+                    'shipping_city',
+                    placeholder='Situation du magasin',
                     css_class='form-group col-md-6 mb-0'
                 ),
             ),
 
             layout.Row(
                 layout.Column(
-                    bootstrap.PrependedText(
-                        'phone', '',
-                        placeholder='Entrer un numéro de téléphone',
-                    ),
+                    'phone',
+                    placeholder='Entrer un numéro de téléphone',
                     css_class='form-group col-md-6 mb-0'
                 ),
 
                 layout.Column(
-                    bootstrap.PrependedText(
-                        'phone_two', '', 
-                        placeholder='Numéro de téléphone supplémentaire',
-                    ),
+                    'phone_two',
+                    placeholder='Numéro de téléphone supplémentaire',
                     css_class='form-group col-md-6 mb-0'
                 ),
             ),
 
 
             bootstrap.Field(
-                'password1', '',
+                'password1',
                 placeholder="Entrez votre mot de passe"
             ),
 
             bootstrap.Field(
-                'password2', '',
+                'password2',
                 placeholder="Confirmez le mot de passe"
             ),
 
@@ -169,6 +159,7 @@ class MarketSignupForm(UserCreationForm):
         if commit:
             user.save()
         return user
+        
 
 
 class CustomerSignUpForm(forms.ModelForm):

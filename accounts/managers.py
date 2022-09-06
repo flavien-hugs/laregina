@@ -7,7 +7,7 @@ from django.contrib.auth.models import BaseUserManager
 
 class UserManager(BaseUserManager):
 
-    def _create_user(self, email, password, is_seller, **extra_fields):
+    def _create_user(self, email, password, **extra_fields):
 
         if not email:
             raise ValueError("Les utilisateurs doivent disposer d'une adresse électronique.")
@@ -16,7 +16,6 @@ class UserManager(BaseUserManager):
         email = self.normalize_email(email)
         user = self.model(
             email=email,
-            is_seller=is_seller,
             is_active=True,
             last_login=now,
             date_joined=now,
