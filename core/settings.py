@@ -6,8 +6,10 @@ from pathlib import Path
 from django.contrib.messages import constants as messages
 
 import pyzstd
-from decouple import config
 
+from dotenv import dotenv_values
+
+env = dotenv_values(".env")
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -16,7 +18,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/3.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = config('SECRET_KEY')
+SECRET_KEY = env.get('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -31,9 +33,6 @@ APPEND_SLASH = True
 # Custom Django auth settings
 AUTH_USER_MODEL = 'accounts.User'
 
-# site ID for allauth
-SITE_ID = 1
-
 # DJANGO-ADMIN CONFIGURATION
 # Location of root django.contrib.admin URL
 ADMIN_URL = 'lrg-admin/'
@@ -45,7 +44,6 @@ ALLOWED_HOSTS = []
 # See: https://docs.djangoproject.com/en/1.11/ref/settings/#installed-apps
 INSTALLED_APPS = [
     'django.contrib.auth',
-    'django.contrib.sites',
 
     'django.contrib.contenttypes',
     'django.contrib.sessions',
@@ -54,6 +52,8 @@ INSTALLED_APPS = [
 
     'django.contrib.humanize',
     'django.contrib.sitemaps',
+
+    'django.contrib.sites',
 ]
 
 OTHERS_APPS = [
@@ -78,8 +78,8 @@ OTHERS_APPS = [
 ]
 
 LOCAL_APPS = [
-    'search.apps.SearchConfig',
     'accounts.apps.AccountsConfig',
+    'search.apps.SearchConfig',
     'category.apps.CategoryConfig',
     'catalogue.apps.CatalogueConfig',
     'reviews.apps.ReviewsConfig',
@@ -93,9 +93,11 @@ LOCAL_APPS = [
 
 INSTALLED_APPS += OTHERS_APPS + LOCAL_APPS
 
+# site ID for allauth
+SITE_ID = 1
+
 # AUTHENTICATION CONFIGURATION
 AUTHENTICATION_BACKENDS = [
-    # 'django.contrib.auth.backends.ModelBackend',
     'allauth.account.auth_backends.AuthenticationBackend',
 ]
 
@@ -112,13 +114,12 @@ SIGNUP_CUSTOMER_URL = 'customer_signup'
 
 ACCOUNT_LOGOUT_ON_GET = True
 ACCOUNT_UNIQUE_EMAIL = True
-ACCOUNT_LOGOUT_ON_GET = True
 ACCOUNT_EMAIL_REQUIRED = True
 ACCOUNT_USERNAME_MIN_LENGTH = 4
 ACCOUNT_SESSION_REMEMBER = False
 ACCOUNT_USERNAME_REQUIRED = False
 ACCOUNT_AUTHENTICATION_METHOD = 'email'
-ACCOUNT_EMAIL_VERIFICATION = "mandatory"
+ACCOUNT_EMAIL_VERIFICATION = None
 ACCOUNT_USER_MODEL_EMAIL_FIELD = 'email'
 ACCOUNT_USER_MODEL_USERNAME_FIELD = None
 ACCOUNT_LOGOUT_REDIRECT_URL = LOGOUT_URL
@@ -136,11 +137,11 @@ ACCOUNT_FORMS = {
 # La valeur d'affichage de l'utilisateur est le nom du profil associé
 ACCOUNT_USER_DISPLAY = lambda user: user.shipping_first_name
 
-EMAIL_HOST = config('EMAIL_HOST')
-EMAIL_PORT = config('EMAIL_PORT')
-EMAIL_USE_TLS = config('EMAIL_USE_TLS')
-EMAIL_HOST_USER = config('EMAIL_HOST_USER')
-EMAIL_HOST_PASSWORD = config('EMAIL_HOST_PASSWORD')
+EMAIL_HOST = env.get('EMAIL_HOST')
+EMAIL_PORT = env.get('EMAIL_PORT')
+EMAIL_USE_TLS = env.get('EMAIL_USE_TLS')
+EMAIL_HOST_USER = env.get('EMAIL_HOST_USER')
+EMAIL_HOST_PASSWORD = env.get('EMAIL_HOST_PASSWORD')
 DEFAULT_FROM_EMAIL = SERVER_EMAIL = 'no-reply@laregina.deals'
 
 
@@ -223,11 +224,11 @@ else:
     DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.mysql',
-            'NAME': config('DATABASE_NAME'),
-            'USER': config('DATABASE_USER'),
-            'PASSWORD': config('DATABASE_PASSWORD'),
-            'HOST': config('DATABASE_HOST', cast=str),
-            'PORT': config('DATABASE_PORT', cast=int),
+            'NAME': env.get('DATABASE_NAME'),
+            'USER': env.get('DATABASE_USER'),
+            'PASSWORD': env.get('DATABASE_PASSWORD'),
+            'HOST': env.get('DATABASE_HOST'),
+            'PORT': env.get('DATABASE_PORT'),
             'OPTIONS': {
                 "init_command": "SET sql_mode='STRICT_TRANS_TABLES'",
             }
@@ -314,18 +315,19 @@ MPTT_ADMIN_LEVEL_INDENT = 20
 # phonenumber config
 
 PHONENUMBER_DEFAULT_REGION = "CI"
-PHONENUMBER_DB_FORMAT = "NATIONAL"
+PHONENUMBER_DB_FORMAT = "INTERNATIONAL"
+PHONENUMBER_DEFAULT_FORMAT = "INTERNATIONAL"
 
 # CINETPAY API KEY
 
-CINETPAY_API_KEY = config('CINETPAY_API_KEY')
-CINETPAY_SITE_ID = config('CINETPAY_SITE_ID')
-CINETPAY_TRANS_ID = config('CINETPAY_TRANS_ID')
+CINETPAY_API_KEY = env.get('CINETPAY_API_KEY')
+CINETPAY_SITE_ID = env.get('CINETPAY_SITE_ID')
+CINETPAY_TRANS_ID = env.get('CINETPAY_TRANS_ID')
 
 # Mailchimp Configuration
 
-MAILCHIMP_API_KEY = config('MAILCHIMP_API_KEY')
-MAILCHIMP_SUBSCRIBE_LIST_ID = config('MAILCHIMP_SUBSCRIBE_LIST_ID')
+MAILCHIMP_API_KEY = env.get('MAILCHIMP_API_KEY')
+MAILCHIMP_SUBSCRIBE_LIST_ID = env.get('MAILCHIMP_SUBSCRIBE_LIST_ID')
 
 # Django est passé à la sérialisation JSON pour des raisons de sécurité, mais il ne
 # sérialise pas les modèles. Nous devrions résoudre ce problème en étendant la
@@ -455,5 +457,5 @@ CRONJOBS = [
     ('0 24 * * *', 'helpers.cron.create_backups_scheduled_job')
 ]
 
-SENDER_ID = config('SENDER_ID')
-SMS_API_KEY = config('SMS_API_KEY')
+SENDER_ID = env.get('SENDER_ID')
+SMS_API_KEY = env.get('SMS_API_KEY')
