@@ -180,6 +180,7 @@ class Campaign(BaseTimeStampModel, ModelSlugMixin):
             return self.formatted_image.url
         return "https://via.placeholder.com/680x380"
 
+    @admin.display(description="cover")
     def show_image_tag(self):
         if self.image is not None:
             return mark_safe(f'<img src="{self.get_image_url()}" height="50"/>')
@@ -341,6 +342,12 @@ class Annonce(BaseTimeStampModel):
 
     def get_image_url(self):
         return self.image.url
+
+    @admin.display(description="cover")
+    def show_image_tag(self):
+        if self.image is not None:
+            return mark_safe(f'<img src="{self.get_image_url()}" height="50"/>')
+        return "https://via.placeholder.com/50x50"
 
 
 class Contact(models.Model):

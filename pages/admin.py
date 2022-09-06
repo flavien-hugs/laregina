@@ -109,6 +109,7 @@ class CampaignAdmin(admin.ModelAdmin):
         "get_vouchers",
         "get_campaigns_count",
         'date',
+        'show_image_tag'
     ]
     list_per_page = 10
     list_display_links = ('__str__',)
@@ -149,6 +150,7 @@ class AnnonceAdmin(admin.ModelAdmin):
         'name',
         'is_active',
         'date',
+        'show_image_tag',
     ]
     fieldsets = (
         (
