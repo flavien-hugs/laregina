@@ -31,10 +31,10 @@ class ProductView(ObjectViewed):
     """
 
     product = models.ForeignKey(
-        to=Product,
-        on_delete=models.SET_NULL,
+        to="catalogue.Product",
+        on_delete=models.CASCADE,
         verbose_name='produit',
-        null=True
+        blank=True, null=True
     )
 
     def __str__(self):
