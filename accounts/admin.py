@@ -8,18 +8,32 @@ from django.utils.safestring import mark_safe
 from django.contrib.auth import get_user_model
 from django.contrib.auth.forms import UserChangeForm
 
+from catalogue.models import Product
 from accounts.models import ProfileSocialMedia
+
 from services.export_data_csv import export_to_csv
 
 admin.site.unregister(Site)
 admin.site.unregister(Group)
 
 
+class ProductInline(admin.TabularInline):
+    model = Product
+    extra = 1
+    max_num = 1
+    verbose_name = "produits"
+    show_change_link = True
+    list_display = ['name', 'price']
+    exclude = [
+        'updated_at', 'created_at',
+        'description', 'keywords', 'is_external',
+        'slug', 'quantity'
+    ]
+
 class UserSocialProfile(admin.TabularInline):
     extra = 1
     max_num = 1
     model = ProfileSocialMedia
-    show_change_link = True
 
 
 @admin.register(get_user_model())
@@ -30,8 +44,8 @@ class UserAdmin(admin.ModelAdmin):
         ('information sur la boutique', {'fields':
             (
                 ("store_id", "email"),
-                "store",
                 ("shipping_first_name", "shipping_last_name"),
+                "store",
             )}
         ),
         (
@@ -87,7 +101,7 @@ class UserAdmin(admin.ModelAdmin):
     readonly_fields = ['store_id', 'show_vendor_url', 'last_login', 'date_joined']
 
     actions = [export_to_csv]
-    inlines = [UserSocialProfile]
+    inlines = [ProductInline, UserSocialProfile]
 
     @mark_safe
     @admin.display(description="Voir la boutique", empty_value="???")
@@ -106,7 +120,7 @@ class UserAdmin(admin.ModelAdmin):
     def get_queryset(self, request):
         qs = super().get_queryset(request)
         vendors = qs.exclude(is_superuser=True)
-        return  vendors
+        return vendors
 
     def has_add_permission(self, request):
         return False
