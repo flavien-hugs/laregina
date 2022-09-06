@@ -2,11 +2,6 @@
 {% load static mptt_tags pages_tags catalogue_tags %}
 {% get_static_prefix as STATIC_PREFIX %}
 
-{% block stylesheet %}
-    {{ block.super }}
-    <link rel="stylesheet" href="{{ STATIC_PREFIX }}css/market-place-3.css">
-{% endblock stylesheet %}
-
 
 {% block header_top %}
     
