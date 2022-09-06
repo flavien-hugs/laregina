@@ -28,45 +28,14 @@
     {% url "pages:contact" as contact %}
     {% url "vendor:store_list_view" as store_list_view %}
 
+    {% full_tree_for_model category.Category as categories %}
+
     <div id="page-wrapper">
         <section class="ps-home-banner">
             <div class="container px-0">
                 <div class="ps-section__left" role="menu">
                     <ul class="menu--dropdown">
-                        
-                        {% full_tree_for_model category.Category as categories %}
-
-                        {% recursetree categories %}
-                            <li role="menuitem" class="{% if node.children.exists %}menu-item-has-children has-mega-menu{% endif %}">
-
-                                <a href="{{ node.get_absolute_url }}">
-                                    <span>{{ node.name|safe }}</span>
-                                </a>
-
-                                {% if node.children.exists %}
-                                    <span class="sub-toggle"></span>
-                                    <div class="mega-menu" role="menu">
-                                        {% for object in node.children.all|slice:"0:4" %}
-                                            <div class="mega-menu__column">
-                                                <h4>
-                                                    <a href="{{ object.get_absolute_url }}">
-                                                        {{ object.name|safe }}
-                                                    </a>
-                                                    <span class="sub-toggle"></span>
-                                                </h4>
-                                                {% if object.children.exists %}
-                                                    <ul class="mega-menu__list">
-                                                        {% for obj in object.children.all %}
-                                                            <li><a href="{{ obj.get_absolute_url }}">{{ obj.name }}</a></li>
-                                                        {% endfor %}
-                                                    </ul>
-                                                {% endif %}
-                                            </div>
-                                        {% endfor %}
-                                    </div>
-                                {% endif %}
-                            </li>
-                        {% endrecursetree %}
+                        {% include "includes/partials/_partials_menu_category.html" %}
                     </ul>
                 </div>
 

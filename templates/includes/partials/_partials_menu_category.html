@@ -7,19 +7,21 @@
 
         <a href="{{ node.get_absolute_url }}">{{ node.name|safe }}</a>
 
-        {% if node.children.all %}
+        {% if node.children.exists %}
             <span class="sub-toggle"></span>
-            <div class="mega-menu">
-                {% for object in node.children.all %}
+            <div class="mega-menu" role="menu">
+                {% for object in node.children.all|slice:"0:4" %}
                     <div class="mega-menu__column">
                         <h4>
-                            {{ object.name|safe }}
+                            <a href="{{ object.get_absolute_url }}">
+                                {{ object.name|safe }}
+                            </a>
                             <span class="sub-toggle"></span>
                         </h4>
                         {% if object.children.exists %}
                             <ul class="mega-menu__list">
-                                {% for obj in object.children.all %}
-                                    <li><a href="{{ obj.get_absolute_url }}">{{ obj.name }}</a></li>
+                                {% for obj in object.children.all|slice:":9" %}
+                                <li><a href="{{ obj.get_absolute_url }}">{{ obj.name }}</a></li>
                                 {% endfor %}
                             </ul>
                         {% endif %}
