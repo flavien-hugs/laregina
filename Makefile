@@ -28,10 +28,10 @@ migrate: ## Make and run migrations
 
 .PHONY: createsuperuser
 createsuperuser: ## Run the Django server
-	$(MANAGE) createsuperuser --email="flavienhugs@gmail.com"
+	$(MANAGE) createsuperuser --email="admin@laregina.deals"
 
 changepassword: ## Change password superuser
-	$(MANAGE) changepassword flavienhugs@gmail.com
+	$(MANAGE) changepassword admin@laregina.deals
 
 .PHONY: test
 test: ## Run test
