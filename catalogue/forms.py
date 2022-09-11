@@ -3,15 +3,22 @@
 from django import forms
 from django.forms.models import inlineformset_factory
 
+from category.models import Category
 from catalogue.models import Product, ProductImage
 from django_summernote.widgets import SummernoteWidget
 
 
 class ProductAdminForm(forms.ModelForm):
 
+    category = forms.ModelChoiceField(
+        empty_label=None, required=True,
+        label="Choisir une catégorie",
+        queryset=Category.objects.all()
+    )
+
     class Meta:
         model = Product
-        exclude = ['user', 'quantity', 'slug', 'updated_at', 'created_at', 'timestamp']
+        exclude = ['user', 'quantity', 'slug', 'updated_at', 'is_external', 'created_at', 'timestamp']
 
         widgets = {'description': SummernoteWidget()}
 
@@ -20,11 +27,8 @@ class ProductAdminForm(forms.ModelForm):
         for field in self.fields:
             self.fields[field].widget.attrs['class'] = 'form-control shadow-none rounded-0'
 
-            if self.fields['is_active'] and self.fields['is_external']:
+            if self.fields['is_active']:
                 self.fields['is_active'].widget.attrs.update(
-                    {'class': 'form-check-input shadow-none'}
-                )
-                self.fields['is_external'].widget.attrs.update(
                     {'class': 'form-check-input shadow-none'}
                 )
 
@@ -66,10 +70,6 @@ ProductCreateFormSet = inlineformset_factory(
 
 
 class ProductAddToCartForm(forms.Form):
-    """ 
-    classe de formulaire pour
-    ajouter des articles au panier
-    """
 
     quantity = forms.IntegerField(
         widget=forms.TextInput(
@@ -86,18 +86,10 @@ class ProductAddToCartForm(forms.Form):
     slug = forms.CharField(widget=forms.HiddenInput())
     
     def __init__(self, request=None, *args, **kwargs):
-        """
-        passer outre la valeur par défaut afin que
-        nous puissions définir la demande
-        """
         self.request = request
         super().__init__(*args, **kwargs)
     
     def clean(self):
-        """ 
-        validation personnalisée pour vérifier
-        la présence de cookies dans le navigateur du client
-        """
         if self.request:
             if not self.request.session.test_cookie_worked():
                 raise forms.ValidationError("Les cookies doivent être activés.")

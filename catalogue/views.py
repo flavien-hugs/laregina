@@ -69,22 +69,13 @@ class HomeView(ExtraContextData, PromotionMixin, generic.TemplateView):
 home_view = HomeView.as_view()
 
 
-class HomeMarketView(ExtraContextData, PromotionMixin, generic.TemplateView):
+class HomeMarketView(PromotionMixin, generic.TemplateView):
 
     template_name = "market.html"
+    queryset = Category.objects.get(pk=223)
 
     def get_context_data(self, **kwargs):
-
-        sococe = self.queryset.get(pk=24).get_descendants(include_self=True)
-        bonprix = self.queryset.get(pk=26).get_descendants(include_self=True)
-        greatmarket = self.queryset.get(pk=23).get_descendants(include_self=True)
-        sococe_details = self.queryset.get(pk=25).get_descendants(include_self=True)
-
-        kwargs['sococes'] = Product.objects.filter(category__in=sococe)[:15]
-        kwargs['bestprices'] = Product.objects.filter(category__in=bonprix)[:15]
-        kwargs['greatmarket'] = Product.objects.filter(category__in=greatmarket)[:15]
-        kwargs['sococedetails'] = Product.objects.filter(category__in=sococe_details)[:15]
-
+        kwargs['farm'] = self.queryset.get_descendants(include_self=True)
         return super().get_context_data(**kwargs)
 
 
@@ -158,64 +149,29 @@ product_list_view = ProductListView.as_view()
 
 @csrf_exempt
 def show_product(request, slug, template="catalogue/product_detail.html"):
-
-    """
-    vue pour chaque page de produit
-    """
     p = get_object_or_404(Product, slug=slug)
     product_cache_key = request.path
-
-    # essayer de récupérer le produit à partir du cache
     p = cache.get(product_cache_key)
-
-    # si le cache manque, on se rabat sur
-    # la requête de la base de données
     if not p:
         p = get_object_or_404(Product, slug=slug)
-        # stocker l'élément dans le cache
-        # pour la prochaine fois
         cache.set(product_cache_key, p, settings.CACHE_TIMEOUT)
-
-    # évaluez la méthode HTTP, modifiez-la si nécessaire
     if request.method == 'POST':
-        # créer le formulaire lié
         postdata = request.POST.copy()
         form = ProductAddToCartForm(request, postdata)
-
-        # vérifier si les données affichées sont valides
         if form.is_valid():
-            # ajouter au panier et rediriger
-            # vers la page du panier
             cart.add_to_cart(request)
 
             msg = f""" '{p.name}' a été ajouté à votre panier."""
             messages.success(request, mark_safe(msg))
-
-            # si le cookie de test a fonctionné,
-            # il faut s'en débarrasser
             if request.session.test_cookie_worked():
                 request.session.delete_test_cookie()
             return HttpResponseRedirect(reverse('cart:cart'))
     else:
-        # créer le formulaire non lié. Remarquez la requête
-        # comme un argument de mot-clé
         form = ProductAddToCartForm(request=request, label_suffix=':')
-
-    # affiche les produits similaires
     related_product = sorted(Product.objects.get_category_related(
         instance=p)[:15], key=lambda x: random.random())
-
-    # affiche les produits recommendés
     recommended_product = Product.objects.recomended_product(instance=p)
-
-    # définir le cookie de test pour s'assurer
-    # que les cookies sont activés
     request.session.set_test_cookie()
-
-    # ajout d'avis sur le produit courant
-    # product_review = ProductReview.objects.filter(product=p)
-
-    # sauvegarder l'utilisateur actuel
     utils.log_product_view(request, p)
 
     context = {
