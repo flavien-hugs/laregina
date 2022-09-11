@@ -35,21 +35,21 @@ def upload_image_logo_path(instance, filename):
 
 
 def upload_image_path(instance, filename):
-    new_filename = slugify(instance.product.name)
+    new_filename = slugify(instance.product.name.lower())
     name, ext = get_filename_ext(filename)
     final_filename = f"{new_filename}-{instance.id}{ext}"
     return f"images/produit/{final_filename}"
 
 
 def upload_promotion_image_path(instance, filename):
-    new_filename = slugify(instance.name)
+    new_filename = slugify(instance.name.lower())
     name, ext = get_filename_ext(filename)
     final_filename = f"{new_filename}-{instance.id}{ext}"
     return f"images/promotion/{final_filename}"
 
 
 def upload_campign_image_path(instance, filename):
-    new_filename = slugify(instance.name)
+    new_filename = slugify(instance.name.lower())
     name, ext = get_filename_ext(filename)
     final_filename = f"{new_filename}-{instance.id}{ext}"
     return f"images/campaign/{final_filename}"
