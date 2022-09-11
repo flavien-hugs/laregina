@@ -10,6 +10,9 @@ from checkout.forms import CheckoutForm
 from checkout.models import Order, OrderItem
 from analytics.utils import get_client_ip
 
+SENDER_ID = settings.SENDER_ID
+SMS_API_KEY = settings.SMS_API_KEY
+
 
 def get_checkout_url(request):
     return reverse('checkout:checkout')
@@ -62,9 +65,6 @@ def create_order(request):
 
 def send_sms_order(order_id):
 
-    SENDER_ID = settings.SENDER_ID
-    SMS_API_KEY = settings.SMS_API_KEY
-
     order = Order.objects.get(transaction_id=order_id)
     order_transaction_id = order.transaction_id
     destinataire = order.phone
@@ -73,5 +73,18 @@ def send_sms_order(order_id):
     SEND_SMS_URL = f"https://sms.lws.fr/sms/api?action=send-sms&api_key={SMS_API_KEY}&to={destinataire}&from={SENDER_ID}&sms={message}"
 
     response = requests.post(SEND_SMS_URL)
-    print(response)
+    return response
+
+
+def send_sms_vendor(order_id):
+
+    order = Order.objects.get(transaction_id=order_id)
+    items = OrderItem.objects.filter(order=order)
+    store = [obj.get_store_name() for obj in items]
+    destinataire = [obj.get_phone_number() for obj in items]
+    message = f"Bonjour {store}, vous avez des commabdes sur laregina.deals. Merci de consulter votre boutique."
+
+    SEND_SMS_URL = f"https://sms.lws.fr/sms/api?action=send-sms&api_key={SMS_API_KEY}&to={destinataire}&from={SENDER_ID}&sms={message}"
+
+    response = requests.post(SEND_SMS_URL)
     return response

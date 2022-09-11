@@ -102,6 +102,7 @@ def order_success_view(
     order = get_object_or_404(Order, transaction_id=order_id)
     order_items = OrderItem.objects.filter(order=order)
     checkout.send_sms_order(order_id)
+    checkout.send_sms_vendor(order_id)
     context = {
         'object': order,
         'order_items':order_items,
