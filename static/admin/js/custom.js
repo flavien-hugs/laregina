@@ -1,24 +1,6 @@
-/*
-
-=========================================================
-* Volt Pro - Premium Bootstrap 5 Dashboard
-=========================================================
-
-* Product Page: https://themesberg.com/product/admin-dashboard/volt-premium-bootstrap-5-dashboard
-* Copyright 2021 Themesberg (https://www.themesberg.com)
-
-* Designed and coded by https://themesberg.com
-
-=========================================================
-
-* The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software. Please contact us to request a removal. Contact us if you want to remove it.
-
-*/
-
 "use strict";
 const d = document;
 d.addEventListener("DOMContentLoaded", function (event) {
-
     // options
     const breakpoints = {
         sm: 540,
@@ -1052,19 +1034,6 @@ d.addEventListener("DOMContentLoaded", function (event) {
             autoplay: 2000
         }).mount();
     }
-
-    /*
-
-    Check out the styles here: https://www.mapbox.com/maps/streets
-    To change the style of the map change the mapboxId attribute with the following available styles:
-
-    mapbox/dark-v10, mapbox/light-v10, mapbox/streets-v11, mapbox/outdoors/v-11, mapbox/satellite-streets-v11
-
-    This is based on the URL you can when clicking on the preview link from Mapbox.
-
-    You need to generate your own mapboxToken by creating an account. This token will NOT work for your website, you need to generate your own one!
-
-    */
 
     var config = {
         mapboxToken: 'pk.eyJ1Ijoiem9sdGFudGhlbWVzYmVyZyIsImEiOiJjazZqaWUwcWswYTBvM21td2Jmcm5mYmdyIn0.7_5YCbbOFRnvqZzCNDo9fw',

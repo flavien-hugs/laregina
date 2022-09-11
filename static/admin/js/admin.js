@@ -236,8 +236,5 @@
         slickConfig();
         parallax();
         select2Cofig();
-        $('#summernote').summernote({
-            height: 150
-        });
     });
 })(jQuery);
