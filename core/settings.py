@@ -15,7 +15,6 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 SECRET_KEY = env.get('SECRET_KEY')
 
-# SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 TEMPLATE_DEBUG = DEBUG
 DEFAULT_CHARSET = 'UTF-8'
@@ -28,11 +27,8 @@ APPEND_SLASH = True
 AUTH_USER_MODEL = 'accounts.User'
 ADMIN_URL = 'lrg-admin/'
 
-# See: https://docs.djangoproject.com/en/1.11/ref/settings/#allowed-hosts
 ALLOWED_HOSTS = []
 
-
-# See: https://docs.djangoproject.com/en/1.11/ref/settings/#installed-apps
 INSTALLED_APPS = [
     'django.contrib.auth',
 
