@@ -45,11 +45,9 @@
                                 </ol>
                             </nav>
                             <h2 class="h4">{{ page_title|capfirst }}</h2>
-                            <p class="mb-0">{{ subtitle|capfirst }}</p>
                         </div>
 
                         {% block block_extra_breadcrumb %}
-                            <!-- extar breadcrumb here -->
                         {% endblock block_extra_breadcrumb %}
                     </div>
                 {% endblock breadcrumb %}
@@ -90,17 +88,18 @@
                 </footer>
             </main>
 
-            {% compress js %}
-                <script src="{{ STATIC_PREFIX }}admin/js/popper.min.js"></script>
-                <script src="{{ STATIC_PREFIX }}admin/js/bootstrap.min.js"></script>
-                <script src="{{ STATIC_PREFIX }}admin/js/onscreen.min.js"></script>
-                <script src="{{ STATIC_PREFIX }}admin/js/select.min.js"></script>
-                <script src="{{ STATIC_PREFIX }}admin/js/nouislider.min.js"></script>
-                <script src="{{ STATIC_PREFIX }}admin/js/smooth-scroll.polyfills.min.js"></script>
-                <script src="{{ STATIC_PREFIX }}admin/js/apexcharts.min.js"></script>
-                <script src="{{ STATIC_PREFIX }}admin/js/simplebar.min.js"></script>
-                <script src="{{ STATIC_PREFIX }}admin/js/custom.js"></script>
-            {% endcompress js %}
+            {% block js %}
+                {% compress js %}
+                        <script src="{{ STATIC_PREFIX }}admin/js/popper.min.js"></script>
+                        <script src="{{ STATIC_PREFIX }}admin/js/bootstrap.min.js"></script>
+                        <script src="{{ STATIC_PREFIX }}admin/js/onscreen.min.js"></script>
+                        <script src="{{ STATIC_PREFIX }}admin/js/nouislider.min.js"></script>
+                        <script src="{{ STATIC_PREFIX }}admin/js/smooth-scroll.polyfills.min.js"></script>
+                        <script src="{{ STATIC_PREFIX }}admin/js/apexcharts.min.js"></script>
+                        <script src="{{ STATIC_PREFIX }}admin/js/simplebar.min.js"></script>
+                        <script src="{{ STATIC_PREFIX }}admin/js/custom.js"></script>
+                {% endcompress %}
+            {% endblock js %}
         </body>
     </html>
 {% endspaceless %}

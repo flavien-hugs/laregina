@@ -9,17 +9,11 @@
                 Choisir la catégorie du produit
             </label>
 
-            <select id="{{ form.category.id_for_label }}" name="{{ form.category.name }}" class="form-select shadow-none rounded-0 mb-4" aria-label="Catégories">
-                {% for node, structure in category|tree_info:"ancestors" %}
-                    {% if node.is_child_node %}
-                        <option value="{{ node.pk }}">
-                            {{ structure.ancestors|tree_path }} :: {{ node }}
-                        </option>
-                    {% else %}
-                        <option value="{{ node.pk }}">
-                            {{ node }}
-                        </option>
-                    {% endif %}
+            <select id="{{ form.category.id_for_label }}" name="{{ form.category.name }}" class="form-select shadow-none rounded-0 mb-4">
+                {% for node in category %}
+                    <option value="{{ node.pk }}">
+                        {{ node.name|safe }}
+                    </option>
                 {% endfor %}
             </select>
         </div>
@@ -64,15 +58,6 @@
                 {{ form.is_active }}
                 <label class="form-check-label" for="{{ form.is_active.id_for_label }}">
                     {{ form.is_active.label }}
-                </label>
-            </div>
-        </div>
-
-        <div class="col-12 col-lg-12">
-            <div class="form-check form-switch">
-                {{ form.is_external }}
-                <label class="form-check-label" for="{{ form.is_external.id_for_label }}">
-                    {{ form.is_external.label }}
                 </label>
             </div>
         </div>

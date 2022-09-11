@@ -24,7 +24,7 @@
             <div class="d-flex align-items-center">
                 <div class="d-block">
                     <h2 class="h5 mb-3">
-                        Hi, {{ request.user.get_fullname|truncatewords:"5" }}
+                        {{ request.user.store|upper }}
                     </h2>
 
                     <a href="{{ logout }}" class="btn btn-secondary btn-sm d-inline-flex align-items-center">
@@ -81,10 +81,10 @@
 
             <li role="separator" class="dropdown-divider mt-4 mb-3 border-gray-700"></li>
 
-            <li class="nav-item">
+            <li class="nav-item {% if request.resolver_match.url_name == 'order_list' or request.resolver_match.url_name == 'order_detail' %}active{% endif %}">
                 <a
                     href="{{ seller_order_list }}"
-                    class="nav-link d-flex align-items-center justify-content-between {% if request.resolver_match.url_name == 'order_list' or request.resolver_match.url_name == 'order_detail' %}active{% endif %}"
+                    class="nav-link d-flex align-items-center justify-content-between"
                 >
                     <span>
                         <span class="sidebar-icon">
@@ -92,7 +92,7 @@
                         </span>
 
                         <span class="sidebar-text fw-extrabold">
-                            Ventes
+                            Commandes
                         </span>
                     </span>
                     <span class="badge badge-sm bg-danger badge-pill notification-count">
@@ -115,140 +115,64 @@
             <li role="separator" class="dropdown-divider mt-3 mb-3 border-gray-700"></li>
 
             <li class="nav-item">
-                <span class="nav-link d-flex justify-content-between align-items-center" data-bs-toggle="collapse" data-bs-target="#submenu-product">
-                    <span>
-                        <span class="sidebar-icon">
-                            <svg class="icon icon-xs me-2" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M4 3a2 2 0 100 4h12a2 2 0 100-4H4z"></path><path fill-rule="evenodd" d="M3 8h14v7a2 2 0 01-2 2H5a2 2 0 01-2-2V8zm5 3a1 1 0 011-1h2a1 1 0 110 2H9a1 1 0 01-1-1z" clip-rule="evenodd"></path></svg>
-                        </span>
-                        <span class="sidebar-text fw-extrabold">Produits</span>
+                <a href="{{ seller_product_list }}" class="nav-link">
+                    <span class="sidebar-icon">
+                        <svg class="icon icon-xs me-2" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M4 3a2 2 0 100 4h12a2 2 0 100-4H4z"></path><path fill-rule="evenodd" d="M3 8h14v7a2 2 0 01-2 2H5a2 2 0 01-2-2V8zm5 3a1 1 0 011-1h2a1 1 0 110 2H9a1 1 0 01-1-1z" clip-rule="evenodd"></path></svg>
                     </span>
-
-                    <span class="link-arrow">
-                        <svg class="icon icon-sm" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd"></path></svg>
+                    <span class="sidebar-text fw-extrabold">
+                        Produit en vente
                     </span>
-                </span>
+                </a>
 
-                <div class="multi-level collapse {% if request.resolver_match.url_name == 'product_list' or request.resolver_match.url_name == 'product_create' or request.resolver_match.url_name == 'product_update' or request.resolver_match.url_name == 'product_delete' %}show{% endif %}" role="list" id="submenu-product" aria-expanded="false">
-                    <ul class="flex-column nav">
-                        <li class="nav-item {% if request.resolver_match.url_name == 'product_list' %}active {% endif %}">
-                            <a href="{{ seller_product_list }}" class="nav-link">
-                                <span class="sidebar-text-contracted">P</span>
-                                <span class="sidebar-text fw-extrabold">Vos produits</span>
-                            </a>
-                        </li>
-                        <li class="nav-item {% if request.resolver_match.url_name == 'product_create' or request.resolver_match.url_name == 'product_update' %}active {% endif %}">
-                            <a href="{{ seller_product_create }}" class="nav-link">
-                                <span class="sidebar-text-contracted">A</span>
-                                <span class="sidebar-text fw-extrabold">Ajouter un produit</span>
-                            </a>
-                        </li>
-                    </ul>
-                </div>
-            </li>
-
-            <li class="nav-item">
-                <span class="nav-link d-flex justify-content-between align-items-center" data-bs-toggle="collapse" data-bs-target="#submenu-promotion">
-                    <span>
-                        <span class="sidebar-icon">
-                            <svg class="icon icon-xs me-2" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M3 4a1 1 0 011-1h12a1 1 0 011 1v2a1 1 0 01-1 1H4a1 1 0 01-1-1V4zM3 10a1 1 0 011-1h6a1 1 0 011 1v6a1 1 0 01-1 1H4a1 1 0 01-1-1v-6zM14 9a1 1 0 00-1 1v6a1 1 0 001 1h2a1 1 0 001-1v-6a1 1 0 00-1-1h-2z"></path></svg>
-                        </span>
-                        <span class="sidebar-text fw-extrabold">Promotions</span>
+                <a href="{{ seller_product_create }}" class="nav-link">
+                    <span class="sidebar-icon">
+                        <svg class="icon icon-xs me-2" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M4 3a2 2 0 100 4h12a2 2 0 100-4H4z"></path><path fill-rule="evenodd" d="M3 8h14v7a2 2 0 01-2 2H5a2 2 0 01-2-2V8zm5 3a1 1 0 011-1h2a1 1 0 110 2H9a1 1 0 01-1-1z" clip-rule="evenodd"></path></svg>
                     </span>
-
-                    <span class="link-arrow">
-                        <svg class="icon icon-sm" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd"></path></svg>
+                    <span class="sidebar-text fw-extrabold">
+                        Ajouter un produit
                     </span>
-                </span>
-
-                <div
-                    class="multi-level collapse {% if request.resolver_match.url_name == 'promotion_list' or request.resolver_match.url_name == 'promotion_create' or request.resolver_match.url_name == 'promotion_update' %}show{% endif %}"
-                    role="list" id="submenu-promotion"
-                    aria-expanded="false"
-                >
-                    <ul class="flex-column nav">
-                        <li
-                            class="nav-item {% if request.resolver_match.url_name == 'promotion_list' %}active{% endif %}"
-                        >
-                            <a href="{{ promotion_list_url }}" class="nav-link">
-                                <span class="sidebar-text-contracted">P</span>
-                                <span class="sidebar-text fw-extrabold">
-                                Vos promos</span>
-                            </a>
-                        </li>
-
-                        <li 
-                            class="nav-item {% if request.resolver_match.url_name == 'promotion_create' %}active{% endif %}"
-                        >
-                            <a href="{{ promotion_create_url }}" class="nav-link">
-                                <span class="sidebar-text-contracted">A</span>
-                                <span class="sidebar-text fw-extrabold">
-                                Faire une promo</span>
-                            </a>
-                        </li>
-                    </ul>
-                </div>
-            </li>
-
-            <li class="nav-item">
-                <span class="nav-link d-flex justify-content-between align-items-center" data-bs-toggle="collapse" data-bs-target="#submenu-reductions">
-                    <span>
-                        <span class="sidebar-icon">
-                            <svg class="icon icon-xs me-2" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M3 4a1 1 0 011-1h12a1 1 0 011 1v2a1 1 0 01-1 1H4a1 1 0 01-1-1V4zM3 10a1 1 0 011-1h6a1 1 0 011 1v6a1 1 0 01-1 1H4a1 1 0 01-1-1v-6zM14 9a1 1 0 00-1 1v6a1 1 0 001 1h2a1 1 0 001-1v-6a1 1 0 00-1-1h-2z"></path></svg>
-                        </span>
-                        <span class="sidebar-text fw-extrabold">Réductions</span>
-                    </span>
-
-                    <span class="link-arrow">
-                        <svg class="icon icon-sm" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd"></path></svg>
-                    </span>
-                </span>
-
-                <div
-                    class="multi-level collapse {% if request.resolver_match.url_name == 'voucher_list' or request.resolver_match.url_name == 'voucher_create' or request.resolver_match.url_name == 'voucher_update' %}show{% endif %}"
-                    role="list" id="submenu-reductions"
-                    aria-expanded="false"
-                >
-                    <ul class="flex-column nav">
-                        <li 
-                            class="nav-item {% if request.resolver_match.url_name == 'voucher_list' %}active{% endif %}"
-                        >
-                            <a href="{{ voucher_list_url }}" class="nav-link">
-                                <span class="sidebar-text-contracted">L</span>
-                                <span class="sidebar-text fw-extrabold">
-                                Liste des réductions</span>
-                            </a>
-                        </li>
-
-                        <li 
-                            class="nav-item {% if request.resolver_match.url_name == 'voucher_create' %}active{% endif %}"
-                        >
-                            <a href="{{ voucher_create_url }}" class="nav-link">
-                                <span class="sidebar-text-contracted">R</span>
-                                <span class="sidebar-text fw-extrabold">
-                                Faire une réduction</span>
-                            </a>
-                        </li>
-                    </ul>
-                </div>
+                </a>
             </li>
 
             <li role="separator" class="dropdown-divider mt-3 mb-3 border-gray-700"></li>
 
             <li class="nav-item">
-                <a href="#" class="nav-link d-flex align-items-center justify-content-between">
-                    <span>
-                        <span class="sidebar-icon">
-                            <svg class="icon icon-xs me-2" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M10 2a6 6 0 00-6 6v3.586l-.707.707A1 1 0 004 14h12a1 1 0 00.707-1.707L16 11.586V8a6 6 0 00-6-6zM10 18a3 3 0 01-3-3h6a3 3 0 01-3 3z"></path></svg>
-                        </span>
-
-                        <span class="sidebar-text fw-extrabold">Notifications</span>
+                <a href="{{ promotion_list_url }}" class="nav-link">
+                    <span class="sidebar-icon">
+                        <svg class="icon icon-xs me-2" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M3 4a1 1 0 011-1h12a1 1 0 011 1v2a1 1 0 01-1 1H4a1 1 0 01-1-1V4zM3 10a1 1 0 011-1h6a1 1 0 011 1v6a1 1 0 01-1 1H4a1 1 0 01-1-1v-6zM14 9a1 1 0 00-1 1v6a1 1 0 001 1h2a1 1 0 001-1v-6a1 1 0 00-1-1h-2z"></path></svg>
                     </span>
-                    <span class="badge badge-sm bg-danger badge-pill notification-count">
-                        0
+                    <span class="sidebar-text fw-extrabold">
+                        Promo en cours
+                    </span>
+                </a>
+
+                <a href="{{ seller_product_create }}" class="nav-link">
+                    <span class="sidebar-icon">
+                        <svg class="icon icon-xs me-2" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M3 4a1 1 0 011-1h12a1 1 0 011 1v2a1 1 0 01-1 1H4a1 1 0 01-1-1V4zM3 10a1 1 0 011-1h6a1 1 0 011 1v6a1 1 0 01-1 1H4a1 1 0 01-1-1v-6zM14 9a1 1 0 00-1 1v6a1 1 0 001 1h2a1 1 0 001-1v-6a1 1 0 00-1-1h-2z"></path></svg>
+                    </span>
+                    <span class="sidebar-text fw-extrabold">
+                        Faire une promo
                     </span>
                 </a>
             </li>
 
+            <li role="separator" class="dropdown-divider mt-3 mb-3 border-gray-700"></li>
+
+            <li class="nav-item {% if request.resolver_match.url_name == 'voucher_list' or request.resolver_match.url_name == 'voucher_create' or request.resolver_match.url_name == 'voucher_update' %}active{% endif %}">
+                <a href="{{ voucher_list_url }}" class="nav-link">
+                    <span class="sidebar-icon">
+                        <svg class="icon icon-xs me-2" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M3 4a1 1 0 011-1h12a1 1 0 011 1v2a1 1 0 01-1 1H4a1 1 0 01-1-1V4zM3 10a1 1 0 011-1h6a1 1 0 011 1v6a1 1 0 01-1 1H4a1 1 0 01-1-1v-6zM14 9a1 1 0 00-1 1v6a1 1 0 001 1h2a1 1 0 001-1v-6a1 1 0 00-1-1h-2z"></path></svg>
+                    </span>
+                    <span class="sidebar-text fw-extrabold">Liste des réductions</span>
+                </a>
+
+                <a href="{{ voucher_create_url }}" class="nav-link">
+                    <span class="sidebar-icon">
+                        <svg class="icon icon-xs me-2" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M3 4a1 1 0 011-1h12a1 1 0 011 1v2a1 1 0 01-1 1H4a1 1 0 01-1-1V4zM3 10a1 1 0 011-1h6a1 1 0 011 1v6a1 1 0 01-1 1H4a1 1 0 01-1-1v-6zM14 9a1 1 0 00-1 1v6a1 1 0 001 1h2a1 1 0 001-1v-6a1 1 0 00-1-1h-2z"></path></svg>
+                    </span>
+                    <span class="sidebar-text fw-extrabold">Faire une réduction</span>
+                </a>
+            </li>
             <!--  <li role="separator" class="dropdown-divider mt-4 mb-3 border-gray-700"></li>
             <li class="nav-item">
                 <a href="#" class="nav-link">
@@ -261,47 +185,20 @@
 
             <li role="separator" class="dropdown-divider mt-3 mb-3 border-gray-700"></li>
 
-            <li class="nav-item">
-                <span class="nav-link d-flex justify-content-between align-items-center" data-bs-toggle="collapse" data-bs-target="#submenu-settings">
-                    <span>
-                        <span class="sidebar-icon">
-                            <svg class="icon icon-xs me-2" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M11.49 3.17c-.38-1.56-2.6-1.56-2.98 0a1.532 1.532 0 01-2.286.948c-1.372-.836-2.942.734-2.106 2.106.54.886.061 2.042-.947 2.287-1.561.379-1.561 2.6 0 2.978a1.532 1.532 0 01.947 2.287c-.836 1.372.734 2.942 2.106 2.106a1.532 1.532 0 012.287.947c.379 1.561 2.6 1.561 2.978 0a1.533 1.533 0 012.287-.947c1.372.836 2.942-.734 2.106-2.106a1.533 1.533 0 01.947-2.287c1.561-.379 1.561-2.6 0-2.978a1.532 1.532 0 01-.947-2.287c.836-1.372-.734-2.942-2.106-2.106a1.532 1.532 0 01-2.287-.947zM10 13a3 3 0 100-6 3 3 0 000 6z" clip-rule="evenodd"></path></svg>
-                        </span>
-                        <span class="sidebar-text fw-extrabold">Configuration</span>
+            <li class="nav-item {% if request.resolver_match.url_name == 'update' or request.resolver_match.url_name == 'rs_update' %}show{% endif %}">
+                <a href="{{ request.user.get_update_url }}" class="nav-link">
+                    <span class="sidebar-icon">
+                        <svg class="icon icon-xs me-2" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M11.49 3.17c-.38-1.56-2.6-1.56-2.98 0a1.532 1.532 0 01-2.286.948c-1.372-.836-2.942.734-2.106 2.106.54.886.061 2.042-.947 2.287-1.561.379-1.561 2.6 0 2.978a1.532 1.532 0 01.947 2.287c-.836 1.372.734 2.942 2.106 2.106a1.532 1.532 0 012.287.947c.379 1.561 2.6 1.561 2.978 0a1.533 1.533 0 012.287-.947c1.372.836 2.942-.734 2.106-2.106a1.533 1.533 0 01.947-2.287c1.561-.379 1.561-2.6 0-2.978a1.532 1.532 0 01-.947-2.287c.836-1.372-.734-2.942-2.106-2.106a1.532 1.532 0 01-2.287-.947zM10 13a3 3 0 100-6 3 3 0 000 6z" clip-rule="evenodd"></path></svg>
                     </span>
+                    <span class="sidebar-text fw-extrabold">Paramètres</span>
+                </a>
 
-                    <span class="link-arrow">
-                        <svg class="icon icon-sm" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd"></path></svg>
+                <a href="{{ request.user.get_social_url }}" class="nav-link">
+                    <span class="sidebar-icon">
+                        <svg class="icon icon-xs me-2" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M11.49 3.17c-.38-1.56-2.6-1.56-2.98 0a1.532 1.532 0 01-2.286.948c-1.372-.836-2.942.734-2.106 2.106.54.886.061 2.042-.947 2.287-1.561.379-1.561 2.6 0 2.978a1.532 1.532 0 01.947 2.287c-.836 1.372.734 2.942 2.106 2.106a1.532 1.532 0 012.287.947c.379 1.561 2.6 1.561 2.978 0a1.533 1.533 0 012.287-.947c1.372.836 2.942-.734 2.106-2.106a1.533 1.533 0 01.947-2.287c1.561-.379 1.561-2.6 0-2.978a1.532 1.532 0 01-.947-2.287c.836-1.372-.734-2.942-2.106-2.106a1.532 1.532 0 01-2.287-.947zM10 13a3 3 0 100-6 3 3 0 000 6z" clip-rule="evenodd"></path></svg>
                     </span>
-                </span>
-
-                <div
-                    class="multi-level collapse {% if request.resolver_match.url_name == 'update' or request.resolver_match.url_name == 'rs_update' %}show{% endif %}"
-                    role="list" id="submenu-settings"
-                    aria-expanded="false"
-                >
-                    <ul class="flex-column nav">
-                        <li
-                            class="nav-item {% if request.resolver_match.url_name == 'update' %}active{% endif %}"
-                        >
-                            <a href="{{ request.user.get_update_url }}" class="nav-link">
-                                <span class="sidebar-text-contracted">P</span>
-                                <span class="sidebar-text fw-extrabold">
-                                Paramètres</span>
-                            </a>
-                        </li>
-
-                        <li 
-                            class="nav-item {% if request.resolver_match.url_name == 'rs_update' %}active{% endif %}"
-                        >
-                            <a href="{{ request.user.get_social_url }}" class="nav-link">
-                                <span class="sidebar-text-contracted">R</span>
-                                <span class="sidebar-text fw-extrabold">
-                                Réseaux sociaux</span>
-                            </a>
-                        </li>
-                    </ul>
-                </div>
+                    <span class="sidebar-text fw-extrabold">Réseaux sociaux</span>
+                </a>
             </li>
 
             <li role="separator" class="dropdown-divider mt-4 mb-3 border-gray-700"></li>
