@@ -11,13 +11,8 @@ from dotenv import dotenv_values
 
 env = dotenv_values(".env")
 
-# Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-# Quick-start development settings - unsuitable for production
-# See https://docs.djangoproject.com/en/3.1/howto/deployment/checklist/
-
-# SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = env.get('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
@@ -30,11 +25,7 @@ META_KEYWORDS = 'créer boutique vente ligne, vente, achat, laregina, deals, ach
 SITE_NAME = 'LaRegina Deals'
 APPEND_SLASH = True
 
-# Custom Django auth settings
 AUTH_USER_MODEL = 'accounts.User'
-
-# DJANGO-ADMIN CONFIGURATION
-# Location of root django.contrib.admin URL
 ADMIN_URL = 'lrg-admin/'
 
 # See: https://docs.djangoproject.com/en/1.11/ref/settings/#allowed-hosts
@@ -93,16 +84,11 @@ LOCAL_APPS = [
 
 INSTALLED_APPS += OTHERS_APPS + LOCAL_APPS
 
-# site ID for allauth
 SITE_ID = 1
 
-# AUTHENTICATION CONFIGURATION
 AUTHENTICATION_BACKENDS = [
     'allauth.account.auth_backends.AuthenticationBackend',
 ]
-
-# Les utilisateurs connectés sont redirigés ici s'ils
-# consultent les pages de connexion/inscription
 
 LOGOUT_URL = 'home'
 LOGIN_URL = 'account_login'
@@ -134,7 +120,6 @@ ACCOUNT_FORMS = {
     'signup': 'accounts.forms.MarketSignupForm',
 }
 
-# La valeur d'affichage de l'utilisateur est le nom du profil associé
 ACCOUNT_USER_DISPLAY = lambda user: user.shipping_first_name
 
 EMAIL_HOST = env.get('EMAIL_HOST')
@@ -143,10 +128,6 @@ EMAIL_USE_TLS = env.get('EMAIL_USE_TLS')
 EMAIL_HOST_USER = env.get('EMAIL_HOST_USER')
 EMAIL_HOST_PASSWORD = env.get('EMAIL_HOST_PASSWORD')
 DEFAULT_FROM_EMAIL = SERVER_EMAIL = 'no-reply@laregina.deals'
-
-
-# https://docs.djangoproject.com/fr/3.0/ref/settings/
-# Let's Encrypt ssl/tls https
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -169,7 +150,6 @@ MIDDLEWARE = [
 
 ROOT_URLCONF = 'core.urls'
 
-# See: https://docs.djangoproject.com/en/1.11/ref/settings/#templates
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
@@ -197,21 +177,13 @@ TEMPLATES = [
     },
 ]
 
-# See: https://docs.djangoproject.com/en/1.11/ref/settings/#wsgi-application
 WSGI_APPLICATION = 'core.wsgi.application'
-
-# https://docs.djangoproject.com/en/dev/ref/settings/#secure-browser-xss-filter
 
 CSRF_COOKIE_HTTPONLY = True
 SESSION_COOKIE_HTTPONLY = True
 X_FRAME_OPTIONS = "SAMEORIGIN"
 
-# See: http://django-crispy-forms.readthedocs.io/en/latest/install.html#template-packs
-
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
-
-# Database
-# https://docs.djangoproject.com/en/3.1/ref/settings/#databases
 
 if DEBUG:
     DATABASES = {
@@ -235,10 +207,6 @@ else:
         }
     }
 
-
-# Password validation
-# https://docs.djangoproject.com/en/3.1/ref/settings/#auth-password-validators
-
 AUTH_PASSWORD_VALIDATORS = [
     {'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
         'OPTIONS': {'max_similarity': 0.9,}
@@ -250,9 +218,6 @@ AUTH_PASSWORD_VALIDATORS = [
     {'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',},
 ]
 
-# password hashers
-# https://docs.djangoproject.com/fr/3.1/topics/auth/passwords/
-
 PASSWORD_HASHERS = [
     'django.contrib.auth.hashers.Argon2PasswordHasher',
     'django.contrib.auth.hashers.PBKDF2PasswordHasher',
@@ -260,12 +225,7 @@ PASSWORD_HASHERS = [
     'django.contrib.auth.hashers.BCryptSHA256PasswordHasher',
 ]
 
-# Hashage des donnees
-# https://docs.djangoproject.com/fr/3.1/ref/settings/
 DEFAULT_HASHING_ALGORITHM = 'sha1'
-
-# Internationalization
-# https://docs.djangoproject.com/en/3.1/topics/i18n/
 
 USE_TZ = False
 TIME_ZONE = 'UTC'
@@ -273,18 +233,11 @@ LANGUAGE_CODE = 'fr-fr'
 USE_I18N = USE_L10N = True
 DATE_INPUT_FORMATS = ('%d/%m/%Y', '%Y-%m-%d')
 
-# Static files (CSS, JavaScript, Images)
-# https://docs.djangoproject.com/en/3.1/howto/static-files/
-# See: https://docs.djangoproject.com/en/1.11/ref/settings/#static-root
-
 MEDIA_URL = '/media/'
 STATIC_URL = '/static/'
 MEDIA_ROOT = BASE_DIR / 'media'
 STATIC_ROOT = BASE_DIR / 'staticfiles'
 STATICFILES_DIRS = [BASE_DIR / 'static']
-
-# staticfiles finders
-# See: https://docs.djangoproject.com/en/1.11/ref/contrib/staticfiles/#staticfiles-finders
 
 STATICFILES_FINDERS = [
     'django.contrib.staticfiles.finders.FileSystemFinder',
@@ -293,11 +246,7 @@ STATICFILES_FINDERS = [
     'compressor.finders.CompressorFinder',
 ]
 
-# https://warehouse.python.org/project/whitenoise/
-
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
-
-# Messages built-in framework
 
 MESSAGE_TAGS = {
     messages.DEBUG: 'alert-secondary',
@@ -307,51 +256,28 @@ MESSAGE_TAGS = {
     messages.ERROR: 'alert-danger',
 }
 
-# default is 10 pixels
-# https://django-mptt.readthedocs.io/en/latest/admin.html
-
 MPTT_ADMIN_LEVEL_INDENT = 20
 
-# phonenumber config
-
 PHONENUMBER_DEFAULT_REGION = "CI"
-PHONENUMBER_DB_FORMAT = "INTERNATIONAL"
-PHONENUMBER_DEFAULT_FORMAT = "INTERNATIONAL"
-
-# CINETPAY API KEY
+PHONENUMBER_DB_FORMAT = "NATIONAL"
+PHONENUMBER_DEFAULT_FORMAT = "NATIONAL"
 
 CINETPAY_API_KEY = env.get('CINETPAY_API_KEY')
 CINETPAY_SITE_ID = env.get('CINETPAY_SITE_ID')
 CINETPAY_TRANS_ID = env.get('CINETPAY_TRANS_ID')
 
-# Mailchimp Configuration
-
 MAILCHIMP_API_KEY = env.get('MAILCHIMP_API_KEY')
 MAILCHIMP_SUBSCRIBE_LIST_ID = env.get('MAILCHIMP_SUBSCRIBE_LIST_ID')
 
-# Django est passé à la sérialisation JSON pour des raisons de sécurité, mais il ne
-# sérialise pas les modèles. Nous devrions résoudre ce problème en étendant la
-# django/core/serializers/json.Serializer pour avoir la fonction de `dumps`.
-# dans tests/config.py
-
 SESSION_SERIALIZER = 'django.contrib.sessions.serializers.JSONSerializer'
 
-# Default primary key field type
-# https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
-
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
-
-# https://docs.djangoproject.com/fr/3.2/ref/settings/#ignorable-404-urls
 
 IGNORABLE_404_URLS = [
     re.compile(r'^/apple-touch-icon.*\.png$'),
     re.compile(r'^/favicon\.ico$'),
     re.compile(r'^/robots\.txt$'),
 ]
-
-
-# Configuration django-jet
-# https://jet.readthedocs.io/en/latest/config_file.html
 
 JET_THEMES = [
     {
@@ -364,26 +290,15 @@ JET_THEMES = [
 JET_SIDE_MENU_COMPACT = True
 JET_CHANGE_FORM_SIBLING_LINKS = True
 
-# Summernote configuration
-# https://github.com/summernote/django-summernote
-
-# Show summernote with Bootstrap4
 SUMMERNOTE_THEME = 'bs4'
 
 SUMMERNOTE_CONFIG = {
-    # Using SummernoteWidget - iframe mode, default
     'iframe': True,
 
     'summernote': {
-        # As an example, using Summernote Air-mode
         'airMode': False,
-
-        # Change editor size
         'width': '100%',
         'height': '300',
-
-        # Toolbar customization
-        # https://summernote.org/deep-dive/#custom-toolbar-popover
         'toolbar': [
             ['font', ['bold', 'italic', 'underline', 'clear']],
             ['fontname', ['fontname']],
@@ -394,37 +309,23 @@ SUMMERNOTE_CONFIG = {
             ['insert', ['picture', 'hr']],
             ['view', ['fullscreen']],
         ],
-
-        # Set to `True` to return attachment paths in absolute URIs.
         'attachment_absolute_uri': True,
-
-        # Require users to be authenticated for uploading attachments.
         'attachment_require_authentication': True,
-
-        # Set custom storage class for attachments.
         'attachment_storage_class': 'core.utils.upload_image_path',
 
         'codemirror': {
             'mode': 'htmlmixed',
             'lineNumbers': 'true',
-            # You have to include theme file in 'css' or 'css_for_inplace' before using it.
             'theme': 'monokai',
         },
     },
 }
-
-# Configure as cache backend
-# https://pypi.org/project/django-redis/
 
 CACHE_TTL = 60 * 15
 CACHE_TIMEOUT = 60 * 60
 
 DJANGO_REDIS_IGNORE_EXCEPTIONS = True
 DJANGO_REDIS_LOG_IGNORED_EXCEPTIONS = True
-
-
-# Django-compressor config
-# https://django-compressor.readthedocs.io/en/stable/settings/#settings
 
 COMPRESS_ENABLED = True
 COMPRESS_URL = STATIC_URL
@@ -445,13 +346,8 @@ COMPRESS_OFFLINE_CONTEXT = {
     "STATIC_URL": "STATIC_URL",
 }
 
-# Configuration
-# https://django-dbbackup.readthedocs.io/en/master/installation.html
-
 DBBACKUP_STORAGE = 'django.core.files.storage.FileSystemStorage'
 DBBACKUP_STORAGE_OPTIONS = {'location': BASE_DIR / 'db_backup'}
-
-# https://pypi.org/project/django-crontab/
 
 CRONJOBS = [
     ('0 24 * * *', 'helpers.cron.create_backups_scheduled_job')
