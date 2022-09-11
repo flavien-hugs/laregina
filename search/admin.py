@@ -5,7 +5,7 @@ from search.models import SearchTerm
 from services.export_data_csv import export_to_csv
 
 
-@admin.register(SearchTerm)
+# @admin.register(SearchTerm)
 class SearchTermAdmin(admin.ModelAdmin):
     date_hierarchy = 'date_search_at'
     list_display_links = ('__str__',)

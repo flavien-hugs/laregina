@@ -6,7 +6,7 @@ from analytics.models import ProductView
 from services.export_data_csv import export_to_csv
 
 
-@admin.register(ProductView)
+# @admin.register(ProductView)
 class AnalyticsAdmin(admin.ModelAdmin):
     date_hierarchy = 'date_viewed'
 
