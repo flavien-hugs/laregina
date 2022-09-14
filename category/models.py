@@ -56,8 +56,6 @@ class Category(MPTTModel, ModelSlugMixin, BaseTimeStampModel):
     )
     is_active = models.BooleanField(verbose_name='active', default=True)
 
-    objects = CategoryManager()
-
     class MPTTMeta:
         order_insertion_by = ['name']
 
@@ -104,7 +102,7 @@ class Category(MPTTModel, ModelSlugMixin, BaseTimeStampModel):
 
     @admin.display(description="nombre de produits")
     def products_count(self):
-        return len(self.get_products_in_category())
+        return self.get_products_in_category().count()
 
     def promotions_category(self):
         from pages.models import Promotion
