@@ -11,21 +11,24 @@
     </form>
 
     <ul class="ps-list--categories">
-        {% recursetree category %}
-        <li {% if not node.is_leaf_instance %}class="menu-item-has-children"{% endif %}>
-            <a href="{{ node.get_absolute_url }}">{{ node.name|safe }}</a>
+        
+        {% full_tree_for_model category.Category as category %}
 
-            {% if not node.is_leaf_node and node.children.all %}
-                <span class="sub-toggle"><i class="fa fa-angle-down"></i></span>
-                
-                <ul class="sub-menu">
-                    {% for children in node.children.all %}
-                        <li><a href="{{ children.get_absolute_url }}">
-                        {{ children.name }}</a></li>
-                    {% endfor %} 
-                </ul>
-            {% endif %}
-        </li>
+        {% recursetree category %}
+            <li {% if not node.is_leaf_instance %}class="menu-item-has-children"{% endif %}>
+                <a href="{{ node.get_absolute_url }}">{{ node.name|safe }}</a>
+
+                {% if not node.is_leaf_node and node.children.all %}
+                    <span class="sub-toggle"><i class="fa fa-angle-down"></i></span>
+                    
+                    <ul class="sub-menu">
+                        {% for children in node.children.all %}
+                            <li><a href="{{ children.get_absolute_url }}">
+                            {{ children.name }}</a></li>
+                        {% endfor %} 
+                    </ul>
+                {% endif %}
+            </li>
         {% endrecursetree %}
     </ul>
 </aside>
