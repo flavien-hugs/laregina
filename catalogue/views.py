@@ -42,14 +42,8 @@ class ExtraContextData:
         kwargs['recently_viewed'] = utils.get_recently_viewed(request=self.request)
         kwargs['category_list'] = self.queryset
 
-        supermarket = self.queryset.get(
-            pk=7).get_descendants(include_self=True)
-        kwargs['supermarkets'] = Product.objects.filter(
-            category__in=supermarket)[:15]
-
-        supermarkets = self.queryset.get(pk=22).get_descendants(include_self=True)
-        kwargs['categories'] = supermarkets.get_ancestors(include_self=False)
-        kwargs['products'] = Product.objects.filter(category__in=supermarkets)[:15]
+        category = self.queryset.get_descendants(include_self=True)
+        kwargs['products'] = Product.objects.filter(category__parent__in=category).distinct()[:15]
 
         return super().get_context_data(**kwargs)
 
