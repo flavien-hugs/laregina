@@ -97,18 +97,18 @@ class Category(MPTTModel, ModelSlugMixin, BaseTimeStampModel):
             return self.formatted_image.url
         return "static/img/categories/1.jpg"
 
-    def get_products_in_category(self):
+    def get_products(self):
         from catalogue.models import Product
-        products = Product.objects.filter(category=self)
+        products = Product.objects.filter(category__in=self.get_descendants(include_self=True))
         return products
 
     @admin.display(description="nombre de produits")
     def products_count(self):
-        return len(self.get_products_in_category())
+        return self.get_products().count()
 
     def promotions_category(self):
         from pages.models import Promotion
-        products = self.get_products_in_category()
+        products = self.get_products()
         promotions = Promotion.objects.filter(products__in=products)
         return (promotions).distinct()
 
