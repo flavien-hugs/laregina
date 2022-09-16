@@ -15,10 +15,10 @@ class SearchTerm(models.Model):
     """
     
     user = models.ForeignKey(
-        User,
-        models.SET_NULL,
-        null=True,
+        to="accounts.User",
+        on_delete=models.SET_NULL,
         verbose_name='user'
+        null=True
     )
     q = models.CharField(
         verbose_name='mot recherché',
