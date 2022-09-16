@@ -102,11 +102,7 @@ class Category(MPTTModel, ModelSlugMixin, BaseTimeStampModel):
 
     @admin.display(description="nombre de produits")
     def products_count(self):
-<<<<<<< HEAD
-        return self.get_products_in_category().count()
-=======
         return self.get_products().count()
->>>>>>> main
 
     def promotions_category(self):
         from pages.models import Promotion
