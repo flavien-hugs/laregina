@@ -2,30 +2,38 @@
 
 {% load mptt_tags crispy_forms_tags %}
 
+{% full_tree_for_model category.Category as categories %}
+
+{% url "search" as search_url %}
+
 <aside class="widget widget_shop">
     <h4 class="widget-title">Catégories</h4>
 
-    <form role='search' class="ps-form--widget-search" action="{% url "search" %}" method="GET">
+    <form role='search' class="ps-form--widget-search" action="{{ search_url }}" method="GET">
         <input class="form-control" type="search" name='q' value='{{ request.GET.q }}' placeholder="Rechercher ...">
         <button><i class="icon-magnifier"></i></button>
     </form>
 
     <ul class="ps-list--categories">
-        {% recursetree category %}
-        <li {% if not node.is_leaf_instance %}class="menu-item-has-children"{% endif %}>
-            <a href="{{ node.get_absolute_url }}">{{ node.name|safe }}</a>
+        {% recursetree categories %}
+            <li class="{% if not node.is_leaf_instance %}menu-item-has-children{% endif %}">
+                <a href="{{ node.get_absolute_url }}">{{ node.name|safe }}</a>
 
-            {% if not node.is_leaf_node and node.children.all %}
-                <span class="sub-toggle"><i class="fa fa-angle-down"></i></span>
-                
-                <ul class="sub-menu">
-                    {% for children in node.children.all %}
-                        <li><a href="{{ children.get_absolute_url }}">
-                        {{ children.name }}</a></li>
-                    {% endfor %} 
-                </ul>
-            {% endif %}
-        </li>
+                {% if not node.is_leaf_node and node.children.all %}
+                    <span class="sub-toggle"><i class="fa fa-angle-down"></i></span>
+                    
+                    <ul class="sub-menu">
+                        {% for object in node.children.all %}
+                            <li>
+                                <a href="{{ object.get_absolute_url }}">
+                                    {{ object.name }}
+                                </a>
+                            </li>
+                        {% endfor %} 
+                    </ul>
+                {% endif %}
+            </li>
         {% endrecursetree %}
     </ul>
 </aside>
+
