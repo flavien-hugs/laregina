@@ -9,11 +9,13 @@
                 Choisir la catégorie du produit
             </label>
 
-            <select id="{{ form.category.id_for_label }}" name="{{ form.category.name }}" class="form-select shadow-none rounded-0 mb-4">
+            <select id="{{ form.category.id_for_label }}"
+                name="{{ form.category.name }}"
+                class="form-select shadow-none rounded-0 mb-4">
                 {% for node in category %}
-                <option value="{{ node.pk }}">
-                    {{ node.parent|safe }}/{{ node.name|safe }}
-                </option>
+                    <option value="{{ node.pk }}">
+                        {{ node.parent|safe }}/{{ node.name|safe }}
+                    </option>
                 {% endfor %}
             </select>
         </div>
@@ -35,6 +37,16 @@
                 {{ form.price }}
             </div>
         </div>
+        
+        {{ formset_one.management_form }}
+        {{ formset_two.management_form }}
+
+        {% for form in formset_two %}
+            {{ form.non_form_errors }}
+                <div class="col-12 col-lg-12 mb-3">
+                    {{ form }}
+                </div>
+        {% endfor %}
 
         <div class="col-12 col-lg-12">
             <div class="form-group mb-3">
@@ -45,12 +57,11 @@
             </div>
         </div>
 
-        {{ formset.management_form }}
-        {% for form in formset %}
-        {{ form.non_form_errors }}
-        <div class="col-12 col-lg-6 mb-3">
-            {{ form.image }}
-        </div>
+        {% for form in formset_one %}
+            {{ form.non_form_errors }}
+                <div class="col-12 col-lg-6 mb-3">
+                    {{ form.image }}
+                </div>
         {% endfor %}
 
         <div class="col-12 col-lg-12">
