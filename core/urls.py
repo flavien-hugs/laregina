@@ -16,7 +16,7 @@ from django.views.generic import TemplateView
 from search.views import search_view
 from checkout.views import TrackOrderView, download_invoice_view
 
-from catalogue.views import home_view, market_view, combine_view, home_market_view
+from catalogue import views as catalog_views
 from core.sitemap import StaticViewSitemap, CategorySitemapView, ProductSitemapView
 
 from allauth.account.models import EmailAddress
@@ -46,19 +46,22 @@ def handler500(request, template_name='500.html'):
 
 
 urlpatterns = [
-    path(route='', view=home_view, name='home'),
-    path(route='m/', view=market_view, name='market'),
-    path(route='monmarche/', view=home_market_view, name='homemarket'),
-    path(route='e/', view=combine_view, name='allmarket'),
+    path(route='', view=catalog_views.home_view, name='home'),
+    path(route='m/', view=catalog_views.market_view, name='market'),
+    path(route='monmarche/', view=catalog_views.home_market_view, name='homemarket'),
+    path(route='e/', view=catalog_views.combine_view, name='allmarket'),
     path(route='search/', view=search_view, name="search"),
     path('', include('catalogue.urls')),
     path('categorie/', include('category.urls', namespace='category')),
     path('avis/', include('reviews.urls', namespace='reviews')),
     path('panier/', include('cart.urls', namespace='cart')),
     path('checkout/', include('checkout.urls', namespace='checkout')),
-    path(route='tracking/order/', view=TrackOrderView.as_view(extra_context={
-        'page_title': 'suivre votre commande',}), name='order_tracking'),
-    path(route='print-invoice/<int:order_id>/', view=download_invoice_view, name='download_invoice'),
+    path(route='tracking/order/',
+        view=TrackOrderView.as_view(extra_context={
+        'page_title': 'suivre votre commande',}),
+        name='order_tracking'),
+    path(route='print-invoice/<int:order_id>/',
+        view=download_invoice_view, name='download_invoice'),
     path('sp-', include("pages.urls", namespace='pages')),
     path('accounts/', include('allauth.urls')),
     path('', include('accounts.urls')),
