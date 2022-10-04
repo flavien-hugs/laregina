@@ -22,7 +22,7 @@ class CategoryDetailView(
     def get_context_data(self, **kwargs):
         kwargs['category'] = self.queryset
         kwargs['page_title'] = self.object.name
-        kwargs['object_list'] = self.get_object().get_products_in_category()
+        kwargs['object_list'] = self.get_object().get_products()
         kwargs['product_recommended'] = utils.get_recently_viewed(self.request)
         return super().get_context_data(**kwargs)
 

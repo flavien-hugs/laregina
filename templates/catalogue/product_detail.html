@@ -84,6 +84,23 @@
                                 {% endif %}
                             </div>
 
+                            {% if object.attributes.exists  %}
+                                <div class="ps-product__variations">
+                                    <figure>
+                                        <figcaption>
+                                            <strong class="text-uppercase text-success">tailles disponibles</strong>
+                                        </figcaption>
+
+                                        {% for size in object.attributes %}
+                                            <div class="ps-variant ps-variant--size">
+                                                <span class="ps-variant__tooltip">{{ size.size }}</span>
+                                                <span class="ps-variant__size">{{ size.size }}</span>
+                                            </div>
+                                        {% endfor %}
+                                    </figure>
+                                </div>
+                                {% endif %}
+
                             {% include "cart/snippet/form.html" with product=object %}
 
                             <div class="ps-product__specification">
