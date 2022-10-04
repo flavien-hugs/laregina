@@ -42,8 +42,8 @@ class ExtraContextData:
         kwargs['recently_viewed'] = utils.get_recently_viewed(request=self.request)
         kwargs['category_list'] = self.queryset
 
-        category = self.queryset.get_descendants(include_self=True)
-        kwargs['products'] = Product.objects.filter(category__parent__in=category).distinct()[:15]
+        category = self.queryset
+        kwargs['products'] = Product.objects.filter(category__parent__in=category)[:15]
 
         return super().get_context_data(**kwargs)
 
@@ -69,7 +69,8 @@ class HomeMarketView(PromotionMixin, generic.TemplateView):
     queryset = Category.objects.get(pk=223)
 
     def get_context_data(self, **kwargs):
-        kwargs['farm'] = self.queryset.get_descendants(include_self=True)
+        categories = self.queryset.get_children()
+        kwargs['farm'] = categories[:15]
         return super().get_context_data(**kwargs)
 
 
