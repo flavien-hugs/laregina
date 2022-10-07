@@ -6,7 +6,6 @@ from django.db import models
 from datetime import datetime
 from django.urls import reverse
 from django.contrib import admin
-from django.conf import settings
 from django.dispatch import receiver
 from django.db.models import Avg, Count
 from django.utils.safestring import mark_safe
@@ -24,20 +23,14 @@ from helpers.models import BaseTimeStampModel
 from imagekit.models import ImageSpecField
 from imagekit.processors import ResizeToFill, Adjust
 
-User = settings.AUTH_USER_MODEL
-
 NULL_AND_BLANK = {'null': True, 'blank': True}
 UNIQUE_AND_DB_INDEX = {'null': False, 'unique': True, 'db_index': True}
 DECIMAFIELD_OPTION = {'max_digits': 50, 'decimal_places': 0}
 
 
 class Product(BaseTimeStampModel):
-    """
-    Produit : prix, code, etc.
-    """
-
     user = models.ForeignKey(
-        to=User,
+        to="accounts.User",
         on_delete=models.CASCADE,
         limit_choices_to={'is_seller': True, },
         verbose_name='vendeur',
@@ -272,7 +265,7 @@ class ProductAttributeValue(models.Model):
         indexes = [models.Index(fields=['id'])]
 
     def __str__(self):
-        return f"{self.product}, [{self.size}]"
+        return f"{self.product}, {self.size}"
 
 
 class ProductImage(models.Model):
