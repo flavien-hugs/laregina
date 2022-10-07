@@ -17,12 +17,14 @@ class CategoryDetailView(
     slug_field = "slug"
     slug_url_kwarg = "slug"
     queryset = Category.objects.all()
-    template_name = "category/category_detail.html"
+    template_name = "catalogue/product_list.html"
 
     def get_context_data(self, **kwargs):
         kwargs['category'] = self.queryset
         kwargs['page_title'] = self.object.name
-        kwargs['object_list'] = self.get_object().get_products()
+        kwargs['object_list'] = Product.objects.filter(
+            category__in=self.object.get_descendants(include_self=True)
+        )
         kwargs['product_recommended'] = utils.get_recently_viewed(self.request)
         return super().get_context_data(**kwargs)
 
