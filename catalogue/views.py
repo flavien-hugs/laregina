@@ -66,7 +66,10 @@ home_view = HomeView.as_view()
 class HomeMarketView(PromotionMixin, generic.TemplateView):
 
     template_name = "market.html"
-    queryset = Category.objects.get(pk=223)
+    try:
+        queryset = Category.objects.get(pk=223)
+    except:
+        queryset = Category.objects.all()
 
     def get_context_data(self, **kwargs):
         categories = self.queryset.get_children()
