@@ -5,12 +5,10 @@ DIR=/home/laregina/laregina.deals/laregina
 USER=laregina
 GROUP=laregina
 WORKERS=3
-BIND=unix:/home/laregina/run/gunicorn.sock
+BIND=unix:/home/laregina/laregina.deals/laregina/run/gunicorn.sock
 DJANGO_SETTINGS_MODULE=core.production
 DJANGO_WSGI_MODULE=core.wsgi
 LOG_LEVEL=error
-
-echo "Démarrage de $NAME en tant que `whoami`"
 
 cd $DIR
 source ../bin/activate
