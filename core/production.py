@@ -2,6 +2,8 @@
 
 from core.settings import *
 
+import dj_database_url
+
 PREPEND_WWW = True
 DEBUG = TEMPLATE_DEBUG = False
 
@@ -11,16 +13,16 @@ ALLOWED_HOSTS = [
     'www.laregina.deals'
 ]
 
-# Parse database configuration from $DATABASE_URL
-# Change 'default' database configuration with
 # $DATABASE_URL. pwd=__unstainc@@ bdd=c1581337c_laregina_deals_db
 # username=c1581337c_unsta_dev
 
-# APPLICATION DEFINITION
-INSTALLED_APPS += ['whitenoise.runserver_nostatic']
+DATABASES = {
+    'default': dj_database_url.config(
+        default=en.get('DATABASE_URL')
+    )
+}
 
-# https://docs.djangoproject.com/fr/3.0/ref/settings/
-# Let's Encrypt ssl/tls https
+INSTALLED_APPS += ['whitenoise.runserver_nostatic']
 
 SECURE_SSL_REDIRECT = True
 SECURE_HSTS_SECONDS = 86400
@@ -34,7 +36,6 @@ CSRF_COOKIE_SECURE = True
 SESSION_COOKIE_SECURE = True
 SESSION_EXPIRE_AT_BROWSER_CLOSE = False
 
-# https://warehouse.python.org/project/whitenoise/
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 LOGGING = {
