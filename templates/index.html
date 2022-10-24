@@ -2,28 +2,6 @@
 {% load static mptt_tags pages_tags catalogue_tags %}
 {% get_static_prefix as STATIC_PREFIX %}
 
-
-{% block header_top %}
-    
-    {% url "homemarket" as market_url %}
-
-    <div class="ps-block--promotion-header bg--cover"
-        data-background="{{ STATIC_PREFIX }}img/promo.jpg"
-        style="background: rgba(0, 0, 0, 0) url({{ STATIC_PREFIX }}img/promo.jpg) repeat scroll 0% 0%;">
-        <div class="container">
-            <div class="ps-block__left">
-                <figure>
-                    <p class="text-white">Nouveauté</p>
-                    <h4 class="text-white">Faites votre marché ici.</h4>
-                </figure>
-            </div>
-            <a class="ps-btn ps-btn--sm text-uppercase" href="{{ market_url }}">
-                je fais mon marché    
-            </a>
-        </div>
-    </div>
-{% endblock header_top %}
-
 {% block content %}
     {% url "home" as home_url %}
     {% url "account_signup" as signup %}

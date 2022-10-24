@@ -47,10 +47,7 @@ class Category(MPTTModel, ModelSlugMixin, BaseTimeStampModel):
     )
     formatted_image = ImageSpecField(
         source='image',
-        processors=[
-            Adjust(contrast=1.2, sharpness=1.1),
-            ResizeToFill(1170, 399)
-        ],
+        processors=[ResizeToFill(1170, 399)],
         format='JPEG',
         options={'quality': 90}
     )
@@ -97,7 +94,7 @@ class Category(MPTTModel, ModelSlugMixin, BaseTimeStampModel):
 
     def get_products(self):
         from catalogue.models import Product
-        products = Product.objects.filter(category__in=self.get_descendants(include_self=True))
+        products = Product.objects.filter(category__in=self.get_descendants(include_self=False))
         return products
 
     @admin.display(description="nombre de produits")

@@ -6,7 +6,6 @@ from pathlib import Path
 from django.contrib.messages import constants as messages
 
 import pyzstd
-
 from dotenv import dotenv_values
 
 env = dotenv_values(".env")
@@ -181,27 +180,12 @@ X_FRAME_OPTIONS = "SAMEORIGIN"
 
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
 
-if DEBUG:
-    DATABASES = {
-        'default': {
-            'ENGINE': 'django.db.backends.sqlite3',
-            'NAME': str(BASE_DIR / 'db.sqlite3')
-        }
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': str(BASE_DIR / 'db.sqlite3')
     }
-else:
-    DATABASES = {
-        'default': {
-            'ENGINE': 'django.db.backends.mysql',
-            'NAME': env.get('DATABASE_NAME'),
-            'USER': env.get('DATABASE_USER'),
-            'PASSWORD': env.get('DATABASE_PASSWORD'),
-            'HOST': env.get('DATABASE_HOST'),
-            'PORT': env.get('DATABASE_PORT'),
-            'OPTIONS': {
-                "init_command": "SET sql_mode='STRICT_TRANS_TABLES'",
-            }
-        }
-    }
+}
 
 AUTH_PASSWORD_VALIDATORS = [
     {'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
@@ -261,9 +245,6 @@ PHONENUMBER_DEFAULT_FORMAT = "NATIONAL"
 CINETPAY_API_KEY = env.get('CINETPAY_API_KEY')
 CINETPAY_SITE_ID = env.get('CINETPAY_SITE_ID')
 CINETPAY_TRANS_ID = env.get('CINETPAY_TRANS_ID')
-
-MAILCHIMP_API_KEY = env.get('MAILCHIMP_API_KEY')
-MAILCHIMP_SUBSCRIBE_LIST_ID = env.get('MAILCHIMP_SUBSCRIBE_LIST_ID')
 
 SESSION_SERIALIZER = 'django.contrib.sessions.serializers.JSONSerializer'
 

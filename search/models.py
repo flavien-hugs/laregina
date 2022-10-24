@@ -13,11 +13,11 @@ class SearchTerm(models.Model):
     """
     stocke le texte de chaque recherche interne soumise
     """
-    
+
     user = models.ForeignKey(
         to="accounts.User",
         on_delete=models.SET_NULL,
-        verbose_name='user'
+        verbose_name='user',
         null=True
     )
     q = models.CharField(

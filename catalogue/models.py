@@ -6,7 +6,6 @@ from django.db import models
 from datetime import datetime
 from django.urls import reverse
 from django.contrib import admin
-from django.conf import settings
 from django.dispatch import receiver
 from django.db.models import Avg, Count
 from django.utils.safestring import mark_safe
@@ -24,8 +23,6 @@ from helpers.models import BaseTimeStampModel
 from imagekit.models import ImageSpecField
 from imagekit.processors import ResizeToFill, Adjust
 
-User = settings.AUTH_USER_MODEL
-
 NULL_AND_BLANK = {'null': True, 'blank': True}
 UNIQUE_AND_DB_INDEX = {'null': False, 'unique': True, 'db_index': True}
 DECIMAFIELD_OPTION = {'max_digits': 50, 'decimal_places': 0}
@@ -33,7 +30,7 @@ DECIMAFIELD_OPTION = {'max_digits': 50, 'decimal_places': 0}
 
 class Product(BaseTimeStampModel):
     user = models.ForeignKey(
-        to=User,
+        to="accounts.User",
         on_delete=models.CASCADE,
         limit_choices_to={'is_seller': True, },
         verbose_name='vendeur',
@@ -100,6 +97,10 @@ class Product(BaseTimeStampModel):
 
     def __str__(self):
         return self.name
+
+    def attributes(self):
+        values = ProductAttributeValue.objects.filter(product=self)
+        return values
 
     def get_price(self):
         for obj in self.get_vouchers_price():
@@ -230,9 +231,46 @@ class Product(BaseTimeStampModel):
         return promotion
 
 
+class ProductAttributeValue(models.Model):
+    """
+    Déclinaison de produit déterminée par
+    des attributs comme la couleur, etc.
+    """
+
+    S = "S"
+    M = "M"
+    L = "L"
+    XL = "XL"
+    XS = "XS"
+
+    SIZE_CHOICES = (
+        (XS, "XS"), (S, "S"),
+        (M, "M"), (L, "L"), (XL, "XL"),
+    )
+    product = models.ForeignKey(
+        to="catalogue.Product",
+        on_delete=models.CASCADE,
+        verbose_name='attribut'
+    )
+    size = models.CharField(
+        max_length=2,
+        default=M,
+        verbose_name="tailles",
+        choices=SIZE_CHOICES,
+        help_text="Sélectionner une taille"
+    )
+
+    class Meta:
+        verbose_name_plural = "Tailles"
+        indexes = [models.Index(fields=['id'])]
+
+    def __str__(self):
+        return f"{self.product}, {self.size}"
+
+
 class ProductImage(models.Model):
     product = models.ForeignKey(
-        to=Product,
+        to="catalogue.Product",
         on_delete=models.CASCADE,
         verbose_name='image produit'
     )
@@ -262,7 +300,7 @@ class ProductImage(models.Model):
     class Meta:
         db_table = 'product_image_db'
         ordering = ['-updated', '-timestamp']
-        verbose_name_plural = 'images du produit'
+        verbose_name_plural = 'galleries du produit'
 
     def __str__(self):
         return self.product.name.lower()

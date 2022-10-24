@@ -1,6 +1,3 @@
-# catalogue.admin.py
-
-import admin_thumbnails
 from django.contrib import admin
 from django.utils.html import format_html
 from django.utils.safestring import mark_safe
@@ -13,9 +10,15 @@ from django_summernote.admin import SummernoteModelAdmin
 class ProductImageInline(admin.TabularInline):
     extra = 0
     max_num = 3
+    show_change_link = True
     model = models.ProductImage
     readonly_fields = ['product']
-    show_change_link = True
+
+
+class ProductAttributeValueAdmin(admin.TabularInline):
+    model = models.ProductAttributeValue
+    extra = 2
+
 
 
 @admin.register(models.Product)
@@ -62,7 +65,7 @@ class ProductAdmin(SummernoteModelAdmin):
         'get_product_shop',
     ]
     list_per_page = 10
-    inlines = [ProductImageInline]
+    inlines = [ProductAttributeValueAdmin, ProductImageInline]
     prepopulated_fields = {
         'keywords': ('name',)
     }

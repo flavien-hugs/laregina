@@ -15,7 +15,7 @@ from pages.mixins import PromotionMixin
 from voucher.models import Voucher
 from voucher.forms import VoucherCreateForm
 from checkout.models import Order, OrderItem
-from catalogue.forms import ProductCreateFormSet
+from catalogue.forms import ProductCreateFormSet, ProductAttributeCreateFormset
 
 from accounts.models import ProfileSocialMedia
 from accounts.mixins import SellerRequiredMixin, ProductEditMixin
@@ -239,12 +239,14 @@ class ProductCreateView(
         self.object = None
         form_class = self.get_form_class()
         form = self.get_form(form_class)
-        formset = ProductCreateFormSet()
+        formset_one = ProductCreateFormSet()
+        formset_two = ProductAttributeCreateFormset()
 
         return self.render_to_response(
             self.get_context_data(
                 form=form,
-                formset=formset
+                formset_one=formset_one,
+                formset_two=formset_two
             )
         )
 
@@ -252,26 +254,38 @@ class ProductCreateView(
         self.object = None
         form_class = self.get_form_class()
         form = self.get_form(form_class)
-        formset = ProductCreateFormSet(self.request.POST, self.request.FILES)
+        formset_one = ProductCreateFormSet(
+            self.request.POST, self.request.FILES
+        )
+        formset_two = ProductCreateFormSet(self.request.POST)
 
-        if form.is_valid() and formset.is_valid():
-            return self.form_valid(form, formset)
+        if (form.is_valid()
+            and formset_one.is_valid()
+            and formset_two.is_valid()
+        ):
+            return self.form_valid(form, formset_one, formset_two)
         else:
-            return self.form_invalid(form, formset)
+            return self.form_invalid(form, formset_one, formset_two)
 
-    def form_valid(self, form, formset):
+    def form_valid(self, form, formset_one, formset_two):
         form.instance.user = self.request.user
         self.object = form.save()
 
-        formset.instance = self.object
-        formset.save()
+        formset_one.instance = self.object
+        formset_two.instance = self.object
+        formset_one.save()
+        formset_two.save()
         msg = 'Votre nouveau produit a été ajouté  avec succes !'
         messages.success(self.request, msg)
         return HttpResponseRedirect(self.get_success_url())
 
-    def form_invalid(self, form, formset):
-        return self.render_to_response(self.get_context_data(form=form, formset=formset))
-
+    def form_invalid(self, form, formset_one, formset_two):
+        return self.render_to_response(
+            self.get_context_data(
+                form=form, formset_one=formset_one,
+                formset_two=formset_two
+            )
+        )
 
     def get_context_data(self, *args, **kwargs):
         kwargs['subtitle'] = "ajouter un nouveau produit"
