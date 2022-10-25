@@ -12,9 +12,7 @@ django = "==3.2.12"
 gunicorn = "*"
 django-mptt = "*"
 django-countries = "*"
-whitenoise = {extras = ["brotl"], version = "*"}
-python-decouple = "*"
-dj-database-url = "*"
+whitenoise = {extras = ["brotli"], version = "*"}
 django-redis = "*"
 django-crispy-forms = "*"
 django-allauth = "*"
