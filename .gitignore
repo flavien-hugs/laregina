@@ -8,8 +8,9 @@ __pycache__
 media
 data/*.json
 db.sqlite3
-staticfiles
+staticfiles/
 db_backup/*.dump
+celerybeat-schedule
 
 # Backup files #
 *.bak
