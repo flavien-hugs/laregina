@@ -72,6 +72,8 @@ urlpatterns = [
 
     path('sitemap.xml', views.sitemap, {'sitemaps': sitemaps}, name='django.contrib.sitemaps.views.sitemap'),
     path('robots.txt', TemplateView.as_view(template_name='robots.txt', content_type='text/plain')),
+
+    path('__debug__/', include('debug_toolbar.urls')),
 ]
 
 handler404 = handler404

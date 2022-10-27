@@ -61,6 +61,8 @@ OTHERS_APPS = [
 
     'dbbackup',
     'django_crontab',
+
+    'debug_toolbar',
 ]
 
 LOCAL_APPS = [
@@ -141,6 +143,8 @@ MIDDLEWARE = [
 
     'django.middleware.gzip.GZipMiddleware',
     'django.middleware.http.ConditionalGetMiddleware',
+
+    "debug_toolbar.middleware.DebugToolbarMiddleware",
 ]
 
 ROOT_URLCONF = 'core.urls'
