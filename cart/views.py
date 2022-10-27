@@ -41,3 +41,6 @@ def shopcart(request, template="cart/cart.html"):
     }
 
     return render(request, template, context)
+
+
+shopcart = shopcart
