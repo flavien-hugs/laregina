@@ -3,10 +3,13 @@
 *.pot
 *.pyc
 *.lock
+*.sqlite3
 __pycache__
-db.sqlite3
 media
+data/*.json
+db.sqlite3
 staticfiles
+db_backup/*.dump
 
 # Backup files #
 *.bak
