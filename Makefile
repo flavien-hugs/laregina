@@ -8,6 +8,10 @@ help: ## Show this help
 freeze: ## Pin current dependencies
 	pipenv run pip freeze --local > requirements.txt
 
+merge: ## Resolve conflicts detected to merge
+	$(MANAGE) makemigrations --merge
+
+
 migrate: ## Make and run migrations
 	$(MANAGE) makemigrations
 	$(MANAGE) migrate
