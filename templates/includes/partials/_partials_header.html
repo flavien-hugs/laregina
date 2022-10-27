@@ -37,7 +37,7 @@
                             {% csrf_token %}
                             <div class="ps-product__shopping">
                                 <span class="ps-product__price">
-                                    <span>{{ object.get_product_price|intcomma }} Fr</span>
+                                    <span>{{ object.price|intcomma }} Fr</span>
                                 </span>
 
                                 <a href="{{ cart }}" class="ps-btn text-uppercase">
@@ -60,8 +60,7 @@
                 <div class="navigation__left">
                     <div class="menu--product-categories">
                         <div class="menu__toggle">
-                            <i class="icon-menu"></i><span>
-                            Catégories</span>
+                            <i class="icon-menu"></i><span>Catégories</span>
                         </div>
                         <div class="menu__content">
                             <ul class="menu--dropdown">

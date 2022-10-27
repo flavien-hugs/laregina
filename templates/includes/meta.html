@@ -1,46 +1,86 @@
-<!--[if IE 7]><html class="ie ie7"><![endif]-->
-<!--[if IE 8]><html class="ie ie8"><![endif]-->
-<!--[if IE 9]><html class="ie ie9"><![endif]-->
-
 <meta charset="utf-8"/>
 <meta http-equiv="Content-Type" content="text/html">
 <meta name="format-detection" content="telephone=yes">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta http-equiv="X-UA-Compatible" content="ie=edge,chrome=1">
-<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<meta name="title" content="{% if page_title %} {{ page_title }} {% else %} {{ title }} {% endif %}">
-<meta name="description" content="{% if object.description %} {{ object.description }} {% else %} {{ description }} {% endif %}">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="title" content="{% if page_title %}{{ page_title }}{% else %}Vente et achat en ligne Informatiques, Électromenager, Habillement et mode, Téléphones, TV, Jeux Vidéos{% endif %}">
+<meta name="description" content="LaRegina deals est une plateforme de commerce électronique de vente et d'achat au détail.">
 
 <meta name="distribution" content="Global">
-<meta name="revisit-after" content="10 days">
-<meta name="keywords" content="{{ keywords }}">
-<meta name="robots" content="index,nofollow,all">
+<meta name="revisit-after" content="3 days">
+<meta name="keywords" content="laregina, deals, marché de gros, grand marché, supermarché, vente en ligne, côte d'ivoire, jumia deals, promotions chaudes, electronique, informatique, e-commerce, commerce électronique, bouaké, abidjan, electromenager, téléphone, tablettes loisirs et jouets">
+<meta name="robots" content="follow,all">
 <meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="google-site-verification" content="{{ google_site_verification }}"/>
 
 <!-- Twitter card -->
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:site" content="@publisher_handle">
 <meta name="twitter:creator" content="@flavien_hugs">
-<meta name="twitter:title" content="{% if page_title %} {{ page_title }} {% else %} {{ title }} {% endif %}">
-<meta name="twitter:description" content="{% if object.description %} {{ object.description }} {% else %} {{ description }} {% endif %}">
-<meta name="twitter:image" content="{{ STATIC_PREFIX }}img/favicon.ico">
+<meta name="twitter:title" content="{{ title }}">
+<meta name="twitter:description" content="{% if object.description %}{{ object.description }}LaRegina Deals est la branche e-commerce de CGIC Group qui concilie au sein de ses services immobiliers et commerce{% endif %}">
+<meta name="twitter:image" content="{% if object %}{{ object.get_image_url }}{% else %}{{ STATIC_PREFIX }}img/favicon.ico {% endif %}">
 <meta name="twitter:image:alt" content="{{ title }}">
-
-<!-- Facebook Meta Tags -->
 
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="{{ title }}">
 <meta property="og:url" content="{% if object %}{{ object.get_absolute_url }}{% else %}{{ request.get_host }} {% endif %}">
-<meta property="og:title" content="{% if object.name %}{{ object.name }}{% else %}Vente et achat en ligne Informatiques, Électromenager, Habillement et mode, Téléphones, TV, Jeux Vidéos, {% endif %}">
-<meta property="og:image" content="{% if object.image %}{{ object.get_image_url }}{% else %}{{ STATIC_PREFIX }}img/favicon.ico {% endif %}">
-<meta property="og:description" content="{% if object.description %}{{ object.description }}Vente et achat en ligne Informatiques, Électromenager, Habillement et mode, Téléphones, TV, Jeux Vidéos,{{ description }}{% endif %}">
+<meta property="og:title" content="{% if object.name %}{{ object.name }}{% else %}Vente et achat en ligne Informatiques, Électromenager, Habillement et mode, Téléphones, TV, Jeux Vidéos{% endif %}">
+<meta property="og:image" content="{% if object %}{{ object.get_image_url }}{% else %}{{ STATIC_PREFIX }}img/favicon.ico {% endif %}">
+<meta property="og:description" content="{% if object.description %}{{ object.description }}LaRegina Deals est la branche e-commerce de CGIC Group qui concilie au sein de ses services immobiliers et commerce.{% endif %}">
 <meta property="og:image:alt" content="{% if object.image %}{{ object.name }}{% else %}{{ title }}{% endif %}">
 <meta property="og:image:type" content="image/png">
 <meta property="og:locale" content="fr_CI">
-<meta name="bingbot" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1">
 
-<!-- favicon-->
+<!-- Favicon-->
 <link rel="shortcut icon" href="{{ STATIC_PREFIX }}img/favicon.ico">
 <link rel="canonical" href="https://{{ request.get_host }}"/>
-<link rel="preconnect" href="https://{{ request.get_host }}"/>
-<link rel="dns-prefetch" href="https://{{ request.get_host }}"/>
+
+<!-- Google Tag Manager -->
+<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+})(window,document,'script','dataLayer','GTM-MXNGK8Z');</script>
+<!-- End Google Tag Manager -->
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-YDBHRN5LMT"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-YDBHRN5LMT');
+</script>
+
+<!-- Facebook Pixel Code -->
+<script>
+!function(f,b,e,v,n,t,s)
+{if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+n.queue=[];t=b.createElement(e);t.async=!0;
+t.src=v;s=b.getElementsByTagName(e)[0];
+s.parentNode.insertBefore(t,s)}(window,document,'script',
+'https://connect.facebook.net/en_US/fbevents.js');
+ fbq('init', '254583546669361'); 
+fbq('track', 'PageView');
+</script>
+<noscript>
+ <img height="1" width="1" 
+src="https://www.facebook.com/tr?id=254583546669361&ev=PageView
+&noscript=1"/>
+</noscript>
+<!-- End Facebook Pixel Code -->
+<meta name="facebook-domain-verification" content="afg0cxrdk70h332fvr27g1cbi2yk20" />
+<meta name="msvalidate.01" content="1DA4D72A105353AD708D921B4B80B9C6" />
+<!-- Clarity tracking code for https://laregina.deals -->
+<script>
+    (function(c,l,a,r,i,t,y){
+        c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
+        t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i+"?ref=bwt";
+        y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
+    })(window, document, "clarity", "script", "d3m625esj6");
+</script>
+<script type="text/javascript" async src="https://brain.plezi.co/api/v1/analytics?tenant=5ff72097-cf71-4e11-8473-90116569d2cc&tw=441edb36-034e-40fa-a232-44214ad40798"></script>
