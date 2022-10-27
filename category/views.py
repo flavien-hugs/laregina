@@ -17,12 +17,8 @@ class CategoryDetailView(
     paginate_by = 20
     slug_field = "slug"
     slug_url_kwarg = "slug"
-<<<<<<< HEAD
-    template_name = "category/category_detail.html"
-=======
     queryset = Category.objects.all()
     template_name = "catalogue/product_list.html"
->>>>>>> main
 
     def get_queryset(self):
         return self.model.objects.all()
