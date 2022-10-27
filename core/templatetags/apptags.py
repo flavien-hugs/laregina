@@ -1,6 +1,5 @@
-# core.templatetags.apptags.py
-
 from django import template
+
 
 register = template.Library()
 

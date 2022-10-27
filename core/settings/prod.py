@@ -1,11 +1,8 @@
-# core/production.py
+from .base import *  # noqa
 
-from core.settings import *
-
-import dj_database_url
 
 PREPEND_WWW = True
-DEBUG = TEMPLATE_DEBUG = False
+APPEND_SLASH = True
 
 ALLOWED_HOSTS = [
     '*.laregina.deals',
@@ -13,16 +10,16 @@ ALLOWED_HOSTS = [
     'www.laregina.deals'
 ]
 
-# $DATABASE_URL. pwd=__unstainc@@ bdd=c1581337c_laregina_deals_db
-# username=c1581337c_unsta_dev
-
 DATABASES = {
-    'default': dj_database_url.config(
-        default=en.get('DATABASE_URL')
-    )
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': env.get('DATABASE_NAME'),
+        'USER': env.get('DATABASE_USER'),
+        'PASSWORD': env.get('DATABASE_PASSWORD'),
+        'HOST': env.get('DATABASE_HOST'),
+        'PORT': env.get('DATABASE_PORT'),
+    }
 }
-
-INSTALLED_APPS += ['whitenoise.runserver_nostatic']
 
 SECURE_SSL_REDIRECT = True
 SECURE_HSTS_SECONDS = 86400
@@ -45,7 +42,7 @@ LOGGING = {
         "file": {
             "level": "INFO",
             "class": "logging.handlers.TimedRotatingFileHandler",
-            "filename": BASE_DIR / "logs/debug.log",
+            "filename": os.path.join(BASE_DIR, 'logs/debug.log'),
             "when": "D",
             "interval": 1,
             "backupCount": 100,

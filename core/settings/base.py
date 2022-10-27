@@ -1,5 +1,3 @@
-# core/settings.py
-
 import re
 import os
 from pathlib import Path
@@ -10,21 +8,26 @@ from dotenv import dotenv_values
 
 env = dotenv_values(".env")
 
-BASE_DIR = Path(__file__).resolve().parent.parent
+# BASE_DIR = Path(__file__).resolve().parent.parent
 
+abspath = os.path.abspath(__file__)
+dirname = os.path.dirname(os.path.dirname(abspath))
+BASE_DIR = os.path.dirname(dirname)
+
+DEBUG = env.get('DEBUG')
+TEMPLATE_DEBUG = DEBUG
+
+USE_THOUSAND_SEPARATOR = False
 SECRET_KEY = env.get('SECRET_KEY')
 
-DEBUG = True
-TEMPLATE_DEBUG = DEBUG
-DEFAULT_CHARSET = 'UTF-8'
-SITE_DESCRIPTION = ""
+APPEND_SLASH = True
+SITE_DESCRIPTION = "Vente et achat en ligne Informatiques, Électromenager, Habillement et mode, Téléphones, TV, Jeux Vidéos"
 INDEX_DESCRIPTION = "Vente et achat en ligne Informatiques, Électromenager, Habillement et mode, Téléphones, TV, Jeux Vidéos"
 META_KEYWORDS = 'créer boutique vente ligne, vente, achat, laregina, deals, acheter, vendre, boutique en ligne, laregina deals, ouvrir un magasin en ligne'
 SITE_NAME = 'LaRegina Deals'
-APPEND_SLASH = True
 
-AUTH_USER_MODEL = 'accounts.User'
 ADMIN_URL = 'lrg-admin/'
+AUTH_USER_MODEL = 'accounts.User'
 
 ALLOWED_HOSTS = []
 
@@ -60,9 +63,7 @@ OTHERS_APPS = [
     'compressor',
 
     'dbbackup',
-    'django_crontab',
-
-    'debug_toolbar',
+    'django_crontab'
 ]
 
 LOCAL_APPS = [
@@ -92,9 +93,6 @@ LOGIN_URL = 'account_login'
 LOGIN_REDIRECT_URL = 'seller:profile'
 SIGNUP_CUSTOMER_URL = 'customer_signup'
 
-# Configuration django-allauth
-# https://django-allauth.readthedocs.io/en/latest/configuration.html
-
 ACCOUNT_LOGOUT_ON_GET = True
 ACCOUNT_UNIQUE_EMAIL = True
 ACCOUNT_EMAIL_REQUIRED = True
@@ -117,16 +115,18 @@ ACCOUNT_FORMS = {
     'signup': 'accounts.forms.MarketSignupForm',
 }
 
-ACCOUNT_USER_DISPLAY = lambda user: user.shipping_first_name
+def ACCOUNT_USER_DISPLAY(user): return user.shipping_first_name
 
-EMAIL_HOST = env.get('EMAIL_HOST')
-EMAIL_PORT = env.get('EMAIL_PORT')
-EMAIL_USE_TLS = env.get('EMAIL_USE_TLS')
-EMAIL_HOST_USER = env.get('EMAIL_HOST_USER')
-EMAIL_HOST_PASSWORD = env.get('EMAIL_HOST_PASSWORD')
+EMAIL_HOST = os.getenv('EMAIL_HOST')
+EMAIL_PORT = os.getenv('EMAIL_PORT')
+EMAIL_USE_TLS = os.getenv('EMAIL_USE_TLS')
+EMAIL_HOST_USER = os.getenv('EMAIL_HOST_USER')
+EMAIL_HOST_PASSWORD = os.getenv('EMAIL_HOST_PASSWORD')
 DEFAULT_FROM_EMAIL = SERVER_EMAIL = 'no-reply@laregina.deals'
 
 MIDDLEWARE = [
+    "django.middleware.cache.UpdateCacheMiddleware",
+
     'django.middleware.security.SecurityMiddleware',
     'whitenoise.middleware.WhiteNoiseMiddleware',
 
@@ -144,15 +144,17 @@ MIDDLEWARE = [
     'django.middleware.gzip.GZipMiddleware',
     'django.middleware.http.ConditionalGetMiddleware',
 
-    "debug_toolbar.middleware.DebugToolbarMiddleware",
+    "django.middleware.cache.FetchFromCacheMiddleware",
 ]
 
 ROOT_URLCONF = 'core.urls'
 
+TEMPLATES_DIR = os.path.join(BASE_DIR, 'templates')
+
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [BASE_DIR / 'templates'],
+        'DIRS': [TEMPLATES_DIR],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -164,14 +166,11 @@ TEMPLATES = [
                 'django.template.context_processors.csrf',
                 'django.contrib.messages.context_processors.messages',
 
-                # Custom context processors
                 'helpers.context.context',
                 'helpers.context.category',
                 'helpers.context.cart_items',
                 'accounts.context.profile',
-            ],
-
-            'debug': DEBUG,
+            ]
         },
     },
 ]
@@ -184,22 +183,15 @@ X_FRAME_OPTIONS = "SAMEORIGIN"
 
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': str(BASE_DIR / 'db.sqlite3')
-    }
-}
-
 AUTH_PASSWORD_VALIDATORS = [
     {'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
-        'OPTIONS': {'max_similarity': 0.9,}
-    },
+        'OPTIONS': {'max_similarity': 0.9, }
+     },
     {'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator',
-        'OPTIONS': {'min_length': 9,}
+        'OPTIONS': {'min_length': 9, }
     },
-    {'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator',},
-    {'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',},
+    {'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator', },
+    {'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator', },
 ]
 
 PASSWORD_HASHERS = [
@@ -218,10 +210,12 @@ USE_I18N = USE_L10N = True
 DATE_INPUT_FORMATS = ('%d/%m/%Y', '%Y-%m-%d')
 
 MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+
 STATIC_URL = '/static/'
-MEDIA_ROOT = BASE_DIR / 'media'
-STATIC_ROOT = BASE_DIR / 'staticfiles'
-STATICFILES_DIRS = [BASE_DIR / 'static']
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+
+STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
 
 STATICFILES_FINDERS = [
     'django.contrib.staticfiles.finders.FileSystemFinder',
@@ -246,9 +240,9 @@ PHONENUMBER_DEFAULT_REGION = "CI"
 PHONENUMBER_DB_FORMAT = "NATIONAL"
 PHONENUMBER_DEFAULT_FORMAT = "NATIONAL"
 
-CINETPAY_API_KEY = env.get('CINETPAY_API_KEY')
-CINETPAY_SITE_ID = env.get('CINETPAY_SITE_ID')
-CINETPAY_TRANS_ID = env.get('CINETPAY_TRANS_ID')
+CINETPAY_API_KEY = os.getenv('CINETPAY_API_KEY')
+CINETPAY_SITE_ID = os.getenv('CINETPAY_SITE_ID')
+CINETPAY_TRANS_ID = os.getenv('CINETPAY_TRANS_ID')
 
 SESSION_SERIALIZER = 'django.contrib.sessions.serializers.JSONSerializer'
 
@@ -305,6 +299,22 @@ SUMMERNOTE_CONFIG = {
 CACHE_TTL = 60 * 15
 CACHE_TIMEOUT = 60 * 60
 
+
+REDIS_PORT = env.get('REDIS_PORT')
+REDIS_HOST = env.get('REDIS_HOST')
+
+CACHES = {
+    "default": {
+        "BACKEND": "django_redis.cache.RedisCache",
+        "LOCATION": f"redis://{REDIS_HOST}:{REDIS_PORT}",
+        "OPTIONS": {
+            "CLIENT_CLASS": "django_redis.client.DefaultClient"
+        },
+    }
+}
+
+CELERY_BROKER_URL = os.getenv("CELERY_BROKER_REDIS_URL")
+
 DJANGO_REDIS_IGNORE_EXCEPTIONS = True
 DJANGO_REDIS_LOG_IGNORED_EXCEPTIONS = True
 
@@ -328,7 +338,7 @@ COMPRESS_OFFLINE_CONTEXT = {
 }
 
 DBBACKUP_STORAGE = 'django.core.files.storage.FileSystemStorage'
-DBBACKUP_STORAGE_OPTIONS = {'location': BASE_DIR / 'db_backup'}
+DBBACKUP_STORAGE_OPTIONS = {'location': os.path.join(BASE_DIR, 'db_backup')}
 
 CRONJOBS = [
     ('0 24 * * *', 'helpers.cron.create_backups_scheduled_job')
@@ -336,3 +346,5 @@ CRONJOBS = [
 
 SENDER_ID = env.get('SENDER_ID')
 SMS_API_KEY = env.get('SMS_API_KEY')
+
+SESSION_ENGINE = 'django.contrib.sessions.backends.cache'
