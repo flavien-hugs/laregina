@@ -1,8 +1,8 @@
 # checkout.views.py
 
 from django.conf import settings
+from django.views import generic
 from django.template import Context
-from django.views.generic import ListView
 from django.urls import reverse, reverse_lazy
 from django.template.loader import get_template
 from django.views.decorators.csrf import csrf_exempt
@@ -92,6 +92,9 @@ def show_checkout(request, template='checkout/checkout.html'):
     return render(request, template, context)
 
 
+show_checkout = show_checkout
+
+
 def order_success_view(
     request, order_id,
     template='checkout/checkout_success.html'
@@ -110,6 +113,9 @@ def order_success_view(
     }
 
     return render(request, template, context)
+
+
+order_success_view = order_success_view
 
 
 def render_to_pdf(template_src, context_dict):
@@ -141,9 +147,15 @@ def download_invoice_view(request, order_id):
     return render_to_pdf('checkout/snippet/_partials_order_invoice.html', mydict)
 
 
-class TrackOrderView(ListView):
+download_invoice_view = download_invoice_view
+
+
+class TrackOrderListView(generic.ListView):
     template_name = 'checkout/snippet/_partials_order_tracking.html'
     success_url = reverse_lazy('order_tracking')
+    extra_context = {
+        'page_title': 'suivre votre commande'
+    }
 
     def get_context_data(self, **kwargs):
         kwargs['query'] = self.request.GET.get('track', None)
@@ -154,3 +166,6 @@ class TrackOrderView(ListView):
         if query is not None:
             return Order.objects.track_order(query)
         return Order.objects.none()
+
+
+track_order_view = TrackOrderListView.as_view()
