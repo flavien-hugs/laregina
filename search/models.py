@@ -1,10 +1,9 @@
 # search.models.py
 
 from django.db import models
+from django.conf import settings
 
-from core import settings
 
-# user manager
 User = settings.AUTH_USER_MODEL
 
 
