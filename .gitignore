@@ -75,6 +75,6 @@ local/
 .idea
 staticfiles
 debug
-*/migrations/*.py
+migrations/*_initial.py
 db_backup/*.dump
 data/*.json
