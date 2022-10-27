@@ -6,7 +6,6 @@ verify_ssl = true
 [dev-packages]
 flake8 = "*"
 coverage = "*"
-django-debug-toolbar = "*"
 
 [packages]
 django = "==3.2.12"
@@ -35,6 +34,8 @@ django-crontab = "*"
 requests = "*"
 python-dotenv = "*"
 psycopg2-binary = "*"
+hiredis = "*"
+redis = "*"
 
 [requires]
 python_version = "3.8"
