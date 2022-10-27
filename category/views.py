@@ -1,6 +1,9 @@
 # category.views.py
 
 from django.views import generic
+from django.conf import settings
+from django.views.decorators.cache import cache_page
+from django.utils.decorators import method_decorator
 
 from analytics import utils
 from category.models import Category
@@ -9,6 +12,7 @@ from catalogue.models import Product
 from pages.mixins import PromotionMixin
 
 
+@method_decorator(cache_page(settings.CACHE_TTL), name="dispatch")
 class CategoryDetailView(
     PromotionMixin, generic.DetailView,
     generic.list.MultipleObjectMixin):
