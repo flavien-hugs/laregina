@@ -1,6 +1,6 @@
 # catalogue.views.py
-
 import random
+
 from django.db.models import Q
 from django.conf import settings
 from django.views import generic
@@ -11,6 +11,8 @@ from django.utils.safestring import mark_safe
 from django.contrib.auth import get_user_model
 from django.urls import reverse, reverse_lazy
 from django.views.decorators.csrf import csrf_exempt
+from django.views.decorators.cache import cache_page
+from django.utils.decorators import method_decorator
 from django.http import HttpResponseRedirect, HttpResponse
 from django.shortcuts import render, redirect, get_object_or_404, get_list_or_404
 
@@ -52,6 +54,7 @@ class HomeView(ExtraContextData, PromotionMixin, generic.TemplateView):
 
     template_name = "index.html"
 
+    @method_decorator(cache_page(settings.CACHE_TTL))
     def dispatch(self, request, *args, **kwargs):
         if HomePage.objects.filter(page=1):
             return HttpResponseRedirect(reverse_lazy("market"))
@@ -63,6 +66,7 @@ class HomeView(ExtraContextData, PromotionMixin, generic.TemplateView):
 home_view = HomeView.as_view()
 
 
+@method_decorator(cache_page(settings.CACHE_TTL),  name='dispatch')
 class HomeMarketView(PromotionMixin, generic.TemplateView):
 
     template_name = "market.html"
@@ -84,6 +88,7 @@ class HomeTwoView(ExtraContextData, PromotionMixin, generic.TemplateView):
 
     template_name = 'market.html'
 
+    @method_decorator(cache_page(settings.CACHE_TTL))
     def dispatch(self, request, *args, **kwargs):
         if HomePage.objects.filter(page=0):
             return HttpResponseRedirect(reverse_lazy("home"))
@@ -99,6 +104,7 @@ class HomeThirdView(ExtraContextData, PromotionMixin, generic.TemplateView):
 
     template_name = "combine.html"
 
+    @method_decorator(cache_page(settings.CACHE_TTL))
     def dispatch(self, request, *args, **kwargs):
         if HomePage.objects.filter(page=0):
             return HttpResponseRedirect(reverse_lazy("home"))
@@ -110,6 +116,7 @@ class HomeThirdView(ExtraContextData, PromotionMixin, generic.TemplateView):
 combine_view = HomeThirdView.as_view()
 
 
+@method_decorator(cache_page(settings.CACHE_TTL),  name='dispatch')
 class ProductListView(FilterMixin, PromotionMixin, generic.ListView):
     model = Product
     paginate_by = 20
@@ -146,6 +153,7 @@ product_list_view = ProductListView.as_view()
 
 
 @csrf_exempt
+@cache_page(settings.CACHE_TTL)
 def show_product(request, slug, template="catalogue/product_detail.html"):
     p = get_object_or_404(Product, slug=slug)
     product_cache_key = request.path
@@ -190,6 +198,7 @@ def show_product(request, slug, template="catalogue/product_detail.html"):
 
 
 @csrf_exempt
+@cache_page(settings.CACHE_TTL)
 def addRreview(request, slug):
     product = get_object_or_404(Product, slug=slug)
 
