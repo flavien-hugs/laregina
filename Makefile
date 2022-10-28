@@ -54,4 +54,4 @@ crontabshow: ## Show current active jobs of this project
 
 .PHONY: gunicorn
 gunicorn: ## Run project with gunicorn
-	gunicorn --bind 127.0.0.1:8000 core.wsg
+	gunicorn --bind 127.0.0.1:8000 core.wsgi
