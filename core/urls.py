@@ -9,21 +9,14 @@ from django.views.generic import TemplateView
 from search.views import search_view
 from checkout.views import track_order_view, download_invoice_view
 
+from core.sitemap import SITEMAPS
 from catalogue import views as catalog_views
-from core.sitemap import StaticViewSitemap, CategorySitemapView, ProductSitemapView
 
 from allauth.account.models import EmailAddress
 from django_summernote.models import Attachment
 
 admin.site.unregister(Attachment)
 admin.site.unregister(EmailAddress)
-
-
-sitemaps = {
-    'static': StaticViewSitemap,
-    'category': CategorySitemapView,
-    'product': ProductSitemapView,
-}
 
 
 def handler404(request, exception, template_name='404.html'):
@@ -62,7 +55,10 @@ urlpatterns = [
     # path(route='mon-marche/', view=catalog_views.market_view, name='market'),
     # path(route='monmarche/', view=catalog_views.home_market_view, name='homemarket'),
 
-    path('sitemap.xml', views.sitemap, {'sitemaps': sitemaps}, name='django.contrib.sitemaps.views.sitemap'),
+    path('sitemap.xml', views.sitemap,
+        {'sitemaps': SITEMAPS},
+        name='django.contrib.sitemaps.views.sitemap'
+    ),
     path('robots.txt', TemplateView.as_view(template_name='robots.txt', content_type='text/plain')),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 

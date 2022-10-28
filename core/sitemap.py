@@ -47,3 +47,10 @@ class ProductSitemapView(Sitemap):
 
     def location(self, item):
         return item.get_absolute_url()
+
+
+SITEMAPS = {
+    'static': StaticViewSitemap,
+    'category': CategorySitemapView,
+    'product': ProductSitemapView,
+}
