@@ -50,6 +50,16 @@ class ExtraContextData:
         return super().get_context_data(**kwargs)
 
 
+@method_decorator(cache_page(settings.CACHE_TTL), name='dispatch')
+class HomeThirdView(ExtraContextData, PromotionMixin, generic.TemplateView):
+
+    template_name = "combine.html"
+
+
+combine_view = HomeThirdView.as_view()
+
+
+"""
 class HomeView(ExtraContextData, PromotionMixin, generic.TemplateView):
 
     template_name = "index.html"
@@ -98,23 +108,7 @@ class HomeTwoView(ExtraContextData, PromotionMixin, generic.TemplateView):
 
 
 market_view = HomeTwoView.as_view()
-
-
-class HomeThirdView(ExtraContextData, PromotionMixin, generic.TemplateView):
-
-    template_name = "combine.html"
-
-    @method_decorator(cache_page(settings.CACHE_TTL))
-    def dispatch(self, request, *args, **kwargs):
-        if HomePage.objects.filter(page=0):
-            return HttpResponseRedirect(reverse_lazy("home"))
-        elif HomePage.objects.filter(page=1):
-            return HttpResponseRedirect(reverse_lazy("market"))
-        return super().dispatch(request, *args, **kwargs)
-
-
-combine_view = HomeThirdView.as_view()
-
+"""
 
 @method_decorator(cache_page(settings.CACHE_TTL),  name='dispatch')
 class ProductListView(FilterMixin, PromotionMixin, generic.ListView):

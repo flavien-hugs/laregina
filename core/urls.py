@@ -40,10 +40,7 @@ def handler500(request, template_name='500.html'):
 
 
 urlpatterns = [
-    path(route='', view=catalog_views.home_view, name='home'),
-    path(route='m/', view=catalog_views.market_view, name='market'),
-    path(route='monmarche/', view=catalog_views.home_market_view, name='homemarket'),
-    path(route='e/', view=catalog_views.combine_view, name='allmarket'),
+    path(route='', view=catalog_views.combine_view, name='home'),
     path(route='search/', view=search_view, name="search"),
     path('', include('catalogue.urls')),
     path('categorie/', include('category.urls', namespace='category')),
@@ -60,6 +57,10 @@ urlpatterns = [
     path('jet/', include('jet.urls', 'jet')),
     path('summernote/', include('django_summernote.urls')),
     path(settings.ADMIN_URL, admin.site.urls),
+
+    # path(route='', view=catalog_views.home_view, name='home'),
+    # path(route='mon-marche/', view=catalog_views.market_view, name='market'),
+    # path(route='monmarche/', view=catalog_views.home_market_view, name='homemarket'),
 
     path('sitemap.xml', views.sitemap, {'sitemaps': sitemaps}, name='django.contrib.sitemaps.views.sitemap'),
     path('robots.txt', TemplateView.as_view(template_name='robots.txt', content_type='text/plain')),
