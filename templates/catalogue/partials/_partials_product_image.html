@@ -8,7 +8,7 @@
                 {% for obj in object.images.all %}
                     <div class="item">
                         <a href="{{ obj.image }}">
-                            <img src="{{ obj.image.url }}" alt="{{ obj.product.name|slugify }}">
+                            <img loading="lazy" src="{{ obj.image.url }}" alt="{{ obj.product.name|slugify }}">
                         </a>
                     </div>
                 {% endfor %}
@@ -19,7 +19,7 @@
     <div class="ps-product__variants" data-item="4" data-md="4" data-sm="4" data-arrow="false">
         {% for obj in object.images.all %}
             <div class="item">
-                <img src="{{ obj.image.url }}" alt="{{ obj.product.name|slugify }}">
+                <img loading="lazy" src="{{ obj.image.url }}" alt="{{ obj.product.name|slugify }}">
             </div>
         {% endfor %}
     </div>

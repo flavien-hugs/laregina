@@ -1,6 +1,3 @@
-<!-- includes/partials/_partials_promotion_list -->
-
-
 {% if testimonial_object_list %}
 	<section class="ps-client-say bg-transparent py-5">
 		<div class="container">
@@ -12,7 +9,7 @@
 					{% for object in testimonial_object_list %}
 						<article class="ps-block--testimonial">
 							<div class="ps-block__header">
-								<img src="{{ object.get_image_url }}" alt="{{ object.full_name|slugify }}">
+								<img loading="lazy" src="{{ object.get_image_url }}" alt="{{ object.full_name|slugify }}">
 							</div>
 							<div class="ps-block__content">
 								<i class="icon-quote-close"></i>

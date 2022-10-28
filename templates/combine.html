@@ -4,7 +4,6 @@
 
 
 {% block content %}
-    {% url "home" as home_url %}
     {% url "account_signup" as signup %}
     {% url "pages:contact" as contact %}
     {% url "vendor:store_list_view" as store_list_view %}
@@ -30,7 +29,7 @@
 
                     <aside class="ps-collection bg-white p-4">
                         <a href="{{ store_list_view }}">
-                            <img class="img-fluid" src="{{ STATIC_PREFIX }}img/signup_page.jpg" alt="{{ title }}">
+                            <img loading="lazy" class="img-fluid" src="{{ STATIC_PREFIX }}img/signup_page.jpg" alt="{{ title }}">
                             <p class="py-3 font-weight-bolder text-center">Trouver une boutique</p>
                         </a>
                     </aside>
@@ -70,7 +69,7 @@
                     {% for cat in categories|slice:":2"|shuffle %}
                         <div class="col-xl-6 col-lg-6 col-sm-12 col-12 mb-lg-0 mb-4">
                             <a href="{{ cat.get_absolute_url }}">
-                                <img src="{{ cat.get_image_url }}" alt="{{ cat.name|slugify }}">
+                                <img loading="lazy" src="{{ cat.get_image_url }}" alt="{{ cat.name|slugify }}">
                             </a>
                         </div>
                     {% endfor %}

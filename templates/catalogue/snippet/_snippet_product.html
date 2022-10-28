@@ -4,7 +4,7 @@
 <div class="ps-product ps-product--inner">
     <div class="ps-product__thumbnail">
         <a href="{{ instance.get_absolute_url }}">
-            <img src="{{ instance.get_image_url }}" alt="{{ instance.name|slugify }}">
+            <img loading="lazy" src="{{ instance.get_image_url }}" alt="{{ instance.name|slugify }}">
         </a>
         {% if instance.get_vouchers %}
             <div class="ps-product__badge">

@@ -25,8 +25,6 @@
 </head>
 
 <body>
-    {% url 'home' as home %}
-
     {% block header_top %}
         
     {% endblock header_top %}
@@ -36,8 +34,8 @@
             <header class="header sticky-top">
                 <nav class="navbar navbar-expand-lg navbar-inverse py-4" style="background-color:#fcb800;">
                     <div class="container">
-                        <a class="ps-logo navbar-brand" href="{% url 'home' as home %}">
-                            <img src="{{ STATIC_PREFIX }}img/logo.png" alt="{{ title }}">
+                        <a class="ps-logo navbar-brand" href="/">
+                            <img loading="lazy" src="{{ STATIC_PREFIX }}img/logo.png" alt="{{ title }}">
                         </a>
                     </div>
                 </nav>
@@ -49,8 +47,7 @@
         {% block content %}
         {% endblock content %}
     </main>
-
-    <!-- mise en cache du header pendant 120ms -->
+    
     {% include "includes/partials/_partials_footer.html" %}
 
     {% block javascript %}

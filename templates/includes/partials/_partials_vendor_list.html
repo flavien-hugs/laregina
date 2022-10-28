@@ -5,7 +5,6 @@
 
 
 {% block content %}
-    {% url "home" as home_url %}
     {% url "vendor:store_list_view" as store_list_view %}
 
     {% include "includes/partials/_partials_breadcrumb.html" %}
@@ -28,7 +27,7 @@
                                     <article class="ps-block text-center shadow-sm">
                                         <div class="ps-block__thumbnail mb-3">
                                             <a href="{{ vendor.get_absolute_url }}">
-                                                <img src="{{ vendor.get_logo_url }}" alt="{{ object.name }}">
+                                                <img loading="lazy" src="{{ vendor.get_logo_url }}" alt="{{ object.name }}">
                                             </a>
                                         </div>
                                         <div class="ps-block__content">

@@ -1,12 +1,10 @@
-<!-- partials/pagination.html -->
-
 {% if is_paginated %}
     <nav aria-label="page navigation" class="text-center mt-3">
-        <ul class="pagination">
+        <ul class="pagination mb-0">
             {% if page_obj.has_previous %}
                 <li>
                     <a href="?page={{ page_obj.previous_page_number }}">
-                        <i class="icon-chevron-left"></i>
+                        <i class="icon-chevron-left"></i> Précedent
                     </a>
                 </li>
             {% else %}
@@ -16,23 +14,17 @@
                     </a>
                 </li>
             {% endif %}
-
-            {% for obj in paginator.page_range %}
-                {% if page_obj.number == obj %}
-                    <li class="{% if obj %} active {% endif %}" aria-current="page">
-                        <a href="?page={{ obj }}">{{ obj }}</a>
-                    </li>
-                {% else %}
-                    <li>
-                        <a href="?page={{ obj }}">{{ obj }}</a>
-                    </li>
-                {% endif %}
-            {% endfor %}
+            
+            <li>
+                <a href="#" class="font-weight-bold">
+                   {{ page_obj.number }} sur {{ page_obj.paginator.num_pages }}
+                </a>
+            </li>
 
             {% if page_obj.has_next %}
                 <li>
                     <a href="?page={{ page_obj.next_page_number }}">
-                        <i class="icon-chevron-right"></i>
+                        Suivant <i class="icon-chevron-right"></i>
                     </a>
                 </li>
             {% endif %}

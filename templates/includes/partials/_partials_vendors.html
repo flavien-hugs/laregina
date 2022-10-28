@@ -5,7 +5,7 @@
     <article class="ps-block text-center">
         <div class="ps-block__thumbnail mb-2">
             <a href="{{ object.get_absolute_url }}">
-                <img src="{{ object.get_logo_url }}" alt="{{ object.name|slugify }}">
+                <img loading="lazy" src="{{ object.get_logo_url }}" alt="{{ object.name|slugify }}">
             </a>
         </div>
         <div class="ps-block__content text-center">

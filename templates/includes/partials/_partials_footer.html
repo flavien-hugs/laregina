@@ -1,6 +1,5 @@
 <!-- includes/footer.html -->
 {% load mptt_tags %}
-{% url 'home' as home %}
 {% url "pages:cgu" as cgu %}
 {% url "pages:faqs" as faqs %}
 {% url "pages:return" as return %}
@@ -75,7 +74,7 @@
 
         <div class="ps-footer__copyright py-3">
             <span>&copy; {% now 'Y' %}
-            <a class="font-weight-bold" title="{{ title }}" href="{{ home }}"> {{ title }}</a>.
+            <a class="font-weight-bold" title="{{ title }}" href="/"> {{ title|title }}</a>.
             Développé par <span class="font-weight-bold">CGIC Côte d'Ivoire</span>.</span>
 
             {% include "includes/partials/_partials_social_link.html" %}

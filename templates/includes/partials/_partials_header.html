@@ -1,6 +1,3 @@
-<!-- includes/header.html -->
-
-{% url 'home' as home %}
 {% url 'search' as search %}
 {% url "cart:cart" as cart %}
 {% url "account_login" as login %}
@@ -17,8 +14,8 @@
                 <article class="ps-product--header-sticky">
                     <div class="ps-product__thumbnail">
                         <img {% if object.get_image_url %}
-                        src="{{ object.get_image_url }}"{% else %} src="{{ STATIC_PREFIX }}img/empty_image.svg"{% endif %}
-                        alt="{{ object.name }}" height="60" width="60">
+                            src="{{ object.get_image_url }}"{% else %} src="{{ STATIC_PREFIX }}img/empty_image.svg"{% endif %}
+                            alt="{{ object.name }}" loading="lazy" height="60" width="60">
                     </div>
 
                     <div class="ps-product__wrapper">
@@ -70,8 +67,8 @@
                     </div>
                 </div>
 
-                <a class="ps-logo" href="{{ home }}" title="{{ title }}">
-                    <img src="{{ STATIC_PREFIX }}img/logo.png" alt="{{ title }}">
+                <a class="ps-logo" href="/" title="{{ title }}">
+                    <img loading="lazy" src="{{ STATIC_PREFIX }}img/logo.png" alt="{{ title }}">
                 </a>
             </div>
 
@@ -129,14 +126,14 @@
     <nav class="navigation--mobile">
         {% if request.resolver_match.url_name == 'product_list' %}
         <div class="navigation__left">
-            <a class="header__back" href="{{ home }}">
+            <a class="header__back" href="/">
                 <i class="icon-chevron-left"></i><strong>Retour</strong>
             </a>
         </div>
         {% else %}
         <div class="navigation__left">
-            <a class="ps-logo" href="{{ home }}">
-                <img src="{{ STATIC_PREFIX }}img/logo_light.png" alt="{{ title }}">
+            <a class="ps-logo" href="/">
+                <img loading="lazy" src="{{ STATIC_PREFIX }}img/logo_light.png" alt="{{ title }}">
             </a>
         </div>
         {% endif %}
@@ -150,9 +147,9 @@
                 <div class="ps-block--user-header">
                     <div class="ps-block__right">
                         {% if request.user.is_authenticated and request.user.is_seller or request.user.is_superuser %}
-                        <a href="{{ seller_profile }}"><i class="icon-user"></i></a>
+                            <a href="{{ seller_profile }}"><i class="icon-user"></i></a>
                         {% else %}
-                        <a href="{{ login }}"><i class="icon-user"></i></a>
+                            <a href="{{ login }}"><i class="icon-user"></i></a>
                         {% endif %}
                     </div>
                 </div>

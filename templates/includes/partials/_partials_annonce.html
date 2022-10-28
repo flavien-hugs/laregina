@@ -4,7 +4,7 @@
             <div class="row">
                 {% for object in annonce_object_list %}
                     <article class="col-xl-6 col-lg-6 col-sm-12 col-12 mb-lg-0 mb-3">
-                        <img src="{{ object.get_image_url }}" alt="{{ object.name|slugify }}">
+                        <img loading="lazy" src="{{ object.get_image_url }}" alt="{{ object.name|slugify }}">
                     </article>
                 {% endfor %}
             </div>
