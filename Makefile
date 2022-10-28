@@ -51,3 +51,7 @@ crontabadd: ## Add all defined jobs from CRONJOB to crontab
 .PHONY: crontabshow
 crontabshow: ## Show current active jobs of this project
 	$(MANAGE) crontab show
+
+.PHONY: gunicorn
+gunicorn: ## Run project with gunicorn
+	gunicorn --bind 127.0.0.1:8000 core.wsg
