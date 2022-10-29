@@ -264,13 +264,13 @@ class Promotion(ModelSlugMixin, ApplyDiscountModel, BaseTimeStampModel):
 
     def get_update_promo_url(self):
         return reverse(
-            'seller:promotion_update',
+            'dashboard_seller:promotion_update',
             kwargs={'slug': str(self.slug)}
         )
 
     def get_delete_promo_url(self):
         return reverse(
-            'seller:promotion_delete',
+            'dashboard_seller:promotion_delete',
             kwargs={'slug': str(self.slug)}
         )
 
