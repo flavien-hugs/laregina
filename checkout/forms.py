@@ -1,23 +1,8 @@
-# checkout.forms.py
-
 from django import forms
 from checkout.models import Order
-from django_countries.fields import CountryField
-from django_countries.widgets import CountrySelectWidget
 
 
 class CheckoutForm(forms.ModelForm):
-
-    """
-    classe de formulaire de paiement
-    pour recueillir les informations d'expédition
-    de l'utilisateur pour passer une commande
-    """
-
-    shipping_country = CountryField(blank_label='Sélection un pays').formfield(
-        widget=CountrySelectWidget(attrs={
-        'class': 'form-control custom-select'
-    }))
 
     privacy = forms.BooleanField(required=True)
 
@@ -25,10 +10,11 @@ class CheckoutForm(forms.ModelForm):
         super(CheckoutForm, self).__init__(*args, **kwargs)
 
         for field in self.fields:
-            self.fields[field].widget.attrs['class'] = 'form-control'
+            self.fields[field].widget.attrs['class'] = 'form-control shadown-none'
 
             if self.fields['shipping_country']:
-                self.fields['shipping_country'].widget.attrs.update({'class': 'form-control custom-select'})
+                self.fields['shipping_country'].widget.attrs.update(
+                    {'class': 'form-control custom-select'})
 
         note_placehoder = "Commentaires concernant votre commande, ex.: consignes de livraison."
         shipping_adress_text = 'Votre adresse géographique, ex. : Quartier N°/Nom de la rue, etc.'
@@ -54,9 +40,7 @@ class CheckoutForm(forms.ModelForm):
         model = Order
         fields = '__all__'
         exclude = [
-            'status',
-            'transaction_id',
-            'ip_address',
-            'created_at',
-            'updated_at',
+            'status', 'transaction_id',
+            'ip_address', 'created_at',
+            'updated_at'
         ]
