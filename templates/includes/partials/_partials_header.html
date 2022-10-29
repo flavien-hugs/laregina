@@ -1,9 +1,11 @@
 {% url 'search' as search %}
 {% url "cart:cart" as cart %}
-{% url "account_login" as login %}
-{% url "account_signup"  as signup %}
-{% url "seller:profile" as seller_profile %}
 {% url "pages:promotion" as promotion_url %}
+
+{% url "auth_views:account_login" as login %}
+{% url "auth_views:account_signup"  as signup %}
+{% url "dashboard_seller:profile" as seller_profile %}
+
 {% load humanize mptt_tags search_tags catalogue_tags %}
 
 <!-- affficher sur la page detail de produit -->
