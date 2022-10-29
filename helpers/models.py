@@ -5,8 +5,8 @@ from django.contrib import admin
 from django.utils import timezone
 from django.core.validators import RegexValidator
 
-from django_countries.fields import CountryField
 from phonenumber_field.modelfields import PhoneNumberField
+from .constants import COUNTRY_CHOICES, DEFAULT_COUNTRY_CHOICES
 
 NULL_AND_BLANK = {'null': True, 'blank': True}
 
@@ -82,10 +82,11 @@ class BaseOrderInfo(models.Model):
         verbose_name='ville',
         max_length=50
     )
-    shipping_country = CountryField(
-        blank_label='sélection un pays',
-        verbose_name='pays/région',
-        multiple=False
+    shipping_country = models.CharField(
+        max_length=25,
+        verbose_name="Pays/Région",
+        choices=COUNTRY_CHOICES,
+        default=DEFAULT_COUNTRY_CHOICES
     )
     shipping_adress = models.CharField(
         verbose_name='situation géographique',
