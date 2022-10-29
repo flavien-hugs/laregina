@@ -1,23 +1,16 @@
-# search.forms.py
-
 from django import forms
 from search.models import SearchTerm
 
 
 class SearchForm(forms.ModelForm):
 
-    """ 
-    classe de formulaires pour l'acceptation
-    des termes de recherche
-    """
-
     q = forms.CharField(
         widget=forms.TextInput(
             attrs={
-                'type': 'search',
+                'type': 'text',
                 'class': 'form-control',
                 'id': 'input-search',
-                'placeholder': 'Rechercher un produit, une catégorie, un magasin, une marque...'
+                'placeholder': "Rechercher un produit, une catégorie, une marque ..."
             }),
             error_messages={'invalid': 'Veuillez entrer une quantité valide.'},
         )
