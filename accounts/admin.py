@@ -40,7 +40,7 @@ class UserAdmin(admin.ModelAdmin):
             (
                 ("store_id", "email"),
                 ("shipping_first_name", "shipping_last_name"),
-                "store",
+                "store", ("is_seller", "is_active"),
             )}
         ),
         (
@@ -69,8 +69,7 @@ class UserAdmin(admin.ModelAdmin):
                 'classes': ('wide',),
                 'fields': (
                     'email',
-                    'is_staff',
-                    'account_verified'
+                    'is_staff'
                 )
             }
         ),

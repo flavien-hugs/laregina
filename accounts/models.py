@@ -1,5 +1,3 @@
-# accounts.models.py
-
 import random
 import string
 import datetime
@@ -9,6 +7,7 @@ from django.urls import reverse
 from django.contrib import admin
 from django.dispatch import receiver
 from django.utils.safestring import mark_safe
+from django.core.validators import FileExtensionValidator
 from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin
 
 from accounts.managers import UserManager
@@ -28,11 +27,12 @@ from imagekit.processors import ResizeToFill, Adjust
 
 NULL_AND_BLANK = {'null': True, 'blank': True}
 UNIQUE_AND_DB_INDEX = {'null': False, 'unique': True, 'db_index': True}
-
+image_validators = [FileExtensionValidator(['jpeg', 'jpg', 'png'])]
 
 class User(
     BaseOrderInfo, ModelSlugMixin, BaseTimeStampModel,
-    AbstractBaseUser, PermissionsMixin):
+    AbstractBaseUser, PermissionsMixin
+):
 
     CIVILITY_CHOICES = (
         ('M.', 'M.'),
@@ -76,8 +76,8 @@ class User(
     logo = models.ImageField(
         verbose_name="logo",
         upload_to=upload_image_logo_path,
+        validators=image_validators,
         help_text="Ajouter le logo de votre boutique",
-
         **NULL_AND_BLANK
     )
     formatted_logo = ImageSpecField(
@@ -120,12 +120,10 @@ class User(
     class Meta:
         app_label = 'accounts'
         db_table = 'accounts_db'
+        ordering = ["-date_joined"]
         index_together = (('email',),)
-        ordering = ('-date_joined', '-last_login')
-        get_latest_by = ('-date_joined', '-last_login')
         verbose_name_plural = 'boutiques'
         indexes = [models.Index(fields=['id'], name='id_index'),]
-
 
     def __str__(self):
         return f"{self.store.upper()} | {self.shipping_last_name.capitalize()}"
@@ -150,14 +148,6 @@ class User(
     def formatted_phone(self, country=None):
         return phonenumbers.parse(self.phone, country)
 
-    @admin.display(description="compte verifié")
-    def account_verified(self):
-        from allauth.account.models import EmailAddress
-        result = EmailAddress.objects.filter(email=self.email)
-        if len(result):
-            return result[0].verified
-        return False
-
     def has_perm(self, perm, obj=None):
         "L'utilisateur a-t-il les permissions pour voir l'application `app_label` ?"
         return self.is_superuser
@@ -167,13 +157,13 @@ class User(
         return self.is_superuser
 
     def get_update_url(self):
-        return reverse('seller:update', kwargs={'slug': self.slug})
+        return reverse('dashboard_seller:update', kwargs={'slug': self.slug})
 
     def get_absolute_url(self):
         return reverse('vendor:store_detail_view', kwargs={'slug': self.slug})
 
     def get_social_url(self):
-        return reverse('seller:rs_update', kwargs={"slug": self.slug})
+        return reverse('dashboard_seller:rs_update', kwargs={"slug": self.slug})
 
     @admin.display(description="logo")
     def get_vendor_logo(self):

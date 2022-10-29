@@ -6,31 +6,50 @@ from django.contrib.auth.forms import UserCreationForm, UserChangeForm
 
 from accounts import models
 
+from validate_email import validate_email
 from crispy_forms import bootstrap, layout
 from crispy_forms.helper import FormHelper
-from allauth.account.forms import LoginForm
-
-from django_countries.fields import CountryField
-from django_countries.widgets import CountrySelectWidget
-
 from phonenumber_field.formfields import PhoneNumberField
 from phonenumber_field.widgets import PhoneNumberPrefixWidget
 
 
-class MarketLoginForm(LoginForm):
+class AccountMixinForm:
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.request = self.request.user
-        self.helper = FormHelper(self)
-        self.helper.form_id = 'login_form_ajax'
-        self.helper.form_class = 'login_form_ajax form-group'
-        self.helper.form_method = 'POST'
-        
-        self.helper.layout = layout.Layout(
-            bootstrap.PrependedText('login', '', placeholder="Entrez votre adresse email"),
-            bootstrap.PrependedText('password', '', placeholder="Entrez votre mot de passe"),
+        for field in self.fields:
+            self.fields[field].widget.attrs.update(
+                {'class': 'form-control form-control-md shadow-none'}
+            )
 
+
+class AccountLoginForm(AccountMixinForm, forms.Form):
+
+    required_css_class = 'required'
+
+    email = forms.EmailField(
+        label="Adresse email",
+        widget=forms.TextInput(
+            {"placeholder": "Entrez votre adresse email"}
+        )
+    )
+    password = forms.CharField(
+        label="Mot de passe",
+        widget=forms.PasswordInput(
+            {"placeholder": "Entrez votre mot de passe" }
+        )
+    )
+
+    def __init__(self, *args, **kwargs):
+
+        super().__init__(*args, **kwargs)
+
+        self.helper = FormHelper(self)
+        self.helper.form_method = 'post'
+
+        self.helper.layout = layout.Layout(
+            layout.Field('email'),
+            bootstrap.Field('password'),
             bootstrap.FormActions(
                 layout.Submit(
                     'submit',
@@ -41,16 +60,91 @@ class MarketLoginForm(LoginForm):
         )
 
 
-class MarketSignupForm(UserCreationForm):
-    civility = forms.TypedChoiceField(
-        label="Civilité", choices=get_user_model().CIVILITY_CHOICES,
-        initial='1', coerce=str, required=True,
+class AccountRequestPasswordResetForm(AccountMixinForm, forms.Form):
+
+    required_css_class = 'required'
+
+    email = forms.EmailField(
+        label="Adresse email",
+        widget=forms.TextInput(
+            {"placeholder": "Entrez votre adresse email"}
+        )
     )
-    shipping_first_name = forms.CharField(label='Nom', max_length=120,
-        widget=forms.TextInput(attrs={'placeholder': 'Entrez votre nom'}))
-    shipping_last_name = forms.CharField(label='Prénom', max_length=120,
-        widget=forms.TextInput(attrs={'placeholder': 'Entrez votre prénom'}))
-    store = forms.CharField(label='Nom de votre Magasin', max_length=254, required=True)
+
+    def __init__(self, *args, **kwargs):
+
+        super().__init__(*args, **kwargs)
+
+        self.helper = FormHelper(self)
+        self.helper.form_method = 'post'
+
+        self.helper.layout = layout.Layout(
+            layout.Field('email'),
+            bootstrap.FormActions(
+                layout.Submit(
+                    'submit',
+                    'Réinitialiser mon mot de passe',
+                    css_class='mt-4 ps-btn btn-block text-uppercase border-0'
+                ),
+            ),
+        )
+
+
+class AccountSellerRegisterForm(AccountMixinForm, UserCreationForm):
+
+    required_css_class = 'required'
+
+    error_message = UserCreationForm.error_messages.update(
+        {
+            "duplicate_email": "Cette adresse est déjà utilisé par un autre utilisateur."
+        }
+    )
+
+    store = forms.CharField(
+        label='Nom de votre Magasin',
+        max_length=254, required=True,
+        widget=forms.TextInput(
+            {"placeholder": "Entrez le nom du votre magasin"}
+        )
+    )
+    shipping_city = forms.CharField(
+        label='Ville',
+        max_length=254, required=True,
+        widget=forms.TextInput(
+            {"placeholder": "Situation du magasin"}
+        )
+    )
+    email = forms.EmailField(
+        label="Adresse email",
+        widget=forms.TextInput(
+            {"placeholder": "Entrez votre adresse email"}
+        )
+    )
+    phone = forms.CharField(
+        label="Téléphone",
+        widget=forms.TextInput(
+            {"placeholder": "Téléphone avec indicatif de votre pays, Ex: +225xxxxx"}
+        )
+    )
+    password1 = forms.CharField(
+        label="Mot de passe",
+        widget=forms.PasswordInput(
+            {"placeholder": "Entrez votre mot de passe"}
+        ),
+    )
+    password2 = forms.CharField(
+        label="Confirmation Mot de passe",
+        widget=forms.PasswordInput(
+            {"placeholder": "Confirmez le mot de passe"}
+        ),
+    )
+
+    class Meta:
+        model = get_user_model()
+        fields = [
+            'email', 'shipping_country',
+            'shipping_city', 'phone', 'store'
+        ]
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -60,32 +154,20 @@ class MarketSignupForm(UserCreationForm):
             )
 
         self.helper = FormHelper(self)
-        self.helper.form_method = 'POST'
-        self.helper.form_id = 'signup_form_ajax'
-        self.helper.form_class = 'signup_form_ajax'
+        self.helper.form_method = 'post'
 
         self.helper.layout = layout.Layout(
             layout.Row(
-                layout.Column('civility', css_class='form-group col-md-2 mb-0'),
-                layout.Column('shipping_first_name', css_class='form-group col-md-5 mb-0'),
-                layout.Column('shipping_last_name', css_class='form-group col-md-5 mb-0'),
-                css_class='form-row'
-            ),
-
-            layout.Row(
                 layout.Column(
                     'email',
-                    placeholder='Entrez votre adresse email',
                     css_class='form-group col-md-6 mb-0'
                 ),
 
                 layout.Column(
                     'store',
-                    placeholder='Entrez le nom du votre magasin',
                     css_class='form-group col-md-6 mb-0'
                 ),
             ),
-
             layout.Row(
                 layout.Column(
                     'shipping_country',
@@ -93,35 +175,12 @@ class MarketSignupForm(UserCreationForm):
                 ),
                 layout.Column(
                     'shipping_city',
-                    placeholder='Situation du magasin',
                     css_class='form-group col-md-6 mb-0'
                 ),
             ),
-
-            layout.Row(
-                layout.Column(
-                    'phone',
-                    placeholder='Entrer un numéro de téléphone',
-                    css_class='form-group col-md-6 mb-0'
-                ),
-
-                layout.Column(
-                    'phone_two',
-                    placeholder='Numéro de téléphone supplémentaire',
-                    css_class='form-group col-md-6 mb-0'
-                ),
-            ),
-
-
-            bootstrap.Field(
-                'password1',
-                placeholder="Entrez votre mot de passe"
-            ),
-
-            bootstrap.Field(
-                'password2',
-                placeholder="Confirmez le mot de passe"
-            ),
+            layout.Field('phone'),
+            bootstrap.Field('password1'),
+            bootstrap.Field('password2'),
 
             bootstrap.FormActions(
                 layout.Submit(
@@ -131,24 +190,11 @@ class MarketSignupForm(UserCreationForm):
             ),
         )
 
-    class Meta:
-        model = get_user_model()
-        fields = [
-            'email', 'civility',
-            'shipping_first_name', 
-            'shipping_last_name',
-            'shipping_country',
-            'shipping_city',
-            'phone', 'phone_two',
-            'store',
-        ]
-
-    def clean(self):
+    def clean_email(self):
         cleaned_data = super().clean()
         email = cleaned_data.get('email')
-        email_base, provider = email.split("@")
-        domain, extension = provider.split('.')
-        return cleaned_data
+        if validate_email(email):
+            return email
 
     @transaction.atomic
     def save(self, commit=True):
@@ -159,62 +205,10 @@ class MarketSignupForm(UserCreationForm):
         return user
 
 
-class CustomerSignUpForm(forms.ModelForm):
-
-    class Meta:
-        model = models.GuestCustomer
-        fields = ['email',]
-
-    def __init__(self, request, *args, **kwargs):
-        self.request = request
-        super().__init__(*args, **kwargs)
-        self.helper = FormHelper(self)
-
-        self.helper.layout = layout.Layout(
-            bootstrap.PrependedText('email', '', placeholder="Entrez votre adresse email"),
-            bootstrap.FormActions(
-                layout.Submit(
-                    'submit', "Continuer en tant qu'invité",
-                    css_class='mt-4 ps-btn btn-block text-uppercase border-0'
-                ),
-            ),
-        )
-
-    def clean(self):
-        cleaned_data = super().clean()
-        email = cleaned_data.get('email')
-        email_base, provider = email.split("@")
-        domain, extension = provider.split('.')
-        return cleaned_data
-
-    @transaction.atomic
-    def save(self, commit=True):
-        user = super().save(commit=False)
-        if commit:
-            user.save()
-            self.request.session['customer_email_id'] = user.id
-        return user
-
-
-class MarketChangeForm(UserChangeForm):
-    class Meta:
-        model = get_user_model()
-        fields = [
-            'civility',
-            'shipping_first_name', 
-            'shipping_last_name',
-            'store', 'phone'
-        ]
-
-
-class StoreUpdateForm(forms.ModelForm):
-    
-    shipping_country = CountryField(blank_label='Sélection un pays').formfield(
-        widget=CountrySelectWidget(attrs={
-        'class': 'form-control custom-select'
-    }))
+class AccountSellerUpdateForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
+
         super().__init__(*args, **kwargs)
         self.helper = FormHelper(self)
 
@@ -270,25 +264,20 @@ class StoreUpdateForm(forms.ModelForm):
         )
 
         for field in self.fields:
-            self.fields[field].widget.attrs['class'] = 'rounded-0 shadow-none'
+            self.fields[field].widget.attrs['class'] = 'form-control shadow-none rounded-0'
 
     class Meta:
         model = get_user_model()
         fields = [
-            "civility",
-            "shipping_first_name",
-            "shipping_last_name",
-            "store",
-            "phone",
-            "phone_two",
-            "shipping_country",
-            "shipping_city",
-            "store_description",
-            "shipping_adress",
-            "logo",
+            "civility", "shipping_first_name",
+            "shipping_last_name", "store", "phone",
+            "phone_two", "shipping_country",
+            "shipping_city", "store_description",
+            "shipping_adress", "logo",
         ]
 
-class CustomInlineFormSet(forms.ModelForm):
+
+class CustomInlineFormSet(AccountMixinForm, forms.ModelForm):
     class Meta:
         model = models.ProfileSocialMedia
         fields = [
@@ -310,3 +299,96 @@ SocialMediaForm = inlineformset_factory(
     fields=['facebook', 'instagram'],
     can_delete=False, extra=1, max_num=1
 )
+
+
+# -------------------------------------------------
+# -------------- CUSTOMER ACCOUNT FORMS -----------
+# -------------------------------------------------
+
+class CustomerAccountSignUpForm(forms.ModelForm):
+
+    email = forms.EmailField(
+        label="Adresse email",
+        widget=forms.TextInput(
+            {"placeholder": "Entrez votre adresse email"}
+        )
+    )
+    phone = forms.CharField(
+        label="Téléphone",
+        widget=forms.TextInput(
+            {"placeholder": "Téléphone avec indicatif de votre pays, Ex: +225xxxxx"}
+        )
+    )
+    password1 = forms.CharField(
+        label="Mot de passe",
+        widget=forms.PasswordInput(
+            {"placeholder": "Entrez votre mot de passe"}
+        ),
+    )
+    password2 = forms.CharField(
+        label="Confirmation Mot de passe",
+        widget=forms.PasswordInput(
+            {"placeholder": "Confirmez le mot de passe"}
+        ),
+    )
+
+    class Meta:
+        model = models.GuestCustomer
+        fields = ['email']
+
+    def __init__(self, request, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        for field in self.fields:
+            self.fields[field].widget.attrs.update(
+                {'class': 'form-control'}
+            )
+
+        self.helper = FormHelper(self)
+        self.helper.form_method = 'post'
+
+        self.helper.layout = layout.Layout(
+            layout.Row(
+                layout.Column(
+                    'email',
+                    css_class='form-group col-md-6 mb-0'
+                ),
+
+                layout.Column(
+                    'phone',
+                    css_class='form-group col-md-6 mb-0'
+                ),
+            ),
+            bootstrap.Field('password1'),
+            bootstrap.Field('password2'),
+
+            bootstrap.FormActions(
+                layout.Submit(
+                    'submit', 'Créer mon compte',
+                    css_class='mt-4 ps-btn btn-block text-uppercase border-0'
+                )
+            ),
+        )
+
+    def clean_email(self):
+        cleaned_data = super().clean()
+        email = cleaned_data.get('email')
+        if validate_email(email):
+            return email
+
+    @transaction.atomic
+    def save(self, commit=True):
+        user = super().save(commit=False)
+        if commit:
+            user.save()
+        return user
+
+
+class MarketChangeForm(UserChangeForm):
+    class Meta:
+        model = get_user_model()
+        fields = [
+            'civility',
+            'shipping_first_name',
+            'shipping_last_name',
+            'store', 'phone'
+        ]
