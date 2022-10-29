@@ -4,24 +4,23 @@ from django.urls import path
 from django.conf import settings
 from django.views.generic import TemplateView
 from django.views.decorators.cache import cache_page
-from django.core.cache.backends.base import DEFAULT_TIMEOUT
 
-CACHE_TTL = getattr(settings, 'CACHE_TTL', DEFAULT_TIMEOUT)
+CACHE_TTL = getattr(settings, 'CACHE_TTL', settings.CACHE_TIMEOUT)
 
-from pages import views
+from pages.views import contact_view
 
 app_name = 'pages'
 urlpatterns  = [
-    path(route='contact/', view=views.contact_view, name='contact'),
+    path(route='contactez-nous/', view=contact_view, name='contact'),
 
-    path('about-us/',
+    path('qui-sommes-nous/',
         cache_page(CACHE_TTL)(TemplateView.as_view(
             extra_context={
             'page_title': 'À propos de nous',
             'page_description': "Qui sommes-nous ?"
         }, template_name='pages/about-us.html')), name='about-us'),
     
-    path('faq/',
+    path('questions-frequement-posees/',
         cache_page(CACHE_TTL)(TemplateView.as_view(
             extra_context={
             'page_title': 'FAQs : Questions fréquemment posées',

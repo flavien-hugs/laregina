@@ -210,7 +210,7 @@ class Campaign(BaseTimeStampModel, ModelSlugMixin):
 class Promotion(ModelSlugMixin, ApplyDiscountModel, BaseTimeStampModel):
 
     campaign = models.ForeignKey(
-        to=Campaign,
+        to="pages.Campaign",
         on_delete=models.PROTECT,
         verbose_name='campagne',
         related_name="campaigns"

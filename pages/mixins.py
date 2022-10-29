@@ -2,6 +2,7 @@
 
 import random
 
+from catalogue.models import Product
 from pages.models import Campaign, Promotion
 
 
@@ -10,7 +11,7 @@ class PromotionMixin(object):
 	def get_promotions_list(self):
 		return Campaign.objects.published()
 
-	def promotions(self):
+	def get_promotions(self):
 		return Campaign.objects.ventes_flash()
 
 	def get_destockages(self):

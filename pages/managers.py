@@ -9,17 +9,17 @@ class PageQuerySetMixin(models.QuerySet):
     def active(self):
         return self.filter(created_at__lte=now())
 
-    def vente_flash(self):
+    def flash(self):
         from pages.models import Campaign
-        return self.active().filter(name=Campaign.VENTE_FLASH)
+        return self.active().filter(name=Campaign.VENTE_FLASH).all()
 
     def destockage(self):
         from pages.models import Campaign
-        return self.active().filter(name=Campaign.DESTOCKAGE)
+        return self.active().filter(name=Campaign.DESTOCKAGE).all()
 
-    def nouvelle_arrivage(self):
+    def arrivage(self):
         from pages.models import Campaign
-        return self.active().filter(name=Campaign.NOUVELLE_ARRIVAGE)
+        return self.active().filter(name=Campaign.NOUVELLE_ARRIVAGE).all()
 
 
 class PageModelManager(models.Manager):
@@ -31,10 +31,10 @@ class PageModelManager(models.Manager):
         return self.get_queryset().active()
 
     def ventes_flash(self):
-        return self.get_queryset().vente_flash()
+        return self.get_queryset().flash()
 
     def destockages(self):
         return self.get_queryset().destockage()
 
     def nouvelle_arrivages(self):
-        return self.get_queryset().nouvelle_arrivage()
+        return self.get_queryset().arrivage()
