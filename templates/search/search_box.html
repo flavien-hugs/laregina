@@ -1,5 +1,9 @@
-<form role='search' class="ps-form--quick-search" action="{% url 'search' %}"
-method="get" accept-charset="utf-8">
+{% url 'search' as search_url %}
+
+<form role='search' class="ps-form--quick-search" action="{{ search_url }}" method="get" accept-charset="utf-8">
+    <div class="form-group--icon">
+        <div class="form-control"><i class="icon-magnifier"></i></div>
+    </div>
     {{ form.q }}
-    <button type="submit"><i class="icon-magnifier"></i></button>
+    <button type="submit" class="text-uppercase">rechercher</button>
 </form>
