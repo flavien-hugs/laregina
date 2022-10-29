@@ -1,5 +1,3 @@
-# accounts.views.seller.py
-
 from django.views import generic
 from django.contrib import messages
 from django.urls import reverse_lazy
@@ -17,9 +15,9 @@ from voucher.forms import VoucherCreateForm
 from checkout.models import Order, OrderItem
 from catalogue.forms import ProductCreateFormSet, ProductAttributeCreateFormset
 
-from accounts.models import ProfileSocialMedia
-from accounts.mixins import SellerRequiredMixin, ProductEditMixin
-from accounts.forms import MarketSignupForm, StoreUpdateForm, SocialMediaForm
+from ..models import ProfileSocialMedia
+from ..mixins import SellerRequiredMixin, ProductEditMixin
+from ..forms import AccountSellerUpdateForm, SocialMediaForm
 
 
 class CashTotalSeller(object):
@@ -101,9 +99,8 @@ class SettingsUpdateView(
     SuccessMessageMixin, generic.UpdateView
 ):
     slug_field = "slug"
-    slug_url_kwarg = "slug"
     model = get_user_model()
-    form_class = StoreUpdateForm
+    form_class = AccountSellerUpdateForm
     success_message = "Votre profile a été mise à jour avec succes !"
     template_name = 'dashboard/seller/includes/_partials_settings_store.html'
 

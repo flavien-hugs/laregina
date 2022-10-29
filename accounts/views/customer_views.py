@@ -4,13 +4,13 @@ from django.urls import reverse_lazy
 from django.shortcuts import redirect
 from django.views.generic import CreateView
 
-from ..forms import CustomerSignUpForm
+from ..forms import CustomerAccountSignUpForm
 from ..mixins import NextUrlMixin, RequestFormAttachMixin
 
 
 class CustomerSignUpView(NextUrlMixin, RequestFormAttachMixin, CreateView):
-    form_class = CustomerSignUpForm
-    template_name = 'account/customer_signup.html'
+    form_class = CustomerAccountSignUpForm
+    template_name = 'account/signup.html'
     default_next = reverse_lazy('customer_signup')
 
     def get_success_url(self):
