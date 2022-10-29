@@ -1,12 +1,10 @@
-# accounts/forms.py
-
 from django import forms
 from django.db import transaction
 from django.contrib.auth import get_user_model
 from django.forms.models import inlineformset_factory
 from django.contrib.auth.forms import UserCreationForm, UserChangeForm
 
-from accounts.models import ProfileSocialMedia, GuestCustomer
+from accounts import models
 
 from crispy_forms import bootstrap, layout
 from crispy_forms.helper import FormHelper
@@ -159,13 +157,12 @@ class MarketSignupForm(UserCreationForm):
         if commit:
             user.save()
         return user
-        
 
 
 class CustomerSignUpForm(forms.ModelForm):
 
     class Meta:
-        model = GuestCustomer
+        model = models.GuestCustomer
         fields = ['email',]
 
     def __init__(self, request, *args, **kwargs):
@@ -293,7 +290,7 @@ class StoreUpdateForm(forms.ModelForm):
 
 class CustomInlineFormSet(forms.ModelForm):
     class Meta:
-        model = ProfileSocialMedia
+        model = models.ProfileSocialMedia
         fields = [
             "facebook",
             "instagram"
@@ -308,9 +305,8 @@ class CustomInlineFormSet(forms.ModelForm):
 
 
 SocialMediaForm = inlineformset_factory(
-    get_user_model(), ProfileSocialMedia,
+    get_user_model(), models.ProfileSocialMedia,
     fk_name='user', form=CustomInlineFormSet,
     fields=['facebook', 'instagram'],
     can_delete=False, extra=1, max_num=1
 )
-

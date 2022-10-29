@@ -188,18 +188,21 @@ class User(
 
     def orders(self):
         from checkout.models import Order, OrderItem
-        order = Order.objects.filter(orders__product__user=self).filter(status=Order.SHIPPED)
-        order_item = OrderItem.objects.filter(models.Q(order__in=order))
+        order = Order.objects.prefetch_related("status")\
+            .filter(orders__product__user=self, status=Order.SHIPPED)
+        order_item = OrderItem.objects\
+            .prefetch_related("order")\
+            .filter(models.Q(order__in=order))
         return order_item
 
     @admin.display(description="nombre de produits")
     def products(self):
         from catalogue.models import Product
-        products = Product.objects.filter(user=self)
+        products = Product.objects.prefetch_related("user").filter(user=self)
         return products.count()
 
     def get_social_profile(self):
-        return ProfileSocialMedia.objects.filter(user=self)
+        return ProfileSocialMedia.objects.prefetch_related("user").filter(user=self)
 
 
 class ProfileSocialMedia(BaseTimeStampModel):

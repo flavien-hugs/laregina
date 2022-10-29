@@ -2,8 +2,6 @@
 
 from django.contrib import admin
 from django.utils.html import format_html
-from django.contrib.auth.models import Group
-from django.contrib.sites.models import Site
 from django.utils.safestring import mark_safe
 from django.contrib.auth import get_user_model
 from django.contrib.auth.forms import UserChangeForm
@@ -12,9 +10,6 @@ from catalogue.models import Product
 from accounts.models import ProfileSocialMedia
 
 from services.export_data_csv import export_to_csv
-
-admin.site.unregister(Site)
-admin.site.unregister(Group)
 
 
 class ProductInline(admin.TabularInline):

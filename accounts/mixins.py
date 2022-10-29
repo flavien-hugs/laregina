@@ -1,5 +1,3 @@
-# accounts.mixins.py
-
 import decimal
 import datetime
 from django.urls import reverse_lazy
@@ -72,8 +70,7 @@ class SellerRequiredMixin(SellerTextRequiredMixin, object):
 
     def get_promotion(self):
         account = self.get_account()
-        object_list = Promotion.objects.filter(
-            user=account).select_related("user")
+        object_list = Promotion.objects.filter(user=account).select_related("user")
         return object_list
 
     def get_products_count(self):

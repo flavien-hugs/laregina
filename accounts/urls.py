@@ -8,13 +8,6 @@ from accounts.views import customer, seller
 
 
 urlpatterns = [
-    path('customer/', include(([
-        path(
-            route='dashboard/',
-            view=TemplateView.as_view(template_name='dashboard/customer/index.html'),
-            name='customer_dashboard'),
-    ], 'accounts'), namespace='customer')),
-
     path('dashboard/seller/0/me/', include(([
         path(
             route='',
@@ -27,7 +20,7 @@ urlpatterns = [
             name='order_list'
         ),
         path(
-            route='commande/<pk>/detail/',
+            route='commande/<int:pk>/detail/',
             view=seller.order_detail_view,
             name='order_detail'
         ),
@@ -43,23 +36,23 @@ urlpatterns = [
             name='product_create'
         ),
         path(
-            route='produit/<slug>/update/',
+            route='produit/<str:slug>/update/',
             view=seller.product_update_view,
             name='product_update'
         ),
         path(
-            route='produit/<slug>/delete/',
+            route='produit/<str:slug>/delete/',
             view=seller.product_delete_view,
             name='product_delete'
         ),
 
         path(
-            route='parametre/<slug>/update/',
+            route='parametre/<str:slug>/update/',
             view=seller.settings_view,
             name='update'
         ),
         path(
-            route='parametre/<slug>/social/update/',
+            route='parametre/<str:slug>/social/update/',
             view=seller.social_media_view,
             name='rs_update'
         ),
@@ -70,17 +63,17 @@ urlpatterns = [
             name='voucher_create'
         ),
         path(
-            route='reduction/<pk>/update/',
+            route='reduction/<int:pk>/update/',
             view=seller.voucher_update_view,
             name='voucher_update'
         ),
         path(
-            route='reduction/<pk>/delete/',
+            route='reduction/<int:pk>/delete/',
             view=seller.voucher_delete_view,
             name='voucher_delete'
         ),
         path(
-            route='reduction/list/',
+            route='reduction/index/',
             view=seller.voucher_list_view,
             name='voucher_list'
         ),
@@ -96,25 +89,32 @@ urlpatterns = [
             name='promotion_create'
         ),
         path(
-            route='promotion/<slug>/update/',
+            route='promotion/<str:slug>/update/',
             view=views.promotion_update,
             name='promotion_update'
         ),
         path(
-            route='promotion/<slug>/delete/',
+            route='promotion/<str:slug>/delete/',
             view=views.promotion_delete,
             name='promotion_delete'
         ),
     ], 'accounts'), namespace='seller')),
 
-    path('boutique/', include(([
+    path('customer/', include(([
         path(
-            route='all/',
+            route='dashboard/',
+            view=TemplateView.as_view(template_name='dashboard/customer/index.html'),
+            name='customer_dashboard'),
+    ], 'accounts'), namespace='customer')),
+
+    path('marketplace/', include(([
+        path(
+            route='',
             view=seller.store_list_view,
             name='store_list_view'
         ),
         path(
-            route='<slug>/detail/',
+            route='<str:slug>/',
             view=seller.store_detail_view,
             name='store_detail_view'
         ),

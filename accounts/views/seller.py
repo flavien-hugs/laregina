@@ -68,10 +68,7 @@ class StoreListView(PromotionMixin, generic.ListView):
         return response
 
     def get_context_data(self, **kwargs):
-        kwargs['promotions'] = self.promotions()
-        kwargs['destockages'] = self.get_destockages()
-        kwargs['sales_flash'] = self.get_sales_flash()
-        kwargs['news_arrivals'] = self.get_news_arrivals()
+        kwargs['promotions'] = self.get_promotions()
         return super().get_context_data(**kwargs)
 
 
@@ -91,7 +88,7 @@ class StoreDetailView(
 
     def get_context_data(self, *args, **kwargs):
         kwargs['page_title'] = f'Boutique : {self.object.store}'
-        kwargs['promotions'] = self.promotions()
+        kwargs['promotions'] = self.get_promotions()
         kwargs['object_list'] = Product.objects.filter(user=self.object.id)
         return super().get_context_data(*args, **kwargs)
 
