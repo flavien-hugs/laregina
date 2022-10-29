@@ -14,12 +14,12 @@ abspath = os.path.abspath(__file__)
 dirname = os.path.dirname(os.path.dirname(abspath))
 BASE_DIR = os.path.dirname(dirname)
 
-DEBUG = env.get('DEBUG')
+DEBUG = os.getenv('DEBUG')
 TEMPLATE_DEBUG = DEBUG
 
 APPEND_SLASH = True
 USE_THOUSAND_SEPARATOR = False
-SECRET_KEY = env.get('SECRET_KEY')
+SECRET_KEY = os.getenv('SECRET_KEY')
 
 SITE_DESCRIPTION = "Vente et achat en ligne Informatiques, Électromenager, Habillement et mode, Téléphones, TV, Jeux Vidéos"
 INDEX_DESCRIPTION = "Vente et achat en ligne Informatiques, Électromenager, Habillement et mode, Téléphones, TV, Jeux Vidéos"
@@ -84,11 +84,11 @@ LOGIN_URL = 'auth_views:account_login'
 SIGNUP_URL = 'auth_views:account_signup'
 LOGIN_REDIRECT_URL = 'dashboard_seller:profile'
 
-EMAIL_HOST = env.get('EMAIL_HOST')
-EMAIL_PORT = env.get('EMAIL_PORT')
-EMAIL_USE_TLS = env.get('EMAIL_USE_TLS')
-EMAIL_HOST_USER = env.get('EMAIL_HOST_USER')
-EMAIL_HOST_PASSWORD = env.get('EMAIL_HOST_PASSWORD')
+EMAIL_HOST = os.getenv('EMAIL_HOST')
+EMAIL_PORT = os.getenv('EMAIL_PORT')
+EMAIL_USE_TLS = os.getenv('EMAIL_USE_TLS')
+EMAIL_HOST_USER = os.getenv('EMAIL_HOST_USER')
+EMAIL_HOST_PASSWORD = os.getenv('EMAIL_HOST_PASSWORD')
 DEFAULT_FROM_EMAIL = SERVER_EMAIL = "LaRegina <no-reply@laregina.deals>"
 
 MIDDLEWARE = [
@@ -267,8 +267,8 @@ SUMMERNOTE_CONFIG = {
 CACHE_TTL = 60 * 15
 CACHE_TIMEOUT = 60 * 60
 
-REDIS_PORT = env.get('REDIS_PORT')
-REDIS_HOST = env.get('REDIS_HOST')
+REDIS_PORT = os.getenv('REDIS_PORT')
+REDIS_HOST = os.getenv('REDIS_HOST')
 
 CACHES = {
     "default": {
@@ -311,7 +311,5 @@ CRONJOBS = [
     ('0 24 * * *', 'helpers.cron.create_backups_scheduled_job')
 ]
 
-SENDER_ID = env.get('SENDER_ID')
-SMS_API_KEY = env.get('SMS_API_KEY')
-
-SESSION_ENGINE = 'django.contrib.sessions.backends.cache'
+SENDER_ID = os.getenv('SENDER_ID')
+SMS_API_KEY = os.getenv('SMS_API_KEY')
