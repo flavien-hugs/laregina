@@ -15,7 +15,6 @@ django-countries = "*"
 whitenoise = {extras = ["brotli"], version = "*"}
 django-redis = "*"
 django-crispy-forms = "*"
-django-allauth = "*"
 django-phonenumber-field = "*"
 phonenumbers = "*"
 Babel = "*"
@@ -36,6 +35,8 @@ python-dotenv = "*"
 psycopg2-binary = "*"
 hiredis = "*"
 redis = "*"
+validate-email = "*"
+six = "*"
 
 [requires]
 python_version = "3.8"
