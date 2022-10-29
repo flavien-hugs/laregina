@@ -7,16 +7,15 @@ from django.http import HttpResponseRedirect
 from django.views.decorators.csrf import csrf_exempt
 
 from cart import cart
+from analytics import utils
 from checkout import checkout
 from pages.models import Campaign
-
-from analytics.utils import get_recently_viewed, recommended_from_views
 
 
 @csrf_exempt
 def shopcart(request, template="cart/cart.html"):
 
-    request.session.set_expiry(12000)
+    request.session.set_expiry(settings.CACHE_TTL)
 
     if request.method == 'POST':
         postdata = request.POST.copy()
@@ -37,7 +36,7 @@ def shopcart(request, template="cart/cart.html"):
         'page_title': 'Panier',
         'cart_items': cart.get_cart_items(request),
         'cart_subtotal': cart.cart_subtotal(request),
-        'recently_viewed': get_recently_viewed(request)
+        'recently_viewed': utils.get_recently_viewed(request)
     }
 
     return render(request, template, context)
