@@ -17,15 +17,15 @@ BASE_DIR = os.path.dirname(dirname)
 DEBUG = env.get('DEBUG')
 TEMPLATE_DEBUG = DEBUG
 
+APPEND_SLASH = True
 USE_THOUSAND_SEPARATOR = False
 SECRET_KEY = env.get('SECRET_KEY')
 
-APPEND_SLASH = True
 SITE_DESCRIPTION = "Vente et achat en ligne Informatiques, Électromenager, Habillement et mode, Téléphones, TV, Jeux Vidéos"
 INDEX_DESCRIPTION = "Vente et achat en ligne Informatiques, Électromenager, Habillement et mode, Téléphones, TV, Jeux Vidéos"
 META_KEYWORDS = 'créer boutique vente ligne, vente, achat, laregina, deals, acheter, vendre, boutique en ligne, laregina deals, ouvrir un magasin en ligne'
-SITE_NAME = 'LaRegina Deals'
 
+SITE_NAME = 'LaRegina'
 ADMIN_URL = 'lrg-admin/'
 AUTH_USER_MODEL = 'accounts.User'
 
@@ -50,9 +50,6 @@ OTHERS_APPS = [
     'django.contrib.admin',
 
     'crispy_forms',
-
-    'allauth',
-    'allauth.account',
 
     'django_countries',
     'phonenumber_field',
@@ -84,45 +81,17 @@ INSTALLED_APPS += LOCAL_APPS + OTHERS_APPS
 
 SITE_ID = 1
 
-AUTHENTICATION_BACKENDS = [
-    "allauth.account.auth_backends.AuthenticationBackend",
-]
+LOGOUT_URL = '/'
+LOGIN_URL = 'auth_views:account_login'
+SIGNUP_URL = 'auth_views:account_signup'
+LOGIN_REDIRECT_URL = 'dashboard_seller:profile'
 
-LOGOUT_URL = 'home'
-LOGIN_URL = 'account_login'
-LOGIN_REDIRECT_URL = 'seller:profile'
-SIGNUP_CUSTOMER_URL = 'customer_signup'
-
-ACCOUNT_LOGOUT_ON_GET = True
-ACCOUNT_UNIQUE_EMAIL = True
-ACCOUNT_EMAIL_REQUIRED = True
-ACCOUNT_USERNAME_MIN_LENGTH = 4
-ACCOUNT_SESSION_REMEMBER = False
-ACCOUNT_USERNAME_REQUIRED = False
-ACCOUNT_AUTHENTICATION_METHOD = 'email'
-ACCOUNT_EMAIL_VERIFICATION = None
-ACCOUNT_USER_MODEL_EMAIL_FIELD = 'email'
-ACCOUNT_USER_MODEL_USERNAME_FIELD = None
-ACCOUNT_LOGOUT_REDIRECT_URL = LOGOUT_URL
-ACCOUNT_EMAIL_CONFIRMATION_EXPIRE_DAYS = 7
-ACCOUNT_AUTHENTICATED_LOGIN_REDIRECTS = True
-ACCOUNT_EMAIL_CONFIRMATION_ANONYMOUS_REDIRECT_URL = LOGIN_URL
-ACCOUNT_EMAIL_CONFIRMATION_AUTHENTICATED_REDIRECT_URL = LOGIN_REDIRECT_URL
-ACCOUNT_EMAIL_SUBJECT_PREFIX = "LaRegina Deals <no-reply@laregina.deals>"
-
-ACCOUNT_FORMS = {
-    'login': 'accounts.forms.MarketLoginForm',
-    'signup': 'accounts.forms.MarketSignupForm',
-}
-
-def ACCOUNT_USER_DISPLAY(user): return user.shipping_first_name
-
-EMAIL_HOST = os.getenv('EMAIL_HOST')
-EMAIL_PORT = os.getenv('EMAIL_PORT')
-EMAIL_USE_TLS = os.getenv('EMAIL_USE_TLS')
-EMAIL_HOST_USER = os.getenv('EMAIL_HOST_USER')
-EMAIL_HOST_PASSWORD = os.getenv('EMAIL_HOST_PASSWORD')
-DEFAULT_FROM_EMAIL = SERVER_EMAIL = 'no-reply@laregina.deals'
+EMAIL_HOST = env.get('EMAIL_HOST')
+EMAIL_PORT = env.get('EMAIL_PORT')
+EMAIL_USE_TLS = env.get('EMAIL_USE_TLS')
+EMAIL_HOST_USER = env.get('EMAIL_HOST_USER')
+EMAIL_HOST_PASSWORD = env.get('EMAIL_HOST_PASSWORD')
+DEFAULT_FROM_EMAIL = SERVER_EMAIL = "LaRegina <no-reply@laregina.deals>"
 
 MIDDLEWARE = [
     # "django.middleware.cache.UpdateCacheMiddleware",
@@ -224,6 +193,7 @@ STATICFILES_FINDERS = [
     'compressor.finders.CompressorFinder',
 ]
 
+WHITENOISE_KEEP_ONLY_HASHED_FILES = True
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 MESSAGE_TAGS = {
@@ -307,15 +277,15 @@ CACHES = {
         "BACKEND": "django_redis.cache.RedisCache",
         "LOCATION": f"redis://{REDIS_HOST}:{REDIS_PORT}",
         "OPTIONS": {
-            "CLIENT_CLASS": "django_redis.client.DefaultClient"
+            'db': '10',
+            "CLIENT_CLASS": "django_redis.client.DefaultClient",
+            'parser_class': 'redis.connection.PythonParser',
+            'pool_class': 'redis.BlockingConnectionPool',
         },
     }
 }
 
 CELERY_BROKER_URL = os.getenv("CELERY_BROKER_REDIS_URL")
-
-DJANGO_REDIS_IGNORE_EXCEPTIONS = True
-DJANGO_REDIS_LOG_IGNORED_EXCEPTIONS = True
 
 COMPRESS_ENABLED = True
 COMPRESS_URL = STATIC_URL

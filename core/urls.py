@@ -11,13 +11,9 @@ from django.views.generic import TemplateView
 from core.sitemap import SITEMAPS
 from search.views import search_view
 
-from allauth.account.models import EmailAddress
 from django_summernote.models import Attachment
 
-admin.site.unregister(Site)
-admin.site.unregister(Group)
-admin.site.unregister(Attachment)
-admin.site.unregister(EmailAddress)
+
 
 
 def handler404(request, exception, template_name='404.html'):
@@ -43,7 +39,6 @@ urlpatterns = [
     path('jet/', include('jet.urls', 'jet')),
     path('summernote/', include('django_summernote.urls')),
     path('', include('accounts.urls')),
-    path('sp-marketplace-vendors/', include('allauth.urls')),
 
     # path(route='', view=catalog_views.home_view, name='home'),
     # path(route='mon-marche/', view=catalog_views.market_view, name='market'),
