@@ -6,9 +6,9 @@ from django.contrib.auth.forms import UserCreationForm, UserChangeForm
 
 from accounts import models
 
-from validate_email import validate_email
 from crispy_forms import bootstrap, layout
 from crispy_forms.helper import FormHelper
+from helpers.utils import email_validation_function
 from phonenumber_field.formfields import PhoneNumberField
 from phonenumber_field.widgets import PhoneNumberPrefixWidget
 
@@ -54,36 +54,6 @@ class AccountLoginForm(AccountMixinForm, forms.Form):
                 layout.Submit(
                     'submit',
                     'Se connecter',
-                    css_class='mt-4 ps-btn btn-block text-uppercase border-0'
-                ),
-            ),
-        )
-
-
-class AccountRequestPasswordResetForm(AccountMixinForm, forms.Form):
-
-    required_css_class = 'required'
-
-    email = forms.EmailField(
-        label="Adresse email",
-        widget=forms.TextInput(
-            {"placeholder": "Entrez votre adresse email"}
-        )
-    )
-
-    def __init__(self, *args, **kwargs):
-
-        super().__init__(*args, **kwargs)
-
-        self.helper = FormHelper(self)
-        self.helper.form_method = 'post'
-
-        self.helper.layout = layout.Layout(
-            layout.Field('email'),
-            bootstrap.FormActions(
-                layout.Submit(
-                    'submit',
-                    'Réinitialiser mon mot de passe',
                     css_class='mt-4 ps-btn btn-block text-uppercase border-0'
                 ),
             ),
@@ -193,7 +163,7 @@ class AccountSellerRegisterForm(AccountMixinForm, UserCreationForm):
     def clean_email(self):
         cleaned_data = super().clean()
         email = cleaned_data.get('email')
-        if validate_email(email):
+        if email_validation_function(email):
             return email
 
     @transaction.atomic
@@ -203,6 +173,36 @@ class AccountSellerRegisterForm(AccountMixinForm, UserCreationForm):
         if commit:
             user.save()
         return user
+
+
+class AccountRequestPasswordResetForm(AccountMixinForm, forms.Form):
+
+    required_css_class = 'required'
+
+    email = forms.EmailField(
+        label="Adresse email",
+        widget=forms.TextInput(
+            {"placeholder": "Entrez votre adresse email"}
+        )
+    )
+
+    def __init__(self, *args, **kwargs):
+
+        super().__init__(*args, **kwargs)
+
+        self.helper = FormHelper(self)
+        self.helper.form_method = 'post'
+
+        self.helper.layout = layout.Layout(
+            layout.Field('email'),
+            bootstrap.FormActions(
+                layout.Submit(
+                    'submit',
+                    'obtenir un lien de réinitialisationr',
+                    css_class='mt-4 ps-btn btn-block text-uppercase border-0'
+                ),
+            ),
+        )
 
 
 class AccountSellerUpdateForm(forms.ModelForm):

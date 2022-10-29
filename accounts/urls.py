@@ -28,6 +28,12 @@ urlpatterns = [
             name='account_reset_password'
         ),
 
+        path(
+            route='set-new-password/<uidb64>/<token>/',
+            view=auth_views.account_set_new_password_view,
+            name='set_new_password'
+        ),
+
         path(route='logout/',
             view=auth_views.logout_view,
             name='account_logout'),
