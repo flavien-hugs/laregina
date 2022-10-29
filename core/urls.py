@@ -4,17 +4,18 @@ from django.shortcuts import render
 from django.urls import path, include
 from django.contrib.sitemaps import views
 from django.conf.urls.static import static
+from django.contrib.auth.models import Group
+from django.contrib.sites.models import Site
 from django.views.generic import TemplateView
 
-from search.views import search_view
-from checkout.views import track_order_view, download_invoice_view
-
 from core.sitemap import SITEMAPS
-from catalogue import views as catalog_views
+from search.views import search_view
 
 from allauth.account.models import EmailAddress
 from django_summernote.models import Attachment
 
+admin.site.unregister(Site)
+admin.site.unregister(Group)
 admin.site.unregister(Attachment)
 admin.site.unregister(EmailAddress)
 
@@ -33,23 +34,16 @@ def handler500(request, template_name='500.html'):
 
 
 urlpatterns = [
-    path(route='', view=catalog_views.combine_view, name='home'),
-    path(route='search/', view=search_view, name="search"),
-    path('', include('catalogue.urls')),
-    path('categorie/', include('category.urls', namespace='category')),
-    path('avis/', include('reviews.urls', namespace='reviews')),
-    path('panier/', include('cart.urls', namespace='cart')),
-    path('checkout/', include('checkout.urls', namespace='checkout')),
-    path(route='tracking/order/', view=track_order_view, name='order_tracking'),
-    path(route='print-invoice/<int:order_id>/',
-        view=download_invoice_view, name='download_invoice'),
+    path(settings.ADMIN_URL, admin.site.urls),
     path('sp-', include("pages.urls", namespace='pages')),
-    path('accounts/', include('allauth.urls')),
-    path('', include('accounts.urls')),
+    path('checkout/', include('checkout.urls', namespace='checkout')),
+    path('', include('catalogue.urls')),
+    path(route='catalog/', view=search_view, name="search"),
 
     path('jet/', include('jet.urls', 'jet')),
     path('summernote/', include('django_summernote.urls')),
-    path(settings.ADMIN_URL, admin.site.urls),
+    path('', include('accounts.urls')),
+    path('sp-marketplace-vendors/', include('allauth.urls')),
 
     # path(route='', view=catalog_views.home_view, name='home'),
     # path(route='mon-marche/', view=catalog_views.market_view, name='market'),

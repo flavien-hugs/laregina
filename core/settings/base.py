@@ -80,12 +80,12 @@ LOCAL_APPS = [
     'caching',
 ]
 
-INSTALLED_APPS += OTHERS_APPS + LOCAL_APPS
+INSTALLED_APPS += LOCAL_APPS + OTHERS_APPS
 
 SITE_ID = 1
 
 AUTHENTICATION_BACKENDS = [
-    'allauth.account.auth_backends.AuthenticationBackend',
+    "allauth.account.auth_backends.AuthenticationBackend",
 ]
 
 LOGOUT_URL = 'home'
@@ -125,7 +125,7 @@ EMAIL_HOST_PASSWORD = os.getenv('EMAIL_HOST_PASSWORD')
 DEFAULT_FROM_EMAIL = SERVER_EMAIL = 'no-reply@laregina.deals'
 
 MIDDLEWARE = [
-    "django.middleware.cache.UpdateCacheMiddleware",
+    # "django.middleware.cache.UpdateCacheMiddleware",
 
     'django.middleware.security.SecurityMiddleware',
     'whitenoise.middleware.WhiteNoiseMiddleware',
@@ -144,7 +144,7 @@ MIDDLEWARE = [
     'django.middleware.gzip.GZipMiddleware',
     'django.middleware.http.ConditionalGetMiddleware',
 
-    "django.middleware.cache.FetchFromCacheMiddleware",
+    # "django.middleware.cache.FetchFromCacheMiddleware",
 ]
 
 ROOT_URLCONF = 'core.urls'
@@ -298,7 +298,6 @@ SUMMERNOTE_CONFIG = {
 
 CACHE_TTL = 60 * 15
 CACHE_TIMEOUT = 60 * 60
-
 
 REDIS_PORT = env.get('REDIS_PORT')
 REDIS_HOST = env.get('REDIS_HOST')
