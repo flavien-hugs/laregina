@@ -14,8 +14,15 @@ urlpatterns = [
         name='checkout'
     ),
     path(
-        route='commande/success/<order_id>',
+        route='success/<int:order_id>',
         view=views.order_success_view,
         name='order_success'
     ),
+    path(route='check/status-order/',
+        view=views.track_order_view,
+        name='order_tracking'),
+
+    path(route='download-invoice/<int:order_id>/',
+        view=views.download_invoice_view,
+        name='download_invoice'),
 ]
