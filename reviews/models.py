@@ -9,7 +9,7 @@ from reviews.managers import ActiveProductReviewManager
 
 
 class ProductReview(models.Model):
-    
+
     RATINGS = ((1,1), (2,2), (3,3), (4,4), (5,5),)
 
     name = models.CharField(
@@ -50,7 +50,10 @@ class ProductReview(models.Model):
         return f'{self.name} a donné son avis sur {self.product.name}: {self.rating} le {self.created_time_at}'
 
     def get_absolute_url(self):
-        return reverse('reviews:add_product_review', kwargs={'slug': self.product.slug})
+        return reverse(
+            'reviews:add_product_review',
+            kwargs={'slug': str(self.product.slug)}
+        )
 
     @property
     def cache_key(self):
