@@ -34,8 +34,6 @@ python-dotenv = "*"
 psycopg2-binary = "*"
 hiredis = "*"
 redis = "*"
-validate-email = "*"
-six = "*"
 
 [requires]
 python_version = "3.8"
