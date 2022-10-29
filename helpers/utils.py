@@ -1,10 +1,21 @@
-# core.utils.py
-
 import os
 import string
 import random
+import threading
+from hashlib import sha256
+
 from django.utils.text import slugify
 from django.core.validators import EmailValidator
+
+
+class EmailThread(threading.Thread):
+
+    def __init__(self, email_message):
+        self.email_message = email_message
+        threading.Thread.__init__(self)
+
+    def run(self):
+        self.email_message.send()
 
 
 def random_string_generator(size=8, carac=string.ascii_lowercase + string.digits):
