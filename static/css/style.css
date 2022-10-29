@@ -1003,7 +1003,6 @@ h6 {
     color: #000;
     margin-top: 0;
     margin-bottom: 10px;
-    font-weight: 700;
 }
 
 h1 a,
@@ -16544,6 +16543,10 @@ html:not([dir="rtl"]) .noUi-horizontal .noUi-handle {
     .header--mobile .navigation__extra li>a {
         display: none;
     }
+
+    .header--mobile .ps-search--mobile {
+        display: block;
+    }
 }
 
 @media (max-width: 479px) {
@@ -16570,10 +16573,6 @@ html:not([dir="rtl"]) .noUi-horizontal .noUi-handle {
 
     .header--mobile .ps-block--user-header .ps-block__right {
         display: none;
-    }
-
-    .header--mobile .ps-search--mobile {
-        display: block;
     }
 }
 
