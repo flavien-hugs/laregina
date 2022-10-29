@@ -1,8 +1,5 @@
-{% load account %}
-
 {% autoescape off %}
-    {% user_display user as user_display %}
-    {% with site_name=current_site.name %} Bonjour {{ user_display }}{% endwith %}
+    Bonjour
 
     {% block content %}{% endblock content%}
 

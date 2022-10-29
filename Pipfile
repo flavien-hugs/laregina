@@ -11,7 +11,6 @@ coverage = "*"
 django = "==3.2.12"
 gunicorn = "*"
 django-mptt = "*"
-django-countries = "*"
 whitenoise = {extras = ["brotli"], version = "*"}
 django-redis = "*"
 django-crispy-forms = "*"

@@ -1,53 +1,48 @@
 {% extends "base.html" %}
-{% load static cache crispy_forms_tags %}
+{% load static crispy_forms_tags %}
 {% block title %}Créer un compte{% endblock title %}
 
 {% block content %}
-    {% url "home" as home %}
-    {% url "account_login" as login %}
+
+    {% url "auth_views:account_login" as login_url %}
 
     <div class="ps-page--my-account">
         <div class="container">
             <div class="row py-5 mt-5 align-items-center">
-                <!-- descriprion -->
-                {% cache 120 signup_account_description user.pk|default_if_none:"0" %}
-                    <div class="col-md-4 mb-5 mb-md-0">
+                <div class="col-md-3 mb-5 mb-md-0">
 
-                        <div class="mb-5">
-                            <a class="btn btn-md btn-light px-3" href="{{ home }}">
-                                <i class="icon-arrow-left"></i> <span class="font-weight-bold text-uppercase"> 
-                                retour</span>
-                            </a>
-                        </div>
-
-                        <h3>Créer votre boutique</h3>
-                        <img src="{{ STATIC_PREFIX }}img/signup_page.jpg" alt="{{ title }}"
-                        class="img-fluid mb-3 d-none d-md-block">
-
-                        <div class="ps-page__header">
-                            <p class="font-italic text-muted mb-0">
-                                Inscrivez-vous et commencez à vendre dès aujourd'hui - créez votre propre compte vendeur.
-                            </p>
-                            <p class="font-italic text-muted">
-                                <a class="font-weight-bold" href="{{ home }}" class="text-muted">
-                                <u>{{ title }}</u></a>
-                            </p>
-                        </div>
+                    <div class="mb-5">
+                        <a class="btn btn-md btn-light px-3" href="/">
+                            <i class="icon-arrow-left"></i> <span class="font-weight-bold text-uppercase"> 
+                            retour</span>
+                        </a>
                     </div>
-                {% endcache %}
 
-                <!-- registeration form -->
-                <div class="col-md-8 col-lg-8">
+                    <h3>Créer votre boutique</h3>
+                    <img src="{{ STATIC_PREFIX }}img/signup_page.jpg" alt="{{ title }}"
+                        class="img-fluid mb-3 d-none d-md-block" loading="lazy">
+
+                    <div class="ps-page__header">
+                        <p class="font-italic text-muted mb-0">
+                            Inscrivez-vous et commencez à vendre dès aujourd'hui - créez votre propre compte vendeur.
+                        </p>
+                        <p class="font-italic text-muted">
+                            <a class="font-weight-bold" href="/" class="text-muted">
+                                <u>{{ title }}</u>
+                            </a>
+                        </p>
+                    </div>
+                </div>
+
+                <div class="col-md-9 col-lg-9">
                     <div class="row justify-content-center">
                         
-                        <div class="p-3">
-                            {% crispy form %}
-                        </div>
+                        {% crispy form %}
 
                         <!-- connexion url -->
                         <div class="text-center w-100 pt-2 pb-3">
                             Vous avez déjà un compte ?
-                            <a href="{{ login }}">
+                            <a href="{{ login_url }}">
                                 <span class="font-weight-bold"><u>Connectez-vous</u>
                             </a>
                         </div>

@@ -3,13 +3,13 @@
 {% extends "base.html" %}
 {% load static crispy_forms_tags %}{% get_static_prefix as STATIC_PREFIX %}
 
-{% block title %}Connexion{% endblock title %}
+{% block title %}{{ page_title }} &smid; Dashboard {% endblock title %}
 
 {% block content %}
-    {% url "home" as home %}
-    {% url 'customer_signup' as buyer_signup %}
-    {% url 'account_signup' as seller_signup %}
-    {% url 'account_reset_password' as reset_password %}
+
+    {% url "auth_views:account_login" as login_url %}
+    {% url 'auth_views:account_signup' as seller_signup %}
+    {% url 'auth_views:account_reset_password' as reset_password %}
 
     <div class="ps-page--my-account">
         <div class="container">
@@ -17,15 +17,16 @@
                 <div class="col-md-7 col-sm-10">
                     <div class="pb-5 align-middle">
                         <div class="col bg-white p-5">
-                            <h3 class="font-weight-bold text-center">Connexion</h3>
+                            <h3 class="font-weight-bold text-center">{{ page_title|title }}</h3>
 
                             <p class="text-center font-weight-normal pb-4">
                                 Veuillez saisir votre adresse email et mot de passe pour vous connecter.
                             </p>
 
+                            {% include "dashboard/seller/includes/_partials_message.html" %}
+
                             {% crispy form %}
 
-                            <!-- connexion url -->
                             <div class="text-center w-100 pt-3 pb-3">
                                 <p>Vous êtes un nouvel utilisateur ? </p>
                                 <span class="font-weight-bold">

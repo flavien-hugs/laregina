@@ -1,10 +1,7 @@
-
 {% extends "account/email/base_message.txt" %}
-{% load account %}
 
 {% block content %}
     {% autoescape off %}
-        {% user_display user as user_display %}
         {% with site_name=current_site.name site_domain=current_site.domain %}
             Vous êtes sur le point de vendre sur <a href="{{ site_domain }}" class="font-weight-bold text-primary">{{ site_name }}</a> et atteindre des centaines des clients !
 
