@@ -5,9 +5,10 @@
     <td>
         <a target="_blank" href="{{ object.get_absolute_url }}" class="d-flex align-items-center">
             <img
-            src="{{ object.get_image_url }}"
-            class="avatar rounded-circle me-3"
-            alt="{{ object.name|slugify }}"
+                src="{{ object.get_image_url }}"
+                class="avatar rounded-circle me-3"
+                alt="{{ object.name|slugify }}"
+                loading="lazy"
             >
             <div class="d-block">
                 <span class="fw-bold">{{ object.name|capfirst|safe }}</span>

@@ -2,7 +2,7 @@
 {% load crispy_forms_tags mptt_tags %}
 
 {% block block_extra_breadcrumb %}
-    {% url "seller:product_list" as seller_list_product %}
+    {% url "dashboard_seller:product_list" as seller_list_product %}
 
     <div class="btn-toolbar mb-2 mb-md-0">
         <a href="{{ seller_list_product }}" class="btn btn-sm btn-secondary d-inline-flex align-items-center">

@@ -3,7 +3,7 @@
 
 {% block block_extra_breadcrumb %}
     
-    {% url "seller:promotion_create" as promotion_create_url %}
+    {% url "dashboard_seller:promotion_create" as promotion_create_url %}
 
     <div class="btn-toolbar mb-2 mb-md-0">
         <a href="{{ promotion_create_url }}" class="btn btn-sm btn-secondary d-inline-flex align-items-center">
@@ -110,7 +110,9 @@
 
             {% include "dashboard/seller/includes/_partials_pagination.html" %}
         {% else %}
-        {% url "seller:promotion_create" as create_promotion %}
+            
+            {% url "dashboard_seller:promotion_create" as promotion_create_url %}
+            
             <div class="text-center py-2">
                 <span class="d-flex justify-content-center">
                     <img class="img-fluid" height="160" width="160"
@@ -120,7 +122,7 @@
 
                 <p class="font-weight-bold">Vous n'avez aucune promotion en cours.</p>
 
-                <a href="{{ create_promotion }}" class="btn btn-outline-gray-500 d-inline-flex align-items-center justify-content-center dashed-outline">
+                <a href="{{ promotion_create_url }}" class="btn btn-outline-gray-500 d-inline-flex align-items-center justify-content-center dashed-outline">
                     <span class="text-uppercase font-weight-bold py-2">
                         <svg class="icon icon-xs me-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path></svg>
                         faire une promotion

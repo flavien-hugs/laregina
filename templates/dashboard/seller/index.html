@@ -4,7 +4,8 @@
 {% load humanize %}
 
 {% block content %}
-    {% url 'seller:order_list' as order_list_url %}
+    {% url 'dashboard_seller:order_list' as order_list_url %}
+    {% url 'dashboard_seller:product_list' as product_list_url %}
 
     <section class="row">
         <div class="col-12 col-sm-6 col-xl-4 mb-4">
@@ -84,14 +85,14 @@
                                 </div>
                             </li>
                         {% empty %}
-                        <div class="text-center py-2">
-                            <span class="d-flex justify-content-center">
-                                <img class="img-fluid" height="160px" width="160px"
-                                src="{{ STATIC_PREFIX }}img/emptycart.svg" alt="empty-cart-{{ page_title }}">
-                            </span>
+                            <div class="text-center py-2">
+                                <span class="d-flex justify-content-center">
+                                    <img class="img-fluid" height="160px" width="160px"
+                                    src="{{ STATIC_PREFIX }}img/emptycart.svg" alt="empty-cart-{{ page_title }}">
+                                </span>
 
-                            <p class="font-weight-bold">Vous n'avez aucun produit commandé pour aujourd'hui.</p>
-                        </div>
+                                <p class="font-weight-bold">Vous n'avez aucun produit commandé pour aujourd'hui.</p>
+                            </div>
                         {% endfor %}
                     </ul>
                 </div>
@@ -103,7 +104,7 @@
                 <div class="card-header d-flex align-items-center">
                     <h2 class="fs-5 fw-bold mb-0">Vos produits en vente</h2>
                     <div class="ms-auto">
-                        <a class="fw-normal d-inline-flex align-items-center" href="{% url 'seller:product_list' %}">
+                        <a class="fw-normal d-inline-flex align-items-center" href="{{ product_list_url }}">
                             <svg class="icon icon-xxs me-2" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M10 12a2 2 0 100-4 2 2 0 000 4z"></path><path fill-rule="evenodd" d="M.458 10C1.732 5.943 5.522 3 10 3s8.268 2.943 9.542 7c-1.274 4.057-5.064 7-9.542 7S1.732 14.057.458 10zM14 10a4 4 0 11-8 0 4 4 0 018 0z" clip-rule="evenodd"></path></svg> Tout afficher
                         </a>
                     </div>
@@ -116,7 +117,9 @@
                                 <div class="row align-items-center">
                                     <div class="col-auto">
                                         <a href="{{ object.get_absolute_url }}" class="avatar-md">
-                                            <img class="rounded" alt="{{ object.name|slugify }}" src="{{ object.get_image_url }}">
+                                            <img class="rounded" loading="lazy"
+                                                alt="{{ object.name|slugify }}"
+                                                src="{{ object.get_image_url }}">
                                         </a>
                                     </div>
 

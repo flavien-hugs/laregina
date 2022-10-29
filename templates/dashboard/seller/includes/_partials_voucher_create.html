@@ -2,7 +2,7 @@
 {% load crispy_forms_tags %}
 
 {% block block_extra_breadcrumb %}
-{% url "seller:voucher_list" as voucher_list_url %}
+{% url "dashboard_seller:voucher_list" as voucher_list_url %}
 
 <div class="btn-toolbar mb-2 mb-md-0">
     <a href="{{ voucher_list_url }}" class="btn btn-sm btn-secondary d-inline-flex align-items-center">

@@ -2,7 +2,7 @@
 {% load humanize %}
 
 {% block block_extra_breadcrumb %}
-    {% url "seller:product_create" as seller_create_product %}
+    {% url "dashboard_seller:product_create" as seller_create_product %}
 
     <div class="btn-toolbar mb-2 mb-md-0">
         <a href="{{ seller_create_product }}" class="btn btn-sm btn-secondary d-inline-flex align-items-center">
