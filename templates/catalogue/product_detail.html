@@ -2,212 +2,213 @@
 {% load static cache humanize mptt_tags crispy_forms_tags catalogue_tags pages_tags %}
 
 {% block content %}
-{% full_tree_for_model category.Category as category %}
+    {% url "account_signup" as account_signup %}
+    {% full_tree_for_model category.Category as category %}
 
-<div class="ps-breadcrumb">
-    <div class="container">
-        <ul class="breadcrumb">
-            <li>
-                <a class="text-capitalize" href="{{ home_url }}">
-                    <i class="fa fa-home fw-2x text-success"></i>
-                </a>
-            </li>
-            {% if object.category.parent %}
+    <div class="ps-breadcrumb">
+        <div class="container">
+            <ul class="breadcrumb">
                 <li>
-                    <a href="{{ object.category.parent.get_absolute_url }}">
-                        {{ object.category.get_ancestors|tree_path|lower }}
+                    <a class="text-capitalize" href="{{ home_url }}">
+                        <i class="fa fa-home fw-2x text-success"></i>
                     </a>
                 </li>
-            {% endif %}
-            {% if object.category.name %}
-                <li>
-                    <a href="{{ object.category.get_absolute_url }}">
-                        {{ object.category.name|lower }}
-                    </a>
-                </li>
-            {% endif %}
+                {% if object.category.parent %}
+                    <li>
+                        <a href="{{ object.category.parent.get_absolute_url }}">
+                            {{ object.category.get_ancestors|tree_path|lower }}
+                        </a>
+                    </li>
+                {% endif %}
+                {% if object.category.name %}
+                    <li>
+                        <a href="{{ object.category.get_absolute_url }}">
+                            {{ object.category.name|lower }}
+                        </a>
+                    </li>
+                {% endif %}
 
-            <li>{{ object.name|capfirst|lower|safe }}</li>
-        </ul>
-    </div>
-</div>
-
-{% if messages %}
-    {% for message in messages %}
-        <div class="alert alert-block {{ message.tags }} alert-dismissible font-weight-bold" role="alert">
-            {{ message|safe }}
-            <button class="close" type="button" data-dismiss="alert" aria-label="Close">
-                <span aria-hidden="true">&times;</span>
-            </button>
+                <li>{{ object.name|capfirst|lower|safe }}</li>
+            </ul>
         </div>
-    {% endfor %}
-{% endif %}
+    </div>
 
-<div class="ps-page--product">
-    <div class="container">
-        <div class="ps-page__container">
-            <div class="ps-page__left">
-                <div class="ps-product--detail ps-product--fullwidth">
-                    <div class="ps-product__header">
+    {% if messages %}
+        {% for message in messages %}
+            <div class="alert alert-block {{ message.tags }} alert-dismissible font-weight-bold" role="alert">
+                {{ message|safe }}
+                <button class="close" type="button" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+        {% endfor %}
+    {% endif %}
 
-                        {% include "catalogue/partials/_partials_product_image.html" with object=object %}
+    <div class="ps-page--product">
+        <div class="container">
+            <div class="ps-page__container">
+                <div class="ps-page__left">
+                    <div class="ps-product--detail ps-product--fullwidth">
+                        <div class="ps-product__header">
 
-                        <div class="ps-product__info">
-                            <h1>{{ object.name|safe }}</h1>
-                            <div class="ps-product__meta">
-                                <div class="ps-product__rating">
-                                    <select class="ps-rating" data-read-only="true">
-                                        <option value="1">1</option>
-                                        <option value="1">2</option>
-                                        <option value="1">3</option>
-                                        <option value="1">4</option>
-                                        <option value="2">5</option>
-                                    </select>
-                                    <span>({{ object.countreview|safe }} avis)</span>
+                            {% include "catalogue/partials/_partials_product_image.html" with object=object %}
+
+                            <div class="ps-product__info">
+                                <h1>{{ object.name|safe }}</h1>
+                                <div class="ps-product__meta">
+                                    <div class="ps-product__rating">
+                                        <select class="ps-rating" data-read-only="true">
+                                            <option value="1">1</option>
+                                            <option value="1">2</option>
+                                            <option value="1">3</option>
+                                            <option value="1">4</option>
+                                            <option value="2">5</option>
+                                        </select>
+                                        <span>({{ object.countreview|safe }} avis)</span>
+                                    </div>
                                 </div>
-                            </div>
-                            <h4 class="ps-product__price sale">
-                                {% if object.get_vouchers %}
-                                    {{ object.get_product_price|intcomma }} Fr
-                                    <del> {{ object.price|intcomma }} Fr</del>
-                                    <small> ( -{{ object.get_vouchers }}%)</small>
-                                {% else %}
-                                    {{ object.price|intcomma }} Fr
-                                {% endif %}
-                            </h4>
+                                <h4 class="ps-product__price sale">
+                                    {% if object.get_vouchers %}
+                                        {{ object.get_product_price|intcomma }} Fr
+                                        <del> {{ object.price|intcomma }} Fr</del>
+                                        <small> ( -{{ object.get_vouchers }}%)</small>
+                                    {% else %}
+                                        {{ object.price|intcomma }} Fr
+                                    {% endif %}
+                                </h4>
 
-                            <div class="ps-product__desc">
-                                {% if object.user.store %}
-                                    <p>Vendu par: <a href="{{ object.user.get_absolute_url }}">
-                                        <strong> {{ object.user.store }}</strong></a>
+                                <div class="ps-product__desc">
+                                    {% if object.user.store %}
+                                        <p>Vendu par: <a href="{{ object.user.get_absolute_url }}">
+                                            <strong> {{ object.user.store }}</strong></a>
+                                        </p>
+                                    {% endif %}
+                                </div>
+
+                                {% if object.attributes.exists  %}
+                                    <div class="ps-product__variations">
+                                        <figure>
+                                            <figcaption>
+                                                <strong class="text-uppercase text-success">tailles disponibles</strong>
+                                            </figcaption>
+
+                                            {% for size in object.attributes %}
+                                                <div class="ps-variant ps-variant--size">
+                                                    <span class="ps-variant__tooltip">{{ size.size }}</span>
+                                                    <span class="ps-variant__size">{{ size.size }}</span>
+                                                </div>
+                                            {% endfor %}
+                                        </figure>
+                                    </div>
+                                {% endif %}
+
+                                {% include "cart/snippet/form.html" with product=object %}
+
+                                <div class="ps-product__specification">
+                                    {% url 'pages:contact' as contact %}
+                                    <a class="report" href="{{ contact }}">Signaler un abus</a>
+
+                                    <p class="categories">
+                                        <strong> Catégorie{{ category.count|pluralize }}:</strong>
+                                        <a href="{{ object.category.get_absolute_url }}">
+                                            {{ object.category.name|safe }}
+                                        </a>
                                     </p>
-                                {% endif %}
-                            </div>
-
-                            {% if object.attributes.exists  %}
-                                <div class="ps-product__variations">
-                                    <figure>
-                                        <figcaption>
-                                            <strong class="text-uppercase text-success">tailles disponibles</strong>
-                                        </figcaption>
-
-                                        {% for size in object.attributes %}
-                                            <div class="ps-variant ps-variant--size">
-                                                <span class="ps-variant__tooltip">{{ size.size }}</span>
-                                                <span class="ps-variant__size">{{ size.size }}</span>
-                                            </div>
-                                        {% endfor %}
-                                    </figure>
                                 </div>
-                            {% endif %}
 
-                            {% include "cart/snippet/form.html" with product=object %}
-
-                            <div class="ps-product__specification">
-                                {% url 'pages:contact' as contact %}
-                                <a class="report" href="{{ contact }}">Signaler un abus</a>
-
-                                <p class="categories">
-                                    <strong> Catégorie{{ category.count|pluralize }}:</strong>
-                                    <a href="{{ object.category.get_absolute_url }}">
-                                        {{ object.category.name|safe }}
+                                <div class="ps-product__sharing">
+                                    <a class="facebook" href="https://www.facebook.com/sharer.php?u=https://{{ request.get_host }}{{ object.get_absolute_url|urlencode }}" onclick="window.open(this.href,'mywin','left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;">
+                                        <i class="fa fa-facebook"></i>
                                     </a>
-                                </p>
-                            </div>
-
-                            <div class="ps-product__sharing">
-                                <a class="facebook" href="https://www.facebook.com/sharer.php?u=https://{{ request.get_host }}{{ object.get_absolute_url|urlencode }}" onclick="window.open(this.href,'mywin','left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;">
-                                    <i class="fa fa-facebook"></i>
-                                </a>
+                                </div>
                             </div>
                         </div>
-                    </div>
 
-                    <div class="ps-product__content ps-tab-root">
-                        <ul class="ps-tab-list">
-                            <li class="active"><a href="#tab-1">Description</a></li>
-                            <li><a href="#tab-2">Vendeur</a></li>
-                            <li><a href="#tab-3">Avis client ({{ object.countreview|safe }})</a></li>
-                        </ul>
+                        <div class="ps-product__content ps-tab-root">
+                            <ul class="ps-tab-list">
+                                <li class="active"><a href="#tab-1">Description</a></li>
+                                <li><a href="#tab-2">Vendeur</a></li>
+                                <li><a href="#tab-3">Avis client ({{ object.countreview|safe }})</a></li>
+                            </ul>
 
-                        <div class="ps-tabs">
-                            <div class="ps-tab active" id="tab-1">
-                                <div class="ps-document">
-                                    {{ object.description|safe }}
+                            <div class="ps-tabs">
+                                <div class="ps-tab active" id="tab-1">
+                                    <div class="ps-document">
+                                        {{ object.description|safe }}
+                                    </div>
                                 </div>
-                            </div>
 
-                            <div class="ps-tab" id="tab-2">
-                                {% if object.user.store %}
-                                    <h4>{{ object.user.store|upper }}</h4>
-                                    <p>{{ object.user.store_description|safe }}</p>
-                                    <a href="{{ object.user.get_absolute_url }}">
-                                        Voir le magasin de <strong>{{ object.user.store }}</strong>
-                                    </a>
-                                {% else %}
-                                    Produit vendu par l'entreprise.
-                                {% endif %}
-                            </div>
+                                <div class="ps-tab" id="tab-2">
+                                    {% if object.user.store %}
+                                        <h4>{{ object.user.store|upper }}</h4>
+                                        <p>{{ object.user.store_description|safe }}</p>
+                                        <a href="{{ object.user.get_absolute_url }}">
+                                            Voir le magasin de <strong>{{ object.user.store }}</strong>
+                                        </a>
+                                    {% else %}
+                                        Produit vendu par l'entreprise.
+                                    {% endif %}
+                                </div>
 
-                            <div class="ps-tab" id="tab-3">
-                                <div class="row">
-                                    {% include "includes/partials/_partials_product_review.html" %}
+                                <div class="ps-tab" id="tab-3">
+                                    <div class="row">
+                                        {% include "includes/partials/_partials_product_review.html" %}
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
+
+                <div class="ps-page__right">
+                    <!-- delivery information -->
+                    <aside class="widget widget_product widget_features">
+                        <p><i class="icon-3d-rotate"></i> Retour gratuit sous 7 jours si éligible, si facile</p>
+                        <p><i class="icon-receipt"></i> Le fournisseur donne des factures pour ce produit.</p>
+                        <p><i class="icon-credit-card"></i> Payer en ligne ou lors de la réception de marchandises</p>
+                    </aside>
+
+                    <!-- signup for vendor -->
+                    <aside class="widget widget_sell-on-site">
+                        {% if request.user.is_authenticated and request.user.is_buyer or not request.user.is_authenticated and not request.user.is_superuser and not request.user.is_seller %}
+                            <p>
+                                <i class="icon-store"></i> Vendez sur LaRegina ?
+                                <a href="{{ account_signup }}" target="_blank">
+                                    Ouvrez votre boutique maintenant !
+                                </a>
+                            </p>
+                        {% endif %}
+                    </aside>
+
+                    <!-- test news function for catalogue -->
+                    <aside>
+                        <div>
+                            {% for obj in object.cross_sells %}
+                                {{ obj.name }}
+                            {% endfor %}
+                        </div>
+                    </aside>
+                </div>
             </div>
+            
+            {% best_selling_products 20 %}
 
-            <div class="ps-page__right">
-                <!-- delivery information -->
-                <aside class="widget widget_product widget_features">
-                    <p><i class="icon-network"></i> Expédition dans le monde entier</p>
-                    <p><i class="icon-3d-rotate"></i> Retour gratuit sous 7 jours si éligible, si facile</p>
-                    <p><i class="icon-receipt"></i> Le fournisseur donne des factures pour ce produit.</p>
-                    <p><i class="icon-credit-card"></i> Payer en ligne ou lors de la réception de marchandises</p>
-                </aside>
+            <!-- produit recommendé -->
+            {% if recommended_product %}
+                {% product_list recommended_product 'Produits récommandés pour vous' %}
+            {% endif %}
 
-                <!-- signup for vendor -->
-                <aside class="widget widget_sell-on-site">
-                    {% if request.user.is_authenticated and request.user.is_buyer or not request.user.is_authenticated and not request.user.is_superuser and not request.user.is_seller %}
-                        <p>{% url "account_signup" as account_signup %}
-                            <i class="icon-store"></i> Vendre sur {{ title }} ?
-                            <a href="{{ account_signup }}" target="_blank">
-                                Inscrivez-vous maintenant</a>
-                        </p>
-                    {% endif %}
-                </aside>
+            <!-- produit similaire  -->
+            {% if related_product %}
+                {% product_list related_product 'Produits de la même catégorie' %}
+            {% endif %}
 
-                <!-- test news function for catalogue -->
-                <aside>
-                    <div>
-                        {% for obj in object.cross_sells %}
-                            {{ obj.name }}
-                        {% endfor %}
-                    </div>
-                </aside>
-            </div>
+            {% publicity_list %}
+
+            <!-- product recently viewed -->
+            {% if recently_viewed %}
+                {% product_list recently_viewed 'Vus récemment' %}
+            {% endif %}
         </div>
-        
-        {% best_selling_products 20 %}
-
-        <!-- produit recommendé -->
-        {% if recommended_product %}
-            {% product_list recommended_product 'Produits récommandés pour vous' %}
-        {% endif %}
-
-        <!-- produit similaire  -->
-        {% if related_product %}
-            {% product_list related_product 'Produits de la même catégorie' %}
-        {% endif %}
-
-        {% publicity_list %}
-
-        <!-- product recently viewed -->
-        {% if recently_viewed %}
-            {% product_list recently_viewed 'Vus récemment' %}
-        {% endif %}
     </div>
-</div>
 {% endblock content %}

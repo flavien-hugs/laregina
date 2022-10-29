@@ -22,17 +22,29 @@
                 {% hero_slider_list 5 %}
 
                 <div class="ps-section__right">
-                    <aside class="widget widget_product widget_features bg-white p-4">
-                        <p><i class="icon-3d-rotate"></i> Retour gratuit sous 7 jours</p>
-                        <p><i class="icon-credit-card"></i> Payer en ligne ou la livraison</p>
+                    <aside class="widget widget_product widget_features bg-white p-4 mb-3">
+                        <p>
+                            <i class="icon-store text-success"></i> 
+                            <a href="{{ signup }}">
+                                Vender sur LaRegina <br>
+                                <span>Ouvrez votre boutique</span>
+                            </a>
+                        </p>
+                        <p>
+                            <i class="icon-telephone text-success"></i>
+                            Commandez au <br>
+                            <span>{{ contact_one }}</span>
+                        </p>
+                        <p>
+                            <i class="icon-bubbles text-success"></i>
+                            Centre d'assistance <br>
+                            Guide du service client
+                        </p>
                     </aside>
 
-                    <aside class="ps-collection bg-white p-4">
-                        <a href="{{ store_list_view }}">
-                            <img loading="lazy" class="img-fluid" src="{{ STATIC_PREFIX }}img/signup_page.jpg" alt="{{ title }}">
-                            <p class="py-3 font-weight-bolder text-center">Trouver une boutique</p>
-                        </a>
-                    </aside>
+                    <a class="ps-collection" href="#!">
+                        <img loading="lazy" src="{{ STATIC_PREFIX }}img/banner.jpg" alt="{{ title }}">
+                    </a>
                 </div>
             </div>
         </section>
