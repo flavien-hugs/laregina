@@ -1,8 +1,13 @@
 {% extends "base.html" %}
 {% load crispy_forms_tags %}
-{% block title %}Créer un compte{% endblock title %}
+
+{% block title %}{{ page_title }}{% endblock title %}
 
 {% block content %}
+
+    {% url "auth_views:account_login" as account_login %}
+    {% url 'checkout:checkout' %}
+
     <div class="ps-page--my-account">
         <div class="container">
             <div class="row justify-content-center mt-5">
@@ -19,7 +24,7 @@
                                 {% endif %}
                             </p>
 
-                            <form method="post" action='{% url 'checkout:checkout' %}'>
+                            <form method="post" action='.'>
                                 {% csrf_token %}
                               
                                 {{ form|crispy }}
@@ -30,10 +35,9 @@
                                 </div>
                             </form>
 
-                            <!-- connexion url -->
                             <div class="text-center w-100 pt-2 pb-3">
                                 Vous avez déjà un compte ?
-                                <a href="{% url "account_login" %}">
+                                <a href="{{ account_login }}">
                                     <span class="font-weight-bold"><u>Connectez-vous</u>
                                 </a>
                             </div>
