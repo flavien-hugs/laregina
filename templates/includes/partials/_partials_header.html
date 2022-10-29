@@ -181,21 +181,10 @@
             <i class="icon-list4"></i><span> Catégories</span>
         </a>
 
-        <a class="navigation__item ps-toggle--sidebar" href="#search-sidebar">
-            <i class="icon-magnifier"></i><span> Rechercher</span>
-        </a>
-
         <a class="navigation__item ps-toggle--sidebar" href="#cart-mobile">
             <i class="icon-bag2"></i><span> Panier</span>
         </a>
     </div>
-</div>
-
-<div class="ps-panel--sidebar" id="search-sidebar">
-    <div class="ps-panel__header">
-        {% search_box request %}
-    </div>
-    <div class="navigation__content"></div>
 </div>
 
 {% include "includes/partials/menu_mobile.html" %}

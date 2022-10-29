@@ -2,7 +2,7 @@
 {% load static cache humanize mptt_tags crispy_forms_tags catalogue_tags pages_tags %}
 
 {% block content %}
-    {% url "account_signup" as account_signup %}
+    {% url "auth_user:account_signup" as account_signup %}
     {% full_tree_for_model category.Category as category %}
 
     <div class="ps-breadcrumb">
