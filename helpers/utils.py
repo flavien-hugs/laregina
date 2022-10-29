@@ -2,20 +2,49 @@ import os
 import string
 import random
 import threading
-from hashlib import sha256
 
+from django.urls import reverse
+from django.conf import settings
 from django.utils.text import slugify
+from django.core.mail import EmailMessage
+from django.utils.encoding import force_bytes
 from django.core.validators import EmailValidator
+from django.template.loader import render_to_string
+from django.utils.http import urlsafe_base64_encode
+from django.contrib.sites.shortcuts import get_current_site
+from django.contrib.auth.tokens import default_token_generator
 
 
 class EmailThread(threading.Thread):
 
-    def __init__(self, email_message):
-        self.email_message = email_message
+    def __init__(self, message):
+        self.message = message
         threading.Thread.__init__(self)
 
     def run(self):
-        self.email_message.send()
+        self.message.send()
+
+
+class SendEmail:
+
+    @staticmethod
+    def send_confirmation_link(template, request, user, subject):
+
+        current_site = get_current_site(request)
+
+        html_message = render_to_string(
+            template,
+            {
+                "user": user,
+                "domain": current_site,
+                "protocol": request.scheme,
+                "uidb64": urlsafe_base64_encode(force_bytes(user.pk)),
+                "token": default_token_generator.make_token(user)
+            },
+        )
+        message = EmailMessage(subject=subject, body=html_message, to=[user.email])
+        message.content_subtype = "html"
+        EmailThread(message).start()
 
 
 def random_string_generator(size=8, carac=string.ascii_lowercase + string.digits):
