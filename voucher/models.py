@@ -44,12 +44,12 @@ class Voucher(BaseTimeStampModel, ApplyDiscountModel):
 
     def get_update_voucher_url(self):
         return reverse(
-            'seller:voucher_update',
+            'dashboard_seller:voucher_update',
             kwargs={'pk': str(self.pk)}
         )
 
     def get_delete_voucher_url(self):
         return reverse(
-            'seller:voucher_delete',
+            'dashboard_seller:voucher_delete',
             kwargs={'pk': str(self.pk)}
         )
