@@ -10,7 +10,6 @@ from django.dispatch import receiver
 from django.db.models import Avg, Count
 from django.utils.safestring import mark_safe
 
-from category.models import Category
 from catalogue.managers import CatalogueManager
 from caching.caching import cache_update, cache_evict
 
@@ -37,7 +36,7 @@ class Product(BaseTimeStampModel):
         help_text="magasin en charge de la vente."
     )
     category = TreeForeignKey(
-        to=Category,
+        to="category.Category",
         on_delete=models.PROTECT,
         verbose_name='catégorie',
         help_text="Selectionner la catégorie du produit."
@@ -127,8 +126,8 @@ class Product(BaseTimeStampModel):
         from voucher.models import Voucher
         from pages.models import Promotion
 
-        products = Voucher.objects.filter(products=self)
-        promotions = Promotion.objects.filter(products=self)
+        products = Voucher.objects.prefetch_related("products").filter(products=self)
+        promotions = Promotion.objects.prefetch_related("products").filter(products=self)
         objects_list = chain(promotions, products)
 
         return objects_list
@@ -181,12 +180,13 @@ class Product(BaseTimeStampModel):
     @admin.display(description="liste des avis")
     def review_list(self):
         from reviews.models import ProductReview
-        rvw_list = ProductReview.objects.all().filter(product=self)
+        rvw_list = ProductReview.objects.prefetch_related("product").filter(product=self)
         return rvw_list
 
     def get_absolute_url(self):
         return reverse(
-            'catalogue:product_detail', kwargs={'slug': str(self.slug)}
+            'catalogue:product_detail',
+            kwargs={'slug': str(self.slug), 'pk': int(self.pk)}
         )
 
     def get_update_url(self):
@@ -227,7 +227,7 @@ class Product(BaseTimeStampModel):
 
     def promotions(self):
         from pages.models import Promotion
-        promotion = Promotion.objects.filter(product__in=self)
+        promotion = Promotion.objects.prefetch_related("products").filter(product__in=self)
         return promotion
 
 

@@ -28,13 +28,15 @@ from reviews.forms import ProductReviewForm
 from pages.models import Promotion, HomePage
 from catalogue.forms import ProductAddToCartForm
 
+CACHE_TTL = getattr(settings, 'CACHE_TTL', settings.CACHE_TIMEOUT)
+
 
 class ExtraContextData:
 
     queryset = Category.objects.all()
 
     def get_context_data(self, **kwargs):
-        kwargs['promotions'] = self.promotions()
+        kwargs['promotions'] = self.get_promotions()
         kwargs['destockages'] = self.get_destockages()
         kwargs['sales_flash'] = self.get_sales_flash()
         kwargs['news_arrivals'] = self.get_news_arrivals()
@@ -45,12 +47,13 @@ class ExtraContextData:
         kwargs['category_list'] = self.queryset
 
         category = self.queryset
-        kwargs['products'] = Product.objects.filter(category__parent__in=category)[:15]
+        kwargs['products'] = Product.objects\
+            .prefetch_related("category")\
+            .filter(category__parent__in=category)[:15]
 
         return super().get_context_data(**kwargs)
 
 
-@method_decorator(cache_page(settings.CACHE_TTL), name='dispatch')
 class HomeThirdView(ExtraContextData, PromotionMixin, generic.TemplateView):
 
     template_name = "combine.html"
@@ -64,7 +67,7 @@ class HomeView(ExtraContextData, PromotionMixin, generic.TemplateView):
 
     template_name = "index.html"
 
-    @method_decorator(cache_page(settings.CACHE_TTL))
+    @method_decorator(cache_page(CACHE_TTL))
     def dispatch(self, request, *args, **kwargs):
         if HomePage.objects.filter(page=1):
             return HttpResponseRedirect(reverse_lazy("market"))
@@ -76,7 +79,7 @@ class HomeView(ExtraContextData, PromotionMixin, generic.TemplateView):
 home_view = HomeView.as_view()
 
 
-@method_decorator(cache_page(settings.CACHE_TTL),  name='dispatch')
+@method_decorator(cache_page(CACHE_TTL),  name='dispatch')
 class HomeMarketView(PromotionMixin, generic.TemplateView):
 
     template_name = "market.html"
@@ -98,7 +101,7 @@ class HomeTwoView(ExtraContextData, PromotionMixin, generic.TemplateView):
 
     template_name = 'market.html'
 
-    @method_decorator(cache_page(settings.CACHE_TTL))
+    @method_decorator(cache_page(CACHE_TTL))
     def dispatch(self, request, *args, **kwargs):
         if HomePage.objects.filter(page=0):
             return HttpResponseRedirect(reverse_lazy("home"))
@@ -110,16 +113,16 @@ class HomeTwoView(ExtraContextData, PromotionMixin, generic.TemplateView):
 market_view = HomeTwoView.as_view()
 """
 
-@method_decorator(cache_page(settings.CACHE_TTL),  name='dispatch')
+@method_decorator(cache_page(CACHE_TTL),  name='dispatch')
 class ProductListView(FilterMixin, PromotionMixin, generic.ListView):
-    model = Product
-    paginate_by = 20
+    paginate_by = 15
+    queryset = Product.objects.all()
     extra_context = {'page_title': 'Tous les produits'}
     template_name = "catalogue/product_list.html"
 
     def get_context_data(self, *args, **kwargs):
         kwargs["query"] = self.request.GET.get("q", None)
-        kwargs['promotions'] = self.promotions()
+        kwargs['promotions'] = self.get_promotions()
         kwargs['promotion_list'] = self.get_promotions_list()
         kwargs['product_recommended'] = utils.get_recently_viewed(self.request)
         return super().get_context_data(*args, **kwargs)
@@ -128,7 +131,7 @@ class ProductListView(FilterMixin, PromotionMixin, generic.ListView):
         qs = super().get_queryset(*args, **kwargs)
         query = self.request.GET.get("q")
         if query:
-            query_one = self.model.objects.filter(
+            query_one = self.queryset.filter(
                 Q(name__icontains=query)
                 | Q(description__icontains=query)
                 | Q(price__icontains=query)
@@ -136,7 +139,7 @@ class ProductListView(FilterMixin, PromotionMixin, generic.ListView):
                 | Q(category__slug__icontains=query)
             )
             try:
-                query_two = self.model.objects.filter(Q(price=query))
+                query_two = self.queryset.filter(Q(price=query))
                 qs = (query_one | query_two).distinct()
             except:
                 pass
@@ -147,13 +150,13 @@ product_list_view = ProductListView.as_view()
 
 
 @csrf_exempt
-@cache_page(settings.CACHE_TTL)
-def show_product(request, slug, template="catalogue/product_detail.html"):
-    p = get_object_or_404(Product, slug=slug)
+@cache_page(CACHE_TTL)
+def show_product(request, slug, pk, template="catalogue/product_detail.html"):
+    p = get_object_or_404(Product, slug=slug, pk=pk)
     product_cache_key = request.path
     p = cache.get(product_cache_key)
     if not p:
-        p = get_object_or_404(Product, slug=slug)
+        p = get_object_or_404(Product, slug=slug, pk=pk)
         cache.set(product_cache_key, p, settings.CACHE_TIMEOUT)
     if request.method == 'POST':
         postdata = request.POST.copy()
@@ -192,8 +195,8 @@ def show_product(request, slug, template="catalogue/product_detail.html"):
 
 
 @csrf_exempt
-@cache_page(settings.CACHE_TTL)
-def addRreview(request, slug):
+@cache_page(CACHE_TTL)
+def add_review(request, slug):
     product = get_object_or_404(Product, slug=slug)
 
     if request.method == 'POST':
