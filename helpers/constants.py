@@ -1,4 +1,4 @@
-CIV = "Côte d'Ivoire"
+CI = "Côte d'Ivoire"
 SEN = "Sénégal"
 TOG = "Togo"
 BF = "Burkina Faso"
@@ -13,7 +13,7 @@ COM = "Comores"
 
 COUNTRY_CHOICES = (
     (None, 'Veuillez sélectionner un pays'),
-    (CIV, "Côte d'Ivoire")
+    (CI, "Côte d'Ivoire")
 )
 
-DEFAULT_COUNTRY_CHOICES = CIV
+DEFAULT_COUNTRY_CHOICES = CI
