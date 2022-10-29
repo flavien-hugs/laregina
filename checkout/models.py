@@ -171,7 +171,7 @@ class Order(BaseOrderInfo, BaseTimeStampModel):
         return total
 
     def get_absolute_url(self):
-        return reverse('seller:order_detail', kwargs={'pk': int(self.id)})
+        return reverse('dashboard_seller:order_detail', kwargs={'pk': int(self.id)})
 
     def get_success_url(self):
         return reverse('checkout:order_success', kwargs={'pk': int(self.transaction_id)})
