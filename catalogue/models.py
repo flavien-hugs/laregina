@@ -191,12 +191,14 @@ class Product(BaseTimeStampModel):
 
     def get_update_url(self):
         return reverse(
-            'seller:product_update', kwargs={'slug': str(self.slug)}
+            'dashboard_seller:product_update',
+            kwargs={'slug': str(self.slug)}
         )
 
     def get_delete_url(self):
         return reverse(
-            'seller:product_delete', kwargs={'slug': str(self.slug)}
+            'dashboard_seller:product_delete',
+            kwargs={'slug': str(self.slug)}
         )
 
     def cache_key(self):
