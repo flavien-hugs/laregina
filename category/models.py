@@ -108,7 +108,10 @@ class Category(MPTTModel, ModelSlugMixin, BaseTimeStampModel):
         return (promotions).distinct()
 
     def get_absolute_url(self):
-        return reverse('category:category_detail', kwargs={'slug': str(self.slug)})
+        return reverse(
+            'category:category_detail',
+            kwargs={'slug': str(self.slug)}
+        )
 
     @property
     def cache_key(self):
