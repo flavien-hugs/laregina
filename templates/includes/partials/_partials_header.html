@@ -83,13 +83,10 @@
                             <div class="ps-block__left"><i class="icon-user"></i></div>
                             <div class="ps-block__right">
                                 {% if request.user.is_authenticated and request.user.is_seller or request.user.is_superuser %}
-                                    <a class="font-weight-bold text-uppercase" href="{{ seller_profile }}" target="_blank">ma boutique</a>
-                                    <a class="font-weight-bold text-uppercase" href="{{ promotion_url }}">ajouter une annonce</a>
+                                    <a class="font-weight-bolder" href="{{ seller_profile }}" target="_blank">
+                                    Mon <br>Compte </a>
                                 {% else %}
-                                    <a class="font-weight-bold text-uppercase" href="{{ login }}">
-                                    se connecter</a>
-                                    <a class="font-weight-bold text-uppercase" href="{{ signup }}">
-                                    ouvrir une boutique</a>
+                                    <a class="font-weight-bolder" href="{{ login }}">Connectez-vous <br> à votre compte</a>
                                 {% endif %}
                             </div>
                         </div>
@@ -104,14 +101,10 @@
                             <div class="ps-block__left"><i class="icon-user"></i></div>
                             <div class="ps-block__right">
                                 {% if request.user.is_authenticated and request.user.is_seller or request.user.is_superuser %}
-                                    <a class="font-weight-bold text-uppercase" href="{{ seller_profile }}" target="_blank">ma boutique</a>
-                                    <a class="font-weight-bold text-uppercase" href="{{ promotion_url }}">ajouter une annonce</a>
+                                    <a class="font-weight-bolder" href="{{ seller_profile }}" target="_blank">
+                                    Mon <br>Compte </a>
                                 {% else %}
-                                    <a class="font-weight-bold text-uppercase" href="{{ login }}">
-                                    se connecter</a>
-
-                                    <a class="font-weight-bold text-uppercase" href="{{ signup }}">
-                                    ouvrir une boutique</a>
+                                    <a class="font-weight-bolder" href="{{ login }}">Connectez-vous <br> à votre compte</a>
                                 {% endif %}
                             </div>
                         </div>
