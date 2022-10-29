@@ -50,8 +50,6 @@ OTHERS_APPS = [
     'django.contrib.admin',
 
     'crispy_forms',
-
-    'django_countries',
     'phonenumber_field',
     'phonenumbers',
     'mptt',
