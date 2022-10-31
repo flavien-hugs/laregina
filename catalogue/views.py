@@ -150,7 +150,6 @@ product_list_view = ProductListView.as_view()
 
 
 @csrf_exempt
-@cache_page(CACHE_TTL)
 def show_product(request, slug, pk, template="catalogue/product_detail.html"):
     p = get_object_or_404(Product, slug=slug, pk=pk)
     product_cache_key = request.path
@@ -195,7 +194,6 @@ def show_product(request, slug, pk, template="catalogue/product_detail.html"):
 
 
 @csrf_exempt
-@cache_page(CACHE_TTL)
 def add_review(request, slug):
     product = get_object_or_404(Product, slug=slug)
 
