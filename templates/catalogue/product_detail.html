@@ -2,7 +2,6 @@
 {% load static cache humanize mptt_tags crispy_forms_tags catalogue_tags pages_tags %}
 
 {% block content %}
-    {% url "auth_user:account_signup" as account_signup %}
     {% full_tree_for_model category.Category as category %}
 
     <div class="ps-breadcrumb">
@@ -171,6 +170,9 @@
                     <!-- signup for vendor -->
                     <aside class="widget widget_sell-on-site">
                         {% if request.user.is_authenticated and request.user.is_buyer or not request.user.is_authenticated and not request.user.is_superuser and not request.user.is_seller %}
+
+                            {% url "auth_views:account_signup" as account_signup %}
+                            
                             <p>
                                 <i class="icon-store"></i> Vendez sur LaRegina ?
                                 <a href="{{ account_signup }}" target="_blank">
