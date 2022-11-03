@@ -99,10 +99,10 @@ class Order(BaseOrderInfo, BaseTimeStampModel):
 
     @admin.display(description="adresse de livraison")
     def get_shipping_delivery(self):
-        return f'{self.shipping_country.name}, {self.shipping_city}, {self.shipping_adress} | {self.phone}'
+        return f'{self.shipping_country}, {self.shipping_city}, {self.shipping_adress} | {self.phone}'
 
     def get_shipping_delivery_for_seller(self):
-        return f'{self.shipping_city}, {self.shipping_country.name}'
+        return f'{self.shipping_city}, {self.shipping_country}'
 
     def save(self, *args, **kwargs):
         if self.transaction_id is None:
