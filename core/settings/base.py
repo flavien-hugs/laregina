@@ -270,6 +270,8 @@ CACHE_TIMEOUT = 60 * 60
 REDIS_PORT = os.getenv('REDIS_PORT')
 REDIS_HOST = os.getenv('REDIS_HOST')
 
+SESSION_ENGINE = 'django.contrib.sessions.backends.cache'
+
 CACHES = {
     "default": {
         "BACKEND": "django_redis.cache.RedisCache",
