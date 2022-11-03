@@ -1,8 +1,8 @@
-{% url "account_login" as login %}
-{% url "account_signup"  as signup %}
-{% url "seller:profile" as seller_profile %}
-{% url "seller:order_list" as seller_order_list %}
-{% url "seller:product_list" as seller_product_list %}
+{% url "auth_views:account_login" as login %}
+{% url "auth_views:account_signup"  as signup %}
+{% url "dashboard_seller:profile" as seller_profile %}
+{% url "dashboard_seller:order_list" as seller_order_list %}
+{% url "dashboard_seller:product_list" as seller_product_list %}
 
 <div class="ps-panel--sidebar" id="menu-mobile">
     <div class="ps-panel__header"><h3>Menu</h3></div>
