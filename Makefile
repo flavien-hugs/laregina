@@ -59,4 +59,4 @@ crontabshow: ## Show current active jobs of this project
 
 .PHONY: gunicorn
 gunicorn: ## Run project with gunicorn
-	gunicorn --bind 127.0.0.1:9090 core.wsgi
+	gunicorn --workers=3 --bind 127.0.0.1:9090 core.wsgi

@@ -4,7 +4,7 @@
 
 
 {% block content %}
-    {% url "account_signup" as signup %}
+    {% url "auth_views:account_signup" as signup %}
     {% url "pages:contact" as contact %}
     {% url "vendor:store_list_view" as store_list_view %}
     
@@ -26,14 +26,14 @@
                         <p>
                             <i class="icon-store text-success"></i> 
                             <a href="{{ signup }}">
-                                Vender sur LaRegina <br>
+                                Vendez sur LaRegina <br>
                                 <span>Ouvrez votre boutique</span>
                             </a>
                         </p>
                         <p>
                             <i class="icon-telephone text-success"></i>
                             Commandez au <br>
-                            <span>{{ contact_one }}</span>
+                            <span>{{ contact_four }}</span>
                         </p>
                         <p>
                             <i class="icon-bubbles text-success"></i>
