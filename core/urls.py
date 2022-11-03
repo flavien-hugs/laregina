@@ -34,8 +34,8 @@ urlpatterns = [
     path(settings.ADMIN_URL, admin.site.urls),
     path('sp-', include("pages.urls", namespace='pages')),
     path('checkout/', include('checkout.urls', namespace='checkout')),
-    path('', include('catalogue.urls')),
     path(route='catalog/', view=search_view, name="search"),
+    path('', include('catalogue.urls')),
 
     path('jet/', include('jet.urls', 'jet')),
     path('summernote/', include('django_summernote.urls')),
