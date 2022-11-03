@@ -14,6 +14,7 @@ def context(request):
         'contact_one': '+225 07 7872 2639',
         'contact_two': '07 4747 3627',
         'contact_three': '07 7872 2639',
+        'contact_four': '01 600 115 85',
         'email_info': 'infos@laregina.deals',
         'facebook': 'https://www.facebook.com/laregina.ci/',
         'twitter': 'https://twitter.com/CoteLaregina',
