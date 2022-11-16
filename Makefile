@@ -6,7 +6,7 @@ help: ## Show this help
 	@egrep -h '\s##\s' $(MAKEFILE_LIST) | sort | awk 'BEGIN {FS = ":.*?## "}; {printf "\033[36m%-20s\033[0m %s\n", $$1, $$2}'
 
 freeze: ## Pin current dependencies
-	pipenv run pip freeze > requirements.txt
+	pipenv requirements > requirements.txt
 
 merge: ## Resolve conflicts detected to merge
 	$(MANAGE) makemigrations --merge
@@ -59,4 +59,4 @@ crontabshow: ## Show current active jobs of this project
 
 .PHONY: gunicorn
 gunicorn: ## Run project with gunicorn
-	gunicorn --workers=3 --bind 127.0.0.1:9090 core.wsgi
+	gunicorn --workers=3 --bind 127.0.0.1:9990 core.wsgi
