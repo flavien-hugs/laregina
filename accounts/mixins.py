@@ -3,21 +3,18 @@ import datetime
 from django.urls import reverse_lazy
 from django.utils.http import is_safe_url
 from django.contrib.auth import get_user_model
-from django.contrib.auth.mixins import(
-    LoginRequiredMixin,
-    UserPassesTestMixin
-)
+from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 
 from pages.models import Promotion
 from catalogue.models import Product
 from catalogue.forms import ProductAdminForm
-from checkout.models import Order, OrderItem 
+from checkout.models import Order, OrderItem
 
 
 class RequestFormAttachMixin(object):
     def get_form_kwargs(self):
         kwargs = super().get_form_kwargs()
-        kwargs['request'] = self.request
+        kwargs["request"] = self.request
         return kwargs
 
 
@@ -25,8 +22,8 @@ class NextUrlMixin(object):
     default_next = "home"
 
     def get_next_url(self):
-        next_ = self.request.GET.get('next')
-        next_post = self.request.POST.get('next')
+        next_ = self.request.GET.get("next")
+        next_post = self.request.POST.get("next")
         redirect_path = next_ or next_post or None
         if is_safe_url(redirect_path, self.request.get_host()):
             return redirect_path
@@ -80,7 +77,8 @@ class SellerRequiredMixin(SellerTextRequiredMixin, object):
     def get_order_items(self):
         account = self.get_account()
         orders_item_list = OrderItem.objects.filter(
-            product__user=account).select_related("order")
+            product__user=account
+        ).select_related("order")
         return orders_item_list
 
     def get_orders_count(self):
@@ -90,18 +88,19 @@ class SellerRequiredMixin(SellerTextRequiredMixin, object):
     def get_order_account(self):
         account = self.get_account()
         orders_account = OrderItem.objects.filter(
-            product__user=account, order=self).select_related("order")
+            product__user=account, order=self
+        ).select_related("order")
         return orders_account
 
     # cash du vendeur
     def cash_total(self):
-        total = decimal.Decimal('0')
+        total = decimal.Decimal("0")
         for item in self.get_order_items():
             total += item.total
         return total
 
     def get_cost(self):
-        percent = decimal.Decimal('0.05')
+        percent = decimal.Decimal("0.05")
         cash = self.cash_total() * percent
         return cash
 
@@ -118,9 +117,9 @@ class SellerRequiredMixin(SellerTextRequiredMixin, object):
     def get_order_today_count(self):
         order_today_count = self.get_order_today().count()
         return order_today_count
-    
+
 
 class ProductEditMixin(SellerRequiredMixin):
     model = Product
     form_class = ProductAdminForm
-    success_url = reverse_lazy('seller:product_list')
+    success_url = reverse_lazy("dashboard_seller:product_list")

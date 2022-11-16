@@ -11,13 +11,13 @@ from catalogue.models import Product
 
 from pages.mixins import PromotionMixin
 
-CACHE_TTL = getattr(settings, 'CACHE_TTL', settings.CACHE_TIMEOUT)
+CACHE_TTL = getattr(settings, "CACHE_TTL", settings.CACHE_TIMEOUT)
 
 
 @method_decorator(cache_page(CACHE_TTL), name="dispatch")
 class CategoryDetailView(
-    PromotionMixin, generic.DetailView,
-    generic.list.MultipleObjectMixin):
+    PromotionMixin, generic.DetailView, generic.list.MultipleObjectMixin
+):
 
     model = Category
     paginate_by = 15
@@ -30,10 +30,11 @@ class CategoryDetailView(
 
     def get_context_data(self, **kwargs):
         category_object = self.object.get_descendants(include_self=True)
-        kwargs['page_title'] = self.object.name
-        kwargs['object_list'] = Product.objects.prefetch_related("category")\
-            .filter(category__in=category_object)
-        kwargs['product_recommended'] = utils.get_recently_viewed(self.request)
+        kwargs["page_title"] = self.object.name
+        kwargs["object_list"] = Product.objects.prefetch_related("category").filter(
+            category__in=category_object
+        )
+        kwargs["product_recommended"] = utils.get_recently_viewed(self.request)
         return super().get_context_data(**kwargs)
 
 

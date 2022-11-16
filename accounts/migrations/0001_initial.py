@@ -14,103 +14,401 @@ class Migration(migrations.Migration):
     initial = True
 
     dependencies = [
-        ('auth', '0012_alter_user_first_name_max_length'),
+        ("auth", "0012_alter_user_first_name_max_length"),
     ]
 
     operations = [
         migrations.CreateModel(
-            name='User',
+            name="User",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('password', models.CharField(max_length=128, verbose_name='password')),
-                ('created_at', models.DateTimeField(default=django.utils.timezone.now, editable=False, verbose_name='date de création')),
-                ('updated_at', models.DateTimeField(auto_now=True)),
-                ('slug', models.SlugField(blank=True, help_text='Automatiquement formé à partir du nom.', max_length=225, null=True, unique=True, verbose_name='URL de la boutique')),
-                ('shipping_first_name', models.CharField(max_length=50, verbose_name='nom de famille')),
-                ('shipping_last_name', models.CharField(max_length=50, verbose_name='prénom')),
-                ('phone', phonenumber_field.modelfields.PhoneNumberField(max_length=128, region=None, verbose_name='numéro de téléphone')),
-                ('phone_two', phonenumber_field.modelfields.PhoneNumberField(blank=True, max_length=128, region=None, verbose_name='téléphone supplémentaire (facultatif)')),
-                ('shipping_city', models.CharField(max_length=50, verbose_name='ville')),
-                ('shipping_country', models.CharField(choices=[(None, 'Veuillez sélectionner un pays'), ("Côte d'Ivoire", "Côte d'Ivoire")], default="Côte d'Ivoire", max_length=25, verbose_name='Pays/Région')),
-                ('shipping_adress', models.CharField(max_length=50, verbose_name='situation géographique')),
-                ('shipping_zip', models.CharField(blank=True, max_length=10, null=True, verbose_name='adresse postal (facultatif)')),
-                ('note', models.TextField(blank=True, max_length=120, null=True, verbose_name='note de commande (facultatif)')),
-                ('civility', models.CharField(choices=[('M.', 'M.'), ('Mme', 'Mme'), ('Mlle', 'Mlle')], default='M.', max_length=4, verbose_name='civilité')),
-                ('store_id', models.CharField(blank=True, max_length=50, null=True, unique=True, verbose_name='ID BOUTIQUE')),
-                ('email', models.EmailField(error_messages={'unique': 'Un utilisateur disposant de ce courriel existe déjà.'}, max_length=254, unique=True, verbose_name='email')),
-                ('store', models.CharField(error_messages={'unique': 'Un magasin disposant de ce nom existe déjà.'}, max_length=80, unique=True, verbose_name='boutique')),
-                ('store_description', models.TextField(blank=True, max_length=254, null=True, verbose_name='description de la boutique')),
-                ('logo', models.ImageField(blank=True, help_text='Ajouter le logo de votre boutique', null=True, upload_to=helpers.utils.upload_image_logo_path, validators=[django.core.validators.FileExtensionValidator(['jpeg', 'jpg', 'png'])], verbose_name='logo')),
-                ('is_seller', models.BooleanField(default=False, verbose_name='statut vendeur')),
-                ('is_staff', models.BooleanField(default=False, verbose_name='statut équipe')),
-                ('is_superuser', models.BooleanField(default=False, verbose_name='statut administrateur')),
-                ('is_active', models.BooleanField(default=True, verbose_name='active')),
-                ('last_login', models.DateTimeField(auto_now_add=True, verbose_name='date de derniere connexion')),
-                ('date_joined', models.DateTimeField(auto_now_add=True, verbose_name="date d'inscription")),
-                ('groups', models.ManyToManyField(blank=True, help_text='The groups this user belongs to. A user will get all permissions granted to each of their groups.', related_name='user_set', related_query_name='user', to='auth.Group', verbose_name='groups')),
-                ('user_permissions', models.ManyToManyField(blank=True, help_text='Specific permissions for this user.', related_name='user_set', related_query_name='user', to='auth.Permission', verbose_name='user permissions')),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("password", models.CharField(max_length=128, verbose_name="password")),
+                (
+                    "created_at",
+                    models.DateTimeField(
+                        default=django.utils.timezone.now,
+                        editable=False,
+                        verbose_name="date de création",
+                    ),
+                ),
+                ("updated_at", models.DateTimeField(auto_now=True)),
+                (
+                    "slug",
+                    models.SlugField(
+                        blank=True,
+                        help_text="Automatiquement formé à partir du nom.",
+                        max_length=225,
+                        null=True,
+                        unique=True,
+                        verbose_name="URL de la boutique",
+                    ),
+                ),
+                (
+                    "shipping_first_name",
+                    models.CharField(max_length=50, verbose_name="nom de famille"),
+                ),
+                (
+                    "shipping_last_name",
+                    models.CharField(max_length=50, verbose_name="prénom"),
+                ),
+                (
+                    "phone",
+                    phonenumber_field.modelfields.PhoneNumberField(
+                        max_length=128, region=None, verbose_name="numéro de téléphone"
+                    ),
+                ),
+                (
+                    "phone_two",
+                    phonenumber_field.modelfields.PhoneNumberField(
+                        blank=True,
+                        max_length=128,
+                        region=None,
+                        verbose_name="téléphone supplémentaire (facultatif)",
+                    ),
+                ),
+                (
+                    "shipping_city",
+                    models.CharField(max_length=50, verbose_name="ville"),
+                ),
+                (
+                    "shipping_country",
+                    models.CharField(
+                        choices=[
+                            (None, "Veuillez sélectionner un pays"),
+                            ("Côte d'Ivoire", "Côte d'Ivoire"),
+                        ],
+                        default="Côte d'Ivoire",
+                        max_length=25,
+                        verbose_name="Pays/Région",
+                    ),
+                ),
+                (
+                    "shipping_adress",
+                    models.CharField(
+                        max_length=50, verbose_name="situation géographique"
+                    ),
+                ),
+                (
+                    "shipping_zip",
+                    models.CharField(
+                        blank=True,
+                        max_length=10,
+                        null=True,
+                        verbose_name="adresse postal (facultatif)",
+                    ),
+                ),
+                (
+                    "note",
+                    models.TextField(
+                        blank=True,
+                        max_length=120,
+                        null=True,
+                        verbose_name="note de commande (facultatif)",
+                    ),
+                ),
+                (
+                    "civility",
+                    models.CharField(
+                        choices=[("M.", "M."), ("Mme", "Mme"), ("Mlle", "Mlle")],
+                        default="M.",
+                        max_length=4,
+                        verbose_name="civilité",
+                    ),
+                ),
+                (
+                    "store_id",
+                    models.CharField(
+                        blank=True,
+                        max_length=50,
+                        null=True,
+                        unique=True,
+                        verbose_name="ID BOUTIQUE",
+                    ),
+                ),
+                (
+                    "email",
+                    models.EmailField(
+                        error_messages={
+                            "unique": "Un utilisateur disposant de ce courriel existe déjà."
+                        },
+                        max_length=254,
+                        unique=True,
+                        verbose_name="email",
+                    ),
+                ),
+                (
+                    "store",
+                    models.CharField(
+                        error_messages={
+                            "unique": "Un magasin disposant de ce nom existe déjà."
+                        },
+                        max_length=80,
+                        unique=True,
+                        verbose_name="boutique",
+                    ),
+                ),
+                (
+                    "store_description",
+                    models.TextField(
+                        blank=True,
+                        max_length=254,
+                        null=True,
+                        verbose_name="description de la boutique",
+                    ),
+                ),
+                (
+                    "logo",
+                    models.ImageField(
+                        blank=True,
+                        help_text="Ajouter le logo de votre boutique",
+                        null=True,
+                        upload_to=helpers.utils.upload_image_logo_path,
+                        validators=[
+                            django.core.validators.FileExtensionValidator(
+                                ["jpeg", "jpg", "png"]
+                            )
+                        ],
+                        verbose_name="logo",
+                    ),
+                ),
+                (
+                    "is_seller",
+                    models.BooleanField(default=False, verbose_name="statut vendeur"),
+                ),
+                (
+                    "is_staff",
+                    models.BooleanField(default=False, verbose_name="statut équipe"),
+                ),
+                (
+                    "is_superuser",
+                    models.BooleanField(
+                        default=False, verbose_name="statut administrateur"
+                    ),
+                ),
+                ("is_active", models.BooleanField(default=True, verbose_name="active")),
+                (
+                    "last_login",
+                    models.DateTimeField(
+                        auto_now_add=True, verbose_name="date de derniere connexion"
+                    ),
+                ),
+                (
+                    "date_joined",
+                    models.DateTimeField(
+                        auto_now_add=True, verbose_name="date d'inscription"
+                    ),
+                ),
+                (
+                    "groups",
+                    models.ManyToManyField(
+                        blank=True,
+                        help_text="The groups this user belongs to. A user will get all permissions granted to each of their groups.",
+                        related_name="user_set",
+                        related_query_name="user",
+                        to="auth.Group",
+                        verbose_name="groups",
+                    ),
+                ),
+                (
+                    "user_permissions",
+                    models.ManyToManyField(
+                        blank=True,
+                        help_text="Specific permissions for this user.",
+                        related_name="user_set",
+                        related_query_name="user",
+                        to="auth.Permission",
+                        verbose_name="user permissions",
+                    ),
+                ),
             ],
             options={
-                'verbose_name_plural': 'boutiques',
-                'db_table': 'accounts_db',
-                'ordering': ['-date_joined'],
+                "verbose_name_plural": "boutiques",
+                "db_table": "accounts_db",
+                "ordering": ["-date_joined"],
             },
         ),
         migrations.CreateModel(
-            name='ProfileSocialMedia',
+            name="ProfileSocialMedia",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('created_at', models.DateTimeField(default=django.utils.timezone.now, editable=False, verbose_name='date de création')),
-                ('updated_at', models.DateTimeField(auto_now=True)),
-                ('facebook', models.URLField(blank=True, help_text='Copier at coller le lien facebook de votre page ici.', max_length=250, null=True, verbose_name='compte facebook')),
-                ('instagram', models.URLField(blank=True, help_text='Copier at coller le lien instagram de votre page ici.', max_length=250, null=True, verbose_name='compte instagram')),
-                ('user', models.ForeignKey(on_delete=django.db.models.deletion.PROTECT, to=settings.AUTH_USER_MODEL, verbose_name='users')),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                (
+                    "created_at",
+                    models.DateTimeField(
+                        default=django.utils.timezone.now,
+                        editable=False,
+                        verbose_name="date de création",
+                    ),
+                ),
+                ("updated_at", models.DateTimeField(auto_now=True)),
+                (
+                    "facebook",
+                    models.URLField(
+                        blank=True,
+                        help_text="Copier at coller le lien facebook de votre page ici.",
+                        max_length=250,
+                        null=True,
+                        verbose_name="compte facebook",
+                    ),
+                ),
+                (
+                    "instagram",
+                    models.URLField(
+                        blank=True,
+                        help_text="Copier at coller le lien instagram de votre page ici.",
+                        max_length=250,
+                        null=True,
+                        verbose_name="compte instagram",
+                    ),
+                ),
+                (
+                    "user",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.PROTECT,
+                        to=settings.AUTH_USER_MODEL,
+                        verbose_name="users",
+                    ),
+                ),
             ],
             options={
-                'verbose_name_plural': 'profile reseaux sociaux',
-                'db_table': 'accounts_social_db',
+                "verbose_name_plural": "profile reseaux sociaux",
+                "db_table": "accounts_social_db",
             },
         ),
         migrations.CreateModel(
-            name='GuestCustomer',
+            name="GuestCustomer",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('created_at', models.DateTimeField(default=django.utils.timezone.now, editable=False, verbose_name='date de création')),
-                ('updated_at', models.DateTimeField(auto_now=True)),
-                ('shipping_first_name', models.CharField(max_length=50, verbose_name='nom de famille')),
-                ('shipping_last_name', models.CharField(max_length=50, verbose_name='prénom')),
-                ('phone', phonenumber_field.modelfields.PhoneNumberField(max_length=128, region=None, verbose_name='numéro de téléphone')),
-                ('phone_two', phonenumber_field.modelfields.PhoneNumberField(blank=True, max_length=128, region=None, verbose_name='téléphone supplémentaire (facultatif)')),
-                ('shipping_city', models.CharField(max_length=50, verbose_name='ville')),
-                ('shipping_country', models.CharField(choices=[(None, 'Veuillez sélectionner un pays'), ("Côte d'Ivoire", "Côte d'Ivoire")], default="Côte d'Ivoire", max_length=25, verbose_name='Pays/Région')),
-                ('shipping_adress', models.CharField(max_length=50, verbose_name='situation géographique')),
-                ('shipping_zip', models.CharField(blank=True, max_length=10, null=True, verbose_name='adresse postal (facultatif)')),
-                ('note', models.TextField(blank=True, max_length=120, null=True, verbose_name='note de commande (facultatif)')),
-                ('email', models.EmailField(error_messages={'unique': 'Un utilisateur disposant de ce courriel existe déjà.'}, max_length=254, unique=True, verbose_name='email')),
-                ('active', models.BooleanField(default=True)),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                (
+                    "created_at",
+                    models.DateTimeField(
+                        default=django.utils.timezone.now,
+                        editable=False,
+                        verbose_name="date de création",
+                    ),
+                ),
+                ("updated_at", models.DateTimeField(auto_now=True)),
+                (
+                    "shipping_first_name",
+                    models.CharField(max_length=50, verbose_name="nom de famille"),
+                ),
+                (
+                    "shipping_last_name",
+                    models.CharField(max_length=50, verbose_name="prénom"),
+                ),
+                (
+                    "phone",
+                    phonenumber_field.modelfields.PhoneNumberField(
+                        max_length=128, region=None, verbose_name="numéro de téléphone"
+                    ),
+                ),
+                (
+                    "phone_two",
+                    phonenumber_field.modelfields.PhoneNumberField(
+                        blank=True,
+                        max_length=128,
+                        region=None,
+                        verbose_name="téléphone supplémentaire (facultatif)",
+                    ),
+                ),
+                (
+                    "shipping_city",
+                    models.CharField(max_length=50, verbose_name="ville"),
+                ),
+                (
+                    "shipping_country",
+                    models.CharField(
+                        choices=[
+                            (None, "Veuillez sélectionner un pays"),
+                            ("Côte d'Ivoire", "Côte d'Ivoire"),
+                        ],
+                        default="Côte d'Ivoire",
+                        max_length=25,
+                        verbose_name="Pays/Région",
+                    ),
+                ),
+                (
+                    "shipping_adress",
+                    models.CharField(
+                        max_length=50, verbose_name="situation géographique"
+                    ),
+                ),
+                (
+                    "shipping_zip",
+                    models.CharField(
+                        blank=True,
+                        max_length=10,
+                        null=True,
+                        verbose_name="adresse postal (facultatif)",
+                    ),
+                ),
+                (
+                    "note",
+                    models.TextField(
+                        blank=True,
+                        max_length=120,
+                        null=True,
+                        verbose_name="note de commande (facultatif)",
+                    ),
+                ),
+                (
+                    "email",
+                    models.EmailField(
+                        error_messages={
+                            "unique": "Un utilisateur disposant de ce courriel existe déjà."
+                        },
+                        max_length=254,
+                        unique=True,
+                        verbose_name="email",
+                    ),
+                ),
+                ("active", models.BooleanField(default=True)),
             ],
             options={
-                'verbose_name_plural': 'acheteur(s)',
-                'db_table': 'accounts_buyer_db',
-                'ordering': ('-created_at', '-active'),
-                'get_latest_by': ('-created_at', '-active'),
-                'index_together': {('email',)},
+                "verbose_name_plural": "acheteur(s)",
+                "db_table": "accounts_buyer_db",
+                "ordering": ("-created_at", "-active"),
+                "get_latest_by": ("-created_at", "-active"),
+                "index_together": {("email",)},
             },
         ),
         migrations.AddIndex(
-            model_name='profilesocialmedia',
-            index=models.Index(fields=['id'], name='id_rs_index'),
+            model_name="profilesocialmedia",
+            index=models.Index(fields=["id"], name="id_rs_index"),
         ),
         migrations.AlterIndexTogether(
-            name='profilesocialmedia',
-            index_together={('user',)},
+            name="profilesocialmedia",
+            index_together={("user",)},
         ),
         migrations.AddIndex(
-            model_name='user',
-            index=models.Index(fields=['id'], name='id_index'),
+            model_name="user",
+            index=models.Index(fields=["id"], name="id_index"),
         ),
         migrations.AlterIndexTogether(
-            name='user',
-            index_together={('email',)},
+            name="user",
+            index_together={("email",)},
         ),
     ]

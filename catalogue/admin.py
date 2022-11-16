@@ -12,7 +12,7 @@ class ProductImageInline(admin.TabularInline):
     max_num = 3
     show_change_link = True
     model = models.ProductImage
-    readonly_fields = ['product']
+    readonly_fields = ["product"]
 
 
 class ProductAttributeValueAdmin(admin.TabularInline):
@@ -20,57 +20,61 @@ class ProductAttributeValueAdmin(admin.TabularInline):
     extra = 2
 
 
-
 @admin.register(models.Product)
 class ProductAdmin(SummernoteModelAdmin):
     model = models.Product
-    date_hierarchy = 'created_at'
+    date_hierarchy = "created_at"
     fieldsets = (
-        ('information sur le produit', {'fields':
-            (
-                "user",
-                "category",
-                ("name", "price"),
-            )}
+        (
+            "information sur le produit",
+            {
+                "fields": (
+                    "user",
+                    "category",
+                    ("name", "price"),
+                )
+            },
         ),
         (
-            'description du produit',
+            "description du produit",
             {
-                'classes': ('collapse',),
-                'fields': [
-                    'description', 'keywords',
+                "classes": ("collapse",),
+                "fields": [
+                    "description",
+                    "keywords",
                     ("is_external", "is_active"),
                 ],
-            }
+            },
         ),
     )
     list_display_links = (
-        'name',
-        'get_product_shop',
+        "name",
+        "get_product_shop",
     )
     list_display = [
-        'get_product_shop', 'category', 'name',
-        'price', 'get_vouchers', 'get_vouchers_price',
-        'product_link', 'is_active', 'get_product_image',
+        "get_product_shop",
+        "category",
+        "name",
+        "price",
+        "get_vouchers",
+        "get_vouchers_price",
+        "product_link",
+        "is_active",
+        "get_product_image",
     ]
-    list_filter = [
-        'user__store',
-        'category'
-    ]
+    list_filter = ["user__store", "category"]
     list_editable = (
-        'category',
+        "category",
         "is_active",
     )
     readonly_fields = [
-        'get_product_shop',
+        "get_product_shop",
     ]
     list_per_page = 10
     inlines = [ProductAttributeValueAdmin, ProductImageInline]
-    prepopulated_fields = {
-        'keywords': ('name',)
-    }
-    search_fields = ['category', 'name', 'keywords']
-    exclude = ('updated_at', 'created_at', 'timestamp')
+    prepopulated_fields = {"keywords": ("name",)}
+    search_fields = ["category", "name", "keywords"]
+    exclude = ("updated_at", "created_at", "timestamp")
     actions = [export_to_csv]
 
     @mark_safe
@@ -86,4 +90,4 @@ class ProductAdmin(SummernoteModelAdmin):
             """
             return format_html(link)
         else:
-            return 'Aucun lien'
+            return "Aucun lien"

@@ -11,37 +11,88 @@ class Migration(migrations.Migration):
 
     initial = True
 
-    dependencies = [
-    ]
+    dependencies = []
 
     operations = [
         migrations.CreateModel(
-            name='Category',
+            name="Category",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('created_at', models.DateTimeField(default=django.utils.timezone.now, editable=False, verbose_name='date de création')),
-                ('updated_at', models.DateTimeField(auto_now=True)),
-                ('slug', models.SlugField(blank=True, help_text='Automatiquement formé à partir du nom.', max_length=225, null=True, unique=True, verbose_name='URL de la boutique')),
-                ('name', models.CharField(db_index=True, help_text='Définir le nom de cette catégorie.', max_length=120, verbose_name='sous-catégorie')),
-                ('image', models.ImageField(blank=True, help_text='Ajouter une image à cette catégorie.', null=True, upload_to=helpers.utils.upload_promotion_image_path, verbose_name='image')),
-                ('is_active', models.BooleanField(default=True, verbose_name='active')),
-                ('lft', models.PositiveIntegerField(editable=False)),
-                ('rght', models.PositiveIntegerField(editable=False)),
-                ('tree_id', models.PositiveIntegerField(db_index=True, editable=False)),
-                ('level', models.PositiveIntegerField(editable=False)),
-                ('parent', mptt.fields.TreeForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.SET_NULL, related_name='children', to='category.category', verbose_name='catégorie principale')),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                (
+                    "created_at",
+                    models.DateTimeField(
+                        default=django.utils.timezone.now,
+                        editable=False,
+                        verbose_name="date de création",
+                    ),
+                ),
+                ("updated_at", models.DateTimeField(auto_now=True)),
+                (
+                    "slug",
+                    models.SlugField(
+                        blank=True,
+                        help_text="Automatiquement formé à partir du nom.",
+                        max_length=225,
+                        null=True,
+                        unique=True,
+                        verbose_name="URL de la boutique",
+                    ),
+                ),
+                (
+                    "name",
+                    models.CharField(
+                        db_index=True,
+                        help_text="Définir le nom de cette catégorie.",
+                        max_length=120,
+                        verbose_name="sous-catégorie",
+                    ),
+                ),
+                (
+                    "image",
+                    models.ImageField(
+                        blank=True,
+                        help_text="Ajouter une image à cette catégorie.",
+                        null=True,
+                        upload_to=helpers.utils.upload_promotion_image_path,
+                        verbose_name="image",
+                    ),
+                ),
+                ("is_active", models.BooleanField(default=True, verbose_name="active")),
+                ("lft", models.PositiveIntegerField(editable=False)),
+                ("rght", models.PositiveIntegerField(editable=False)),
+                ("tree_id", models.PositiveIntegerField(db_index=True, editable=False)),
+                ("level", models.PositiveIntegerField(editable=False)),
+                (
+                    "parent",
+                    mptt.fields.TreeForeignKey(
+                        blank=True,
+                        null=True,
+                        on_delete=django.db.models.deletion.SET_NULL,
+                        related_name="children",
+                        to="category.category",
+                        verbose_name="catégorie principale",
+                    ),
+                ),
             ],
             options={
-                'verbose_name_plural': 'catégories',
-                'db_table': 'category_db',
+                "verbose_name_plural": "catégories",
+                "db_table": "category_db",
             },
         ),
         migrations.AddIndex(
-            model_name='category',
-            index=models.Index(fields=['id'], name='category_db_id_632add_idx'),
+            model_name="category",
+            index=models.Index(fields=["id"], name="category_db_id_632add_idx"),
         ),
         migrations.AlterUniqueTogether(
-            name='category',
-            unique_together={('parent', 'slug')},
+            name="category",
+            unique_together={("parent", "slug")},
         ),
     ]

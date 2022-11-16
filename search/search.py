@@ -7,23 +7,39 @@ from catalogue.models import Product
 
 
 STRIP_WORDS = [
-    'a', 'an', 'and', 'by', 'for', 'from', 'in', 'no', 'not',
-    'of', 'on', 'or', 'that', 'the', 'to', 'with'
+    "a",
+    "an",
+    "and",
+    "by",
+    "for",
+    "from",
+    "in",
+    "no",
+    "not",
+    "of",
+    "on",
+    "or",
+    "that",
+    "the",
+    "to",
+    "with",
 ]
 
 
 def store(request, q):
 
     """
-        enregistre le texte de la recherche
-        note : si le terme de recherche est long d'au moins
-        trois caractères, stocker en db
+    enregistre le texte de la recherche
+    note : si le terme de recherche est long d'au moins
+    trois caractères, stocker en db
     """
-    
+
     if len(q) > 4:
         term = SearchTerm()
         term.q = q
-        term.ip_address = request.META.get('HTTP_X_FORWARDED_FOR') or request.META.get('REMOTE_ADDR')
+        term.ip_address = request.META.get("HTTP_X_FORWARDED_FOR") or request.META.get(
+            "REMOTE_ADDR"
+        )
         term.user = None
         if request.user.is_authenticated:
             term.user = request.user
@@ -33,7 +49,7 @@ def store(request, q):
 def products(search_text):
 
     """
-        obtenir les produits correspondant au texte de recherche
+    obtenir les produits correspondant au texte de recherche
     """
 
     words = _prepare_words(search_text)
@@ -49,16 +65,16 @@ def products(search_text):
             | Q(slug__icontains=word)
             | Q(price__icontains=word)
         ).distinct()
-        
-        results['products'] = lookups
+
+        results["products"] = lookups
 
     return results
 
- 
+
 def _prepare_words(search_text):
 
     """
-        supprimer les mots courants, limiter à 5 mots
+    supprimer les mots courants, limiter à 5 mots
     """
 
     words = search_text.split()

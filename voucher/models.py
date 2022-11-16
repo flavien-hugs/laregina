@@ -5,9 +5,7 @@ from django.urls import reverse
 from django.contrib import admin
 from django.conf import settings
 from django.utils.timezone import now
-from django.core.validators import(
-    MinValueValidator, MaxValueValidator
-)
+from django.core.validators import MinValueValidator, MaxValueValidator
 
 from catalogue.models import Product
 from helpers.models import BaseTimeStampModel, ApplyDiscountModel
@@ -19,14 +17,13 @@ validators = [MinValueValidator(0), MaxValueValidator(100)]
 class Voucher(BaseTimeStampModel, ApplyDiscountModel):
 
     discount = models.IntegerField(
-        verbose_name="pourcentage de réduction",
-        validators=validators
+        verbose_name="pourcentage de réduction", validators=validators
     )
 
     class Meta:
-        ordering = ['-created_at']
+        ordering = ["-created_at"]
         verbose_name_plural = "réductions produits"
-        indexes = [models.Index(fields=['id'])]
+        indexes = [models.Index(fields=["id"])]
 
     def __str__(self):
         return f"{self.discount}% de réductions"
@@ -34,7 +31,7 @@ class Voucher(BaseTimeStampModel, ApplyDiscountModel):
     @admin.display(description="prix réduit")
     def get_price(self):
         product_price = [
-            ((obj.price * self.discount)/100) for obj in self.get_products()
+            ((obj.price * self.discount) / 100) for obj in self.get_products()
         ]
         return product_price
 
@@ -43,13 +40,7 @@ class Voucher(BaseTimeStampModel, ApplyDiscountModel):
         return f"{self.discount}%"
 
     def get_update_voucher_url(self):
-        return reverse(
-            'dashboard_seller:voucher_update',
-            kwargs={'pk': str(self.pk)}
-        )
+        return reverse("dashboard_seller:voucher_update", kwargs={"pk": str(self.pk)})
 
     def get_delete_voucher_url(self):
-        return reverse(
-            'dashboard_seller:voucher_delete',
-            kwargs={'pk': str(self.pk)}
-        )
+        return reverse("dashboard_seller:voucher_delete", kwargs={"pk": str(self.pk)})

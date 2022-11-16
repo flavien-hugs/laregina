@@ -8,7 +8,6 @@ from django.utils import timezone
 
 # STRUCTURE PRODUCT MODEL QUERYSET
 class CatalogueQuerySet(models.query.QuerySet):
-    
     def active(self):
         return self.filter(is_active=True)
 
@@ -30,7 +29,6 @@ class CatalogueQuerySet(models.query.QuerySet):
 
 # STRUCTURE PRODUCT MODEL MANAGER
 class CatalogueManager(models.Manager):
-
     def get_queryset(self):
         return CatalogueQuerySet(self.model, using=self._db)
 
@@ -41,7 +39,7 @@ class CatalogueManager(models.Manager):
         return self.get_queryset().product_recent_add()
 
     def search(self):
-        return self.get_queryset().product_recent_add().search(query)
+        return self.get_queryset().product_recent_add().search()
 
     def get_category_related(self, instance):
         product = self.get_queryset().filter(category=instance.category)

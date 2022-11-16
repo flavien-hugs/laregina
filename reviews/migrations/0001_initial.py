@@ -9,31 +9,61 @@ class Migration(migrations.Migration):
     initial = True
 
     dependencies = [
-        ('catalogue', '0001_initial'),
+        ("catalogue", "0001_initial"),
     ]
 
     operations = [
         migrations.CreateModel(
-            name='ProductReview',
+            name="ProductReview",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('name', models.CharField(max_length=180, null=True, verbose_name='nom & prénoms')),
-                ('email', models.EmailField(max_length=254, verbose_name='email')),
-                ('rating', models.PositiveSmallIntegerField(choices=[(1, 1), (2, 2), (3, 3), (4, 4), (5, 5)], default=1, verbose_name='note')),
-                ('content', models.TextField(verbose_name='avis client')),
-                ('created_time_at', models.DateField(auto_now_add=True)),
-                ('created_hour_at', models.TimeField(auto_now_add=True)),
-                ('is_approved', models.BooleanField(default=False, verbose_name='approuvé ?')),
-                ('product', models.ForeignKey(on_delete=django.db.models.deletion.PROTECT, to='catalogue.product', verbose_name='produit')),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                (
+                    "name",
+                    models.CharField(
+                        max_length=180, null=True, verbose_name="nom & prénoms"
+                    ),
+                ),
+                ("email", models.EmailField(max_length=254, verbose_name="email")),
+                (
+                    "rating",
+                    models.PositiveSmallIntegerField(
+                        choices=[(1, 1), (2, 2), (3, 3), (4, 4), (5, 5)],
+                        default=1,
+                        verbose_name="note",
+                    ),
+                ),
+                ("content", models.TextField(verbose_name="avis client")),
+                ("created_time_at", models.DateField(auto_now_add=True)),
+                ("created_hour_at", models.TimeField(auto_now_add=True)),
+                (
+                    "is_approved",
+                    models.BooleanField(default=False, verbose_name="approuvé ?"),
+                ),
+                (
+                    "product",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.PROTECT,
+                        to="catalogue.product",
+                        verbose_name="produit",
+                    ),
+                ),
             ],
             options={
-                'verbose_name_plural': 'feedbacks',
-                'ordering': ['-rating', '-created_time_at', '-created_time_at'],
-                'get_latest_by': ['-created_time_at', '-created_time_at', '-rating'],
+                "verbose_name_plural": "feedbacks",
+                "ordering": ["-rating", "-created_time_at", "-created_time_at"],
+                "get_latest_by": ["-created_time_at", "-created_time_at", "-rating"],
             },
         ),
         migrations.AddIndex(
-            model_name='productreview',
-            index=models.Index(fields=['id'], name='reviews_pro_id_06da78_idx'),
+            model_name="productreview",
+            index=models.Index(fields=["id"], name="reviews_pro_id_06da78_idx"),
         ),
     ]

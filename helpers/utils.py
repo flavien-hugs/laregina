@@ -16,7 +16,6 @@ from django.contrib.auth.tokens import default_token_generator
 
 
 class EmailThread(threading.Thread):
-
     def __init__(self, message):
         self.message = message
         threading.Thread.__init__(self)
@@ -26,7 +25,6 @@ class EmailThread(threading.Thread):
 
 
 class SendEmail:
-
     @staticmethod
     def send_confirmation_link(template, request, user, subject):
 
@@ -39,7 +37,7 @@ class SendEmail:
                 "domain": current_site,
                 "protocol": request.scheme,
                 "uidb64": urlsafe_base64_encode(force_bytes(user.pk)),
-                "token": default_token_generator.make_token(user)
+                "token": default_token_generator.make_token(user),
             },
         )
         message = EmailMessage(subject=subject, body=html_message, to=[user.email])
@@ -48,7 +46,7 @@ class SendEmail:
 
 
 def random_string_generator(size=8, carac=string.ascii_lowercase + string.digits):
-    return ''.join(random.choice(carac) for _ in range(size))
+    return "".join(random.choice(carac) for _ in range(size))
 
 
 def unique_key_generator(instance):
@@ -110,10 +108,7 @@ def unique_slug_generator(instance, new_slug=None):
     if new_slug is not None:
         slug = new_slug
     else:
-        slug = (
-            slugify(instance.name)
-            or slugify(instance.store)
-        )
+        slug = slugify(instance.name) or slugify(instance.store)
 
     Klass = instance.__class__
     qs_exists = Klass.objects.filter(slug=slug).exists()

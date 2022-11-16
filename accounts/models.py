@@ -1,6 +1,7 @@
 import random
 import string
 import datetime
+import logging
 
 from django.db import models
 from django.urls import reverse
@@ -11,119 +12,107 @@ from django.core.validators import FileExtensionValidator
 from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin
 
 from accounts.managers import UserManager
-from helpers.utils import(
-    upload_image_logo_path, vendor_unique_slug_generator
-)
+from helpers.utils import upload_image_logo_path, vendor_unique_slug_generator
 
-from helpers.models import(
-    BaseTimeStampModel, BaseOrderInfo, ModelSlugMixin
-)
+from helpers.models import BaseTimeStampModel, BaseOrderInfo, ModelSlugMixin
 
 import phonenumbers
 
 from imagekit.models import ImageSpecField
 from imagekit.processors import ResizeToFill, Adjust
 
+logger = logging.getLogger(__name__)
+NULL_AND_BLANK = {"null": True, "blank": True}
+UNIQUE_AND_DB_INDEX = {"null": False, "unique": True, "db_index": True}
+image_validators = [FileExtensionValidator(["jpeg", "jpg", "png"])]
 
-NULL_AND_BLANK = {'null': True, 'blank': True}
-UNIQUE_AND_DB_INDEX = {'null': False, 'unique': True, 'db_index': True}
-image_validators = [FileExtensionValidator(['jpeg', 'jpg', 'png'])]
 
 class User(
-    BaseOrderInfo, ModelSlugMixin, BaseTimeStampModel,
-    AbstractBaseUser, PermissionsMixin
+    BaseOrderInfo,
+    ModelSlugMixin,
+    BaseTimeStampModel,
+    AbstractBaseUser,
+    PermissionsMixin,
 ):
 
     CIVILITY_CHOICES = (
-        ('M.', 'M.'),
-        ('Mme', 'Mme'),
-        ('Mlle', 'Mlle'),
+        ("M.", "M."),
+        ("Mme", "Mme"),
+        ("Mlle", "Mlle"),
     )
 
     civility = models.CharField(
         max_length=4,
         default="M.",
         choices=CIVILITY_CHOICES,
-        verbose_name='civilité',
+        verbose_name="civilité",
     )
     store_id = models.CharField(
-        max_length=50,
-        verbose_name='ID BOUTIQUE',
-        unique=True,
-        **NULL_AND_BLANK
+        max_length=50, verbose_name="ID BOUTIQUE", unique=True, **NULL_AND_BLANK
     )
     email = models.EmailField(
         unique=True,
         max_length=254,
-        verbose_name='email',
+        verbose_name="email",
         error_messages={
-            'unique': "Un utilisateur disposant de ce courriel existe déjà."
-        }
+            "unique": "Un utilisateur disposant de ce courriel existe déjà."
+        },
     )
     store = models.CharField(
         max_length=80,
-        verbose_name='boutique',
+        verbose_name="boutique",
         unique=True,
-        error_messages={
-            'unique': "Un magasin disposant de ce nom existe déjà."
-        },
+        error_messages={"unique": "Un magasin disposant de ce nom existe déjà."},
     )
     store_description = models.TextField(
-        max_length=254,
-        verbose_name='description de la boutique',
-        **NULL_AND_BLANK
+        max_length=254, verbose_name="description de la boutique", **NULL_AND_BLANK
     )
     logo = models.ImageField(
         verbose_name="logo",
         upload_to=upload_image_logo_path,
         validators=image_validators,
         help_text="Ajouter le logo de votre boutique",
-        **NULL_AND_BLANK
+        **NULL_AND_BLANK,
     )
     formatted_logo = ImageSpecField(
-        source='logo',
+        source="logo",
         processors=[ResizeToFill(150, 150)],
-        format='PNG',
-        options={'quality': 100}
+        format="PNG",
+        options={"quality": 100},
     )
     is_seller = models.BooleanField(
         default=False,
-        verbose_name='statut vendeur',
+        verbose_name="statut vendeur",
     )
-    is_staff = models.BooleanField(
-        verbose_name='statut équipe',
-        default=False
-    )
+    is_staff = models.BooleanField(verbose_name="statut équipe", default=False)
     is_superuser = models.BooleanField(
-        verbose_name='statut administrateur',
-        default=False
+        verbose_name="statut administrateur", default=False
     )
-    is_active = models.BooleanField(
-        verbose_name='active',
-        default=True
-    )
+    is_active = models.BooleanField(verbose_name="active", default=True)
     last_login = models.DateTimeField(
         auto_now_add=True,
-        verbose_name='date de derniere connexion',
+        verbose_name="date de derniere connexion",
     )
     date_joined = models.DateTimeField(
         auto_now_add=True,
         verbose_name="date d'inscription",
     )
 
-    USERNAME_FIELD = 'email'
-    EMAIL_FIELD = 'email'
+    USERNAME_FIELD = "email"
+    EMAIL_FIELD = "email"
     REQUIRED_FIELDS = []
 
     objects = UserManager()
 
     class Meta:
-        app_label = 'accounts'
-        db_table = 'accounts_db'
+        app_label = "accounts"
+        db_table = "accounts_db"
         ordering = ["-date_joined"]
-        index_together = (('email',),)
-        verbose_name_plural = 'boutiques'
-        indexes = [models.Index(fields=['id'], name='id_index'),]
+        index_together = (("email",),)
+        verbose_name_plural = "boutiques"
+        indexes = [
+            models.Index(fields=["id"], name="id_index"),
+        ]
 
     def __str__(self):
         return f"{self.store.upper()} | {self.shipping_last_name.capitalize()}"
@@ -134,10 +123,10 @@ class User(
         super().save(*args, **kwargs)
 
     def generate(self, nb_carac):
-        today = datetime.date.today().strftime('%d%m%y')
+        today = datetime.date.today().strftime("%d%m%y")
         carac = string.digits
         random_carac = [random.choice(carac) for _ in range(nb_carac)]
-        self.store_id = 'LRG-{}'.format(today + ''.join(random_carac))
+        self.store_id = "LRG-{}".format(today + "".join(random_carac))
 
     def get_fullname(self):
         if self.shipping_last_name and self.shipping_first_name:
@@ -157,13 +146,13 @@ class User(
         return self.is_superuser
 
     def get_update_url(self):
-        return reverse('dashboard_seller:update', kwargs={'slug': self.slug})
+        return reverse("dashboard_seller:update", kwargs={"slug": self.slug})
 
     def get_absolute_url(self):
-        return reverse('vendor:store_detail_view', kwargs={'slug': self.slug})
+        return reverse("vendor:store_detail_view", kwargs={"slug": self.slug})
 
     def get_social_url(self):
-        return reverse('dashboard_seller:rs_update', kwargs={"slug": self.slug})
+        return reverse("dashboard_seller:rs_update", kwargs={"slug": self.slug})
 
     @admin.display(description="logo")
     def get_vendor_logo(self):
@@ -178,16 +167,19 @@ class User(
 
     def orders(self):
         from checkout.models import Order, OrderItem
-        order = Order.objects.prefetch_related("status")\
-            .filter(orders__product__user=self, status=Order.SHIPPED)
-        order_item = OrderItem.objects\
-            .prefetch_related("order")\
-            .filter(models.Q(order__in=order))
+
+        order = Order.objects.prefetch_related("status").filter(
+            orders__product__user=self, status=Order.SHIPPED
+        )
+        order_item = OrderItem.objects.prefetch_related("order").filter(
+            models.Q(order__in=order)
+        )
         return order_item
 
     @admin.display(description="nombre de produits")
     def products(self):
         from catalogue.models import Product
+
         products = Product.objects.prefetch_related("user").filter(user=self)
         return products.count()
 
@@ -196,30 +188,28 @@ class User(
 
 
 class ProfileSocialMedia(BaseTimeStampModel):
-    user = models.ForeignKey(
-        to=User,
-        on_delete=models.PROTECT,
-        verbose_name="users"
-    )
+    user = models.ForeignKey(to=User, on_delete=models.PROTECT, verbose_name="users")
     facebook = models.URLField(
-        verbose_name='compte facebook',
+        verbose_name="compte facebook",
         max_length=250,
         help_text="Copier at coller le lien facebook de votre page ici.",
-        **NULL_AND_BLANK
+        **NULL_AND_BLANK,
     )
     instagram = models.URLField(
-        verbose_name='compte instagram',
+        verbose_name="compte instagram",
         max_length=250,
         help_text="Copier at coller le lien instagram de votre page ici.",
-        **NULL_AND_BLANK
+        **NULL_AND_BLANK,
     )
 
     class Meta:
-        app_label = 'accounts'
-        db_table = 'accounts_social_db'
-        index_together = (('user',),)
-        verbose_name_plural = 'profile reseaux sociaux'
-        indexes = [models.Index(fields=['id'], name='id_rs_index'),]
+        app_label = "accounts"
+        db_table = "accounts_social_db"
+        index_together = (("user",),)
+        verbose_name_plural = "profile reseaux sociaux"
+        indexes = [
+            models.Index(fields=["id"], name="id_rs_index"),
+        ]
 
     def __str__(self):
         return self.user.get_fullname()
@@ -236,23 +226,23 @@ class GuestCustomer(BaseOrderInfo, BaseTimeStampModel):
     email = models.EmailField(
         unique=True,
         max_length=254,
-        verbose_name='email',
+        verbose_name="email",
         error_messages={
-            'unique': "Un utilisateur disposant de ce courriel existe déjà."
-        }
+            "unique": "Un utilisateur disposant de ce courriel existe déjà."
+        },
     )
     active = models.BooleanField(default=True)
 
     class Meta:
-        app_label = 'accounts'
-        db_table = 'accounts_buyer_db'
-        index_together = (('email',),)
-        ordering = ('-created_at', '-active')
-        get_latest_by = ('-created_at', '-active')
-        verbose_name_plural = 'acheteur(s)'
+        app_label = "accounts"
+        db_table = "accounts_buyer_db"
+        index_together = (("email",),)
+        ordering = ("-created_at", "-active")
+        get_latest_by = ("-created_at", "-active")
+        verbose_name_plural = "acheteur(s)"
 
     def __str__(self):
-        return '{email}({created})'.format(email=self.email, created=self.active)
+        return "{email}({created})".format(email=self.email, created=self.active)
 
     def get_fullname(self):
         if self.shipping_last_name and self.shipping_first_name:
@@ -275,5 +265,5 @@ def delete_old_image(sender, instance, *args, **kwargs):
             old_image = Klass.objects.get(pk=instance.pk).logo
             if old_image and old_image.url != instance.logo.url:
                 old_image.delete(save=False)
-        except:
-            pass
+        except Klass.DoesNotExist:
+            logger.error("The Klass does not exist with that ID")

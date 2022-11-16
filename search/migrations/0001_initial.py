@@ -15,24 +15,53 @@ class Migration(migrations.Migration):
 
     operations = [
         migrations.CreateModel(
-            name='SearchTerm',
+            name="SearchTerm",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('q', models.CharField(max_length=50, verbose_name='mot recherché')),
-                ('ip_address', models.CharField(max_length=225, verbose_name='adresse IP')),
-                ('date_search_at', models.DateField(auto_now_add=True, verbose_name='date de recherche')),
-                ('time_search_at', models.TimeField(auto_now=True, verbose_name='heure de la recherche')),
-                ('user', models.ForeignKey(null=True, on_delete=django.db.models.deletion.SET_NULL, to=settings.AUTH_USER_MODEL, verbose_name='user')),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("q", models.CharField(max_length=50, verbose_name="mot recherché")),
+                (
+                    "ip_address",
+                    models.CharField(max_length=225, verbose_name="adresse IP"),
+                ),
+                (
+                    "date_search_at",
+                    models.DateField(
+                        auto_now_add=True, verbose_name="date de recherche"
+                    ),
+                ),
+                (
+                    "time_search_at",
+                    models.TimeField(
+                        auto_now=True, verbose_name="heure de la recherche"
+                    ),
+                ),
+                (
+                    "user",
+                    models.ForeignKey(
+                        null=True,
+                        on_delete=django.db.models.deletion.SET_NULL,
+                        to=settings.AUTH_USER_MODEL,
+                        verbose_name="user",
+                    ),
+                ),
             ],
             options={
-                'verbose_name_plural': 'recherches',
-                'db_table': 'search_db',
-                'ordering': ['-date_search_at', '-time_search_at'],
-                'get_latest_by': ['-date_search_at', '-time_search_at'],
+                "verbose_name_plural": "recherches",
+                "db_table": "search_db",
+                "ordering": ["-date_search_at", "-time_search_at"],
+                "get_latest_by": ["-date_search_at", "-time_search_at"],
             },
         ),
         migrations.AddIndex(
-            model_name='searchterm',
-            index=models.Index(fields=['id'], name='search_db_id_1d10e1_idx'),
+            model_name="searchterm",
+            index=models.Index(fields=["id"], name="search_db_id_1d10e1_idx"),
         ),
     ]

@@ -11,7 +11,7 @@ class FilterMixin(object):
         try:
             qs = super().get_queryset(*args, **kwargs)
             return qs
-        except:
+        except Exception:
             raise ImproperlyConfigured(
                 "Vous devez disposer d'un queryset pour \
                 pouvoir utiliser le FilterMixin"
@@ -27,4 +27,3 @@ class FilterMixin(object):
             f = filter_class(self.request.GET, queryset=qs)
             kwargs["object_list"] = f
         return super().get_context_data(*args, **kwargs)
-		

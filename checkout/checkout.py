@@ -15,15 +15,16 @@ SMS_API_KEY = settings.SMS_API_KEY
 
 
 def get_checkout_url(request):
-    return reverse('checkout:checkout')
+    return reverse("checkout:checkout")
+
 
 def process(request):
 
     order = create_order(request)
     context = {
-        'order': order,
-        'payment': order.payment,
-        'order_id': order.transaction_id,
+        "order": order,
+        "payment": order.payment,
+        "order_id": order.transaction_id,
     }
     return context
 
@@ -45,7 +46,7 @@ def create_order(request):
 
     if order.pk:
 
-        """ si la sauvegarde de la commande a réussi """
+        """si la sauvegarde de la commande a réussi"""
         cart_items = cart.get_cart_items(request)
 
         for cart_item in cart_items:

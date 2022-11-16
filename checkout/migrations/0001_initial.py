@@ -11,97 +11,250 @@ class Migration(migrations.Migration):
     initial = True
 
     dependencies = [
-        ('catalogue', '0001_initial'),
+        ("catalogue", "0001_initial"),
     ]
 
     operations = [
         migrations.CreateModel(
-            name='Order',
+            name="Order",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('created_at', models.DateTimeField(default=django.utils.timezone.now, editable=False, verbose_name='date de création')),
-                ('updated_at', models.DateTimeField(auto_now=True)),
-                ('email', models.EmailField(max_length=50, verbose_name='adresse de messagerie')),
-                ('shipping_first_name', models.CharField(max_length=50, verbose_name='nom de famille')),
-                ('shipping_last_name', models.CharField(max_length=50, verbose_name='prénom')),
-                ('phone', phonenumber_field.modelfields.PhoneNumberField(max_length=128, region=None, verbose_name='numéro de téléphone')),
-                ('phone_two', phonenumber_field.modelfields.PhoneNumberField(blank=True, max_length=128, region=None, verbose_name='téléphone supplémentaire (facultatif)')),
-                ('shipping_city', models.CharField(max_length=50, verbose_name='ville')),
-                ('shipping_country', models.CharField(choices=[(None, 'Veuillez sélectionner un pays'), ("Côte d'Ivoire", "Côte d'Ivoire")], default="Côte d'Ivoire", max_length=25, verbose_name='Pays/Région')),
-                ('shipping_adress', models.CharField(max_length=50, verbose_name='situation géographique')),
-                ('shipping_zip', models.CharField(blank=True, max_length=10, null=True, verbose_name='adresse postal (facultatif)')),
-                ('note', models.TextField(blank=True, max_length=120, null=True, verbose_name='note de commande (facultatif)')),
-                ('status', models.CharField(choices=[('traitement en cours', 'traitement en cours'), ('livraison en cours', 'livraison en cours'), ('livrée', 'livrée'), ('annulée', 'annulée')], default='traitement en cours', max_length=120, verbose_name='status')),
-                ('payment', models.PositiveIntegerField(choices=[(1, 'PAYER CASH'), (0, 'PAYER À LA LIVRAISON')], default=1, verbose_name='Type de paiment')),
-                ('transaction_id', models.CharField(blank=True, max_length=20, null=True, unique=True, verbose_name='id de la commande')),
-                ('ip_address', models.CharField(blank=True, max_length=50, null=True, verbose_name='adresse ip')),
-                ('emailing', models.BooleanField(default=False, verbose_name='abonnement aux offres et promotions')),
-                ('date', models.DateTimeField(auto_now_add=True, verbose_name='date de la commade')),
-                ('last_updated', models.DateTimeField(auto_now=True, verbose_name='derniere modification')),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                (
+                    "created_at",
+                    models.DateTimeField(
+                        default=django.utils.timezone.now,
+                        editable=False,
+                        verbose_name="date de création",
+                    ),
+                ),
+                ("updated_at", models.DateTimeField(auto_now=True)),
+                (
+                    "email",
+                    models.EmailField(
+                        max_length=50, verbose_name="adresse de messagerie"
+                    ),
+                ),
+                (
+                    "shipping_first_name",
+                    models.CharField(max_length=50, verbose_name="nom de famille"),
+                ),
+                (
+                    "shipping_last_name",
+                    models.CharField(max_length=50, verbose_name="prénom"),
+                ),
+                (
+                    "phone",
+                    phonenumber_field.modelfields.PhoneNumberField(
+                        max_length=128, region=None, verbose_name="numéro de téléphone"
+                    ),
+                ),
+                (
+                    "phone_two",
+                    phonenumber_field.modelfields.PhoneNumberField(
+                        blank=True,
+                        max_length=128,
+                        region=None,
+                        verbose_name="téléphone supplémentaire (facultatif)",
+                    ),
+                ),
+                (
+                    "shipping_city",
+                    models.CharField(max_length=50, verbose_name="ville"),
+                ),
+                (
+                    "shipping_country",
+                    models.CharField(
+                        choices=[
+                            (None, "Veuillez sélectionner un pays"),
+                            ("Côte d'Ivoire", "Côte d'Ivoire"),
+                        ],
+                        default="Côte d'Ivoire",
+                        max_length=25,
+                        verbose_name="Pays/Région",
+                    ),
+                ),
+                (
+                    "shipping_adress",
+                    models.CharField(
+                        max_length=50, verbose_name="situation géographique"
+                    ),
+                ),
+                (
+                    "shipping_zip",
+                    models.CharField(
+                        blank=True,
+                        max_length=10,
+                        null=True,
+                        verbose_name="adresse postal (facultatif)",
+                    ),
+                ),
+                (
+                    "note",
+                    models.TextField(
+                        blank=True,
+                        max_length=120,
+                        null=True,
+                        verbose_name="note de commande (facultatif)",
+                    ),
+                ),
+                (
+                    "status",
+                    models.CharField(
+                        choices=[
+                            ("traitement en cours", "traitement en cours"),
+                            ("livraison en cours", "livraison en cours"),
+                            ("livrée", "livrée"),
+                            ("annulée", "annulée"),
+                        ],
+                        default="traitement en cours",
+                        max_length=120,
+                        verbose_name="status",
+                    ),
+                ),
+                (
+                    "payment",
+                    models.PositiveIntegerField(
+                        choices=[(1, "PAYER CASH"), (0, "PAYER À LA LIVRAISON")],
+                        default=1,
+                        verbose_name="Type de paiment",
+                    ),
+                ),
+                (
+                    "transaction_id",
+                    models.CharField(
+                        blank=True,
+                        max_length=20,
+                        null=True,
+                        unique=True,
+                        verbose_name="id de la commande",
+                    ),
+                ),
+                (
+                    "ip_address",
+                    models.CharField(
+                        blank=True, max_length=50, null=True, verbose_name="adresse ip"
+                    ),
+                ),
+                (
+                    "emailing",
+                    models.BooleanField(
+                        default=False,
+                        verbose_name="abonnement aux offres et promotions",
+                    ),
+                ),
+                (
+                    "date",
+                    models.DateTimeField(
+                        auto_now_add=True, verbose_name="date de la commade"
+                    ),
+                ),
+                (
+                    "last_updated",
+                    models.DateTimeField(
+                        auto_now=True, verbose_name="derniere modification"
+                    ),
+                ),
             ],
             options={
-                'verbose_name_plural': 'Payer Cash',
+                "verbose_name_plural": "Payer Cash",
             },
         ),
         migrations.CreateModel(
-            name='OrderItem',
+            name="OrderItem",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('quantity', models.IntegerField(default=1, verbose_name='quantité')),
-                ('date_updated', models.DateTimeField(auto_now=True, verbose_name='derniere modification')),
-                ('date_created', models.DateTimeField(auto_now=True, verbose_name='date ajout')),
-                ('order', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='orders', to='checkout.order', verbose_name='commande')),
-                ('product', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='products', to='catalogue.product', verbose_name='produit')),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("quantity", models.IntegerField(default=1, verbose_name="quantité")),
+                (
+                    "date_updated",
+                    models.DateTimeField(
+                        auto_now=True, verbose_name="derniere modification"
+                    ),
+                ),
+                (
+                    "date_created",
+                    models.DateTimeField(auto_now=True, verbose_name="date ajout"),
+                ),
+                (
+                    "order",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        related_name="orders",
+                        to="checkout.order",
+                        verbose_name="commande",
+                    ),
+                ),
+                (
+                    "product",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        related_name="products",
+                        to="catalogue.product",
+                        verbose_name="produit",
+                    ),
+                ),
             ],
             options={
-                'verbose_name_plural': 'panier',
-                'db_table': 'checkout_order_item_db',
-                'ordering': ['-date_created', '-date_updated'],
-                'get_latest_by': ['-date_created', '-date_updated'],
+                "verbose_name_plural": "panier",
+                "db_table": "checkout_order_item_db",
+                "ordering": ["-date_created", "-date_updated"],
+                "get_latest_by": ["-date_created", "-date_updated"],
             },
         ),
         migrations.AddIndex(
-            model_name='order',
-            index=models.Index(fields=['id'], name='checkout_or_id_79bcbc_idx'),
+            model_name="order",
+            index=models.Index(fields=["id"], name="checkout_or_id_79bcbc_idx"),
         ),
         migrations.CreateModel(
-            name='OrderCancelled',
-            fields=[
-            ],
+            name="OrderCancelled",
+            fields=[],
             options={
-                'verbose_name_plural': 'Commandes annulées',
-                'proxy': True,
-                'indexes': [],
-                'constraints': [],
+                "verbose_name_plural": "Commandes annulées",
+                "proxy": True,
+                "indexes": [],
+                "constraints": [],
             },
-            bases=('checkout.order',),
+            bases=("checkout.order",),
         ),
         migrations.CreateModel(
-            name='OrderCashOnDelivery',
-            fields=[
-            ],
+            name="OrderCashOnDelivery",
+            fields=[],
             options={
-                'verbose_name_plural': 'Payer à la livraison',
-                'proxy': True,
-                'indexes': [],
-                'constraints': [],
+                "verbose_name_plural": "Payer à la livraison",
+                "proxy": True,
+                "indexes": [],
+                "constraints": [],
             },
-            bases=('checkout.order',),
+            bases=("checkout.order",),
         ),
         migrations.CreateModel(
-            name='OrderShipped',
-            fields=[
-            ],
+            name="OrderShipped",
+            fields=[],
             options={
-                'verbose_name_plural': 'Commandes livrées',
-                'proxy': True,
-                'indexes': [],
-                'constraints': [],
+                "verbose_name_plural": "Commandes livrées",
+                "proxy": True,
+                "indexes": [],
+                "constraints": [],
             },
-            bases=('checkout.order',),
+            bases=("checkout.order",),
         ),
         migrations.AddIndex(
-            model_name='orderitem',
-            index=models.Index(fields=['id'], name='checkout_or_id_440f68_idx'),
+            model_name="orderitem",
+            index=models.Index(fields=["id"], name="checkout_or_id_440f68_idx"),
         ),
     ]

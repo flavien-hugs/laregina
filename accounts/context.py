@@ -1,4 +1,5 @@
 # accounts.context.py
 
+
 def profile(request):
-    return {'profile': request.user}
+    return {"profile": request.user}

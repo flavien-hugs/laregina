@@ -9,25 +9,54 @@ class Migration(migrations.Migration):
     initial = True
 
     dependencies = [
-        ('catalogue', '0001_initial'),
+        ("catalogue", "0001_initial"),
     ]
 
     operations = [
         migrations.CreateModel(
-            name='ProductView',
+            name="ProductView",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('ip_address', models.CharField(max_length=225, verbose_name='adresse ip')),
-                ('tracking_id', models.CharField(db_index=True, default='', max_length=50)),
-                ('date_viewed', models.DateField(auto_now=True, verbose_name='date de visite')),
-                ('time_viewed', models.TimeField(auto_now=True, verbose_name='heure de visite')),
-                ('product', models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.CASCADE, to='catalogue.product', verbose_name='produit')),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                (
+                    "ip_address",
+                    models.CharField(max_length=225, verbose_name="adresse ip"),
+                ),
+                (
+                    "tracking_id",
+                    models.CharField(db_index=True, default="", max_length=50),
+                ),
+                (
+                    "date_viewed",
+                    models.DateField(auto_now=True, verbose_name="date de visite"),
+                ),
+                (
+                    "time_viewed",
+                    models.TimeField(auto_now=True, verbose_name="heure de visite"),
+                ),
+                (
+                    "product",
+                    models.ForeignKey(
+                        blank=True,
+                        null=True,
+                        on_delete=django.db.models.deletion.CASCADE,
+                        to="catalogue.product",
+                        verbose_name="produit",
+                    ),
+                ),
             ],
             options={
-                'verbose_name_plural': 'statistiques',
-                'ordering': ('-date_viewed', '-time_viewed'),
-                'get_latest_by': ('-date_viewed', '-time_viewed'),
-                'abstract': False,
+                "verbose_name_plural": "statistiques",
+                "ordering": ("-date_viewed", "-time_viewed"),
+                "get_latest_by": ("-date_viewed", "-time_viewed"),
+                "abstract": False,
             },
         ),
     ]

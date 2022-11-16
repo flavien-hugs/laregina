@@ -1,1 +1,1 @@
-default_app_config = 'cart.apps.CartConfig'
+default_app_config = "cart.apps.CartConfig"

@@ -11,9 +11,6 @@ BEN = "Benin"
 MAL = "Mali"
 COM = "Comores"
 
-COUNTRY_CHOICES = (
-    (None, 'Veuillez sélectionner un pays'),
-    (CI, "Côte d'Ivoire")
-)
+COUNTRY_CHOICES = ((None, "Veuillez sélectionner un pays"), (CI, "Côte d'Ivoire"))
 
 DEFAULT_COUNTRY_CHOICES = CI

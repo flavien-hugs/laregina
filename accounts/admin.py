@@ -18,12 +18,17 @@ class ProductInline(admin.TabularInline):
     max_num = 1
     verbose_name = "produits"
     show_change_link = True
-    list_display = ['name', 'price']
+    list_display = ["name", "price"]
     exclude = [
-        'updated_at', 'created_at',
-        'description', 'keywords', 'is_external',
-        'slug', 'quantity'
+        "updated_at",
+        "created_at",
+        "description",
+        "keywords",
+        "is_external",
+        "slug",
+        "quantity",
     ]
+
 
 class UserSocialProfile(admin.TabularInline):
     extra = 1
@@ -34,46 +39,39 @@ class UserSocialProfile(admin.TabularInline):
 @admin.register(get_user_model())
 class UserAdmin(admin.ModelAdmin):
     form = UserChangeForm
-    date_hierarchy = 'date_joined'
+    date_hierarchy = "date_joined"
     fieldsets = (
-        ('information sur la boutique', {'fields':
-            (
-                ("store_id", "email"),
-                ("shipping_first_name", "shipping_last_name"),
-                "store", ("is_seller", "is_active"),
-            )}
+        (
+            "information sur la boutique",
+            {
+                "fields": (
+                    ("store_id", "email"),
+                    ("shipping_first_name", "shipping_last_name"),
+                    "store",
+                    ("is_seller", "is_active"),
+                )
+            },
         ),
         (
-            'address de la boutique',
+            "address de la boutique",
             {
-                'classes': ('collapse',),
-                'fields': [
-                    ('shipping_country', "shipping_city"),
+                "classes": ("collapse",),
+                "fields": [
+                    ("shipping_country", "shipping_city"),
                     ("phone", "phone_two"),
                     "shipping_adress",
                 ],
-            }
+            },
         ),
         (
-            'description de la boutique',
+            "description de la boutique",
             {
-                'classes': ('collapse',),
-                'fields': ["store_description", "logo"],
-            }
+                "classes": ("collapse",),
+                "fields": ["store_description", "logo"],
+            },
         ),
     )
-    add_fieldsets = (
-        (
-            None,
-            {
-                'classes': ('wide',),
-                'fields': (
-                    'email',
-                    'is_staff'
-                )
-            }
-        ),
-    )
+    add_fieldsets = ((None, {"classes": ("wide",), "fields": ("email", "is_staff")}),)
     list_display = (
         "get_vendor_logo",
         "store_id",
@@ -81,7 +79,7 @@ class UserAdmin(admin.ModelAdmin):
         "email",
         "products",
         "last_login",
-        "show_vendor_url"
+        "show_vendor_url",
     )
     list_filter = (
         "last_login",
@@ -89,10 +87,10 @@ class UserAdmin(admin.ModelAdmin):
     )
     list_per_page = 10
     list_display_links = (
-        'store_id',
-        'email',
+        "store_id",
+        "email",
     )
-    readonly_fields = ['store_id', 'show_vendor_url', 'last_login', 'date_joined']
+    readonly_fields = ["store_id", "show_vendor_url", "last_login", "date_joined"]
 
     actions = [export_to_csv]
     inlines = [ProductInline, UserSocialProfile]

@@ -6,6 +6,7 @@ from django.contrib import messages
 from django.http import HttpResponse
 from django.utils.translation import ngettext
 
+
 def export_to_csv(modeladmin, request, queryset):
     opts = modeladmin.model._meta
     response = HttpResponse(content_type="text/csv")
@@ -22,7 +23,7 @@ def export_to_csv(modeladmin, request, queryset):
 
     # Write a first row with header information
     writer.writerow([field.verbose_name for field in fields])
-    
+
     # Write data rows
     for obj in queryset:
         data_row = []
@@ -34,6 +35,8 @@ def export_to_csv(modeladmin, request, queryset):
         writer.writerow(data_row)
 
     return response
+
+
 export_to_csv.short_description = "Exporter les données"
 
 
@@ -41,4 +44,6 @@ def copy_orders_items(modeladmin, request, queryset):
     for object in queryset:
         object.id = None
         object.save()
-copy_orders_items.short_description = 'Dupliquer les éléments'
+
+
+copy_orders_items.short_description = "Dupliquer les éléments"
