@@ -3,7 +3,7 @@
 <meta name="format-detection" content="telephone=yes">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta http-equiv="X-UA-Compatible" content="ie=edge,chrome=1">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="title" content="{% if page_title %}{{ page_title }}{% else %}Vente et achat en ligne Informatiques, Électromenager, Habillement et mode, Téléphones, TV, Jeux Vidéos{% endif %}">
 <meta name="description" content="LaRegina deals est une plateforme de commerce électronique de vente et d'achat au détail.">
 
@@ -34,6 +34,9 @@
 <meta property="og:locale" content="fr_CI">
 
 <!-- Favicon-->
-<link rel="shortcut icon" href="{{ STATIC_PREFIX }}img/favicon.ico">
+<link loading="lazy" rel="shortcut icon" href="{{ STATIC_PREFIX }}img/favicon.ico">
+<link loading="lazy" rel="apple-touch-icon" href="{{ STATIC_PREFIX }}img/logo_laregina.png">
 <link rel="canonical" href="https://{{ request.get_host }}"/>
-<link rel="dns-prefetch" href="https://{{ request.get_host }}">.
+<link rel="dns-prefetch" href="https://{{ request.get_host }}">
+
+<link rel="manifest" href="manifest.json">

@@ -2,61 +2,91 @@
 <!DOCTYPE html>
 <html dir="ltr" lang="fr">
 
-<head>
-    {% load static %}{% get_static_prefix as STATIC_PREFIX %}
+    <head>
+        {% load static pwa %}{% get_static_prefix as STATIC_PREFIX %}
 
-    {% include "includes/meta.html" %}
+        {% progressive_web_app_meta %}
 
-    {% block stylesheet %}
-        {% include "includes/assets/css.html" %}
-    {% endblock stylesheet %}
+        {% include "includes/meta.html" %}
 
-    <title>
-        {% block title %}
-        {% if page_title %}
-            {{ page_title|capfirst|safe }}
+        {% block stylesheet %}
+            {% include "includes/assets/css.html" %}
+        {% endblock stylesheet %}
 
-        {% else %}
-            {{ desc }}
-        {% endif %}
-        {% endblock title %} &smid; {{ title }}
-    </title>
+        <title>
+            {% block title %}
+            {% if page_title %}
+                {{ page_title|capfirst|safe }}
 
-</head>
+            {% else %}
+                {{ desc }}
+            {% endif %}
+            {% endblock title %} &smid; {{ title }}
+        </title>
 
-<body>
-    {% block header_top %}
-        
-    {% endblock header_top %}
+        <style>
+            .hidden {
+                display: none !important;
+            }
 
-    <main class="ps-page--single">
-        {% if request.resolver_match.url_name == 'account_signup' or request.resolver_match.url_name == 'account_login' %}
-            <header class="header sticky-top">
-                <nav class="navbar navbar-expand-lg navbar-inverse py-4" style="background-color:#fcb800;">
-                    <div class="container">
-                        <a class="ps-logo navbar-brand" href="/">
-                            <img loading="lazy" src="{{ STATIC_PREFIX }}img/logo.png" alt="{{ title }}">
-                        </a>
-                    </div>
-                </nav>
-            </header>
-        {% else %}
-            {% include "includes/partials/_partials_header.html" %}
-        {% endif %}
+            #installContainer {
+                position: absolute;
+                bottom: 1em;
+                display: flex;
+                justify-content: center;
+                width: 100%;
+            }
 
-        {% block content %}
-        {% endblock content %}
-    </main>
-    
-    {% include "includes/partials/_partials_footer.html" %}
+            #installContainer button {
+                background-color: inherit;
+                border: 1px solid white;
+                color: white;
+                font-size: 1em;
+                padding: 0.75em;
+            }
+        </style>
+    </head>
 
-    {% block javascript %}
-        {% include "includes/assets/javascript.html" %}
-    {% endblock javascript %}
+    <body>
+        {% block header_top %}
 
-    {% block others_javascript %}
-    {% endblock others_javascript %}
-</body>
+        {% endblock header_top %}
+
+        <main class="ps-page--single">
+            {% if request.resolver_match.url_name == 'account_signup' or request.resolver_match.url_name == 'account_login' %}
+                <header class="header sticky-top">
+                    <nav class="navbar navbar-expand-lg navbar-inverse py-4" style="background-color:#fcb800;">
+                        <div class="container">
+                            <a class="ps-logo navbar-brand" href="/">
+                                <img loading="lazy" src="{{ STATIC_PREFIX }}img/logo.png" alt="{{ title }}">
+                            </a>
+                        </div>
+                    </nav>
+                </header>
+            {% else %}
+                {% include "includes/partials/_partials_header.html" %}
+            {% endif %}
+
+            {% block content %}
+            {% endblock content %}
+
+            <div id="installContainer" class="hidden">
+                <button id="butInstall" type="button">
+                    Installer {{ title }}
+                </button>
+            </div>
+        </main>
+
+        {% include "includes/partials/_partials_footer.html" %}
+
+        {% block javascript %}
+            {% include "includes/assets/javascript.html" %}
+        {% endblock javascript %}
+
+        {% block others_javascript %}
+            <script src="{{ STATIC_PREFIX }}js/install.js"></script>
+        {% endblock others_javascript %}
+    </body>
 
 </html>
 {% endspaceless %}

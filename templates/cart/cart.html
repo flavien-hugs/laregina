@@ -41,7 +41,7 @@
                                                         <a href="{{ object.get_absolute_url }}">
                                                             {{ object.product.name|safe }}
                                                         </a>
-                                                        {% if object.product.user.store %}   
+                                                        {% if object.product.user.store %}
                                                             <p>Vendu par: <strong>
                                                                 <a href="{{ object.product.user.get_absolute_url }}">
                                                                 {{ object.product.user.store }}</a>
@@ -61,7 +61,7 @@
                                                     {% csrf_token %}
                                                     <div class="form-group--number">
                                                         <input id="quantity" class="form-control" name="quantity" type="number" value="{{ object.quantity }}">
-                                                        
+
                                                         <input type='hidden' name='item_id' value='{{ object.id }}'>
                                                     </div>
 
@@ -80,7 +80,7 @@
                                                     <button class="ps-btn" type="submit" name="submit" value="remove">
                                                         <i class="icon-cross"></i>
                                                     </button>
-                                                </form> 
+                                                </form>
                                             </td>
                                         </tr>
                                     {% endfor %}

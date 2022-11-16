@@ -106,7 +106,7 @@ CINETPAY.apps = CINETPAY.apps || {},
             var elements = a.getElementById("cinetpay-form");
             var formData = new FormData();
             for (var i = 0; i < elements.length; i++) {
-                
+
                 if(elements[i].name == 'cpm_trans_id' && (elements[i].value == '' || elements[i].value == 'undefined')){
                     var generator = new IDGenerator();
                     elements[i].value = generator.generate();
@@ -139,7 +139,7 @@ CINETPAY.apps = CINETPAY.apps || {},
 
         function b() {
             var b, c, d, e;
-            a.getElementById("cinetpay-button") || (b = "", c = a.createElement("style"), 
+            a.getElementById("cinetpay-button") || (b = "", c = a.createElement("style"),
                 d = ".cinetpay-button",
                 e = d + " button",
                 b += d + " { white-space: nowrap; }",

@@ -12,7 +12,7 @@
                             <img loading="lazy" src="{{ instance.get_image_url }}" alt="{{ instance.name }}">
                         </a>
                     </div>
-                    
+
                     <div class="ps-product__container">
                         {% if instance.user.store %}
                             <a class="ps-product__vendor" href="{{ instance.user.get_absolute_url }}">{{ instance.user.store|upper }}</a>

@@ -19,7 +19,7 @@
 
                 {% if not node.is_leaf_node and node.children.all %}
                     <span class="sub-toggle"><i class="fa fa-angle-down"></i></span>
-                    
+
                     <ul class="sub-menu">
                         {% for object in node.children.all %}
                             <li>
@@ -27,7 +27,7 @@
                                     {{ object.name }}
                                 </a>
                             </li>
-                        {% endfor %} 
+                        {% endfor %}
                     </ul>
                 {% endif %}
             </li>

@@ -10,17 +10,17 @@ from category.models import Category
 
 class StaticViewSitemap(Sitemap):
     priority = 0.5
-    changefreq = 'daily'
+    changefreq = "daily"
 
     def items(self):
         return [
-            'home',
-            'pages:about-us',
-            'pages:faqs',
-            'pages:cgu',
-            'pages:policy',
-            'pages:return',
-            'pages:contact'
+            "home",
+            "pages:about-us",
+            "pages:faqs",
+            "pages:cgu",
+            "pages:policy",
+            "pages:return",
+            "pages:contact",
         ]
 
     def location(self, item):
@@ -28,7 +28,7 @@ class StaticViewSitemap(Sitemap):
 
 
 class CategorySitemapView(Sitemap):
-    changefreq = 'always'
+    changefreq = "always"
     priority = 0.7
 
     def items(self):
@@ -39,7 +39,7 @@ class CategorySitemapView(Sitemap):
 
 
 class ProductSitemapView(Sitemap):
-    changefreq = 'always'
+    changefreq = "always"
     priority = 0.7
 
     def items(self):
@@ -50,7 +50,7 @@ class ProductSitemapView(Sitemap):
 
 
 SITEMAPS = {
-    'static': StaticViewSitemap,
-    'category': CategorySitemapView,
-    'product': ProductSitemapView,
+    "static": StaticViewSitemap,
+    "category": CategorySitemapView,
+    "product": ProductSitemapView,
 }

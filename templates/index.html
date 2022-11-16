@@ -35,7 +35,7 @@
                 </div>
             </div>
         </section>
-        
+
         {% best_selling_products 20 %}
 
         {% if promotions.exists %}
@@ -58,7 +58,7 @@
                 {% endif %}
             {% endfor %}
         {% endif %}
-        
+
         <section class="ps-deal-of-day container bg-white p-3 my-3">
             <div class="ps-section__content">
                 <div class="row">
@@ -80,7 +80,7 @@
                             <h3>{{ node.name|safe }}</h3>
                             <a class="font-weight-bolder" href="{{ node.get_absolute_url }}">Voir plus</a>
                         </div>
-    
+
                         <div class="ps-section__content pt-4">
                             <div class="ps-carousel--nav owl-slider" data-owl-auto="true" data-owl-loop="true"
                                 data-owl-speed="5000" data-owl-gap="30" data-owl-nav="false" data-owl-dots="false"
