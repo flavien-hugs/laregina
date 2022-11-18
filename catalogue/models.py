@@ -152,7 +152,11 @@ class Product(BaseTimeStampModel):
 
     @admin.display(description="boutique du produit")
     def get_product_shop(self):
-        return str(self.user.store)
+        return self.user.store
+
+    @admin.display(description="contact de la boutique")
+    def get_product_contact(self):
+        return self.user.phone
 
     @admin.display(description="score du produit")
     def avaregereview(self):
