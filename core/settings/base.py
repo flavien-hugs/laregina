@@ -8,20 +8,18 @@ from dotenv import dotenv_values
 
 env = dotenv_values(".env")
 
-# BASE_DIR = Path(__file__).resolve().parent.parent
-
 abspath = os.path.abspath(__file__)
 dirname = os.path.dirname(os.path.dirname(abspath))
 BASE_DIR = os.path.dirname(dirname)
 
 PWA_SERVICE_WORKER_PATH = os.path.join(BASE_DIR, "static/js", "serviceworker.js")
 
-DEBUG = os.getenv("DEBUG")
+DEBUG = env.get("DEBUG")
 TEMPLATE_DEBUG = DEBUG
 
 APPEND_SLASH = True
 USE_THOUSAND_SEPARATOR = False
-SECRET_KEY = os.getenv("SECRET_KEY")
+SECRET_KEY = env.get("SECRET_KEY")
 
 SITE_DESCRIPTION = "Vente et achat en ligne Informatiques, Électromenager, Habillement et mode, Téléphones, TV, Jeux Vidéos"
 INDEX_DESCRIPTION = "Vente et achat en ligne Informatiques, Électromenager, Habillement et mode, Téléphones, TV, Jeux Vidéos"
@@ -81,11 +79,11 @@ LOGIN_URL = "auth_views:account_login"
 SIGNUP_URL = "auth_views:account_signup"
 LOGIN_REDIRECT_URL = "dashboard_seller:profile"
 
-EMAIL_HOST = os.getenv("EMAIL_HOST")
-EMAIL_PORT = os.getenv("EMAIL_PORT")
-EMAIL_USE_TLS = os.getenv("EMAIL_USE_TLS")
-EMAIL_HOST_USER = os.getenv("EMAIL_HOST_USER")
-EMAIL_HOST_PASSWORD = os.getenv("EMAIL_HOST_PASSWORD")
+EMAIL_HOST = env.get("EMAIL_HOST")
+EMAIL_PORT = env.get("EMAIL_PORT")
+EMAIL_USE_TLS = env.get("EMAIL_USE_TLS")
+EMAIL_HOST_USER = env.get("EMAIL_HOST_USER")
+EMAIL_HOST_PASSWORD = env.get("EMAIL_HOST_PASSWORD")
 DEFAULT_FROM_EMAIL = SERVER_EMAIL = "LaRegina <no-reply@laregina.deals>"
 
 MIDDLEWARE = [
@@ -204,12 +202,12 @@ MESSAGE_TAGS = {
 MPTT_ADMIN_LEVEL_INDENT = 20
 
 PHONENUMBER_DEFAULT_REGION = "CI"
-PHONENUMBER_DB_FORMAT = "NATIONAL"
-PHONENUMBER_DEFAULT_FORMAT = "NATIONAL"
+PHONENUMBER_DB_FORMAT = "INTERNATIONAL"
+PHONENUMBER_DEFAULT_FORMAT = "INTERNATIONAL"
 
-CINETPAY_API_KEY = os.getenv("CINETPAY_API_KEY")
-CINETPAY_SITE_ID = os.getenv("CINETPAY_SITE_ID")
-CINETPAY_TRANS_ID = os.getenv("CINETPAY_TRANS_ID")
+CINETPAY_API_KEY = env.get("CINETPAY_API_KEY")
+CINETPAY_SITE_ID = env.get("CINETPAY_SITE_ID")
+CINETPAY_TRANS_ID = env.get("CINETPAY_TRANS_ID")
 
 SESSION_SERIALIZER = "django.contrib.sessions.serializers.JSONSerializer"
 
@@ -258,8 +256,8 @@ SUMMERNOTE_CONFIG = {
 CACHE_TTL = 60 * 15
 CACHE_TIMEOUT = 60 * 60
 
-REDIS_PORT = os.getenv("REDIS_PORT")
-REDIS_HOST = os.getenv("REDIS_HOST")
+REDIS_PORT = env.get("REDIS_PORT")
+REDIS_HOST = env.get("REDIS_HOST")
 
 SESSION_ENGINE = "django.contrib.sessions.backends.cache"
 
@@ -276,7 +274,7 @@ CACHES = {
     }
 }
 
-CELERY_BROKER_URL = os.getenv("CELERY_BROKER_REDIS_URL")
+CELERY_BROKER_URL = env.get("CELERY_BROKER_REDIS_URL")
 
 COMPRESS_ENABLED = True
 COMPRESS_URL = STATIC_URL
@@ -302,8 +300,8 @@ DBBACKUP_STORAGE_OPTIONS = {"location": os.path.join(BASE_DIR, "db_backup")}
 
 CRONJOBS = [("0 24 * * *", "helpers.cron.create_backups_scheduled_job")]
 
-SENDER_ID = os.getenv("SENDER_ID")
-SMS_API_KEY = os.getenv("SMS_API_KEY")
+SENDER_ID = env.get("SENDER_ID")
+SMS_API_KEY = env.get("SMS_API_KEY")
 
 PWA_APP_NAME = SITE_NAME
 PWA_APP_DESCRIPTION = SITE_DESCRIPTION
