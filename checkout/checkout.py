@@ -67,14 +67,14 @@ def create_order(request):
 def send_sms_order(order_id):
 
     order = Order.objects.get(transaction_id=order_id)
-    order_transaction_id = order.transaction_id
-    destinataire = order.phone
-    message = f"Bonjour, votre commande {order_transaction_id} a été validée avec succès. Merci pour votre achat sur laregina.deals."
+    DESTINATAIRE = order.get_phone_number()
+    NUMBER_TRANSACTION = order.get_order_id()
+    MESSAGE = f"Bonjour, votre commande {NUMBER_TRANSACTION} a été validée avec succès. Merci pour votre achat sur laregina.deals."
 
-    SEND_SMS_URL = f"https://sms.lws.fr/sms/api?action=send-sms&api_key={SMS_API_KEY}&to={destinataire}&from={SENDER_ID}&sms={message}"
+    SEND_SMS_URL = f"https://sms.lws.fr/sms/api?action=send-sms&api_key={SMS_API_KEY}&to={DESTINATAIRE}&from={SENDER_ID}&sms={MESSAGE}"
 
     response = requests.post(SEND_SMS_URL)
-    print(response.status_code)
+    print("envoi client ", response.status_code)
     return response
 
 
@@ -83,11 +83,11 @@ def send_sms_vendor(order_id):
     order = Order.objects.get(transaction_id=order_id)
     items = OrderItem.objects.filter(order=order)
     store = [obj.get_store_name() for obj in items]
-    destinataire = [obj.get_phone_number() for obj in items]
-    message = f"Bonjour {store}, vous avez des commabdes sur laregina.deals. Merci de consulter votre boutique."
+    DESTINATAIRE = [obj.get_phone_number() for obj in items]
+    MESSAGE = f"Bonjour {store}, vous avez des commabdes sur laregina.deals. Merci de consulter votre boutique."
 
-    SEND_SMS_URL = f"https://sms.lws.fr/sms/api?action=send-sms&api_key={SMS_API_KEY}&to={destinataire}&from={SENDER_ID}&sms={message}"
+    SEND_SMS_URL = f"https://sms.lws.fr/sms/api?action=send-sms&api_key={SMS_API_KEY}&to={DESTINATAIRE}&from={SENDER_ID}&sms={MESSAGE}"
 
     response = requests.post(SEND_SMS_URL)
-    print(response.status_code)
+    print("envoi vendeur ", response.status_code)
     return response
