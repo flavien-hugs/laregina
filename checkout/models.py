@@ -75,9 +75,13 @@ class Order(BaseOrderInfo, BaseTimeStampModel):
     def get_order_id(self):
         return self.transaction_id
 
+    @admin.display(description="téléphone")
+    def get_phone_number(self):
+        return self.phone
+
     @admin.display(description="nom")
     def get_short_name(self):
-        return f"{self.shipping_first_name}"
+        return self.shipping_first_name
 
     @admin.display(description="nom & prénoms")
     def get_full_name(self):
