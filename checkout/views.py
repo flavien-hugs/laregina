@@ -10,7 +10,7 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render, redirect, get_object_or_404
 
 from cart import cart
-from checkout import checkout
+from checkout import checkout, tasks
 from checkout.forms import CheckoutForm
 from checkout.models import Order, OrderItem
 
@@ -102,8 +102,7 @@ def order_success_view(request, order_id, template="checkout/checkout_success.ht
 
     order = get_object_or_404(Order, transaction_id=order_id)
     order_items = OrderItem.objects.filter(order=order)
-    checkout.send_sms_order(order_id)
-    checkout.send_sms_vendor(order_id)
+    tasks.send_sms_order.delay(order_id)
     context = {
         "object": order,
         "order_items": order_items,
@@ -138,12 +137,12 @@ def download_invoice_view(request, order_id):
     order = Order.objects.get(id=order_id)
     order_item = OrderItem.objects.filter(order=order)
     mydict = {
+        "order_item": order_item,
         "object_date": order.date,
-        "order_total": order.get_order_total,
         "object_id": order.transaction_id,
         "get_full_name": order.get_full_name,
+        "order_total": order.get_order_total,
         "get_shipping_delivery": order.get_shipping_delivery,
-        "order_item": order_item,
     }
     return render_to_pdf("checkout/snippet/_partials_order_invoice.html", mydict)
 

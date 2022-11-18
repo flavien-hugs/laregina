@@ -233,7 +233,7 @@ class OrderItem(models.Model):
 
     @admin.display(description="N° de téléphone")
     def get_phone_number(self):
-        return self.product.user.phone
+        return self.product.get_product_contact()
 
     @admin.display(description="contact boutique")
     def get_store_product(self):
