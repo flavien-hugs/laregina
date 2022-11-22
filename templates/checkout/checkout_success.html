@@ -3,9 +3,9 @@
 
 
 {% block content %}
-{% url 'order_tracking' as order_tracking %}
+{% url 'checkout:order_tracking' as order_tracking %}
 {% url 'catalogue:product_list' as product_list %}
-{% url 'download_invoice' object.id as print_invoice %}
+{% url 'checkout:download_invoice' object.id as print_invoice %}
 
 {% include "includes/partials/_partials_breadcrumb.html" %}
 
