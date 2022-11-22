@@ -4,6 +4,9 @@ from .base import *  # noqa
 PREPEND_WWW = True
 APPEND_SLASH = True
 
+ADMINS = (("LaRegina", "unsta.inc@pm.me"),)
+MANAGERS = ADMINS
+
 ALLOWED_HOSTS = ["*.laregina.deals", "laregina.deals", "www.laregina.deals"]
 
 DATABASES = {
