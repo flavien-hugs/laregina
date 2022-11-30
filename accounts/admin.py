@@ -119,4 +119,38 @@ class UserAdmin(admin.ModelAdmin):
 
 @admin.register(DistributorCustomer)
 class DistributorCustomerAdmin(admin.ModelAdmin):
-    pass
+    date_hierarchy = "created_at"
+    fk_name = "product"
+    readonly_fields = [
+        "delivery_id",
+        "gender",
+        "fullname",
+        "birth_date",
+        "marital_status",
+        "nationnality",
+        "level_of_education",
+        "profession",
+        "commune",
+        "district",
+        "local_market",
+        "phone",
+        "phone_two",
+        "shipping_city",
+        "id_card_number",
+        "created_at",
+        "updated_at",
+    ]
+    list_display = [
+        "delivery_id",
+        "get_fullname",
+        "phone",
+        "shipping_city",
+        "date",
+        "active",
+    ]
+    list_filter = ["created_at"]
+    list_display_links = (
+        "delivery_id",
+        "get_fullname",
+    )
+    list_editable = ("active",)

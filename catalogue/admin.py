@@ -73,7 +73,7 @@ class ProductAdmin(SummernoteModelAdmin):
     list_per_page = 10
     inlines = [ProductAttributeValueAdmin, ProductImageInline]
     prepopulated_fields = {"keywords": ("name",)}
-    search_fields = ["category", "name", "keywords"]
+    search_fields = ["name", "keywords"]
     exclude = ("updated_at", "created_at", "timestamp")
     actions = [export_to_csv]
 
