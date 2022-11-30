@@ -51,4 +51,11 @@ class CheckoutForm(forms.ModelForm):
     class Meta:
         model = Order
         fields = "__all__"
-        exclude = ["status", "transaction_id", "ip_address", "created_at", "updated_at"]
+        exclude = [
+            "status",
+            "collecte_data",
+            "transaction_id",
+            "ip_address",
+            "created_at",
+            "updated_at",
+        ]

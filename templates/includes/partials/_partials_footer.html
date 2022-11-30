@@ -12,7 +12,7 @@
 
 <footer class="ps-footer pt-2 flex-shrink-0">
     <div class="container">
-        {% if not request.resolver_match.url_name == 'order_tracking' and not request.resolver_match.url_name == 'account_signup' and not request.resolver_match.url_name == 'account_login' and not request.resolver_match.url_name == 'customer_signup' %}
+        {% if not request.resolver_match.url_name == 'order_tracking' and not request.resolver_match.url_name == 'account_signup' and not request.resolver_match.url_name == 'account_login' and not request.resolver_match.url_name == 'customer_signup' and not request.resolver_match.url_name == 'delivery_register' and not request.resolver_match.url_name == 'delivery_register_success' %}
             <div class="ps-footer__widgets pb-0 pt-5">
                 <aside class="widget widget_footer widget_contact-us pb-0 mb-0">
                     <h4 class="widget-title">Contactez-nous</h4>
@@ -74,7 +74,7 @@
 
         <div class="ps-footer__copyright py-3">
             <span>&copy; {% now 'Y' %}
-            <a class="font-weight-bold" title="{{ title }}" href="/"> {{ title|title }}</a>.
+            <a class="font-weight-bold" title="{{ title }}" href="/"> {{ title }}</a>.
             Développé par <span class="font-weight-bold">CGIC Côte d'Ivoire</span>.</span>
 
             {% include "includes/partials/_partials_social_link.html" %}

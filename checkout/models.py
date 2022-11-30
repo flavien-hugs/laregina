@@ -9,7 +9,7 @@ from django.db import models
 from django.urls import reverse
 from django.contrib import admin
 
-from core import settings
+from django.conf import settings
 from catalogue.models import Product
 from checkout.managers import OrderManager
 from helpers.models import BaseOrderInfo, BaseTimeStampModel
@@ -19,16 +19,16 @@ NULL_AND_BLANK = {"null": True, "blank": True}
 
 class Order(BaseOrderInfo, BaseTimeStampModel):
 
-    SHIPPED = "livrée"
-    CANCELLED = "annulée"
+    SHIPPED = "commande livrée"
+    CANCELLED = "commande annulée"
     PROCESSED = "livraison en cours"
     SUBMITTED = "traitement en cours"
 
     ORDER_STATUS = (
+        (SHIPPED, "commande livrée"),
+        (CANCELLED, "commande annulée"),
         (SUBMITTED, "traitement en cours"),
         (PROCESSED, "livraison en cours"),
-        (SHIPPED, "livrée"),
-        (CANCELLED, "annulée"),
     )
 
     NOW_PAYMENT = 1
@@ -56,6 +56,9 @@ class Order(BaseOrderInfo, BaseTimeStampModel):
     )
     emailing = models.BooleanField(
         verbose_name="abonnement aux offres et promotions", default=False
+    )
+    collecte_data = models.BooleanField(
+        verbose_name="Message de satisfaction envoyé", default=False
     )
     date = models.DateTimeField(verbose_name="date de la commade", auto_now_add=True)
     last_updated = models.DateTimeField(

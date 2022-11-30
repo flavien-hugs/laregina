@@ -2,7 +2,9 @@
 {% load static cache humanize mptt_tags crispy_forms_tags catalogue_tags pages_tags %}
 
 {% block content %}
+
     {% full_tree_for_model category.Category as category %}
+    {% url "delivery:delivery_register" as delivery_register %}
 
     <div class="ps-breadcrumb">
         <div class="container">
@@ -119,6 +121,10 @@
                                     <a class="facebook" href="https://www.facebook.com/sharer.php?u=https://{{ request.get_host }}{{ object.get_absolute_url|urlencode }}" onclick="window.open(this.href,'mywin','left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;">
                                         <i class="fa fa-facebook"></i>
                                     </a>
+
+                                    <a style="background-color:#fcb800" target="_blank" class="whatsapp" href="https://wa.me/?text=Bonjour, ce produit https://{{ request.get_host }}{{ object.get_absolute_url|urlencode }} peut t'intéresser.">
+                                        <i class="fa fa-whatsapp"></i>
+                                    </a>
                                 </div>
                             </div>
                         </div>
@@ -161,34 +167,28 @@
 
                 <div class="ps-page__right">
                     <!-- delivery information -->
-                    <aside class="widget widget_product widget_features">
+                    <aside class="widget widget_product widget_features mb-3">
                         <p><i class="icon-3d-rotate"></i> Retour gratuit sous 7 jours si éligible, si facile</p>
                         <p><i class="icon-receipt"></i> Le fournisseur donne des factures pour ce produit.</p>
                         <p><i class="icon-credit-card"></i> Payer en ligne ou lors de la réception de marchandises</p>
                     </aside>
 
-                    <!-- signup for vendor -->
-                    <aside class="widget widget_sell-on-site">
-                        {% if request.user.is_authenticated and request.user.is_buyer or not request.user.is_authenticated and not request.user.is_superuser and not request.user.is_seller %}
-
+                    {% if request.user.is_authenticated and request.user.is_buyer or not request.user.is_authenticated and not request.user.is_superuser and not request.user.is_seller %}
+                        <aside class="widget widget_sell-on-site mb-3">
                             {% url "auth_views:account_signup" as account_signup %}
-
                             <p>
                                 <i class="icon-store"></i> Vendez sur LaRegina ?
                                 <a href="{{ account_signup }}" target="_blank">
                                     Ouvrez votre boutique maintenant !
                                 </a>
                             </p>
-                        {% endif %}
-                    </aside>
+                        </aside>
+                    {% endif %}
 
-                    <!-- test news function for catalogue -->
-                    <aside>
-                        <div>
-                            {% for obj in object.cross_sells %}
-                                {{ obj.name }}
-                            {% endfor %}
-                        </div>
+                    <aside class="widget widget_sell-on-site">
+                        <a class="ps-collection" href="{{ delivery_register }}">
+                            <img loading="lazy" src="{{ STATIC_PREFIX }}img/banner.jpg" alt="distributeur-produit-laregina">
+                        </a>
                     </aside>
                 </div>
             </div>

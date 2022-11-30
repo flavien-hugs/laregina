@@ -75,6 +75,8 @@ INSTALLED_APPS += LOCAL_APPS + OTHERS_APPS
 SITE_ID = 1
 
 LOGOUT_URL = "/"
+LOGOUT_REDIRECT_URL = "/"
+
 LOGIN_URL = "auth_views:account_login"
 SIGNUP_URL = "auth_views:account_signup"
 LOGIN_REDIRECT_URL = "dashboard_seller:profile"

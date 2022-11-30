@@ -1,5 +1,8 @@
+import datetime
+
 from django import forms
 from django.db import transaction
+from django.forms.widgets import NumberInput
 from django.contrib.auth import get_user_model
 from django.forms.models import inlineformset_factory
 from django.contrib.auth.forms import UserCreationForm, UserChangeForm
@@ -342,3 +345,87 @@ class MarketChangeForm(UserChangeForm):
             "store",
             "phone",
         ]
+
+
+class DistributorCustomerForm(AccountMixinForm, forms.ModelForm):
+
+    privacy = forms.BooleanField(
+        label="Conditions légales d'utilisation des données",
+        initial=True,
+        required=True,
+    )
+    birth_date = forms.DateField(
+        label="Date de naisssance", widget=NumberInput(attrs={"type": "date"})
+    )
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
+        fields = ["gender", "marital_status", "level_of_education"]
+        for field in fields:
+            if (
+                self.fields["gender"]
+                and self.fields["marital_status"]
+                and self.fields["level_of_education"]
+            ):
+                self.fields[field].widget.attrs.update(
+                    {"class": "form-control custom-select"}
+                )
+
+        self.fields["phone"].widget.attrs["placeholder"] = "Ex: +225xxxxxxxxx"
+        self.fields["phone_two"].widget.attrs["placeholder"] = "Ex: +225xxxxxxxxx"
+        self.fields["shipping_city"].widget.attrs["placeholder"] = "Ville de résidence"
+
+        self.helper = FormHelper(self)
+        self.helper.form_method = "post"
+
+        self.helper.layout = layout.Layout(
+            layout.Row(
+                layout.Column("gender", css_class="form-group col-md-3 mb-0"),
+                layout.Column("fullname", css_class="form-group col-md-9 mb-0"),
+            ),
+            layout.Row(
+                layout.Column("phone", css_class="form-group col-md-6 mb-0"),
+                layout.Column("phone_two", css_class="form-group col-md-6 mb-0"),
+            ),
+            layout.Row(
+                layout.Column("marital_status", css_class="form-group col-md-6 mb-0"),
+                layout.Column("birth_date", css_class="form-group col-md-6 mb-0"),
+            ),
+            layout.Field("level_of_education"),
+            layout.Row(
+                layout.Column("profession", css_class="form-group col-md-6 mb-0"),
+                layout.Column("nationnality", css_class="form-group col-md-6 mb-0"),
+            ),
+            layout.Field("id_card_number"),
+            layout.Field("shipping_city"),
+            layout.Row(
+                layout.Column("commune", css_class="form-group col-md-6 mb-0"),
+                layout.Column("district", css_class="form-group col-md-6 mb-0"),
+            ),
+            layout.Field("local_market"),
+            bootstrap.FormActions(
+                layout.Submit(
+                    "submit",
+                    "S'inscire en tant que distributeur",
+                    css_class="mt-4 ps-btn btn-block text-uppercase border-0",
+                )
+            ),
+            layout.Field("privacy"),
+        )
+
+    class Meta:
+        model = models.DistributorCustomer
+        fields = "__all__"
+        exclude = ["active", "created_at", "updated_at"]
+        labels = {
+            "profession": "Quelle activité vous exercez actuellement ?",
+            "commune": "Vous habitez dans quelle commune ?",
+            "district": "Veuillez préciser le nom de votre quartier",
+            "local_market": "Quel est le marché le plus proche de chez vous ?",
+            "privacy": "En validant votre inscription, vous acceptez toutes les Conditions d'Utilisations de vos données transmises.",
+        }
+
+    def validate_birth_date(self):
+        birth_date = self.cleaned_data["birth_date"].year
+        return 1992 <= birth_date < 2004

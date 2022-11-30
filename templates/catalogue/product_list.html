@@ -43,7 +43,7 @@
 
         {% if object.image %}
             <div class="ps-carousel--nav-inside py-3 mb-4">
-                <img class="w-100" src="{{ object.get_image_url }}" alt="{{ object.name|slugify }}">
+                <img loading="lazy" class="w-100" src="{{ object.get_image_url }}" alt="{{ object.name|slugify }}">
             </div>
         {% endif %}
 

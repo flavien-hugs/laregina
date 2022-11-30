@@ -1,7 +1,7 @@
-# checkout.admin.py
-
+from django.conf import settings
 from django.contrib import admin
 
+import requests
 from services.export_data_csv import export_to_csv
 from checkout.models import (
     Order,
@@ -55,7 +55,7 @@ class ExtraOrderAdmin(object):
     ]
     list_display = [
         "get_order_id",
-        "payment",
+        "get_full_name",
         "get_shipping_delivery",
         "get_order_payment",
         "get_order_rest_payment",
@@ -63,6 +63,7 @@ class ExtraOrderAdmin(object):
         "get_cost",
         "date",
         "status",
+        "collecte_data",
     ]
     list_filter = [
         "status",
@@ -90,6 +91,7 @@ class ExtraOrderAdmin(object):
                     "phone_two",
                     "note",
                     "emailing",
+                    "collecte_data",
                 )
             },
         ),
@@ -97,15 +99,8 @@ class ExtraOrderAdmin(object):
     list_per_page = 10
     list_editable = ["status"]
     inlines = [OrderItemStackedInline]
-    actions = [
-        export_to_csv,
-        "make_submitted",
-        "make_shipped",
-        "make_cancelled",
-        "make_processed",
-    ]
 
-    @admin.display(description="commande en cours de traitement")
+    @admin.display(description="traitement en cours")
     def make_submitted(self, request, queryset):
         queryset.update(status="SUBMITTED")
 
@@ -117,12 +112,21 @@ class ExtraOrderAdmin(object):
     def make_cancelled(self, request, queryset):
         queryset.update(status="CANCELLED")
 
-    @admin.display(description="commande en cours de livraison")
+    @admin.display(description="livraison en cours")
     def make_processed(self, request, queryset):
         queryset.update(status="PROCESSED")
 
     def has_add_permission(self, request):
         return False
+
+    @admin.display(description="Exporter les données au format json")
+    def export_as_json(modeladmin, request, queryset):
+        from django.core import serializers
+        from django.http import HttpResponse
+
+        response = HttpResponse(content_type="application/json")
+        serializers.serialize("json", queryset, stream=response)
+        return response
 
 
 @admin.register(Order)
@@ -148,9 +152,24 @@ class OrderCashOnDeliveryAdmin(ExtraOrderAdmin, admin.ModelAdmin):
 
 
 @admin.register(OrderShipped)
-class OrderCancelledAdmin(ExtraOrderAdmin, admin.ModelAdmin):
+class OrderShippedAdmin(ExtraOrderAdmin, admin.ModelAdmin):
 
     model = OrderShipped
+    actions = ["collect_satisfaction_data"]
+
+    @admin.display(description="Collect Satisfaction")
+    def collect_satisfaction_data(self, request, queryset):
+        SENDER_ID = settings.SENDER_ID
+        SMS_API_KEY = settings.SMS_API_KEY
+
+        for instance in queryset:
+            USER = instance.get_full_name()
+            DESTINATAIRE = instance.get_phone_number()
+            MESSAGE = f"Bonjour {USER}, aidez-nous à ameliorer l'expérience client sur {settings.SITE_NAME} en remplissant ce formulaire de satisfaction"
+            SEND_SMS_URL = f"https://sms.lws.fr/sms/api?action=send-sms&api_key={SMS_API_KEY}&to={DESTINATAIRE}&from={SENDER_ID}&sms={MESSAGE}"
+            requests.post(SEND_SMS_URL).json()
+
+        queryset.update(collecte_data=True)
 
     def get_queryset(self, request):
         qs = super().get_queryset(request)
@@ -159,7 +178,7 @@ class OrderCancelledAdmin(ExtraOrderAdmin, admin.ModelAdmin):
 
 
 @admin.register(OrderCancelled)
-class OrderShippedAdmin(ExtraOrderAdmin, admin.ModelAdmin):
+class OrderCancelledAdmin(ExtraOrderAdmin, admin.ModelAdmin):
 
     model = OrderCancelled
 

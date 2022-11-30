@@ -1,6 +1,7 @@
 {% url "auth_views:account_login" as login %}
 {% url "auth_views:account_signup"  as signup %}
 {% url "dashboard_seller:profile" as seller_profile %}
+{% url "delivery:delivery_register" as delivery_register %}
 {% url "dashboard_seller:order_list" as seller_order_list %}
 {% url "dashboard_seller:product_list" as seller_product_list %}
 
@@ -49,6 +50,12 @@
 
                 <li class="menu-item-has-children has-mega-menu">
                     <a href="{{ signup }}">Ouvrir une boutique</a>
+                </li>
+
+                <hr class="dropdown-divider py-2">
+
+                <li class="menu-item-has-children has-mega-menu">
+                    <a href="{{ delivery_register }}">Devenir distributeur chez LaRegina</a>
                 </li>
             {% endif %}
         </ul>

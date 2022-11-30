@@ -12,9 +12,9 @@ from core.sitemap import SITEMAPS
 from search.views import search_view
 from django_summernote.models import Attachment
 
-admin.site.unregister(Site)
-admin.site.unregister(Group)
-admin.site.unregister(Attachment)
+# admin.site.unregister(Site)
+# admin.site.unregister(Group)
+# admin.site.unregister(Attachment)
 
 
 def handler404(request, exception, template_name="404.html"):

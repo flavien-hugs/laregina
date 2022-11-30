@@ -5,6 +5,7 @@
 {% url "auth_views:account_login" as login %}
 {% url "auth_views:account_signup"  as signup %}
 {% url "dashboard_seller:profile" as seller_profile %}
+{% url "delivery:delivery_register" as delivery_register %}
 
 {% load humanize mptt_tags search_tags catalogue_tags %}
 
@@ -118,13 +119,22 @@
 </header>
 
 <header class="header header--mobile header--mobile-categories header--mobile-product" data-sticky="true">
+    <div class="header__top p-0">
+        <div class="header__center">
+            <p>
+                <a class="font-weight-bold text-uppercase" href="{{ delivery_register  }}">
+                devener distributeur agréé chez {{ title }}</a>
+            </p>
+        </div>
+    </div>
+
     <nav class="navigation--mobile">
         {% if request.resolver_match.url_name == 'product_list' %}
-        <div class="navigation__left">
-            <a class="header__back" href="/">
-                <i class="icon-chevron-left"></i><strong>Retour</strong>
-            </a>
-        </div>
+            <div class="navigation__left">
+                <a class="header__back" href="/">
+                    <i class="icon-chevron-left"></i><strong>Retour</strong>
+                </a>
+            </div>
         {% else %}
         <div class="navigation__left">
             <a class="ps-logo" href="/">

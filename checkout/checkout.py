@@ -1,6 +1,10 @@
 # checkout.checkout.py
 
+
+import requests
+
 from django.urls import reverse
+from django.conf import settings
 
 from cart import cart
 from checkout.forms import CheckoutForm
@@ -25,12 +29,15 @@ def process(request):
 
 def create_order(request):
 
+    SENDER_ID = settings.SENDER_ID
+    SMS_API_KEY = settings.SMS_API_KEY
+
     order = Order()
     checkout_form = CheckoutForm(request.POST, instance=order)
     order = checkout_form.save(commit=False)
 
-    order.ip_address = get_client_ip(request)
     order.user = None
+    order.ip_address = get_client_ip(request)
 
     if request.user.is_authenticated:
         order.user = request.user
@@ -46,6 +53,12 @@ def create_order(request):
             order_item.order = order
             order_item.quantity = cart_item.quantity
             order_item.product = cart_item.product
+
+            STORE_NAME = order_item.get_store_name()
+            DESTINATAIRE = order_item.get_phone_number()
+            MESSAGE = f"Bonjour {STORE_NAME}, vous avez reçu une commande sur {settings.SITE_NAME}. Veuillez consultez votre boutique."
+            SEND_SMS_URL = f"https://sms.lws.fr/sms/api?action=send-sms&api_key={SMS_API_KEY}&to={DESTINATAIRE}&from={SENDER_ID}&sms={MESSAGE}"
+            requests.post(SEND_SMS_URL)
             order_item.save()
         cart.empty_cart(request)
     return order

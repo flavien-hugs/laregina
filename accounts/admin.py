@@ -7,7 +7,7 @@ from django.contrib.auth import get_user_model
 from django.contrib.auth.forms import UserChangeForm
 
 from catalogue.models import Product
-from accounts.models import ProfileSocialMedia
+from accounts.models import ProfileSocialMedia, DistributorCustomer
 
 from services.export_data_csv import export_to_csv
 
@@ -106,8 +106,7 @@ class UserAdmin(admin.ModelAdmin):
                 </a>"""
             )
             return response
-        else:
-            return "Aucun lien"
+        return "Aucun lien"
 
     def get_queryset(self, request):
         qs = super().get_queryset(request)
@@ -116,3 +115,8 @@ class UserAdmin(admin.ModelAdmin):
 
     def has_add_permission(self, request):
         return False
+
+
+@admin.register(DistributorCustomer)
+class DistributorCustomerAdmin(admin.ModelAdmin):
+    pass

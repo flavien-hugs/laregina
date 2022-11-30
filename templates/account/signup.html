@@ -8,8 +8,8 @@
 
     <div class="ps-page--my-account">
         <div class="container">
-            <div class="row py-5 mt-5 align-items-center">
-                <div class="col-md-3 mb-5 mb-md-0">
+            <div class="row py-5 mt-5 align-items-center justify-content-center">
+                <div class="col-md-5 mb-5 mb-md-0">
 
                     <div class="mb-5">
                         <a class="btn btn-md btn-light px-3" href="/">
@@ -34,18 +34,14 @@
                     </div>
                 </div>
 
-                <div class="col-md-9 col-lg-9">
-                    <div class="row justify-content-center">
+                <div class="col-md-7">
+                    {% crispy form %}
 
-                        {% crispy form %}
-
-                        <!-- connexion url -->
-                        <div class="text-center w-100 pt-2 pb-3">
-                            Vous avez déjà un compte ?
-                            <a href="{{ login_url }}">
-                                <span class="font-weight-bold"><u>Connectez-vous</u>
-                            </a>
-                        </div>
+                    <div class="text-center w-100 pt-2 pb-3">
+                        Vous avez déjà un compte ?
+                        <a href="{{ login_url }}">
+                            <span class="font-weight-bold"><u>Connectez-vous</u>
+                        </a>
                     </div>
                 </div>
             </div>

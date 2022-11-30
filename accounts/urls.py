@@ -4,7 +4,7 @@ from django.urls import path, include
 from django.views.generic import TemplateView
 
 from pages import views
-from accounts.views import auth_views, seller_views
+from accounts.views import auth_views, seller_views, customer_views
 
 
 urlpatterns = [
@@ -160,6 +160,27 @@ urlpatterns = [
                 "accounts",
             ),
             namespace="vendor",
+        ),
+    ),
+    path(
+        "sp-marketplace-delivery/",
+        include(
+            (
+                [
+                    path(
+                        route="register/",
+                        view=customer_views.distributor_register_view,
+                        name="delivery_register",
+                    ),
+                    path(
+                        route="success/<int:delivery_id>/",
+                        view=customer_views.distributor_register_success_view,
+                        name="delivery_register_success",
+                    ),
+                ],
+                "accounts",
+            ),
+            namespace="delivery",
         ),
     ),
 ]

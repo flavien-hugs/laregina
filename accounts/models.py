@@ -17,9 +17,9 @@ from helpers.utils import upload_image_logo_path, vendor_unique_slug_generator
 from helpers.models import BaseTimeStampModel, BaseOrderInfo, ModelSlugMixin
 
 import phonenumbers
-
+from . import constants
 from imagekit.models import ImageSpecField
-from imagekit.processors import ResizeToFill, Adjust
+from imagekit.processors import ResizeToFill
 
 logger = logging.getLogger(__name__)
 NULL_AND_BLANK = {"null": True, "blank": True}
@@ -35,16 +35,10 @@ class User(
     PermissionsMixin,
 ):
 
-    CIVILITY_CHOICES = (
-        ("M.", "M."),
-        ("Mme", "Mme"),
-        ("Mlle", "Mlle"),
-    )
-
     civility = models.CharField(
-        max_length=4,
-        default="M.",
-        choices=CIVILITY_CHOICES,
+        max_length=12,
+        choices=constants.CIVILITY_CHOICES,
+        default=constants.DEFAULT_CIVILITY_CHOICES,
         verbose_name="civilité",
     )
     store_id = models.CharField(
@@ -111,7 +105,7 @@ class User(
         index_together = (("email",),)
         verbose_name_plural = "boutiques"
         indexes = [
-            models.Index(fields=["id"], name="id_index"),
+            models.Index(fields=["id"]),
         ]
 
     def __str__(self):
@@ -221,6 +215,82 @@ class ProfileSocialMedia(BaseTimeStampModel):
         return self.instagram
 
 
+class DistributorCustomer(BaseOrderInfo, BaseTimeStampModel):
+
+    note = email = shipping_zip = None
+    shipping_country = shipping_adress = shipping_first_name = shipping_last_name = None
+
+    gender = models.CharField(
+        max_length=12,
+        choices=constants.CIVILITY_CHOICES,
+        default=constants.DEFAULT_CIVILITY_CHOICES,
+        verbose_name="Civilité",
+    )
+    fullname = models.CharField(verbose_name="Nom & Prénoms", max_length=50)
+    birth_date = models.DateField(verbose_name="Votre date de naisssance", null=True)
+    marital_status = models.CharField(
+        max_length=100,
+        choices=constants.MARITAL_STATUS_CHOICES,
+        default=constants.DEFAULT_MARITAL_STATUS,
+        verbose_name="Situation matrimoniale",
+    )
+    nationnality = models.CharField(max_length=80, verbose_name="Nationalité")
+    level_of_education = models.CharField(
+        max_length=100,
+        verbose_name="Niveau d'étude",
+        choices=constants.LEVEL_OF_EDUCATION_CHOICES,
+        default=constants.DEFAULT_LEVEL_OF_EDUCATION_CHOICES,
+    )
+    profession = models.CharField(max_length=100, verbose_name="Profession", null=True)
+    commune = models.CharField(max_length=180, verbose_name="Commune", null=True)
+    district = models.CharField(max_length=180, verbose_name="Quartier", null=True)
+    local_market = models.CharField(
+        max_length=100, verbose_name="Marché à proximité de vous"
+    )
+    id_card_number = models.CharField(
+        max_length=50,
+        verbose_name="Numéro de votre pièce d'identité (CNI, PASSEPORT, PERMIS)",
+        null=True,
+    )
+    delivery_id = models.CharField(
+        max_length=6, unique=True, verbose_name="ID Distributeur", **NULL_AND_BLANK
+    )
+    active = models.BooleanField(verbose_name="Activer le compte", default=False)
+
+    class Meta:
+        ordering = ["-created_at", "-active"]
+        verbose_name_plural = "distributeurs"
+        indexes = [
+            models.Index(fields=["id"], name="id_index"),
+        ]
+
+    def __str__(self):
+        return f"{self.delivery_id} - {self.get_fullname()} ({self.phone})"
+
+    def get_fullname(self):
+        if self.fullname:
+            full_name = f"{self.gender} {self.fullname}"
+            return full_name.strip()
+        return self.phone
+
+    @admin.display(boolean=True)
+    def born_in_nineties(self):
+        return 1992 <= self.birth_date.year < 2004
+
+    def save(self, *args, **kwargs):
+        from analytics.utils import get_client_ip
+
+        if self.delivery_id is None:
+            self.generate_delivery_id(3)
+        super().save(*args, **kwargs)
+
+    def generate_delivery_id(self, nb_carac):
+        today = datetime.date.today().strftime("%d%m%y")
+        carac = string.digits
+        random_carac = [random.choice(carac) for _ in range(nb_carac)]
+        self.delivery_id = "{}".format(today + "".join(random_carac))
+
+
 class GuestCustomer(BaseOrderInfo, BaseTimeStampModel):
 
     email = models.EmailField(
@@ -242,7 +312,7 @@ class GuestCustomer(BaseOrderInfo, BaseTimeStampModel):
         verbose_name_plural = "acheteur(s)"
 
     def __str__(self):
-        return "{email}({created})".format(email=self.email, created=self.active)
+        return f"{self.email}({self.created})"
 
     def get_fullname(self):
         if self.shipping_last_name and self.shipping_first_name:

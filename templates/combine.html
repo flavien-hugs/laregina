@@ -2,15 +2,15 @@
 {% load static mptt_tags pages_tags catalogue_tags %}
 {% get_static_prefix as STATIC_PREFIX %}
 
-
 {% block content %}
-    {% url "auth_views:account_signup" as signup %}
     {% url "pages:contact" as contact %}
+    {% url "auth_views:account_signup" as signup %}
     {% url "vendor:store_list_view" as store_list_view %}
+    {% url "delivery:delivery_register" as delivery_register %}
 
     {% full_tree_for_model category.Category as categories %}
 
-    <div id="page-wrapper" class="pb-4">
+    <div id="page-wrapper" class="pb-4" data-background="{{ STATIC_PREFIX }}img/bf.png">
         <section class="ps-home-banner">
             <div class="container px-0">
                 <div class="ps-section__left" role="menu">
@@ -42,8 +42,8 @@
                         </p>
                     </aside>
 
-                    <a class="ps-collection" href="#!">
-                        <img loading="lazy" src="{{ STATIC_PREFIX }}img/banner.jpg" alt="{{ title }}">
+                    <a class="ps-collection" href="{{ delivery_register }}">
+                        <img loading="lazy" src="{{ STATIC_PREFIX }}img/laregina-distributeur-homepage.jpg" alt="distributeur-produit-laregina">
                     </a>
                 </div>
             </div>

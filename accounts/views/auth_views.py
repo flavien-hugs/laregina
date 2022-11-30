@@ -26,6 +26,9 @@ from accounts.forms import (
 
 def sellerSignupView(request, template="account/signup.html"):
 
+    if request.user.is_authenticated:
+        return HttpResponseRedirect(reverse(settings.LOGIN_REDIRECT_URL))
+
     form = AccountSellerRegisterForm()
     if request.method == "POST":
         form = AccountSellerRegisterForm(request.POST)
