@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% load static mptt_tags pages_tags catalogue_tags %}
+{% load cache static mptt_tags pages_tags catalogue_tags %}
 {% get_static_prefix as STATIC_PREFIX %}
 
 {% block content %}
@@ -49,67 +49,71 @@
             </div>
         </section>
 
-        {% best_selling_products 20 %}
+        {% cache 300 combine_page %}
 
-        {% if promotions.exists %}
-            {% for object in promotions|slice:":1" %}
-                {% if object.get_products.exists %}
-                    <section class="ps-deal-of-day container bg-white mt-3 pb-3">
-                        <div class="ps-section__header py-4 mb-3">
-                            <h3>{{ object.campaign.name }}</h3>
-                            <a class="font-weight-bolder" href="{{ object.campaign.get_absolute_url }}">Voir plus</a>
-                        </div>
+            {% best_selling_products 20 %}
 
-                        <div class="ps-section__content pt-4">
-                            <div class="ps-carousel--nav owl-slider" data-owl-auto="true" data-owl-loop="true" data-owl-speed="5000"
-                                data-owl-gap="30" data-owl-nav="false" data-owl-dots="false" data-owl-item="5" data-owl-item-xs="2"
-                                data-owl-item-sm="3" data-owl-item-md="4" data-owl-item-lg="4" data-owl-item-xl="5" data-owl-duration="1000"
-                                data-owl-mousedrag="on">
-                                {% for instance in object.get_products %}
-                                    {% include "catalogue/snippet/_snippet_product.html" with instance=instance %}
-                                {% endfor %}
+            {% if promotions.exists %}
+                {% for object in promotions|slice:":1" %}
+                    {% if object.get_products.exists %}
+                        <section class="ps-deal-of-day container bg-white mt-3 pb-3">
+                            <div class="ps-section__header py-4 mb-3">
+                                <h3>{{ object.campaign.name }}</h3>
+                                <a class="font-weight-bolder" href="{{ object.campaign.get_absolute_url }}">Voir plus</a>
                             </div>
-                        </div>
+
+                            <div class="ps-section__content pt-4">
+                                <div class="ps-carousel--nav owl-slider" data-owl-auto="true" data-owl-loop="true" data-owl-speed="5000"
+                                    data-owl-gap="30" data-owl-nav="false" data-owl-dots="false" data-owl-item="5" data-owl-item-xs="2"
+                                    data-owl-item-sm="3" data-owl-item-md="4" data-owl-item-lg="4" data-owl-item-xl="5" data-owl-duration="1000"
+                                    data-owl-mousedrag="on">
+                                    {% for instance in object.get_products %}
+                                        {% include "catalogue/snippet/_snippet_product.html" with instance=instance %}
+                                    {% endfor %}
+                                </div>
+                            </div>
+                        </section>
+                    {% endif %}
+                {% endfor %}
+            {% endif %}
+
+            <section class="ps-deal-of-day container bg-white p-3 my-3">
+                <div class="ps-section__content">
+                    <div class="row">
+                        {% for cat in categories|slice:":2"|shuffle %}
+                            <div class="col-xl-6 col-lg-6 col-sm-12 col-12 mb-lg-0 mb-4">
+                                <a href="{{ cat.get_absolute_url }}">
+                                    <img loading="lazy" src="{{ cat.get_image_url }}" alt="{{ cat.name|slugify }}">
+                                </a>
+                            </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </section>
+
+            {% recursetree categories %}
+                {% if node.get_products.exists and node.products_count > 1 %}
+                    <section class="ps-deal-of-day container bg-white mt-3 pb-3">
+                            <div class="ps-section__header py-4 mb-3">
+                                <h3>{{ node.name|safe }}</h3>
+                                <a class="font-weight-bolder" href="{{ node.get_absolute_url }}">Voir plus</a>
+                            </div>
+
+                            <div class="ps-section__content pt-4">
+                                <div class="ps-carousel--nav owl-slider" data-owl-auto="true" data-owl-loop="true"
+                                    data-owl-speed="5000" data-owl-gap="30" data-owl-nav="false" data-owl-dots="false"
+                                    data-owl-item="5" data-owl-item-xs="2" data-owl-item-sm="3" data-owl-item-md="4"
+                                    data-owl-item-lg="4" data-owl-item-xl="5" data-owl-duration="1000" data-owl-mousedrag="on">
+                                    {% for object in node.get_products %}
+                                        {% include "catalogue/snippet/_snippet_product.html" with instance=object %}
+                                    {% endfor %}
+                                </div>
+                            </div>
                     </section>
                 {% endif %}
-            {% endfor %}
-        {% endif %}
+            {% endrecursetree %}
 
-        <section class="ps-deal-of-day container bg-white p-3 my-3">
-            <div class="ps-section__content">
-                <div class="row">
-                    {% for cat in categories|slice:":2"|shuffle %}
-                        <div class="col-xl-6 col-lg-6 col-sm-12 col-12 mb-lg-0 mb-4">
-                            <a href="{{ cat.get_absolute_url }}">
-                                <img loading="lazy" src="{{ cat.get_image_url }}" alt="{{ cat.name|slugify }}">
-                            </a>
-                        </div>
-                    {% endfor %}
-                </div>
-            </div>
-        </section>
-
-        {% recursetree categories %}
-            {% if node.get_products.exists and node.products_count > 1 %}
-                <section class="ps-deal-of-day container bg-white mt-3 pb-3">
-                        <div class="ps-section__header py-4 mb-3">
-                            <h3>{{ node.name|safe }}</h3>
-                            <a class="font-weight-bolder" href="{{ node.get_absolute_url }}">Voir plus</a>
-                        </div>
-
-                        <div class="ps-section__content pt-4">
-                            <div class="ps-carousel--nav owl-slider" data-owl-auto="true" data-owl-loop="true"
-                                data-owl-speed="5000" data-owl-gap="30" data-owl-nav="false" data-owl-dots="false"
-                                data-owl-item="5" data-owl-item-xs="2" data-owl-item-sm="3" data-owl-item-md="4"
-                                data-owl-item-lg="4" data-owl-item-xl="5" data-owl-duration="1000" data-owl-mousedrag="on">
-                                {% for object in node.get_products %}
-                                    {% include "catalogue/snippet/_snippet_product.html" with instance=object %}
-                                {% endfor %}
-                            </div>
-                        </div>
-                </section>
-            {% endif %}
-        {% endrecursetree %}
+        {% endcache %}
 
         {% if recently_viewed %}
             <section class="ps-deal-of-day container bg-white py-4 mt-3">
