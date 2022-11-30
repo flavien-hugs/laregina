@@ -10,6 +10,7 @@
     {% url "auth_views:account_login" as login_url %}
     {% url 'auth_views:account_signup' as seller_signup %}
     {% url 'auth_views:account_reset_password' as reset_password %}
+    {% url "delivery:delivery_register" as delivery_register %}
 
     <div class="ps-page--my-account">
         <div class="container">
@@ -40,6 +41,12 @@
                                     </a>
                                 </span>
                             </div>
+
+                            <hr>
+
+                            <a href="{{ delivery_register }}" class="mt-4 ps-btn btn-block text-uppercase text-center border-0">
+                                devenez distributeur agréé chez {{ title }}
+                            </a>
                         </div>
                     </div>
                 </div>

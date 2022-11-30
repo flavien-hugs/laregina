@@ -5,6 +5,7 @@
 {% block content %}
 
     {% url "auth_views:account_login" as login_url %}
+    {% url "delivery:delivery_register" as delivery_register %}
 
     <div class="ps-page--my-account">
         <div class="container">
@@ -43,6 +44,12 @@
                             <span class="font-weight-bold"><u>Connectez-vous</u>
                         </a>
                     </div>
+
+                    <hr>
+
+                    <a href="{{ delivery_register }}" class="mt-4 ps-btn btn-block text-uppercase text-center border-0">
+                        devenez distributeur agréé chez {{ title }}
+                    </a>
                 </div>
             </div>
         </div>
