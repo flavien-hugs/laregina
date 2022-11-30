@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+{% block title %}{{ page_title }}{% endblock title %}
+
+{% block content %}
+    <div class="ps-page--my-account">
+        <div class="container-xl">
+
+            {% include "account/customer/path/_banner.html" %}
+
+            <div class="row py-5 mt-5 align-items-center justify-content-center">
+                <div class="col-md-10">
+                    {% include "dashboard/seller/includes/_partials_message.html" %}
+
+                    <p>
+                        Bonjour {{ object.get_fullname | title }}, nous avions reçu votre candidature pour dévenir distributeur cher
+                        <b>{{ title }}</b>. Afin de finaliser le processus de validation de votre compte, veuillez nous envoyer la photo
+                        recto et verso de votre pièce d'identité (CNI, PASSEPORT, PERMIS, ATTESTATION D'IDENTITE) sur notre compte
+                        <a target="_blank" href="https://wa.me/+2250160011585?text={{ message }}">WhatsApp</a>. Merci et à bientôt.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock content %}

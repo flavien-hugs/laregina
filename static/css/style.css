@@ -16550,10 +16550,6 @@ html:not([dir="rtl"]) .noUi-horizontal .noUi-handle {
 }
 
 @media (max-width: 479px) {
-    .header--mobile .header__top {
-        display: none;
-    }
-
     .header--mobile .header__actions>* {
         margin: 0;
         margin-right: 20px;
