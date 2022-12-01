@@ -265,11 +265,16 @@ class DistributorCustomer(BaseOrderInfo, BaseTimeStampModel):
         ]
 
     def __str__(self):
-        return f"{self.delivery_id} - {self.get_fullname()} ({self.phone})"
+        return f"{self.delivery_id} - {self.get_delivery_location()} - {self.get_fullname()}"
 
+    @admin.display(description="Info supp. livreur")
+    def get_delivery_location(self):
+        return f"{self.commune} - {self.district} - {self.local_market}"
+
+    @admin.display(description="Nom & prénoms")
     def get_fullname(self):
         if self.fullname:
-            full_name = f"{self.gender} {self.fullname}"
+            full_name = f"{self.gender} {self.fullname} ({self.phone})"
             return full_name.strip()
         return self.phone
 
