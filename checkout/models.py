@@ -64,7 +64,15 @@ class Order(BaseOrderInfo, BaseTimeStampModel):
     last_updated = models.DateTimeField(
         verbose_name="derniere modification", auto_now=True
     )
-
+    distributor = models.ForeignKey(
+        to="accounts.DistributorCustomer",
+        on_delete=models.CASCADE,
+        limit_choices_to={"active": True},
+        related_name="distibutors",
+        verbose_name="livreur",
+        help_text="Choisir un livreur",
+        **NULL_AND_BLANK,
+    )
     objects = OrderManager()
 
     class Meta:
@@ -193,7 +201,7 @@ class OrderCancelled(Order):
 class OrderItem(models.Model):
 
     order = models.ForeignKey(
-        to=Order,
+        to="checkout.Order",
         on_delete=models.CASCADE,
         related_name="orders",
         verbose_name="commande",

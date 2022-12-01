@@ -55,6 +55,7 @@ class CheckoutForm(forms.ModelForm):
             "status",
             "collecte_data",
             "transaction_id",
+            "distributor",
             "ip_address",
             "created_at",
             "updated_at",

@@ -41,6 +41,10 @@ class OrderItemStackedInline(admin.StackedInline):
 class ExtraOrderAdmin(object):
     date_hierarchy = "created_at"
     fk_name = "product"
+    list_display_links = (
+        "distributor",
+        "get_order_id",
+    )
     readonly_fields = [
         "email",
         "payment",
@@ -54,6 +58,7 @@ class ExtraOrderAdmin(object):
         "emailing",
     ]
     list_display = [
+        "distributor",
         "get_order_id",
         "get_full_name",
         "get_shipping_delivery",
@@ -82,6 +87,7 @@ class ExtraOrderAdmin(object):
             "information sur la commande",
             {
                 "fields": (
+                    "distributor",
                     ("status", "email"),
                     "shipping_country",
                     "shipping_city",
