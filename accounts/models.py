@@ -253,7 +253,7 @@ class DistributorCustomer(BaseOrderInfo, BaseTimeStampModel):
         null=True,
     )
     delivery_id = models.CharField(
-        max_length=6, unique=True, verbose_name="ID Distributeur", **NULL_AND_BLANK
+        max_length=100, unique=True, verbose_name="ID Distributeur", **NULL_AND_BLANK
     )
     active = models.BooleanField(verbose_name="Activer le compte", default=False)
 
