@@ -11,45 +11,44 @@
 
 <!-- affficher sur la page detail de produit -->
 {% if request.resolver_match.url_name == 'product_detail' %}
-    <header class="header header--product" data-sticky="true">
-        <nav class="navigation">
-            <div class="container">
-                <article class="ps-product--header-sticky">
-                    <div class="ps-product__thumbnail">
-                        <img {% if object.get_image_url %}
-                            src="{{ object.get_image_url }}"{% else %} src="{{ STATIC_PREFIX }}img/empty_image.svg"{% endif %}
-                            alt="{{ object.name }}" loading="lazy" height="60" width="60">
+<header class="header header--product" data-sticky="true">
+    <nav class="navigation">
+        <div class="container">
+            <article class="ps-product--header-sticky">
+                <div class="ps-product__thumbnail">
+                    <img {% if object.get_image_url %} src="{{ object.get_image_url }}" {% else %} src="{{ STATIC_PREFIX }}img/empty_image.svg" {% endif %} alt="{{ object.name }}" loading="lazy" height="60" width="60">
+                </div>
+
+                <div class="ps-product__wrapper">
+                    <div class="ps-product__content">
+                        <a class="ps-product__title" href="{{ object.get_absolute_url }}">{{ object.name }}</a>
+                        <ul class="ps-tab-list">
+                            <li class="active">
+                                <a href="#tab-1">Description</a>
+                            </li>
+                            <li><a href="#tab-2">Vendeur</a></li>
+                            <li><a href="#tab-3">Avis client ({{ object.countreview }})</a></li>
+                        </ul>
                     </div>
 
-                    <div class="ps-product__wrapper">
-                        <div class="ps-product__content">
-                            <a class="ps-product__title" href="{{ object.get_absolute_url }}">{{ object.name }}</a>
-                            <ul class="ps-tab-list">
-                                <li class="active">
-                                    <a href="#tab-1">Description</a>
-                                </li>
-                                <li><a href="#tab-2">Vendeur</a></li>
-                                <li><a href="#tab-3">Avis client ({{ object.countreview }})</a></li>
-                            </ul>
-                        </div>
+                    <form method="post" action=".">
+                        {% csrf_token %}
+                        <div class="ps-product__shopping">
+                            <span class="ps-product__price">
+                                <span>{{ object.price|intcomma }} Fr</span>
+                            </span>
 
-                        <form method="post" action=".">
-                            {% csrf_token %}
-                            <div class="ps-product__shopping">
-                                <span class="ps-product__price">
-                                    <span>{{ object.price|intcomma }} Fr</span>
-                                </span>
-
-                                <a href="{{ cart }}" class="ps-btn text-uppercase">
+                            <a href="{{ cart }}" class="ps-btn text-uppercase">
                                 voir le panier</a>
-                            </div>
-                        </form>
-                    </div>
-                </article>
-            </div>
-        </nav>
-    </header>
-{% endif %} <!-- ./end -->
+                        </div>
+                    </form>
+                </div>
+            </article>
+        </div>
+    </nav>
+</header>
+{% endif %}
+<!-- ./end -->
 
 <!-- afficher sur la page de detail des categorie -->
 <header class="header header--1" data-sticky="{% if not request.resolver_match.url_name == 'product_detail' %}true{% endif %}">
@@ -82,35 +81,35 @@
             <div class="header__right">
                 <div class="header__actions">
                     {% if request.user.is_authenticated %}
-                        <div class="ps-block--user-header">
-                            <div class="ps-block__left"><i class="icon-user"></i></div>
-                            <div class="ps-block__right">
-                                {% if request.user.is_authenticated and request.user.is_seller or request.user.is_superuser %}
-                                    <a class="font-weight-bolder" href="{{ seller_profile }}" target="_blank">
-                                    Mon <br>Compte </a>
-                                {% else %}
-                                    <a class="font-weight-bolder" href="{{ login }}">Connectez-vous <br> à votre compte</a>
-                                {% endif %}
-                            </div>
+                    <div class="ps-block--user-header">
+                        <div class="ps-block__left"><i class="icon-user"></i></div>
+                        <div class="ps-block__right">
+                            {% if request.user.is_authenticated and request.user.is_seller or request.user.is_superuser %}
+                            <a class="font-weight-bolder" href="{{ seller_profile }}" target="_blank">
+                                Mon <br>Compte </a>
+                            {% else %}
+                            <a class="font-weight-bolder" href="{{ login }}">Connectez-vous <br> à votre compte</a>
+                            {% endif %}
                         </div>
-                        <div class="ps-cart--mini">
-                            {% include "cart/snippet/item_cart.html" %}
-                        </div>
+                    </div>
+                    <div class="ps-cart--mini">
+                        {% include "cart/snippet/item_cart.html" %}
+                    </div>
                     {% else %}
-                        <div class="ps-cart--mini">
-                            {% include "cart/snippet/item_cart.html" %}
+                    <div class="ps-cart--mini">
+                        {% include "cart/snippet/item_cart.html" %}
+                    </div>
+                    <div class="ps-block--user-header">
+                        <div class="ps-block__left"><i class="icon-user"></i></div>
+                        <div class="ps-block__right">
+                            {% if request.user.is_authenticated and request.user.is_seller or request.user.is_superuser %}
+                            <a class="font-weight-bolder" href="{{ seller_profile }}" target="_blank">
+                                Mon <br>Compte </a>
+                            {% else %}
+                            <a class="font-weight-bolder" href="{{ login }}">Connectez-vous <br> à votre compte</a>
+                            {% endif %}
                         </div>
-                        <div class="ps-block--user-header">
-                            <div class="ps-block__left"><i class="icon-user"></i></div>
-                            <div class="ps-block__right">
-                                {% if request.user.is_authenticated and request.user.is_seller or request.user.is_superuser %}
-                                    <a class="font-weight-bolder" href="{{ seller_profile }}" target="_blank">
-                                    Mon <br>Compte </a>
-                                {% else %}
-                                    <a class="font-weight-bolder" href="{{ login }}">Connectez-vous <br> à votre compte</a>
-                                {% endif %}
-                            </div>
-                        </div>
+                    </div>
                     {% endif %}
                 </div>
             </div>
@@ -123,18 +122,18 @@
         <div class="header__center p-3" style="background-color:red;">
             <span>
                 <a class="font-weight-bold text-uppercase text-white" href="{{ delivery_register  }}">
-                devenez distributeur agréé chez {{ title }}. Cliquez ici !</a>
+                    devenez distributeur agréé chez {{ title }}. Cliquez ici !</a>
             </span>
         </div>
     </div>
 
     <nav class="navigation--mobile">
         {% if request.resolver_match.url_name == 'product_list' %}
-            <div class="navigation__left">
-                <a class="header__back" href="/">
-                    <i class="icon-chevron-left"></i><strong>Retour</strong>
-                </a>
-            </div>
+        <div class="navigation__left">
+            <a class="header__back" href="/">
+                <i class="icon-chevron-left"></i><strong>Retour</strong>
+            </a>
+        </div>
         {% else %}
         <div class="navigation__left">
             <a class="ps-logo" href="/">
@@ -152,9 +151,9 @@
                 <div class="ps-block--user-header">
                     <div class="ps-block__right">
                         {% if request.user.is_authenticated and request.user.is_seller or request.user.is_superuser %}
-                            <a href="{{ seller_profile }}"><i class="icon-user"></i></a>
+                        <a href="{{ seller_profile }}"><i class="icon-user"></i></a>
                         {% else %}
-                            <a href="{{ login }}"><i class="icon-user"></i></a>
+                        <a href="{{ login }}"><i class="icon-user"></i></a>
                         {% endif %}
                     </div>
                 </div>
@@ -165,9 +164,7 @@
     <div class="ps-search--mobile">
         <form role='search' accept-charset="utf-8" class="ps-form--search-mobile" action="{{ search }}" method="get">
             <div class="form-group--nest">
-                <input id='input-search' name='q' class="form-control" type="search"
-                placeholder="Rechercher un produit, une catégorie, une marque ..."
-                value="{{ request.GET.q }}">
+                <input id='input-search' name='q' class="form-control" type="search" placeholder="Rechercher un produit, une catégorie, une marque ..." value="{{ request.GET.q }}">
                 <button type="submit"><i class="icon-magnifier"></i></button>
             </div>
         </form>
