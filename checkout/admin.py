@@ -161,7 +161,7 @@ class OrderCashOnDeliveryAdmin(ExtraOrderAdmin, admin.ModelAdmin):
 class OrderShippedAdmin(ExtraOrderAdmin, admin.ModelAdmin):
 
     model = OrderShipped
-    actions = ["collect_satisfaction_data"]
+    actions = [export_to_csv, "collect_satisfaction_data"]
 
     @admin.display(description="Collect Satisfaction")
     def collect_satisfaction_data(self, request, queryset):

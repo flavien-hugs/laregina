@@ -4,121 +4,121 @@
 {% block css %}{% endblock css %}
 
 {% block content %}
-    {% include "includes/partials/_partials_breadcrumb.html" %}
-    {% url "catalogue:product_list" as product_list %}
+{% include "includes/partials/_partials_breadcrumb.html" %}
+{% url "catalogue:product_list" as product_list %}
 
-    <section class="container">
-        <div class="ps-page__container">
-            <div class="ps-section--shopping ps-shopping-cart py-5">
-                {% if cart_items %}
+<section class="container">
+    <div class="ps-page__container">
+        <div class="ps-section--shopping ps-shopping-cart py-5">
+            {% if cart_items %}
 
-                    <h3>Panier ({% cart_items_count request %})</h3>
+            <h3>Panier ({% cart_items_count request %})</h3>
 
-                    <div class="ps-section__content">
-                        <div class="table-responsive">
-                            <table summary="votre panier d'achat" class="table ps-table--shopping-cart ps-table--responsive">
-                                <thead>
-                                    <tr>
-                                        <th scope="col">Produit</th>
-                                        <th scope="col">Prix Unitaire</th>
-                                        <th scope="col">Quantité</th>
-                                        <th scope="col">Sous-Total</th>
-                                        <th></th>
-                                    </tr>
-                                </thead>
+            <div class="ps-section__content">
+                <div class="table-responsive">
+                    <table summary="votre panier d'achat" class="table ps-table--shopping-cart ps-table--responsive">
+                        <thead>
+                            <tr>
+                                <th scope="col">Produit</th>
+                                <th scope="col">Prix Unitaire</th>
+                                <th scope="col">Quantité</th>
+                                <th scope="col">Sous-Total</th>
+                                <th></th>
+                            </tr>
+                        </thead>
 
-                                <tbody>
-                                    {% for object in cart_items %}
-                                        <tr>
-                                            <td data-label="Produit">
-                                                <div class="ps-product--cart">
-                                                    <div class="ps-product__thumbnail">
-                                                        <a href="{{ object.product.get_absolute_url }}">
-                                                            <img loading="lazy" src="{{ object.product.get_image_url }}" alt="{{ object.product.name }}">
-                                                        </a>
-                                                    </div>
-                                                    <div class="ps-product__content">
-                                                        <a href="{{ object.get_absolute_url }}">
-                                                            {{ object.product.name|safe }}
-                                                        </a>
-                                                        {% if object.product.user.store %}
-                                                            <p>Vendu par: <strong>
-                                                                <a href="{{ object.product.user.get_absolute_url }}">
-                                                                {{ object.product.user.store }}</a>
-                                                                </strong>
-                                                            </p>
-                                                        {% endif %}
-                                                    </div>
-                                                </div>
-                                            </td>
+                        <tbody>
+                            {% for object in cart_items %}
+                            <tr>
+                                <td data-label="Produit">
+                                    <div class="ps-product--cart">
+                                        <div class="ps-product__thumbnail">
+                                            <a href="{{ object.product.get_absolute_url }}">
+                                                <img loading="lazy" src="{{ object.product.get_image_url }}" alt="{{ object.product.name }}">
+                                            </a>
+                                        </div>
+                                        <div class="ps-product__content">
+                                            <a href="{{ object.get_absolute_url }}">
+                                                {{ object.product.name|safe }}
+                                            </a>
+                                            {% if object.product.user.store %}
+                                            <p>Vendu par: <strong>
+                                                    <a href="{{ object.product.user.get_absolute_url }}">
+                                                        {{ object.product.user.store }}</a>
+                                                </strong>
+                                            </p>
+                                            {% endif %}
+                                        </div>
+                                    </div>
+                                </td>
 
-                                            <td class="price text-center" data-label="Prix Unitaire">
-                                                {{ object.price|intcomma }}
-                                            </td>
+                                <td class="price text-center" data-label="Prix Unitaire">
+                                    {{ object.price|intcomma }}
+                                </td>
 
-                                            <td data-label="Quantité">
-                                                <form action="." method="post">
-                                                    {% csrf_token %}
-                                                    <div class="form-group--number">
-                                                        <input id="quantity" class="form-control" name="quantity" type="number" value="{{ object.quantity }}">
+                                <td data-label="Quantité">
+                                    <form action="." method="post">
+                                        {% csrf_token %}
+                                        <div class="form-group--number">
+                                            <input id="quantity" class="form-control" name="quantity" type="number" value="{{ object.quantity }}">
 
-                                                        <input type='hidden' name='item_id' value='{{ object.id }}'>
-                                                    </div>
+                                            <input type='hidden' name='item_id' value='{{ object.id }}'>
+                                        </div>
 
-                                                    <button class="ps-btn font-weight-bold" type="submit" name="submit" value="update" required>
-                                                        <i class="icon-sync"></i>
-                                                    </button>
-                                                </form>
-                                            </td>
+                                        <button class="ps-btn font-weight-bold" type="submit" name="submit" value="update" required>
+                                            <i class="icon-sync"></i>
+                                        </button>
+                                    </form>
+                                </td>
 
-                                            <td class="text-center" data-label="Sous-total">{{ object.total|intcomma }} Fr</td>
+                                <td class="text-center" data-label="Sous-total">{{ object.total|intcomma }} Fr</td>
 
-                                            <td data-label="Supprimer">
-                                                <form method="post" action=".">
-                                                    {% csrf_token %}
-                                                    <input type="hidden" name="item_id" value="{{ object.id }}">
-                                                    <button class="ps-btn" type="submit" name="submit" value="remove">
-                                                        <i class="icon-cross"></i>
-                                                    </button>
-                                                </form>
-                                            </td>
-                                        </tr>
-                                    {% endfor %}
+                                <td data-label="Supprimer">
+                                    <form method="post" action=".">
+                                        {% csrf_token %}
+                                        <input type="hidden" name="item_id" value="{{ object.id }}">
+                                        <button class="ps-btn" type="submit" name="submit" value="remove">
+                                            <i class="icon-cross"></i>
+                                        </button>
+                                    </form>
+                                </td>
+                            </tr>
+                            {% endfor %}
 
-                                    <tr class="bg-light">
-                                        <td class="font-weight-bold" rowspan="3" colspan="4">
-                                            <h3>Total</h3><small>(Livraison gratuite)</small>
-                                        </td>
-                                        <td data-label='Sous-total'>
-                                            <h3><span class="font-weight-bold" style="color:#f30">
+                            <tr class="bg-light">
+                                <td class="font-weight-bold" rowspan="3" colspan="4">
+                                    <h3>Total</h3>
+                                </td>
+                                <td data-label='Sous-total'>
+                                    <h3><span class="font-weight-bold" style="color:#f30">
                                             {{ cart_subtotal|intcomma }} Fr</span></h3>
-                                        </td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
 
-                        <div class="ps-section__cart-actions">
-                            <!-- poursuivre ces commandes : liste des produits -->
-                            <a href="{{ product_list }}" class="ps-btn ps-btn--outline text-uppercase">
-                                Poursuivre vos achats <i class="icon-arrow-right"></i>
-                            </a>
+                <div class="ps-section__cart-actions">
+                    <!-- poursuivre ces commandes : liste des produits -->
+                    <a href="{{ product_list }}" class="ps-btn ps-btn--outline text-uppercase">
+                        Poursuivre vos achats <i class="icon-arrow-right"></i>
+                    </a>
 
-                            <!-- bouton de validation -->
-                            <form method="POST" action=".">
-                                {% csrf_token %}
-                                <button class="ps-btn ps-btn--fullwidth text-uppercase" type="submit" name="submit" value="checkout">
-                                passer à la commande</button>
-                            </form>
-                        </div>
-                    </div>
-                {% else %}
-                    {% include "cart/empty_cart.html" %}
-                {% endif %}
+                    <!-- bouton de validation -->
+                    <form method="POST" action=".">
+                        {% csrf_token %}
+                        <button class="ps-btn ps-btn--fullwidth text-uppercase" type="submit" name="submit" value="checkout">
+                            passer à la commande</button>
+                    </form>
+                </div>
             </div>
+            {% else %}
+            {% include "cart/empty_cart.html" %}
+            {% endif %}
         </div>
-        {% if recently_viewed and not cart_items %}
-            {% product_list recently_viewed 'Produits récemment vus' %}
-        {% endif %}
-    </section>
+    </div>
+    {% if recently_viewed and not cart_items %}
+    {% product_list recently_viewed 'Produits récemment vus' %}
+    {% endif %}
+</section>
 {% endblock content %}
