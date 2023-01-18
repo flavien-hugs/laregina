@@ -114,7 +114,9 @@ class SettingsUpdateView(
         return HttpResponseRedirect(self.get_success_url())
 
     def get_success_url(self):
-        return reverse_lazy("seller:update", kwargs={"slug": self.get_object().slug})
+        return reverse_lazy(
+            "dashboard_seller:update", kwargs={"slug": self.get_object().slug}
+        )
 
 
 settings_view = SettingsUpdateView.as_view()
@@ -143,7 +145,9 @@ class SocialMediaUpdateView(SellerRequiredMixin, CashTotalSeller, generic.Update
         return super(SocialMediaUpdateView, self).form_valid(form)
 
     def get_success_url(self):
-        return reverse_lazy("seller:rs_update", kwargs={"slug": self.get_object().slug})
+        return reverse_lazy(
+            "dashboard_seller:rs_update", kwargs={"slug": self.get_object().slug}
+        )
 
 
 social_media_view = SocialMediaUpdateView.as_view()
@@ -310,7 +314,7 @@ def voucher_create_view(
             voucher.save()
             voucher.products.add(*product)
             messages.success(request, "La réduction a été appliqué avec success !")
-            return redirect("seller:voucher_list")
+            return redirect("dashboard_seller:voucher_list")
         else:
             messages.error(request, "Vérifier les informations fournies !")
     else:
@@ -356,7 +360,7 @@ class VoucherDeleteView(SuccessMessageMixin, generic.DeleteView):
     model = Voucher
     form_class = VoucherCreateForm
     success_message = "Suppression effectuée avec succes !"
-    success_url = reverse_lazy("seller:voucher_list")
+    success_url = reverse_lazy("dashboard_seller:voucher_list")
 
     def form_valid(self, form):
         return HttpResponseRedirect(self.get_success_url())
