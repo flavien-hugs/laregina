@@ -54,9 +54,29 @@ class ExtraContextData:
         return super().get_context_data(**kwargs)
 
 
-class HomeThirdView(ExtraContextData, PromotionMixin, generic.TemplateView):
+@method_decorator(cache_page(CACHE_TTL), name="dispatch")
+class HomeThirdView(PromotionMixin, generic.TemplateView):
 
-    template_name = "combine.html"
+    queryset = Category.objects.all()
+    template_name = "index.html"
+
+    def get_context_data(self, **kwargs):
+        kwargs["promotions"] = self.get_promotions()
+        kwargs["destockages"] = self.get_destockages()
+        kwargs["sales_flash"] = self.get_sales_flash()
+        kwargs["news_arrivals"] = self.get_news_arrivals()
+
+        kwargs["promotion_list"] = self.get_promotions_list()[:6]
+        kwargs["vendor_list"] = get_list_or_404(get_user_model())[0:8]
+        kwargs["recently_viewed"] = utils.get_recently_viewed(request=self.request)
+        kwargs["category_list"] = self.queryset
+
+        category = self.queryset
+        kwargs["products"] = Product.objects.prefetch_related("category").filter(
+            category__parent__in=category
+        )[:15]
+
+        return super().get_context_data(**kwargs)
 
 
 combine_view = HomeThirdView.as_view()

@@ -1,7 +1,7 @@
 from django.urls import reverse
 from django.conf import settings
 from django.views import generic
-
+from django.utils import timezone
 from django.contrib import messages
 from django.urls import reverse_lazy
 from django.core.mail import EmailMessage
@@ -68,6 +68,7 @@ class AccountLoginView(generic.View):
             user = authenticate(
                 email=form.cleaned_data["email"], password=form.cleaned_data["password"]
             )
+            user.last_login = timezone.now()
             if user is not None:
                 login(request, user)
                 messages.success(
