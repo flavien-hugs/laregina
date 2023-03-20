@@ -305,6 +305,7 @@ DBBACKUP_STORAGE_OPTIONS = {"location": os.path.join(BASE_DIR, "db_backup")}
 CRONJOBS = [("0 24 * * *", "helpers.cron.create_backups_scheduled_job")]
 
 SENDER_ID = env.get("SENDER_ID")
+API_TOKEN = env.get("API_TOKEN")
 SMS_API_KEY = env.get("SMS_API_KEY")
 
 PWA_APP_NAME = SITE_NAME
