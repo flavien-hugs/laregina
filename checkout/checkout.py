@@ -31,6 +31,7 @@ def create_order(request):
 
     SENDER_ID = settings.SENDER_ID
     SMS_API_KEY = settings.SMS_API_KEY
+    SMS_API_TOKEN = settings.API_TOKEN
 
     order = Order()
     checkout_form = CheckoutForm(request.POST, instance=order)
@@ -54,11 +55,11 @@ def create_order(request):
             order_item.quantity = cart_item.quantity
             order_item.product = cart_item.product
 
-            STORE_NAME = order_item.get_store_name()
-            DESTINATAIRE = order_item.get_phone_number()
-            MESSAGE = f"Bonjour {STORE_NAME}, vous avez reçu une commande sur {settings.SITE_NAME}. Veuillez consultez votre boutique."
-            SEND_SMS_URL = f"https://sms.lws.fr/sms/api?action=send-sms&api_key={SMS_API_KEY}&to={DESTINATAIRE}&from={SENDER_ID}&sms={MESSAGE}"
-            requests.post(SEND_SMS_URL)
+            DESTINATAIRE = "2250160011585"
+            MESSAGE = f"Bonjour, Vous avez une commande sur {settings.SITE_NAME}."
+
+            SEND_SMS_URL = f"https://panel.smsing.app/smsAPI?sendsms&apikey={SMS_API_KEY}&apitoken={SMS_API_TOKEN}&type=sms&from={SENDER_ID}&to={DESTINATAIRE}&text={MESSAGE}"
+            requests.request("POST", SEND_SMS_URL)
             order_item.save()
         cart.empty_cart(request)
     return order
