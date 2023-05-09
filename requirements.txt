@@ -1,83 +1,26 @@
--i https://pypi.org/simple
-amqp==5.1.1 ; python_version >= '3.6'
-arabic-reshaper==2.1.4
-argon2-cffi==21.3.0
-argon2-cffi-bindings==21.2.0 ; python_version >= '3.6'
-asgiref==3.5.2 ; python_version >= '3.7'
-asn1crypto==1.5.1
-async-timeout==4.0.2 ; python_version >= '3.6'
-babel==2.11.0
-billiard==3.6.4.0
-bleach==5.0.1 ; python_version >= '3.7'
-brotli==1.0.9
-celery[redis]==5.2.7
-certifi==2022.9.24 ; python_version >= '3.6'
-cffi==1.15.1
-charset-normalizer==2.1.1 ; python_full_version >= '3.6.0'
-click==8.1.3 ; python_version >= '3.7'
-click-didyoumean==0.3.0 ; python_full_version >= '3.6.2' and python_full_version < '4.0.0'
-click-plugins==1.1.1
-click-repl==0.2.0
-cryptography==38.0.3 ; python_version >= '3.6'
-cssselect2==0.7.0 ; python_version >= '3.7'
-deprecated==1.2.13 ; python_version >= '2.7' and python_version not in '3.0, 3.1, 3.2, 3.3'
-django==3.2.12
-django-3-jet==1.0.8
-django-appconf==1.0.5 ; python_version >= '3.6'
-django-compressor==4.1
-django-crispy-forms==1.14.0
-django-crontab==0.7.1
-django-dbbackup==4.0.2
-django-imagekit==4.1.0
-django-js-asset==2.0.0 ; python_version >= '3.6'
-django-mptt==0.14.0
-django-phonenumber-field==7.0.0
-django-pwa==1.0.10
-django-redis==5.2.0
-django-summernote==0.8.20.0
-future==0.18.2 ; python_version >= '2.6' and python_version not in '3.0, 3.1, 3.2, 3.3'
-gunicorn==20.1.0
-html5lib==1.1 ; python_version >= '2.7' and python_version not in '3.0, 3.1, 3.2, 3.3, 3.4'
-idna==3.4 ; python_version >= '3.5'
-kombu==5.2.4 ; python_version >= '3.7'
-lxml==4.9.1 ; python_version >= '2.7' and python_version not in '3.0, 3.1, 3.2, 3.3, 3.4'
-oscrypto==1.3.0
-packaging==21.3 ; python_version >= '3.6'
-phonenumbers==8.13.0
-pilkit==2.0
-pillow==9.3.0
-prompt-toolkit==3.0.32 ; python_full_version >= '3.6.2'
-psycopg2-binary==2.9.5
-pycparser==2.21
-pyhanko==0.15.1
-pyhanko-certvalidator==0.19.6
-pyparsing==3.0.9 ; python_full_version >= '3.6.8'
-pypdf3==1.0.6
-python-bidi==0.4.2
-python-dotenv==0.21.0
-pytz==2022.6
-pytz-deprecation-shim==0.1.0.post0 ; python_version >= '2.7' and python_version not in '3.0, 3.1, 3.2, 3.3, 3.4, 3.5'
-pyyaml==6.0 ; python_version >= '3.6'
-pyzstd==0.15.3
-qrcode==7.3.1
-rcssmin==1.1.0
-redis==4.3.4 ; python_version >= '3.6'
-reportlab==3.6.6
-requests==2.28.1
-rjsmin==1.2.0
-setuptools==65.5.1 ; python_version >= '3.7'
-six==1.16.0 ; python_version >= '2.7' and python_version not in '3.0, 3.1, 3.2, 3.3'
-sqlparse==0.4.3 ; python_version >= '3.5'
-svglib==1.4.1 ; python_version >= '3.7'
-tinycss2==1.2.1 ; python_version >= '3.7'
-tqdm==4.64.1 ; python_version >= '2.7' and python_version not in '3.0, 3.1, 3.2, 3.3'
-tzdata==2022.6 ; python_version >= '3.6'
-tzlocal==4.2 ; python_version >= '3.6'
-uritools==4.0.0 ; python_version ~= '3.7'
-urllib3==1.26.12 ; python_version >= '2.7' and python_version not in '3.0, 3.1, 3.2, 3.3, 3.4, 3.5' and python_version < '4'
-vine==5.0.0 ; python_version >= '3.6'
-wcwidth==0.2.5
-webencodings==0.5.1
-whitenoise[brotli]==6.2.0
-wrapt==1.14.1 ; python_version >= '2.7' and python_version not in '3.0, 3.1, 3.2, 3.3, 3.4'
-xhtml2pdf==0.2.8
+django
+gunicorn
+django-mptt
+whitenoise[brotli]
+django-redis
+django-crispy-forms
+django-phonenumber-field
+phonenumbers
+Babel
+pillow
+argon2-cffi
+django-3-jet
+django-compressor
+django-summernote
+qrcode
+django-imagekit
+xhtml2pdf
+reportlab
+pyzstd
+django-dbbackup
+django-crontab
+requests
+python-dotenv
+psycopg2-binary
+django-pwa
+celery[redis]
