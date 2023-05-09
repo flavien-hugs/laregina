@@ -11,7 +11,7 @@ isort = "*"
 black = "*"
 
 [packages]
-django = "==3.2.18"
+django = "==3.2.19"
 gunicorn = "*"
 django-mptt = "*"
 whitenoise = {extras = ["brotli"], version = "*"}
