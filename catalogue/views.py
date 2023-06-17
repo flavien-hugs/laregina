@@ -134,7 +134,7 @@ market_view = HomeTwoView.as_view()
 """
 
 
-# @method_decorator(cache_page(CACHE_TTL), name="dispatch")
+@method_decorator(cache_page(CACHE_TTL), name="dispatch")
 class ProductListView(FilterMixin, PromotionMixin, generic.ListView):
     paginate_by = 16
     queryset = Product.objects.all()
