@@ -54,6 +54,8 @@ class Category(MPTTModel, ModelSlugMixin, BaseTimeStampModel):
     )
     is_active = models.BooleanField(verbose_name="active", default=True)
 
+    objects = CategoryManager()
+
     class MPTTMeta:
         order_insertion_by = ["name"]
 

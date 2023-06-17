@@ -14,19 +14,19 @@ from pages.mixins import PromotionMixin
 CACHE_TTL = getattr(settings, "CACHE_TTL", settings.CACHE_TIMEOUT)
 
 
-@method_decorator(cache_page(CACHE_TTL), name="dispatch")
+# @method_decorator(cache_page(CACHE_TTL), name="dispatch")
 class CategoryDetailView(
     PromotionMixin, generic.DetailView, generic.list.MultipleObjectMixin
 ):
 
     model = Category
-    paginate_by = 15
+    paginate_by = 16
     slug_field = "slug"
     queryset = Category.objects.all()
     template_name = "catalogue/product_list.html"
 
     def get_queryset(self):
-        return self.model.objects.all()
+        return self.queryset
 
     def get_context_data(self, **kwargs):
         category_object = self.object.get_descendants(include_self=True)

@@ -28,22 +28,22 @@ class ProductInline(admin.TabularInline):
 
 
 @admin.register(Category)
-class CategoryAdmin(DraggableMPTTAdmin):
-    mptt_indent_field = "parent"
-    expand_tree_by_default = False
+class CategoryAdmin(admin.ModelAdmin):
+    # mptt_indent_field = "parent"
+    # expand_tree_by_default = False
     fieldsets = (
         ("catégorie", {"fields": ("parent", "name", "image", "is_active", "slug")}),
     )
     list_display = (
         "id",
-        "tree_actions",
-        "indented_title",
-        "products_count",
+        "parent",
+        "name",
         "is_active",
     )
-    mptt_level_indent = 20
+    # mptt_level_indent = 20
     list_filter = ("parent__name",)
-    list_display_links = ("indented_title",)
+    list_editable = ("is_active",)
+    list_display_links = ("parent",)
     prepopulated_fields = {
         "slug": (
             "parent",
@@ -51,3 +51,8 @@ class CategoryAdmin(DraggableMPTTAdmin):
         )
     }
     inlines = [ProductInline]
+    actions = ["make_disabled"]
+
+    @admin.action(description="Mark selected categories as disabled")
+    def make_disabled(modeladmin, request, queryset):
+        queryset.update(is_active=False)
