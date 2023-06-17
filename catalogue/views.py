@@ -46,9 +46,9 @@ class ExtraContextData:
         kwargs["recently_viewed"] = utils.get_recently_viewed(request=self.request)
         kwargs["category_list"] = self.queryset
 
-        category = self.queryset
+        categories = self.queryset
         kwargs["products"] = Product.objects.prefetch_related("category").filter(
-            category__parent__in=category
+            category__parent__in=categories
         )[:15]
 
         return super().get_context_data(**kwargs)
@@ -71,10 +71,10 @@ class HomeThirdView(PromotionMixin, generic.TemplateView):
         kwargs["recently_viewed"] = utils.get_recently_viewed(request=self.request)
         kwargs["category_list"] = self.queryset
 
-        category = self.queryset
+        categories = self.queryset
         kwargs["products"] = Product.objects.prefetch_related("category").filter(
-            category__parent__in=category
-        )[:15]
+            category__parent__in=categories
+        )[:16]
 
         return super().get_context_data(**kwargs)
 
@@ -134,9 +134,9 @@ market_view = HomeTwoView.as_view()
 """
 
 
-@method_decorator(cache_page(CACHE_TTL), name="dispatch")
+# @method_decorator(cache_page(CACHE_TTL), name="dispatch")
 class ProductListView(FilterMixin, PromotionMixin, generic.ListView):
-    paginate_by = 15
+    paginate_by = 16
     queryset = Product.objects.all()
     extra_context = {"page_title": "Tous les produits"}
     template_name = "catalogue/product_list.html"
@@ -198,11 +198,11 @@ def show_product(request, slug, pk, template="catalogue/product_detail.html"):
     recommended_product = Product.objects.recomended_product(instance=p)
     request.session.set_test_cookie()
     utils.log_product_view(request, p)
-
+    categories = Category.objects.all()
     context = {
         "object": p,
         "page_title": p.name,
-        "category": Category.objects.all(),
+        "category": categories,
         "form": form,
         "review_form": ProductReviewForm(),
         "related_product": related_product,
