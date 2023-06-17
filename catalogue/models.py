@@ -39,7 +39,7 @@ class Product(BaseTimeStampModel):
     )
     category = TreeForeignKey(
         to="category.Category",
-        on_delete=models.PROTECT,
+        on_delete=models.CASCADE,
         verbose_name="catégorie",
         help_text="Selectionner la catégorie du produit.",
     )
