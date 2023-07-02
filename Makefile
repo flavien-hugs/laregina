@@ -33,7 +33,6 @@ collectstatic: ## Run collectstatic
 .PHONY: dumpdata
 dumpdata: ## dumpdata on database
 	$(MANAGE) dumpdata --indent=4 --natural-foreign --natural-primary -e contenttypes --format=json sites.site > data/site.json
-	$(MANAGE) dumpdata --indent=4 --format=json account.emailaddress > data/email.json
 	$(MANAGE) dumpdata --indent=4 --natural-foreign --natural-primary -e contenttypes --format=json accounts > data/users.json
 	$(MANAGE) dumpdata --indent=4 --natural-foreign --natural-primary -e contenttypes --format=json category > data/categories.json
 	$(MANAGE) dumpdata --indent=4 --natural-foreign --natural-primary -e contenttypes --format=json catalogue.product > data/products.json
