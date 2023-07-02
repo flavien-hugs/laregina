@@ -1,0 +1,6 @@
+-r base.txt
+flake8
+coverage
+pre-commit
+isort
+black
