@@ -8,3 +8,5 @@ DATABASES = {
         "CONN_MAX_AGE": 500,
     }
 }
+
+ADMIN_URL = "admin/"

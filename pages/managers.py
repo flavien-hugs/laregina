@@ -6,7 +6,7 @@ from django.utils.timezone import now
 
 class PageQuerySetMixin(models.QuerySet):
     def active(self):
-        return self.filter(created_at__lte=now())
+        return self.filter(activate_at=True, created_at__lte=now())
 
     def flash(self):
         from pages.models import Campaign

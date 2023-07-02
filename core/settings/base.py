@@ -26,7 +26,6 @@ INDEX_DESCRIPTION = "Vente et achat en ligne Informatiques, Électromenager, Hab
 META_KEYWORDS = "créer boutique vente ligne, vente, achat, laregina, deals, acheter, vendre, boutique en ligne, laregina deals, ouvrir un magasin en ligne"
 
 SITE_NAME = "LaRegina"
-ADMIN_URL = "lrg-admin/"
 AUTH_USER_MODEL = "accounts.User"
 
 ALLOWED_HOSTS = []

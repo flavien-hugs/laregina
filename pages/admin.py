@@ -85,6 +85,7 @@ class CampaignAdmin(admin.ModelAdmin):
                     "parent",
                     "discount",
                     "image",
+                    "activate_at",
                 ),
             },
         ),
@@ -96,6 +97,7 @@ class CampaignAdmin(admin.ModelAdmin):
         "get_campaigns_count",
         "date",
         "show_image_tag",
+        "activate_at",
     ]
     list_per_page = 10
     list_display_links = ("__str__",)

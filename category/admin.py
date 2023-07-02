@@ -1,5 +1,3 @@
-# category.admin.py
-
 from django.contrib import admin
 
 from category.models import Category
@@ -28,22 +26,13 @@ class ProductInline(admin.TabularInline):
 
 
 @admin.register(Category)
-class CategoryAdmin(admin.ModelAdmin):
-    # mptt_indent_field = "parent"
-    # expand_tree_by_default = False
+class CategoryAdmin(DraggableMPTTAdmin, admin.ModelAdmin):
+    mptt_indent_field = "parent"
+    expand_tree_by_default = False
     fieldsets = (
         ("catégorie", {"fields": ("parent", "name", "image", "is_active", "slug")}),
     )
-    list_display = (
-        "id",
-        "parent",
-        "name",
-        "is_active",
-    )
-    # mptt_level_indent = 20
-    list_filter = ("parent__name",)
-    list_editable = ("is_active",)
-    list_display_links = ("parent",)
+    mptt_level_indent = 20
     prepopulated_fields = {
         "slug": (
             "parent",

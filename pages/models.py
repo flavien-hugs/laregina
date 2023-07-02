@@ -165,6 +165,10 @@ class Campaign(BaseTimeStampModel, ModelSlugMixin):
         format="JPEG",
         options={"quality": 90},
     )
+    activate_at = models.BooleanField(
+        default=False,
+        verbose_name="campagne disponible ?",
+    )
 
     objects = PageModelManager()
 

@@ -7,7 +7,7 @@ APPEND_SLASH = True
 
 ADMINS = (("LaRegina", "unsta.inc@pm.me"),)
 MANAGERS = ADMINS
-
+ADMIN_URL = "lrg-admin/"
 ALLOWED_HOSTS = ["*.laregina.deals", "laregina.deals", "www.laregina.deals"]
 
 DATABASES = {

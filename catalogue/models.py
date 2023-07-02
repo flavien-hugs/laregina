@@ -1,5 +1,3 @@
-# catalogue.models.py
-
 import logging
 from itertools import chain
 

@@ -54,7 +54,7 @@ class ExtraContextData:
         return super().get_context_data(**kwargs)
 
 
-@method_decorator(cache_page(CACHE_TTL), name="dispatch")
+# @method_decorator(cache_page(CACHE_TTL), name="dispatch")
 class HomeThirdView(PromotionMixin, generic.TemplateView):
 
     queryset = Category.objects.all()
@@ -79,62 +79,10 @@ class HomeThirdView(PromotionMixin, generic.TemplateView):
         return super().get_context_data(**kwargs)
 
 
-combine_view = HomeThirdView.as_view()
+home_view = HomeThirdView.as_view()
 
 
-"""
-class HomeView(ExtraContextData, PromotionMixin, generic.TemplateView):
-
-    template_name = "index.html"
-
-    @method_decorator(cache_page(CACHE_TTL))
-    def dispatch(self, request, *args, **kwargs):
-        if HomePage.objects.filter(page=1):
-            return HttpResponseRedirect(reverse_lazy("market"))
-        elif HomePage.objects.filter(page=2):
-            return HttpResponseRedirect(reverse_lazy("allmarket"))
-        return super().dispatch(request, *args, **kwargs)
-
-
-home_view = HomeView.as_view()
-
-
-@method_decorator(cache_page(CACHE_TTL),  name='dispatch')
-class HomeMarketView(PromotionMixin, generic.TemplateView):
-
-    template_name = "market.html"
-    try:
-        queryset = Category.objects.get(pk=223)
-    except:
-        queryset = Category.objects.all()
-
-    def get_context_data(self, **kwargs):
-        categories = self.queryset.get_children()
-        kwargs['farm'] = categories[:15]
-        return super().get_context_data(**kwargs)
-
-
-home_market_view = HomeMarketView.as_view()
-
-
-class HomeTwoView(ExtraContextData, PromotionMixin, generic.TemplateView):
-
-    template_name = 'market.html'
-
-    @method_decorator(cache_page(CACHE_TTL))
-    def dispatch(self, request, *args, **kwargs):
-        if HomePage.objects.filter(page=0):
-            return HttpResponseRedirect(reverse_lazy("home"))
-        elif HomePage.objects.filter(page=2):
-            return HttpResponseRedirect(reverse_lazy("allmarket"))
-        return super().dispatch(request, *args, **kwargs)
-
-
-market_view = HomeTwoView.as_view()
-"""
-
-
-@method_decorator(cache_page(CACHE_TTL), name="dispatch")
+# @method_decorator(cache_page(CACHE_TTL), name="dispatch")
 class ProductListView(FilterMixin, PromotionMixin, generic.ListView):
     paginate_by = 16
     queryset = Product.objects.all()

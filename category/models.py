@@ -54,7 +54,7 @@ class Category(MPTTModel, ModelSlugMixin, BaseTimeStampModel):
     )
     is_active = models.BooleanField(verbose_name="active", default=True)
 
-    objects = CategoryManager()
+    # objects = CategoryManager()
 
     class MPTTMeta:
         order_insertion_by = ["name"]
@@ -85,9 +85,10 @@ class Category(MPTTModel, ModelSlugMixin, BaseTimeStampModel):
         full_path = [self.name]
         k = self.parent
         while k is not None:
-            full_path.append(k.name)
+            if k.name:
+                full_path.append(k.name)
             k = k.parent
-        return " / ".join(full_path[::-1])
+        return self.name
 
     @admin.display(description="catégorie")
     def categorie_name(self):

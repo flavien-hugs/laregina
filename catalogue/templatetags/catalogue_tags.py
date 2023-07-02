@@ -45,11 +45,11 @@ def items(request):
     return item_in_cart
 
 
-@register.inclusion_tag("includes/partials/_partials_hero_slider.html")
+@register.inclusion_tag("includes/partials/_hero_slider.html")
 def hero_slider_list(count=5):
-    annonces = Annonce.objects.all()[:count]
-    object_list = sorted(annonces, key=lambda x: random.random())
-    context = {"annonces": object_list}
+    campaigns = Campaign.objects.published()[:count]
+    object_list = sorted(campaigns, key=lambda x: random.random())
+    context = {"campaigns": object_list}
     return context
 
 
@@ -81,7 +81,7 @@ def product_recent_list(count=20):
     return context
 
 
-@register.inclusion_tag("includes/partials/_partials_products_selling.html")
+@register.inclusion_tag("includes/partials/_products_selling.html")
 def best_selling_products(count=20):
     orders = Order.objects.filter(status=Order.SHIPPED)[:count]
     context = {

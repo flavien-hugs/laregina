@@ -1,5 +1,3 @@
-# catalogue.urls.py
-
 from django.urls import path, include
 
 from pages import views as pages_views
@@ -10,7 +8,7 @@ from category.views import category_detail_view
 
 
 urlpatterns = [
-    path(route="", view=catalogue_views.combine_view, name="home"),
+    path(route="", view=catalogue_views.home_view, name="home"),
     path(
         "cart/index/",
         include(
