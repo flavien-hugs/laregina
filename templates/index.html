@@ -10,74 +10,45 @@
 
     {% full_tree_for_model category.Category as categories %}
 
-    <div id="page-wrapper" class="pb-4">
+    <div id="homepage-2" class="pb-4">
         <section class="ps-home-banner">
-            <div class="container px-0">
-                <div class="ps-section__left" role="menu">
-                    <ul class="menu--dropdown">
-                        {% include "includes/partials/_partials_menu_category.html" %}
-                    </ul>
-                </div>
+            {% hero_slider_list 5 %}
+        </section>
 
-                {% hero_slider_list 5 %}
-
-                <div class="ps-section__right">
-                    <aside class="widget widget_product widget_features bg-white p-4 mb-3">
-                        <p>
-                            <i class="icon-store text-success"></i>
-                            <a href="{{ signup }}">
-                                Vendez sur LaRegina <br>
-                                <span>Ouvrez votre boutique</span>
-                            </a>
-                        </p>
-                        <p>
-                            <i class="icon-telephone text-success"></i>
-                            Commandez au <br>
-                            <span>{{ contact_four }}</span>
-                        </p>
-                        <p>
-                            <i class="icon-bubbles text-success"></i>
-                            Centre d'assistance <br>
-                            Guide du service client
-                        </p>
-                    </aside>
-
-                    <a class="ps-collection" href="{{ delivery_register }}">
-                        <img loading="lazy" src="{{ STATIC_PREFIX }}img/laregina-distributeur-homepage.jpg" alt="distributeur-produit-laregina">
-                    </a>
+        <div class="ps-site-features py-5">
+            <div class="container">
+                <div class="ps-block--site-features ps-block--site-features-2">
+                    <div class="ps-block__item">
+                        <div class="ps-block__left"><i class="icon-3d-rotate"></i></div>
+                        <div class="ps-block__right">
+                            <h4>Retour, sous 7 jours si éligible</h4>
+                            <p></p>
+                        </div>
+                    </div>
+                    <div class="ps-block__item">
+                        <div class="ps-block__left"><i class="icon-credit-card"></i></div>
+                        <div class="ps-block__right">
+                            <h4>Paiement 100 % sécurisé</h4>
+                        </div>
+                    </div>
+                    <div class="ps-block__item">
+                        <div class="ps-block__left"><i class="icon-bubbles"></i></div>
+                        <div class="ps-block__right">
+                            <h4>24/7 Assistance</h4>
+                        </div>
+                    </div>
                 </div>
             </div>
-        </section>
+        </div>
 
         {% best_selling_products 20 %}
 
-        {% if promotions.exists %}
-            {% for object in promotions|slice:":1" %}
-                {% if object.get_products.exists %}
-                    <section class="ps-deal-of-day container bg-white mt-3 pb-3">
-                        <div class="ps-section__header py-4 mb-3">
-                            <h3>{{ object.campaign.name }}</h3>
-                            <a class="font-weight-bolder" href="{{ object.campaign.get_absolute_url }}">Voir plus</a>
-                        </div>
-
-                        <div class="ps-section__content pt-4">
-                            <div class="ps-carousel--nav owl-slider" data-owl-auto="true" data-owl-loop="true" data-owl-speed="5000" data-owl-gap="30" data-owl-nav="false" data-owl-dots="false" data-owl-item="5" data-owl-item-xs="2" data-owl-item-sm="3" data-owl-item-md="4" data-owl-item-lg="4" data-owl-item-xl="5" data-owl-duration="1000" data-owl-mousedrag="on">
-                                {% for instance in object.get_products %}
-                                {% include "catalogue/snippet/_snippet_product.html" with instance=instance %}
-                                {% endfor %}
-                            </div>
-                        </div>
-                    </section>
-                {% endif %}
-            {% endfor %}
-        {% endif %}
-
         <section class="ps-deal-of-day container bg-white p-3 my-3">
             <div class="ps-section__content">
-                <div class="row">
+                <div class="row align-content-lg-stretch">
                     {% for cat in categories|slice:":2"|shuffle %}
-                        <div class="col-xl-6 col-lg-6 col-sm-12 col-12 mb-lg-0 mb-4">
-                            <a href="{{ cat.get_absolute_url }}">
+                        <div class="col-xl-6 col-lg-6 col-sm-12 mb-lg-0 mb-4">
+                            <a class="ps-block--category-2 ps-block--category-auto-part" href="{{ cat.get_absolute_url }}">
                                 <img loading="lazy" src="{{ cat.get_image_url }}" alt="{{ cat.name|slugify }}">
                             </a>
                         </div>

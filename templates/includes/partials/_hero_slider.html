@@ -1,0 +1,13 @@
+<div class="ps-carousel--dots owl-slider" data-owl-auto="true" data-owl-loop="true" data-owl-speed="5000" data-owl-gap="0" data-owl-nav="false" data-owl-dots="true" data-owl-item="1" data-owl-item-xs="1" data-owl-item-sm="1" data-owl-item-md="1" data-owl-item-lg="1" data-owl-duration="1000" data-owl-mousedrag="on" data-owl-animate-in="fadeIn" data-owl-animate-out="fadeOut">
+    {% for object in campaigns %}
+        <article class="ps-banner--autopart" data-background="{{ object.image.url }}">
+            <img src="{{ object.image.url }}" alt="{{ object.parent|lower }}">
+            <div class="ps-banner__content">
+                <h2 class="text-danger font-weight-bold">-{{ object.discount }}%</h2>
+                <h4>{{ object.parent|upper }}</h4>
+                <p>{{ object.name|title }}</p>
+                <a class="ps-btn" href="{{ object.get_absolute_url }}">Acheter maintenant</a>
+            </div>
+        </article>
+    {% endfor %}
+</div>

@@ -14,8 +14,8 @@
     </div>
 
     <div class="ps-product__container">
-        <a class="ps-product__vendor text-center" href="{{ instance.user.get_absolute_url }}">
-        {{ instance.user.store|upper }}</a>
+        <!-- <a class="ps-product__vendor text-center" href="{{ instance.user.get_absolute_url }}">
+        {{ instance.user.store|upper }}</a> -->
 
         <div class="ps-product__content">
             <a class="ps-product__title" href="{{ instance.get_absolute_url }}">
@@ -59,7 +59,7 @@
                     <span>{{ instance.avaregereview }}</span>
                 </div>
             {% endif %}
-            <p class="ps-product__price sale">
+            <p class="ps-product__price sale font-weight-bold">
                 {% if instance.get_vouchers %}
                     {{ instance.get_product_price|intcomma }} Fr
                     <del>{{ instance.price|intcomma }} Fr</del>

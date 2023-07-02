@@ -168,7 +168,7 @@
                 <div class="ps-page__right">
                     <!-- delivery information -->
                     <aside class="widget widget_product widget_features mb-3">
-                        <p><i class="icon-3d-rotate"></i> Retour gratuit sous 7 jours si éligible, si facile</p>
+                        <p><i class="icon-3d-rotate"></i> Retour gratuit sous 7 jours si éligible</p>
                         <p><i class="icon-receipt"></i> Le fournisseur donne des factures pour ce produit.</p>
                         <p><i class="icon-credit-card"></i> Payer en ligne ou lors de la réception de marchandises</p>
                     </aside>
@@ -185,11 +185,13 @@
                         </aside>
                     {% endif %}
 
+                    <!--
                     <aside class="widget widget_sell-on-site">
                         <a class="ps-collection" href="{{ delivery_register }}">
                             <img loading="lazy" src="{{ STATIC_PREFIX }}img/laregina-distributeur-homepage.jpg" alt="distributeur-produit-laregina">
                         </a>
                     </aside>
+                     -->
                 </div>
             </div>
 
@@ -204,8 +206,6 @@
             {% if related_product %}
                 {% product_list related_product 'Produits de la même catégorie' %}
             {% endif %}
-
-            {% publicity_list %}
 
             <!-- product recently viewed -->
             {% if recently_viewed %}
