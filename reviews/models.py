@@ -21,7 +21,7 @@ class ProductReview(models.Model):
     name = models.CharField(max_length=180, verbose_name="nom & prénoms", null=True)
 
     product = models.ForeignKey(
-        to=Product, on_delete=models.PROTECT, verbose_name="produit"
+        to=Product, on_delete=models.CASCADE, verbose_name="produit"
     )
     email = models.EmailField(verbose_name="email")
     rating = models.PositiveSmallIntegerField(
