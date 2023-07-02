@@ -1,5 +1,3 @@
-# category.models.py
-
 import logging
 
 from django.db import models
