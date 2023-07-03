@@ -1,5 +1,3 @@
-# category.models.py
-
 import logging
 
 from django.db import models
@@ -54,7 +52,7 @@ class Category(MPTTModel, ModelSlugMixin, BaseTimeStampModel):
     )
     is_active = models.BooleanField(verbose_name="active", default=True)
 
-    # objects = CategoryManager()
+    objects = CategoryManager()
 
     class MPTTMeta:
         order_insertion_by = ["name"]

@@ -54,7 +54,7 @@ class ExtraContextData:
         return super().get_context_data(**kwargs)
 
 
-# @method_decorator(cache_page(CACHE_TTL), name="dispatch")
+@method_decorator(cache_page(CACHE_TTL), name="dispatch")
 class HomeThirdView(PromotionMixin, generic.TemplateView):
 
     queryset = Category.objects.all()
@@ -82,7 +82,7 @@ class HomeThirdView(PromotionMixin, generic.TemplateView):
 home_view = HomeThirdView.as_view()
 
 
-# @method_decorator(cache_page(CACHE_TTL), name="dispatch")
+@method_decorator(cache_page(CACHE_TTL), name="dispatch")
 class ProductListView(FilterMixin, PromotionMixin, generic.ListView):
     paginate_by = 16
     queryset = Product.objects.all()
