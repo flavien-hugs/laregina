@@ -1,8 +1,4 @@
-# analytics.admin.py
-
 from django.contrib import admin
-
-from analytics.models import ProductView
 from services.export_data_csv import export_to_csv
 
 

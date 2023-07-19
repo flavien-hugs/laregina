@@ -1,7 +1,6 @@
 # cart.management.commands
-
-from django.core.management.base import NoArgsCommand
 from cart import cart
+from django.core.management.base import NoArgsCommand
 
 
 class Command(NoArgsCommand):

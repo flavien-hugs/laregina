@@ -1,8 +1,6 @@
-from django.contrib import admin
-
-from category.models import Category
 from catalogue.models import Product
-
+from category.models import Category
+from django.contrib import admin
 from mptt.admin import DraggableMPTTAdmin
 
 
@@ -43,5 +41,5 @@ class CategoryAdmin(DraggableMPTTAdmin, admin.ModelAdmin):
     actions = ["make_disabled"]
 
     @admin.action(description="Mark selected categories as disabled")
-    def make_disabled(modeladmin, request, queryset):
+    def make_disabled(self, request, queryset):
         queryset.update(is_active=False)

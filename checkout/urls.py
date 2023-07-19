@@ -1,9 +1,5 @@
-# checkout.urls.py
-
-from django.urls import path
-from django.views.generic import TemplateView
-
 from checkout import views
+from django.urls import path
 
 
 app_name = "checkout"

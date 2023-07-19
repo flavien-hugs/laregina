@@ -1,7 +1,4 @@
-# search.admin.py
-
 from django.contrib import admin
-from search.models import SearchTerm
 from services.export_data_csv import export_to_csv
 
 

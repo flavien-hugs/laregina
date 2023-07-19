@@ -1,10 +1,9 @@
+from catalogue import models
 from django.contrib import admin
 from django.utils.html import format_html
 from django.utils.safestring import mark_safe
-
-from catalogue import models, forms
-from services.export_data_csv import export_to_csv
 from django_summernote.admin import SummernoteModelAdmin
+from services.export_data_csv import export_to_csv
 
 
 class ProductImageInline(admin.TabularInline):
@@ -84,7 +83,7 @@ class ProductAdmin(SummernoteModelAdmin):
             product_url = instance.get_absolute_url()
             link = f"""
                 <a title="view {instance.name} on website"
-                    target="_blank" href="{product_url}">
+                    target="_blank" href="{product_url}!r">
                     Voir
                 </a>
             """

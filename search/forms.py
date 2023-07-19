@@ -3,7 +3,6 @@ from search.models import SearchTerm
 
 
 class SearchForm(forms.ModelForm):
-
     q = forms.CharField(
         widget=forms.TextInput(
             attrs={

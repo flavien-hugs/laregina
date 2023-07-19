@@ -1,8 +1,7 @@
-from django.conf import settings
-
 import requests
+from checkout.models import Order
 from core.celery import app as celery_app
-from checkout.models import Order, OrderItem
+from django.conf import settings
 
 SENDER_ID = settings.SENDER_ID
 SMS_API_KEY = settings.SMS_API_KEY
@@ -11,7 +10,6 @@ SMS_API_TOKEN = settings.API_TOKEN
 
 @celery_app.task(name="send_sms_order")
 def send_sms_order(order_id):
-
     order = Order.objects.get(transaction_id=order_id)
     DESTINATAIRE = order.get_phone_number()
     NUMBER_TRANSACTION = order.get_order_id()

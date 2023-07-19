@@ -1,19 +1,15 @@
-import datetime
-
-from django import forms
-from django.db import transaction
-from django.forms.widgets import NumberInput
-from django.contrib.auth import get_user_model
-from django.forms.models import inlineformset_factory
-from django.contrib.auth.forms import UserCreationForm, UserChangeForm
-
 from accounts import models
-
-from crispy_forms import bootstrap, layout
+from crispy_forms import bootstrap
+from crispy_forms import layout
 from crispy_forms.helper import FormHelper
+from django import forms
+from django.contrib.auth import get_user_model
+from django.contrib.auth.forms import UserChangeForm
+from django.contrib.auth.forms import UserCreationForm
+from django.db import transaction
+from django.forms.models import inlineformset_factory
+from django.forms.widgets import NumberInput
 from helpers.utils import email_validation_function
-from phonenumber_field.formfields import PhoneNumberField
-from phonenumber_field.widgets import PhoneNumberPrefixWidget
 
 
 class AccountMixinForm:
@@ -26,7 +22,6 @@ class AccountMixinForm:
 
 
 class AccountLoginForm(AccountMixinForm, forms.Form):
-
     required_css_class = "required"
 
     email = forms.EmailField(
@@ -39,7 +34,6 @@ class AccountLoginForm(AccountMixinForm, forms.Form):
     )
 
     def __init__(self, *args, **kwargs):
-
         super().__init__(*args, **kwargs)
 
         self.helper = FormHelper(self)
@@ -59,7 +53,6 @@ class AccountLoginForm(AccountMixinForm, forms.Form):
 
 
 class AccountSellerRegisterForm(AccountMixinForm, UserCreationForm):
-
     required_css_class = "required"
 
     error_message = UserCreationForm.error_messages.update(
@@ -146,7 +139,6 @@ class AccountSellerRegisterForm(AccountMixinForm, UserCreationForm):
 
 
 class AccountRequestPasswordResetForm(AccountMixinForm, forms.Form):
-
     required_css_class = "required"
 
     email = forms.EmailField(
@@ -155,7 +147,6 @@ class AccountRequestPasswordResetForm(AccountMixinForm, forms.Form):
     )
 
     def __init__(self, *args, **kwargs):
-
         super().__init__(*args, **kwargs)
 
         self.helper = FormHelper(self)
@@ -175,7 +166,6 @@ class AccountRequestPasswordResetForm(AccountMixinForm, forms.Form):
 
 class AccountSellerUpdateForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
-
         super().__init__(*args, **kwargs)
         self.helper = FormHelper(self)
 
@@ -273,7 +263,6 @@ SocialMediaForm = inlineformset_factory(
 
 
 class CustomerAccountSignUpForm(forms.ModelForm):
-
     email = forms.EmailField(
         label="Adresse email",
         widget=forms.TextInput({"placeholder": "Entrez votre adresse email"}),
@@ -348,7 +337,6 @@ class MarketChangeForm(UserChangeForm):
 
 
 class DistributorCustomerForm(AccountMixinForm, forms.ModelForm):
-
     privacy = forms.BooleanField(
         label="Conditions légales d'utilisation des données",
         initial=True,

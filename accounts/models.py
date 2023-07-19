@@ -1,25 +1,27 @@
-import random
-import string
 import datetime
 import logging
-
-from django.db import models
-from django.urls import reverse
-from django.contrib import admin
-from django.dispatch import receiver
-from django.utils.safestring import mark_safe
-from django.core.validators import FileExtensionValidator
-from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin
-
-from accounts.managers import UserManager
-from helpers.utils import upload_image_logo_path, vendor_unique_slug_generator
-
-from helpers.models import BaseTimeStampModel, BaseOrderInfo, ModelSlugMixin
+import random
+import string
 
 import phonenumbers
-from . import constants
+from accounts.managers import UserManager
+from django.contrib import admin
+from django.contrib.auth.models import AbstractBaseUser
+from django.contrib.auth.models import PermissionsMixin
+from django.core.validators import FileExtensionValidator
+from django.db import models
+from django.dispatch import receiver
+from django.urls import reverse
+from django.utils.safestring import mark_safe
+from helpers.models import BaseOrderInfo
+from helpers.models import BaseTimeStampModel
+from helpers.models import ModelSlugMixin
+from helpers.utils import upload_image_logo_path
+from helpers.utils import vendor_unique_slug_generator
 from imagekit.models import ImageSpecField
 from imagekit.processors import ResizeToFill
+
+from . import constants
 
 logger = logging.getLogger(__name__)
 NULL_AND_BLANK = {"null": True, "blank": True}
@@ -34,7 +36,6 @@ class User(
     AbstractBaseUser,
     PermissionsMixin,
 ):
-
     civility = models.CharField(
         max_length=12,
         choices=constants.CIVILITY_CHOICES,
@@ -151,7 +152,7 @@ class User(
     @admin.display(description="logo")
     def get_vendor_logo(self):
         if self.logo:
-            return mark_safe(f"<img src='{self.logo.url}' width='50' height='50'/>")
+            return mark_safe(f"<img src='{self.logo.url}!r' width='50' height='50'/>")
         return mark_safe("<img src='/static/img/default.jpeg' height='50'/>")
 
     def get_logo_url(self):
@@ -216,7 +217,6 @@ class ProfileSocialMedia(BaseTimeStampModel):
 
 
 class DistributorCustomer(BaseOrderInfo, BaseTimeStampModel):
-
     note = email = shipping_zip = None
     shipping_country = shipping_adress = shipping_first_name = shipping_last_name = None
 
@@ -283,8 +283,6 @@ class DistributorCustomer(BaseOrderInfo, BaseTimeStampModel):
         return 1992 <= self.birth_date.year < 2004
 
     def save(self, *args, **kwargs):
-        from analytics.utils import get_client_ip
-
         if self.delivery_id is None:
             self.generate_delivery_id(3)
         super().save(*args, **kwargs)
@@ -297,7 +295,6 @@ class DistributorCustomer(BaseOrderInfo, BaseTimeStampModel):
 
 
 class GuestCustomer(BaseOrderInfo, BaseTimeStampModel):
-
     email = models.EmailField(
         unique=True,
         max_length=254,

@@ -1,13 +1,10 @@
 # voucher.forms.py
-
-from django import forms
-
-from voucher.models import Voucher
 from catalogue.models import Product
+from django import forms
+from voucher.models import Voucher
 
 
 class VoucherCreateForm(forms.ModelForm):
-
     products = forms.ModelMultipleChoiceField(
         required=True,
         label="Choisir les produits",

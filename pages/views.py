@@ -1,16 +1,18 @@
 # pages.views.py
-
-from django.views import generic
+from accounts.mixins import SellerRequiredMixin
+from analytics import utils
 from django.contrib import messages
-from django.urls import reverse_lazy
-from django.http import HttpResponseRedirect
 from django.contrib.auth.decorators import login_required
 from django.contrib.messages.views import SuccessMessageMixin
-from django.shortcuts import get_object_or_404, render, redirect
-
-from analytics import utils
-from pages import models, forms, mixins
-from accounts.mixins import SellerRequiredMixin
+from django.http import HttpResponseRedirect
+from django.shortcuts import get_object_or_404
+from django.shortcuts import redirect
+from django.shortcuts import render
+from django.urls import reverse_lazy
+from django.views import generic
+from pages import forms
+from pages import mixins
+from pages import models
 
 
 class ContactView(generic.View):
@@ -92,9 +94,7 @@ def promotion_update_view(
     form = forms.PromotionForm(request.user, request.POST or None, instance=obj)
     if form.is_valid():
         form.save()
-        msg = (
-            f'Mise à jour de la promotion "{obj.campaign.name}" effectuée avec succes !'
-        )
+        msg = f'Mise à jour de la promotion "{obj.campaign.name}!r" effectuée avec succes !'
         messages.success(request, msg)
         return redirect("seller:promotion_list")
 
@@ -150,7 +150,6 @@ promotion_detail = PromotionDetailView.as_view()
 
 
 class CampaignMixinObject(mixins.PromotionMixin, generic.ListView):
-
     paginate_by = 20
     template_name = "pages/promotion/_list.html"
 

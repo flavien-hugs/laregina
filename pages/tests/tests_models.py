@@ -1,10 +1,8 @@
-# pages.tests.tests_models.py
-
-from django.urls import reverse
 from django.test import TestCase
+from django.urls import reverse
 from django.urls.exceptions import NoReverseMatch
-
-from pages.models import Contact, Testimonial, Promotion
+from pages.models import Contact
+from pages.models import Testimonial
 
 
 class ContactTestCase(TestCase):
@@ -21,10 +19,10 @@ class ContactTestCase(TestCase):
     def test_contact_url(self):
         try:
             url = reverse("pages:contact")
-        except NoReverseMatch:
-            assert False
+        except NoReverseMatch as err:
+            raise AssertionError("Reverse for 'pages:contact' not found.") from err
         response = self.client.get(url)
-        assert response.status_code == 200
+        self.assertEqual(response.status_code, 200)
 
 
 class TestimonialtTestCase(TestCase):

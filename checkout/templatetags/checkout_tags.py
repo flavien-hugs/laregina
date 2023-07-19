@@ -1,5 +1,4 @@
 # order.templatetags.checkout_tags.py
-
 from django import template
 
 register = template.Library()

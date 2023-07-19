@@ -1,8 +1,6 @@
 # category.management.commands.create_backup_category.py
-
-from django.core.management.base import BaseCommand
-
 from category.models import Category
+from django.core.management.base import BaseCommand
 
 
 class Command(BaseCommand):

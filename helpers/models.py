@@ -1,18 +1,15 @@
-# common.models.py
-
-from django.db import models
 from django.contrib import admin
+from django.db import models
 from django.utils import timezone
-from django.core.validators import RegexValidator
-
 from phonenumber_field.modelfields import PhoneNumberField
-from .constants import COUNTRY_CHOICES, DEFAULT_COUNTRY_CHOICES
+
+from .constants import COUNTRY_CHOICES
+from .constants import DEFAULT_COUNTRY_CHOICES
 
 NULL_AND_BLANK = {"null": True, "blank": True}
 
 
 class BaseTimeStampModel(models.Model):
-
     created_at = models.DateTimeField(
         default=timezone.now, editable=False, verbose_name="date de création"
     )
@@ -27,7 +24,6 @@ class BaseTimeStampModel(models.Model):
 
 
 class ModelSlugMixin(models.Model):
-
     slug = models.SlugField(
         max_length=225,
         unique=True,
@@ -41,7 +37,6 @@ class ModelSlugMixin(models.Model):
 
 
 class PublishedMixin(models.Model):
-
     published = models.DateTimeField(
         default=timezone.now,
         auto_now_add=False,
@@ -59,7 +54,6 @@ class PublishedMixin(models.Model):
 
 
 class BaseOrderInfo(models.Model):
-
     email = models.EmailField(verbose_name="adresse de messagerie", max_length=50)
     shipping_first_name = models.CharField(verbose_name="nom de famille", max_length=50)
     shipping_last_name = models.CharField(verbose_name="prénom", max_length=50)

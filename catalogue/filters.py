@@ -1,8 +1,3 @@
-# catalogue.filter.py
-
-from django.core.exceptions import ImproperlyConfigured
-
-
 class FilterMixin(object):
     filter_class = None
     search_ordering_param = "ordering"
@@ -11,11 +6,8 @@ class FilterMixin(object):
         try:
             qs = super().get_queryset(*args, **kwargs)
             return qs
-        except Exception:
-            raise ImproperlyConfigured(
-                "Vous devez disposer d'un queryset pour \
-                pouvoir utiliser le FilterMixin"
-            )
+        except Exception as err:
+            raise err
 
     def get_context_data(self, *args, **kwargs):
         qs = self.get_queryset()

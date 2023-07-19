@@ -1,9 +1,8 @@
-from django import forms
 from checkout.models import Order
+from django import forms
 
 
 class CheckoutForm(forms.ModelForm):
-
     privacy = forms.BooleanField(required=True)
 
     def __init__(self, *args, **kwargs):

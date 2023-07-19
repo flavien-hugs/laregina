@@ -1,9 +1,7 @@
 # search.search.py
-
-from django.db.models import Q
-
-from search.models import SearchTerm
 from catalogue.models import Product
+from django.db.models import Q
+from search.models import SearchTerm
 
 
 STRIP_WORDS = [
@@ -27,7 +25,6 @@ STRIP_WORDS = [
 
 
 def store(request, q):
-
     """
     enregistre le texte de la recherche
     note : si le terme de recherche est long d'au moins
@@ -47,7 +44,6 @@ def store(request, q):
 
 
 def products(search_text):
-
     """
     obtenir les produits correspondant au texte de recherche
     """
@@ -72,7 +68,6 @@ def products(search_text):
 
 
 def _prepare_words(search_text):
-
     """
     supprimer les mots courants, limiter à 5 mots
     """

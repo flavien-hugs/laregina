@@ -1,9 +1,9 @@
 # search.tests.test_views.py
-
 import httplib
-from django.utils import html
+from django.test import Client
+from django.test import TestCase
 from django.urls import reverse
-from django.test import TestCase, Client
+from django.utils import html
 
 
 class SearchTestCase(TestCase):

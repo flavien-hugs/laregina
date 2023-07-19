@@ -1,23 +1,21 @@
 import logging
 from itertools import chain
 
-from django.db import models
-from datetime import datetime
-from django.urls import reverse
-from django.contrib import admin
-from django.dispatch import receiver
-from django.db.models import Avg, Count
-from django.utils.safestring import mark_safe
-
 from catalogue.managers import CatalogueManager
-from caching.caching import cache_update, cache_evict
-
-from mptt.models import TreeForeignKey
-from helpers.utils import upload_image_path, unique_slug_generator
+from django.contrib import admin
+from django.db import models
+from django.db.models import Avg
+from django.db.models import Count
+from django.dispatch import receiver
+from django.urls import reverse
+from django.utils.safestring import mark_safe
 from helpers.models import BaseTimeStampModel
-
+from helpers.utils import unique_slug_generator
+from helpers.utils import upload_image_path
 from imagekit.models import ImageSpecField
-from imagekit.processors import ResizeToFill, Adjust
+from imagekit.processors import Adjust
+from imagekit.processors import ResizeToFill
+from mptt.models import TreeForeignKey
 
 logger = logging.getLogger(__name__)
 NULL_AND_BLANK = {"null": True, "blank": True}
@@ -223,7 +221,7 @@ class Product(BaseTimeStampModel):
     @admin.display(description="image du produit")
     def get_product_image(self):
         if self.images().first() is not None:
-            return mark_safe(f"<img src='{self.get_image_url()}' height='50'/>")
+            return mark_safe(f"<img src='{self.get_image_url()}!r' height='50'/>")
         return "https://via.placeholder.com/50x50"
 
     def product_image_url(self):

@@ -1,11 +1,8 @@
-# analytics/utils.py
-
 import os
 from base64 import b64encode
-from django.shortcuts import get_object_or_404
 
-from search.models import SearchTerm
 from catalogue.models import Product
+from search.models import SearchTerm
 
 
 def tracking_id(request):
@@ -17,7 +14,6 @@ def tracking_id(request):
 
 
 def get_client_ip(request):
-
     x_forwarded_for = request.META.get("HTTP_X_FORWARDED_FOR")
     if x_forwarded_for:
         ip = x_forwarded_for.split(",")[0]
@@ -27,7 +23,6 @@ def get_client_ip(request):
 
 
 def recommended_from_search(request):
-
     common_words = frequent_search_words(request)
     from search import search
 
@@ -41,7 +36,6 @@ def recommended_from_search(request):
 
 
 def frequent_search_words(request):
-
     searches = (
         SearchTerm.objects.filter(tracking_id=tracking_id(request))
         .values("q")
@@ -64,7 +58,6 @@ def sort_words_by_frequency(some_string):
 
 
 def log_product_view(request, product):
-
     t_id = tracking_id(request)
     from analytics.models import ProductView
 
@@ -87,7 +80,6 @@ def log_product_view(request, product):
 
 
 def recommended_from_views(request):
-
     t_id = tracking_id(request)
     viewed = get_recently_viewed(request)
 

@@ -1,9 +1,5 @@
-# voucher.admin.py
-
 from django.contrib import admin
-
 from voucher.models import Voucher
-from catalogue.models import Product
 
 
 @admin.register(Voucher)

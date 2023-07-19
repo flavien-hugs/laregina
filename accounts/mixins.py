@@ -1,14 +1,15 @@
-import decimal
 import datetime
+import decimal
+
+from catalogue.forms import ProductAdminForm
+from catalogue.models import Product
+from checkout.models import OrderItem
+from django.contrib.auth import get_user_model
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.mixins import UserPassesTestMixin
 from django.urls import reverse_lazy
 from django.utils.http import is_safe_url
-from django.contrib.auth import get_user_model
-from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
-
 from pages.models import Promotion
-from catalogue.models import Product
-from catalogue.forms import ProductAdminForm
-from checkout.models import Order, OrderItem
 
 
 class RequestFormAttachMixin(object):

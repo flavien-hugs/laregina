@@ -1,10 +1,9 @@
-# accounts/urls.py
-
-from django.urls import path, include
-from django.views.generic import TemplateView
-
+from accounts.views import auth_views
+from accounts.views import customer_views
+from accounts.views import seller_views
+from django.urls import include
+from django.urls import path
 from pages import views
-from accounts.views import auth_views, seller_views, customer_views
 
 
 urlpatterns = [

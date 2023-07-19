@@ -1,4 +1,11 @@
+import os
+
 from .base import *  # noqa
+
+
+abspath = os.path.abspath(__file__)
+dirname = os.path.dirname(os.path.dirname(abspath))
+BASE_DIR = os.path.dirname(dirname)
 
 
 DATABASES = {

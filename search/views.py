@@ -1,8 +1,6 @@
 # search.views.py
-
-from django.views import generic
 from django.urls import reverse_lazy
-
+from django.views import generic
 from search import search
 
 
@@ -13,7 +11,7 @@ class SearchView(generic.ListView):
 
     def get_context_data(self, *args, **kwargs):
         query = self.request.GET.get("q", None)
-        kwargs["page_title"] = f'Résultat de recherche pour : "{query}"'
+        kwargs["page_title"] = f'Résultat de recherche pour : "{query}!r"'
         return super().get_context_data(*args, **kwargs)
 
     def get_queryset(self, *args, **kwargs):

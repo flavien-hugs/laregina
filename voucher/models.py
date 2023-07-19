@@ -1,21 +1,16 @@
-# voucher.models.py
-
+from django.contrib import admin
+from django.core.validators import MaxValueValidator
+from django.core.validators import MinValueValidator
 from django.db import models
 from django.urls import reverse
-from django.contrib import admin
-from django.conf import settings
-from django.utils.timezone import now
-from django.core.validators import MinValueValidator, MaxValueValidator
-
-from catalogue.models import Product
-from helpers.models import BaseTimeStampModel, ApplyDiscountModel
+from helpers.models import ApplyDiscountModel
+from helpers.models import BaseTimeStampModel
 
 
 validators = [MinValueValidator(0), MaxValueValidator(100)]
 
 
 class Voucher(BaseTimeStampModel, ApplyDiscountModel):
-
     discount = models.IntegerField(
         verbose_name="pourcentage de réduction", validators=validators
     )

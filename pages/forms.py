@@ -1,10 +1,8 @@
-# pages.forms.py
-
-from django import forms
-from django.contrib.auth import get_user_model
-
 from catalogue.models import Product
-from pages.models import Contact, Campaign, Promotion
+from django import forms
+from pages.models import Campaign
+from pages.models import Contact
+from pages.models import Promotion
 
 
 OBJECT_TYPES = (
@@ -89,7 +87,6 @@ class ContactForm(forms.ModelForm):
 
 
 class PromotionForm(forms.ModelForm):
-
     campaign = forms.ModelChoiceField(
         empty_label=None, queryset=Campaign.objects.all(), widget=forms.Select()
     )

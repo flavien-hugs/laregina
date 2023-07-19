@@ -1,17 +1,17 @@
 import logging
 
-from django.db import models
-from django.urls import reverse
 from django.contrib import admin
+from django.db import models
 from django.dispatch import receiver
-
+from django.urls import reverse
+from helpers.models import BaseTimeStampModel
+from helpers.models import ModelSlugMixin
+from helpers.utils import unique_slug_generator
+from helpers.utils import upload_promotion_image_path
 from imagekit.models import ImageSpecField
-from imagekit.processors import ResizeToFill, Adjust
-
-from mptt.models import MPTTModel, TreeForeignKey
-
-from helpers.utils import upload_promotion_image_path, unique_slug_generator
-from helpers.models import ModelSlugMixin, BaseTimeStampModel
+from imagekit.processors import ResizeToFill
+from mptt.models import MPTTModel
+from mptt.models import TreeForeignKey
 
 
 logger = logging.getLogger(__name__)

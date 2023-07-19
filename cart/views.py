@@ -1,20 +1,15 @@
-# cart.views.py
-
+from analytics import utils
+from cart import cart
+from checkout import checkout
 from django.conf import settings
 from django.contrib import messages
-from django.shortcuts import render
 from django.http import HttpResponseRedirect
+from django.shortcuts import render
 from django.views.decorators.csrf import csrf_exempt
-
-from cart import cart
-from analytics import utils
-from checkout import checkout
-from pages.models import Campaign
 
 
 @csrf_exempt
 def shopcart(request, template="cart/cart.html"):
-
     request.session.set_expiry(settings.CACHE_TTL)
 
     if request.method == "POST":

@@ -1,14 +1,12 @@
 # acccounts.admin.py
-
+from accounts.models import DistributorCustomer
+from accounts.models import ProfileSocialMedia
+from catalogue.models import Product
 from django.contrib import admin
-from django.utils.html import format_html
-from django.utils.safestring import mark_safe
 from django.contrib.auth import get_user_model
 from django.contrib.auth.forms import UserChangeForm
-
-from catalogue.models import Product
-from accounts.models import ProfileSocialMedia, DistributorCustomer
-
+from django.utils.html import format_html
+from django.utils.safestring import mark_safe
 from services.export_data_csv import export_to_csv
 
 
@@ -101,7 +99,7 @@ class UserAdmin(admin.ModelAdmin):
         if instance.is_seller:
             url = instance.get_absolute_url()
             response = format_html(
-                f"""<a target="_blank" href="{url}">
+                f"""<a target="_blank" href="{url}!r">
                 Afficher
                 </a>"""
             )

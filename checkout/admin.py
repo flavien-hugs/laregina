@@ -1,15 +1,14 @@
+import requests
+from checkout.models import Order
+from checkout.models import OrderCancelled
+from checkout.models import OrderCashOnDelivery
+from checkout.models import OrderItem
+from checkout.models import OrderShipped
 from django.conf import settings
 from django.contrib import admin
-
-import requests
+from django.core import serializers
+from django.http import HttpResponse
 from services.export_data_csv import export_to_csv
-from checkout.models import (
-    Order,
-    OrderItem,
-    OrderCashOnDelivery,
-    OrderShipped,
-    OrderCancelled,
-)
 
 
 class OrderItemStackedInline(admin.StackedInline):
@@ -126,10 +125,7 @@ class ExtraOrderAdmin(object):
         return False
 
     @admin.display(description="Exporter les données au format json")
-    def export_as_json(modeladmin, request, queryset):
-        from django.core import serializers
-        from django.http import HttpResponse
-
+    def export_as_json(self, request, queryset):
         response = HttpResponse(content_type="application/json")
         serializers.serialize("json", queryset, stream=response)
         return response
@@ -137,7 +133,6 @@ class ExtraOrderAdmin(object):
 
 @admin.register(Order)
 class OrderPayedAdmin(ExtraOrderAdmin, admin.ModelAdmin):
-
     model = Order
 
     def get_queryset(self, request):
@@ -148,7 +143,6 @@ class OrderPayedAdmin(ExtraOrderAdmin, admin.ModelAdmin):
 
 @admin.register(OrderCashOnDelivery)
 class OrderCashOnDeliveryAdmin(ExtraOrderAdmin, admin.ModelAdmin):
-
     model = OrderCashOnDelivery
 
     def get_queryset(self, request):
@@ -159,7 +153,6 @@ class OrderCashOnDeliveryAdmin(ExtraOrderAdmin, admin.ModelAdmin):
 
 @admin.register(OrderShipped)
 class OrderShippedAdmin(ExtraOrderAdmin, admin.ModelAdmin):
-
     model = OrderShipped
     actions = [export_to_csv, "collect_satisfaction_data"]
 
@@ -185,7 +178,6 @@ class OrderShippedAdmin(ExtraOrderAdmin, admin.ModelAdmin):
 
 @admin.register(OrderCancelled)
 class OrderCancelledAdmin(ExtraOrderAdmin, admin.ModelAdmin):
-
     model = OrderCancelled
 
     def get_queryset(self, request):

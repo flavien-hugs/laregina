@@ -1,9 +1,5 @@
-# catalogue.tests.test_views.py
-
-
+from django.test import TransactionTestCase
 from django.urls import reverse
-from django.test import TestCase, TransactionTestCase
-from django.http import HttpRequest
 
 
 class HomePageTestCase(TransactionTestCase):

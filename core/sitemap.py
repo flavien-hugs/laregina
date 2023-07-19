@@ -1,11 +1,7 @@
-# core.sitemaps.py
-
-from django.urls import reverse
-from django.contrib.sitemaps import Sitemap
-from django.contrib.sitemaps import GenericSitemap
-
 from catalogue.models import Product
 from category.models import Category
+from django.contrib.sitemaps import Sitemap
+from django.urls import reverse
 
 
 class StaticViewSitemap(Sitemap):
