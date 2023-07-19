@@ -1,49 +1,40 @@
 # cart.cart.py
-
 import random
 import string
+from datetime import datetime
+from datetime import timedelta
 from decimal import Decimal
-from django.db.models import Max
-from django.conf import settings
-from datetime import datetime, timedelta
-from django.http import HttpResponseRedirect
-from django.shortcuts import get_object_or_404
-
-from helpers.utils import generate_key
 
 from cart.models import CartItem
 from catalogue.models import Product
+from django.conf import settings
+from django.db.models import Max
+from django.shortcuts import get_object_or_404
 
 
 CART_ID_SESSION_KEY = "cart_id"
 
 
 def _cart_id(request):
-
     if request.session.get(CART_ID_SESSION_KEY, "") == "":
         request.session[CART_ID_SESSION_KEY] = _generate_cart_id()
     return request.session[CART_ID_SESSION_KEY]
 
 
 def _generate_cart_id():
-
-    cart_id = ""
-    characters = string.ascii_letters + string.ascii_lowercase + string.digits
     cart_id_length = 50
-    for y in range(cart_id_length):
-        cart_id += characters[random.randint(0, len(characters) - 1)]
+    characters = string.ascii_letters + string.ascii_lowercase + string.digits
+    cart_id = "".join(random.choices(characters, k=cart_id_length))
     return cart_id
 
 
 def get_cart_items(request):
-
     return CartItem.objects.filter(
         cart_id=_cart_id(request),
     )
 
 
 def add_to_cart(request):
-
     postdata = request.POST.copy()
 
     slug = postdata.get("slug", "")
@@ -86,7 +77,6 @@ def update_cart(request):
 
 
 def remove_from_cart(request):
-
     postdata = request.POST.copy()
     item_id = postdata["item_id"]
     cart_item = get_single_item(request, item_id)
@@ -95,7 +85,6 @@ def remove_from_cart(request):
 
 
 def cart_subtotal(request):
-
     cart_total = Decimal("0")
     cart_products = get_cart_items(request)
     for cart_item in cart_products:
@@ -112,13 +101,11 @@ def is_empty(request):
 
 
 def empty_cart(request):
-
     user_cart = get_cart_items(request)
     user_cart.delete()
 
 
 def remove_old_cart_items():
-
     print("Enlever les anciennes commandes")
     remove_before = datetime.now() + timedelta(days=-settings.SESSION_COOKIE_DAYS)
     cart_ids = []

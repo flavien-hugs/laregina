@@ -1,24 +1,21 @@
-# checkout.models.py
-
+import datetime
 import decimal
 import random
 import string
-import datetime
 
-from django.db import models
-from django.urls import reverse
-from django.contrib import admin
-
-from django.conf import settings
 from catalogue.models import Product
 from checkout.managers import OrderManager
-from helpers.models import BaseOrderInfo, BaseTimeStampModel
+from django.contrib import admin
+from django.db import models
+from django.urls import reverse
+from helpers.models import BaseOrderInfo
+from helpers.models import BaseTimeStampModel
+
 
 NULL_AND_BLANK = {"null": True, "blank": True}
 
 
 class Order(BaseOrderInfo, BaseTimeStampModel):
-
     SHIPPED = "commande livrée"
     CANCELLED = "commande annulée"
     PROCESSED = "livraison en cours"
@@ -199,7 +196,6 @@ class OrderCancelled(Order):
 
 
 class OrderItem(models.Model):
-
     order = models.ForeignKey(
         to="checkout.Order",
         on_delete=models.CASCADE,

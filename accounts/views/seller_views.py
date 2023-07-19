@@ -1,23 +1,26 @@
-from django.views import generic
+from catalogue.forms import ProductAttributeCreateFormset
+from catalogue.forms import ProductCreateFormSet
+from catalogue.models import Product
+from checkout.models import Order
 from django.contrib import messages
-from django.urls import reverse_lazy
-from django.http import HttpResponseRedirect
 from django.contrib.auth import get_user_model
 from django.contrib.auth.decorators import login_required
 from django.contrib.messages.views import SuccessMessageMixin
-from django.shortcuts import render, redirect, get_object_or_404
-
-from catalogue.models import Product
+from django.http import HttpResponseRedirect
+from django.shortcuts import get_object_or_404
+from django.shortcuts import redirect
+from django.shortcuts import render
+from django.urls import reverse_lazy
+from django.views import generic
 from pages.mixins import PromotionMixin
-
-from voucher.models import Voucher
 from voucher.forms import VoucherCreateForm
-from checkout.models import Order, OrderItem
-from catalogue.forms import ProductCreateFormSet, ProductAttributeCreateFormset
+from voucher.models import Voucher
 
+from ..forms import AccountSellerUpdateForm
+from ..forms import SocialMediaForm
+from ..mixins import ProductEditMixin
+from ..mixins import SellerRequiredMixin
 from ..models import ProfileSocialMedia
-from ..mixins import SellerRequiredMixin, ProductEditMixin
-from ..forms import AccountSellerUpdateForm, SocialMediaForm
 
 
 class CashTotalSeller(object):
@@ -70,7 +73,6 @@ store_list_view = StoreListView.as_view(extra_context={"page_title": "boutiques"
 class StoreDetailView(
     PromotionMixin, generic.DetailView, generic.list.MultipleObjectMixin
 ):
-
     paginate_by = 12
     slug_field = "slug"
     slug_url_kwarg = "slug"
@@ -207,7 +209,6 @@ product_list_view = ProductListView.as_view()
 
 
 class ProductCreateView(ProductEditMixin, CashTotalSeller, generic.CreateView):
-
     template_name = "dashboard/seller/includes/_partials_product_create.html"
 
     def get_object(self, *args, **kwargs):
@@ -267,19 +268,18 @@ product_create_view = ProductCreateView.as_view()
 
 
 class ProductUpdateView(ProductEditMixin, CashTotalSeller, generic.UpdateView):
-
     template_name = "dashboard/seller/includes/_partials_product_create.html"
 
     def get_context_data(self, **kwargs):
-        kwargs["subtitle"] = f"mise à jour du produit '{self.object.name}'"
-        kwargs["page_title"] = f"mise à jour du produit '{self.object.name}'"
+        kwargs["subtitle"] = f"mise à jour du produit '{self.object.name}!r'"
+        kwargs["page_title"] = f"mise à jour du produit '{self.object.name}!r'"
         return super().get_context_data(**kwargs)
 
     def form_valid(self, form):
         self.object = form.save(commit=False)
         self.object.user = self.request.user
         self.object.save()
-        msg = f'Mise à jour du produit "{self.object.name}" effectuée avec succes !'
+        msg = f'Mise à jour du produit "{self.object.name}!r" effectuée avec succes !'
         messages.success(self.request, msg)
         return HttpResponseRedirect(self.get_success_url())
 
@@ -291,7 +291,7 @@ class ProductDeleteView(ProductEditMixin, CashTotalSeller, generic.DeleteView):
     permission_required = "product.product_delete"
 
     def form_valid(self, form):
-        msg = f'"{self.object.name}" supprimé avec succes !'
+        msg = f'"{self.object.name}!r" supprimé avec succes !'
         messages.success(self.request, msg)
         return HttpResponseRedirect(self.get_success_url())
 
@@ -303,7 +303,6 @@ product_delete_view = ProductDeleteView.as_view()
 def voucher_create_view(
     request, template="dashboard/seller/includes/_partials_voucher_create.html"
 ):
-
     user = request.user
     if request.method == "POST":
         form = VoucherCreateForm(user, request.POST or None)
@@ -340,7 +339,7 @@ def voucher_update_view(
     form = VoucherCreateForm(user, request.POST or None, instance=obj)
     if form.is_valid():
         form.save()
-        msg = f'Mise à jour de "{obj}" effectuée avec succes !'
+        msg = f'Mise à jour de "{obj}!r" effectuée avec succes !'
         messages.success(request, msg)
         return redirect("dashboard_seller:voucher_list")
 

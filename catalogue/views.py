@@ -1,38 +1,36 @@
-import random
 import logging
+import random
 
-from django.db.models import Q
-from django.conf import settings
-from django.views import generic
-from django.utils import timezone
-from django.contrib import messages
-from django.core.cache import cache
-from django.urls import reverse, reverse_lazy
-from django.utils.safestring import mark_safe
-from django.contrib.auth import get_user_model
-from django.views.decorators.csrf import csrf_exempt
-from django.views.decorators.cache import cache_page
-from django.utils.decorators import method_decorator
-from django.http import HttpResponseRedirect, HttpResponse
-from django.shortcuts import render, redirect, get_object_or_404, get_list_or_404
-
-from cart import cart
 from analytics import utils
-from category.models import Category
-
-from catalogue.models import Product
-from pages.mixins import PromotionMixin
-from reviews.models import ProductReview
+from cart import cart
 from catalogue.filters import FilterMixin
-from reviews.forms import ProductReviewForm
-from pages.models import Promotion, HomePage
 from catalogue.forms import ProductAddToCartForm
+from catalogue.models import Product
+from category.models import Category
+from django.conf import settings
+from django.contrib import messages
+from django.contrib.auth import get_user_model
+from django.core.cache import cache
+from django.db.models import Q
+from django.http import HttpResponseRedirect
+from django.shortcuts import get_list_or_404
+from django.shortcuts import get_object_or_404
+from django.shortcuts import render
+from django.urls import reverse
+from django.utils import timezone
+from django.utils.decorators import method_decorator
+from django.utils.safestring import mark_safe
+from django.views import generic
+from django.views.decorators.cache import cache_page
+from django.views.decorators.csrf import csrf_exempt
+from pages.mixins import PromotionMixin
+from reviews.forms import ProductReviewForm
+from reviews.models import ProductReview
 
 CACHE_TTL = getattr(settings, "CACHE_TTL", settings.CACHE_TIMEOUT)
 
 
 class ExtraContextData:
-
     queryset = Category.objects.all()
 
     def get_context_data(self, **kwargs):
@@ -56,7 +54,6 @@ class ExtraContextData:
 
 @method_decorator(cache_page(CACHE_TTL), name="dispatch")
 class HomeThirdView(PromotionMixin, generic.TemplateView):
-
     queryset = Category.objects.all()
     template_name = "index.html"
 
@@ -132,7 +129,7 @@ def show_product(request, slug, pk, template="catalogue/product_detail.html"):
         if form.is_valid():
             cart.add_to_cart(request)
 
-            msg = f""" '{p.name}' a été ajouté à votre panier."""
+            msg = f""" '{p.name}!r' a été ajouté à votre panier."""
             messages.success(request, mark_safe(msg))
             if request.session.test_cookie_worked():
                 request.session.delete_test_cookie()

@@ -1,28 +1,24 @@
-# pages.models.py
-
 import logging
 
-from django.db import models
-from django.urls import reverse
 from django.contrib import admin
-from django.utils import timezone
-from django.dispatch import receiver
-from django.utils.text import slugify
-from django.utils.safestring import mark_safe
 from django.core.validators import FileExtensionValidator
-from django.core.validators import MinValueValidator, MaxValueValidator
-
-from catalogue.models import Product
-from pages.managers import PageModelManager
-from helpers.utils import (
-    upload_promotion_image_path,
-    upload_campign_image_path,
-    unique_slug_generator,
-)
-from helpers.models import BaseTimeStampModel, ModelSlugMixin, ApplyDiscountModel
-
+from django.core.validators import MaxValueValidator
+from django.core.validators import MinValueValidator
+from django.db import models
+from django.dispatch import receiver
+from django.urls import reverse
+from django.utils import timezone
+from django.utils.safestring import mark_safe
+from django.utils.text import slugify
+from helpers.models import ApplyDiscountModel
+from helpers.models import BaseTimeStampModel
+from helpers.models import ModelSlugMixin
+from helpers.utils import unique_slug_generator
+from helpers.utils import upload_campign_image_path
 from imagekit.models import ImageSpecField
-from imagekit.processors import ResizeToFill, Adjust
+from imagekit.processors import Adjust
+from imagekit.processors import ResizeToFill
+from pages.managers import PageModelManager
 
 
 validate_video = [
@@ -49,7 +45,6 @@ validators = [MinValueValidator(0), MaxValueValidator(100)]
 
 
 class HomePage(BaseTimeStampModel):
-
     ELECT = 0
     MARKET = 1
     COMBIN = 2
@@ -132,7 +127,6 @@ class Testimonial(BaseTimeStampModel):
 
 
 class Campaign(BaseTimeStampModel, ModelSlugMixin):
-
     DESTOCKAGE = "Destockage"
     VENTE_FLASH = "Vente Flash"
     NOUVELLE_ARRIVAGE = "Nouvel Arrivage"
@@ -189,7 +183,7 @@ class Campaign(BaseTimeStampModel, ModelSlugMixin):
     @admin.display(description="cover")
     def show_image_tag(self):
         if self.image is not None:
-            return mark_safe(f'<img src="{self.get_image_url()}" height="50"/>')
+            return mark_safe(f'<img src="{self.get_image_url()}!r" height="50"/>')
         return "https://via.placeholder.com/50x50"
 
     def get_campaigns(self):
@@ -211,7 +205,6 @@ class Campaign(BaseTimeStampModel, ModelSlugMixin):
 
 
 class Promotion(ModelSlugMixin, ApplyDiscountModel, BaseTimeStampModel):
-
     campaign = models.ForeignKey(
         to="pages.Campaign",
         on_delete=models.PROTECT,
@@ -278,7 +271,6 @@ class Promotion(ModelSlugMixin, ApplyDiscountModel, BaseTimeStampModel):
 
 
 class Pub(ModelSlugMixin, BaseTimeStampModel):
-
     name = models.CharField(
         max_length=225,
         verbose_name="Titre",
@@ -302,7 +294,6 @@ class Pub(ModelSlugMixin, BaseTimeStampModel):
 
 
 class Annonce(BaseTimeStampModel):
-
     name = models.CharField(
         max_length=225,
         verbose_name="Titre",
@@ -336,7 +327,7 @@ class Annonce(BaseTimeStampModel):
     @admin.display(description="cover")
     def show_image_tag(self):
         if self.image is not None:
-            return mark_safe(f'<img src="{self.get_image_url()}" height="50"/>')
+            return mark_safe(f'<img src="{self.get_image_url()!r}" height="50"/>')
         return "https://via.placeholder.com/50x50"
 
 

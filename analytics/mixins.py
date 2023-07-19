@@ -1,5 +1,4 @@
 # analytics/mixins.py
-
 from analytics.signals import object_viewed_signal
 
 

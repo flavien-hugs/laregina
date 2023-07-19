@@ -1,9 +1,6 @@
-# pages.mixins.py
-
 import random
 
-from catalogue.models import Product
-from pages.models import Campaign, Promotion
+from pages.models import Campaign
 
 
 class PromotionMixin(object):

@@ -1,15 +1,13 @@
 # reviews.models.py
-
+from caching.caching import cache_evict
+from caching.caching import cache_update
+from catalogue.models import Product
 from django.db import models
 from django.urls import reverse
-
-from catalogue.models import Product
-from caching.caching import cache_update, cache_evict
 from reviews.managers import ActiveProductReviewManager
 
 
 class ProductReview(models.Model):
-
     RATINGS = (
         (1, 1),
         (2, 2),

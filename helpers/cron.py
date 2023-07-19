@@ -1,6 +1,6 @@
 # helpers.cron.py
-
 import logging
+
 from django.core import management
 
 

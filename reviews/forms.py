@@ -1,7 +1,5 @@
 # reviews.forms.py
-
 from django import forms
-
 from reviews.models import ProductReview
 
 

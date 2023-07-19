@@ -1,31 +1,27 @@
-from django.urls import reverse
+from accounts.forms import AccountLoginForm
+from accounts.forms import AccountRequestPasswordResetForm
+from accounts.forms import AccountSellerRegisterForm
 from django.conf import settings
-from django.views import generic
-from django.utils import timezone
 from django.contrib import messages
-from django.urls import reverse_lazy
-from django.core.mail import EmailMessage
-from django.http import HttpResponseRedirect
-from django.shortcuts import render, redirect
-from django.template.loader import render_to_string
-from django.contrib.auth.decorators import login_required
-from django.contrib.sites.shortcuts import get_current_site
+from django.contrib.auth import authenticate
+from django.contrib.auth import get_user_model
+from django.contrib.auth import login
+from django.contrib.auth import logout
 from django.contrib.auth.tokens import PasswordResetTokenGenerator
-from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
-from django.contrib.auth import get_user_model, authenticate, login, logout
-from django.utils.encoding import force_bytes, force_str, DjangoUnicodeDecodeError
-
-
-from helpers.utils import SendEmail, email_validation_function
-from accounts.forms import (
-    AccountSellerRegisterForm,
-    AccountLoginForm,
-    AccountRequestPasswordResetForm,
-)
+from django.http import HttpResponseRedirect
+from django.shortcuts import redirect
+from django.shortcuts import render
+from django.urls import reverse
+from django.urls import reverse_lazy
+from django.utils import timezone
+from django.utils.encoding import DjangoUnicodeDecodeError
+from django.utils.encoding import force_str
+from django.utils.http import urlsafe_base64_decode
+from django.views import generic
+from helpers.utils import SendEmail
 
 
 def sellerSignupView(request, template="account/signup.html"):
-
     if request.user.is_authenticated:
         return HttpResponseRedirect(reverse(settings.LOGIN_REDIRECT_URL))
 
@@ -48,7 +44,6 @@ seller_signup_view = sellerSignupView
 
 
 class AccountLoginView(generic.View):
-
     form_class = AccountLoginForm
     template_name = "account/login.html"
 
@@ -86,7 +81,6 @@ user_login_view = AccountLoginView.as_view()
 
 
 class AccountRequestPasswordResetView(generic.View):
-
     form_class = AccountRequestPasswordResetForm
     template_name = "account/password_reset.html"
 
@@ -141,11 +135,9 @@ account_request_password_reset_view = AccountRequestPasswordResetView.as_view()
 
 
 class AccountSetNewPasswordView(generic.View):
-
     template_name = "account/password_reset.html"
 
     def get(self, request, uidb64, token):
-
         context = {
             "uidb64": uidb64,
             "token": token,
@@ -169,7 +161,6 @@ class AccountSetNewPasswordView(generic.View):
         return render(request, "account/set_new_password.html", context)
 
     def post(self, request, uidb64, token):
-
         context = {"uidb64": uidb64, "token": token}
 
         password = request.POST.get("password")

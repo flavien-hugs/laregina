@@ -1,8 +1,6 @@
 # cart.models.py
-
-from django.db import models
-
 from catalogue.models import Product
+from django.db import models
 
 NULL_AND_BLANK = {"null": True, "blank": True}
 DECIMAFIELD_OPTION = {"default": 0, "max_digits": 50, "decimal_places": 2}

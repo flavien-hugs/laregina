@@ -1,24 +1,24 @@
-# checkout.views.py
-
-from django.conf import settings
-from django.views import generic
-from django.template import Context
-from django.urls import reverse, reverse_lazy
-from django.template.loader import get_template
-from django.views.decorators.csrf import csrf_exempt
-from django.http import HttpResponse, HttpResponseRedirect
-from django.shortcuts import render, redirect, get_object_or_404
+import io
 
 from cart import cart
-from checkout import checkout, tasks
+from checkout import checkout
+from checkout import tasks
 from checkout.forms import CheckoutForm
-from checkout.models import Order, OrderItem
-
-import io
-import requests
-from xhtml2pdf import pisa
-
+from checkout.models import Order
+from checkout.models import OrderItem
 from cinetpay_sdk.s_d_k import Cinetpay
+from django.conf import settings
+from django.http import HttpResponse
+from django.http import HttpResponseRedirect
+from django.shortcuts import get_object_or_404
+from django.shortcuts import render
+from django.template import Context
+from django.template.loader import get_template
+from django.urls import reverse
+from django.urls import reverse_lazy
+from django.views import generic
+from django.views.decorators.csrf import csrf_exempt
+from xhtml2pdf import pisa
 
 apikey = settings.CINETPAY_API_KEY
 site_id = settings.CINETPAY_SITE_ID
@@ -28,7 +28,6 @@ client = Cinetpay(apikey, site_id)
 
 @csrf_exempt
 def show_checkout(request, template="checkout/checkout.html"):
-
     if cart.is_empty(request):
         return HttpResponseRedirect(reverse("cart:cart"))
 
@@ -50,7 +49,6 @@ def show_checkout(request, template="checkout/checkout.html"):
                 return HttpResponseRedirect(sucess_url)
 
             if payment == 1:
-
                 order = response.get("order")
 
                 amount = order.get_order_total()
@@ -97,7 +95,6 @@ show_checkout = show_checkout
 
 
 def order_success_view(request, order_id, template="checkout/checkout_success.html"):
-
     order_id = request.session.get("order_id")
 
     order = get_object_or_404(Order, transaction_id=order_id)

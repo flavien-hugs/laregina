@@ -1,18 +1,16 @@
 import os
-import string
 import random
+import string
 import threading
 
-from django.urls import reverse
-from django.conf import settings
-from django.utils.text import slugify
+from django.contrib.auth.tokens import default_token_generator
+from django.contrib.sites.shortcuts import get_current_site
 from django.core.mail import EmailMessage
-from django.utils.encoding import force_bytes
 from django.core.validators import EmailValidator
 from django.template.loader import render_to_string
+from django.utils.encoding import force_bytes
 from django.utils.http import urlsafe_base64_encode
-from django.contrib.sites.shortcuts import get_current_site
-from django.contrib.auth.tokens import default_token_generator
+from django.utils.text import slugify
 
 
 class EmailThread(threading.Thread):
@@ -27,7 +25,6 @@ class EmailThread(threading.Thread):
 class SendEmail:
     @staticmethod
     def send_confirmation_link(template, request, user, subject):
-
         current_site = get_current_site(request)
 
         html_message = render_to_string(

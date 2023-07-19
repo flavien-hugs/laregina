@@ -1,7 +1,5 @@
 # search.templatetags.search_tags.py
-
 from django import template
-
 from search.forms import SearchForm
 
 register = template.Library()

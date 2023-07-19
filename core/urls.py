@@ -1,16 +1,16 @@
-from django.contrib import admin
-from django.conf import settings
-from django.shortcuts import render
-from django.urls import path, include
-from django.contrib.sitemaps import views
-from django.conf.urls.static import static
-from django.contrib.auth.models import Group
-from django.contrib.sites.models import Site
-from django.views.generic import TemplateView
-
 from core.sitemap import SITEMAPS
-from search.views import search_view
+from django.conf import settings
+from django.conf.urls.static import static
+from django.contrib import admin
+from django.contrib.auth.models import Group
+from django.contrib.sitemaps import views
+from django.contrib.sites.models import Site
+from django.shortcuts import render
+from django.urls import include
+from django.urls import path
+from django.views.generic import TemplateView
 from django_summernote.models import Attachment
+from search.views import search_view
 
 admin.site.unregister(Site)
 admin.site.unregister(Group)

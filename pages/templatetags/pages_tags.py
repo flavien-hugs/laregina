@@ -1,18 +1,16 @@
-# catalogue filters
-
 import random
-from itertools import chain
 
 from django import template
-
-from pages.models import Campaign, Pub, Annonce, Testimonial
+from pages.models import Annonce
+from pages.models import Campaign
+from pages.models import Pub
+from pages.models import Testimonial
 
 register = template.Library()
 
 
 @register.inclusion_tag("includes/partials/_partials_video.html")
 def publicity_list():
-
     movies = Pub.objects.filter(is_active=True)
     campaigns = Campaign.objects.published()
 

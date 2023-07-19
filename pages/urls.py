@@ -1,13 +1,10 @@
-# static pages url
-
-from django.urls import path
 from django.conf import settings
-from django.views.generic import TemplateView
+from django.urls import path
 from django.views.decorators.cache import cache_page
+from django.views.generic import TemplateView
+from pages.views import contact_view
 
 CACHE_TTL = getattr(settings, "CACHE_TTL", settings.CACHE_TIMEOUT)
-
-from pages.views import contact_view
 
 app_name = "pages"
 urlpatterns = [

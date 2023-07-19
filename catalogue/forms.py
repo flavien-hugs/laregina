@@ -1,16 +1,15 @@
 # catalogue.forms.py
-
+from category.models import Category
 from django import forms
 from django.forms.models import inlineformset_factory
-
-from category.models import Category
-from .models import Product, ProductAttributeValue, ProductImage
-
 from django_summernote.widgets import SummernoteWidget
+
+from .models import Product
+from .models import ProductAttributeValue
+from .models import ProductImage
 
 
 class ProductAdminForm(forms.ModelForm):
-
     category = forms.ModelChoiceField(
         empty_label=None,
         required=True,
@@ -63,7 +62,6 @@ class ProductAdminForm(forms.ModelForm):
 
 
 class ProductImageForm(forms.ModelForm):
-
     image = forms.ImageField(label="Ajouter des images", required=True)
 
     class Meta:
@@ -72,7 +70,6 @@ class ProductImageForm(forms.ModelForm):
 
 
 class ProductAttributeValueForm(forms.ModelForm):
-
     size = forms.MultipleChoiceField(
         label="Sélectionner les tailles", choices=ProductAttributeValue.SIZE_CHOICES
     )
@@ -112,7 +109,6 @@ ProductAttributeCreateFormset = inlineformset_factory(
 
 
 class ProductAddToCartForm(forms.Form):
-
     quantity = forms.IntegerField(
         widget=forms.TextInput(
             attrs={"type": "hidden", "value": "1", "class": "form-control"}

@@ -1,10 +1,9 @@
-from django.urls import path, include
-
-from pages import views as pages_views
-
 from cart.views import shopcart
 from catalogue import views as catalogue_views
 from category.views import category_detail_view
+from django.urls import include
+from django.urls import path
+from pages import views as pages_views
 
 
 urlpatterns = [

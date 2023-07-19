@@ -1,14 +1,7 @@
-# checkout.tests.test_models.py
-
-import http.client
-from django.urls import reverse, resolve
-from django.test import TestCase, Client
-
-from cart import cart
-from cart.models import CartItem
-from catalogue.models import Product
-from checkout.forms import CheckoutForm
-from checkout.models import Order, OrderItem
+from django.test import Client
+from django.test import TestCase
+from django.urls import resolve
+from django.urls import reverse
 
 
 class CheckoutTestCase(TestCase):
@@ -32,7 +25,6 @@ class CheckoutTestCase(TestCase):
         # self.item.save()
 
     def test_checkout_page_empty_cart(self):
-
         """
         le panier vide doit être redirigé vers
         la page du panier
@@ -44,7 +36,6 @@ class CheckoutTestCase(TestCase):
         self.assertRedirects(response, cart_url)
 
     def test_checkout_page(self):
-
         # avec au moins un article dans le panier,
         # la demande d'URL de la page de paiement est acceptée
 

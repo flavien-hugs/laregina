@@ -1,14 +1,8 @@
-# category.views.py
-
-from django.views import generic
-from django.conf import settings
-from django.views.decorators.cache import cache_page
-from django.utils.decorators import method_decorator
-
 from analytics import utils
-from category.models import Category
 from catalogue.models import Product
-
+from category.models import Category
+from django.conf import settings
+from django.views import generic
 from pages.mixins import PromotionMixin
 
 CACHE_TTL = getattr(settings, "CACHE_TTL", settings.CACHE_TIMEOUT)
@@ -18,7 +12,6 @@ CACHE_TTL = getattr(settings, "CACHE_TTL", settings.CACHE_TIMEOUT)
 class CategoryDetailView(
     PromotionMixin, generic.DetailView, generic.list.MultipleObjectMixin
 ):
-
     model = Category
     paginate_by = 16
     slug_field = "slug"

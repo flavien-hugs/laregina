@@ -1,10 +1,6 @@
-# pages.admin.py
-
 from django.contrib import admin
-
+from pages import models
 from services.export_data_csv import export_to_csv
-
-from pages import models, forms
 
 
 @admin.register(models.HomePage)

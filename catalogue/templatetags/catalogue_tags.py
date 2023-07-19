@@ -1,16 +1,14 @@
 import locale
-import random
 import logging
-from itertools import chain
-
-from django import template
-from django.contrib.auth import get_user_model
+import random
 
 from cart import cart
+from checkout.models import Order
+from django import template
+from django.contrib.auth import get_user_model
+from pages.models import Campaign
 
 from ..models import Product
-from checkout.models import Order
-from pages.models import Annonce, Campaign, Promotion
 
 register = template.Library()
 

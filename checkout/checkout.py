@@ -1,15 +1,12 @@
 # checkout.checkout.py
-
-
 import requests
-
-from django.urls import reverse
-from django.conf import settings
-
+from analytics.utils import get_client_ip
 from cart import cart
 from checkout.forms import CheckoutForm
-from checkout.models import Order, OrderItem
-from analytics.utils import get_client_ip
+from checkout.models import Order
+from checkout.models import OrderItem
+from django.conf import settings
+from django.urls import reverse
 
 
 def get_checkout_url(request):
@@ -17,7 +14,6 @@ def get_checkout_url(request):
 
 
 def process(request):
-
     order = create_order(request)
     context = {
         "order": order,
@@ -28,7 +24,6 @@ def process(request):
 
 
 def create_order(request):
-
     SENDER_ID = settings.SENDER_ID
     SMS_API_KEY = settings.SMS_API_KEY
     SMS_API_TOKEN = settings.API_TOKEN
