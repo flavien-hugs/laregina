@@ -1,55 +1,63 @@
-from accounts.forms import AccountLoginForm
-from accounts.forms import AccountRequestPasswordResetForm
-from accounts.forms import AccountSellerRegisterForm
-from django.conf import settings
-from django.contrib import messages
-from django.contrib.auth import authenticate
-from django.contrib.auth import get_user_model
-from django.contrib.auth import login
-from django.contrib.auth import logout
-from django.contrib.auth.tokens import PasswordResetTokenGenerator
-from django.http import HttpResponseRedirect
-from django.shortcuts import redirect
-from django.shortcuts import render
 from django.urls import reverse
-from django.urls import reverse_lazy
-from django.utils import timezone
-from django.utils.encoding import DjangoUnicodeDecodeError
-from django.utils.encoding import force_str
-from django.utils.http import urlsafe_base64_decode
+from django.conf import settings
 from django.views import generic
+from django.utils import timezone
+from django.contrib import messages
+from django.shortcuts import redirect, render
+from django.utils.http import urlsafe_base64_decode
+from django.contrib.auth.tokens import PasswordResetTokenGenerator
+from django.utils.encoding import DjangoUnicodeDecodeError, force_str
+from django.contrib.auth import authenticate, get_user_model, login, logout
+
 from helpers.utils import SendEmail
+from accounts.mixins import login_required_redirect
+from accounts.forms import (
+    AccountLoginForm,
+    AccountRegisterForm,
+    AccountRequestPasswordResetForm,
+)
 
 
-def sellerSignupView(request, template="account/signup.html"):
-    if request.user.is_authenticated:
-        return HttpResponseRedirect(reverse(settings.LOGIN_REDIRECT_URL))
+User = get_user_model()
 
-    form = AccountSellerRegisterForm()
-    if request.method == "POST":
-        form = AccountSellerRegisterForm(request.POST)
+
+class AccountSignupView(generic.View):
+    form_class = AccountRegisterForm
+    template_name = "account/signup.html"
+
+    @login_required_redirect
+    def dispatch(self, request, *args, **kwargs):
+        return super().dispatch(request, *args, **kwargs)
+
+    def get(self, request):
+        form = self.form_class()
+        ctx = {"form": form, "page_title": "Créer votre compte"}
+        return render(request, self.template_name, ctx)
+
+    def post(self, request):
+        form = self.form_class(request.POST)
         if form.is_valid():
             form.save()
             messages.success(
                 request,
-                "Compte crée avec succès. Veuillez vous connecter à votre tableau de bord !",
+                "Compte créé avec succès. Veuillez vous connecter à votre tableau de bord !",
             )
             return redirect(reverse(settings.LOGIN_REDIRECT_URL))
         messages.error(request, "Veuillez vérifier les informations fournies !")
-    context = {"form": form, "page_title": "Créer votre boutique"}
-    return render(request, template, context)
+
+        ctx = {"form": form, "page_title": "Créer votre compte"}
+        return render(request, self.template_name, ctx)
 
 
-seller_signup_view = sellerSignupView
+account_signup_view = AccountSignupView.as_view()
 
 
 class AccountLoginView(generic.View):
     form_class = AccountLoginForm
     template_name = "account/login.html"
 
+    @login_required_redirect
     def dispatch(self, request, *args, **kwargs):
-        if request.user.is_authenticated:
-            return HttpResponseRedirect(reverse_lazy(settings.LOGIN_REDIRECT_URL))
         return super().dispatch(request, *args, **kwargs)
 
     def get(self, request):
@@ -60,14 +68,17 @@ class AccountLoginView(generic.View):
     def post(self, request, *args, **kwargs):
         form = self.form_class(request.POST)
         if form.is_valid():
-            user = authenticate(
-                email=form.cleaned_data["email"], password=form.cleaned_data["password"]
-            )
-            user.last_login = timezone.now()
-            if user is not None:
+            email = form.cleaned_data["email"]
+            password = form.cleaned_data["password"]
+
+            user = authenticate(email=email, password=password)
+
+            if user is not None and user.is_active:
+                user.last_login = timezone.now()
+                user.save()
                 login(request, user)
                 messages.success(
-                    request, f"Vous êtes connecté en tant que {user.email}"
+                    request, f"Vous êtes connecté en tant que {user.email}!r"
                 )
                 return redirect(reverse(settings.LOGIN_REDIRECT_URL))
         messages.error(request, "Identifiants invalides ou compte désactivé !")
@@ -77,7 +88,7 @@ class AccountLoginView(generic.View):
         return render(request, self.template_name, context)
 
 
-user_login_view = AccountLoginView.as_view()
+account_login_view = AccountLoginView.as_view()
 
 
 class AccountRequestPasswordResetView(generic.View):
@@ -89,9 +100,8 @@ class AccountRequestPasswordResetView(generic.View):
         ctx = {"form": form, "page_title": "Réinitialisation du mot de passe"}
         return render(request, self.template_name, ctx)
 
+    @login_required_redirect
     def dispatch(self, request, *args, **kwargs):
-        if request.user.is_authenticated:
-            return HttpResponseRedirect(reverse_lazy(settings.LOGIN_REDIRECT_URL))
         return super().dispatch(request, *args, **kwargs)
 
     def post(self, request):
@@ -100,10 +110,10 @@ class AccountRequestPasswordResetView(generic.View):
         if form.is_valid():
             email = form.cleaned_data.get("email")
             mail_to_lower = email.lower()
-            user_data = get_user_model().objects.filter(email=mail_to_lower)
+            user_data = User.filter_by_email(email=mail_to_lower)
 
             if user_data.exists():
-                user = get_user_model().objects.get(email=mail_to_lower)
+                user = User.filter_by_email(email=mail_to_lower).get()
 
                 SendEmail.send_confirmation_link(
                     request=request,
@@ -114,11 +124,10 @@ class AccountRequestPasswordResetView(generic.View):
 
                 messages.success(
                     request,
-                    f"""Nous vous avons envoyé un courriel à
-                        <strong>{email.lower()}</strong> contenant les
-                        instructions sur la façon de réinitialiser votre mot de passe.
-                        Consultez votre boîte de réception et cliquez sur le lien fourni.
-                    """,
+                    f"Nous vous avons envoyé un courriel à \
+                        {email.lower()} contenant les \
+                        instructions sur la façon de réinitialiser votre mot de passe. \
+                        Consultez votre boîte de réception et cliquez sur le lien fourni.",
                 )
             else:
                 messages.error(
@@ -146,7 +155,7 @@ class AccountSetNewPasswordView(generic.View):
 
         try:
             user_id = force_str(urlsafe_base64_decode(uidb64))
-            user = get_user_model().objects.get(pk=user_id)
+            user = User.filter_by_id(pk=user_id)
 
             if not PasswordResetTokenGenerator().check_token(user, token):
                 messages.info(
@@ -183,7 +192,7 @@ class AccountSetNewPasswordView(generic.View):
 
         try:
             user_id = force_str(urlsafe_base64_decode(uidb64))
-            user = get_user_model().objects.get(pk=user_id)
+            user = User.filter_by_id(pk=user_id)
             user.set_password(password)
             user.save()
 
@@ -213,4 +222,4 @@ def logout_view(request):
     return redirect(reverse(settings.LOGIN_URL))
 
 
-logout_view = logout_view
+account_logout_view = logout_view

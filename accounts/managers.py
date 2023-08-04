@@ -13,7 +13,7 @@ class UserManager(BaseUserManager):
         now = timezone.now()
         email = self.normalize_email(email)
         user = self.model(
-            email=email, is_active=True, last_login=now, date_joined=now, **extra_fields
+            email=email, is_active=True, last_login=now, created_at=now, **extra_fields
         )
 
         user.set_password(password)

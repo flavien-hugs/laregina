@@ -1,12 +1,12 @@
+from django.urls import reverse
 from django.conf import settings
 from django.contrib import messages
 from django.http import HttpResponseRedirect
-from django.shortcuts import get_object_or_404
-from django.shortcuts import render
-from django.urls import reverse
+from django.shortcuts import get_object_or_404, render
 
-from ..forms import DistributorCustomerForm
-from ..models import DistributorCustomer
+
+from accounts.forms import DistributorCustomerForm
+from accounts.models import DistributorCustomer
 
 
 def distributorRegisterView(request, template="account/customer/register.html"):
