@@ -24,3 +24,7 @@ python-dotenv
 psycopg2-binary
 django-pwa
 celery[redis]
+djangorestframework
+django-admin-watchdog
+django-cors-headers
+django-bootstrap4

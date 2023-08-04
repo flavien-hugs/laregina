@@ -16,7 +16,6 @@ gunicorn = "*"
 django-mptt = "*"
 whitenoise = {extras = ["brotli"], version = "*"}
 django-redis = "*"
-django-crispy-forms = "*"
 django-phonenumber-field = "*"
 phonenumbers = "*"
 Babel = "*"
@@ -37,6 +36,11 @@ python-dotenv = "*"
 psycopg2-binary = "*"
 django-pwa = "*"
 celery = {extras = ["redis"], version = "*"}
+djangorestframework = "*"
+django-admin-watchdog = "*"
+django-cors-headers = "*"
+django-crispy-forms = "*"
+django-bootstrap4 = "*"
 
 [requires]
 python_version = "3.10"
